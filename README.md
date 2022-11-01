@@ -1,7 +1,7 @@
-ADLINK LEC-iMX8MP 2GB module with iPI SMARC plus Android 11
+ADLINK LEC-iMX8MP module with Android 11
 =========================================================================
 
-Platform        : LEC-iMX8MP Android
+Platform        : LEC-iMX8MP 
 ================================================
 Kernel version  : 5.10.72
 ================================================
