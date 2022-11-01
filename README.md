@@ -8,7 +8,7 @@ Kernel version  : 5.10.72
 
 Change log:
 ===========
-2v0 (18 August 2022)
+1v0
 ---------------------
  + USB Device Support is added
  + USB Debugging support is enabled
