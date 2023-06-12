@@ -37,6 +37,14 @@ Change log:
 	- Onboard eMMC device
 
 
+2v4
+---
+ - Dual Display - HDMI + DSI Display Support added
+
+2v5
+---
+ - eMMC flashing support is added.
+
 Supported interfaces:
 =====================
  - Serial console
@@ -81,8 +89,8 @@ Interface details:
  - After the Board Booted up, connect the micro USB port on the ADLINK board with the Host system using a Micro USB cable.
  - On a Ubuntu machine, install adb
  - Execute the below command:
-   # sudo adb usb
-   # sudo adb shell ls <to list the current directory on the Android board>
+    - sudo adb usb
+    - sudo adb shell ls <to list the current directory on the Android board>
 
 
 
@@ -249,7 +257,7 @@ eg: for 30% duty cycle on pin 29:
 
  1. In connect CN1602, Connect pin27 (MOSI) and pin28 (MISO) on expansion connecter
  2. Run the below command to send a dummy message on spi line:
-	# spidev_test -D /dev/spidev1.0 -v
+	- spidev_test -D /dev/spidev1.0 -v
 
 
 -------------------------------------------------
@@ -261,18 +269,18 @@ Setup CAN0 & CAN1 Loop : Conn CN1602 => connect 13 & 14, 15 & 16
 Sender should execute below commands:
 
 1) Configure the CAN0 ports as
-   # ip link set can0 type can bitrate 500000
-   # ip link set can0 up
+   - ip link set can0 type can bitrate 500000
+   - ip link set can0 up
 
 2) Configure the CAN1 ports as
-   # ip link set can1 type can bitrate 500000
-   # ip link set can1 up
+   - ip link set can1 type can bitrate 500000
+   - ip link set can1 up
 
 3) Dump CAN data on can0:
-   # candump can0 &
+   - candump can0 &
 
 4) Send data over can1:
-   # cansend can1 01a#11223344AABBCCDD
+   - cansend can1 01a#11223344AABBCCDD
 
 Now send data will be dump back on CAN0.
 
@@ -288,10 +296,10 @@ To disable network update uncheck "Use network-provided time".
 
 Now if date/time is manually set it can be stored to RTC using
 below command:
-     $ hwclock -w
+	- $ hwclock -w
 
 Current data/time stored in RTC can be read as:
-     $ hwclock
+	- $ hwclock
 
 -------------------------------------------------
 4.11 Wifi/BT 
@@ -300,5 +308,42 @@ Current data/time stored in RTC can be read as:
 AW-CM276NF Wifi/BT support. Wifi is working with Android UI.
 BT works using bluez utils hciconfig & hcitool.
 
+-------------------------------------------------
+4.12 eMMC Installation procedure
+-------------------------------------------------
+Download uuu utility
+--------------------
+ - validated using uuu version (1.4.182)
+ - https://github.com/nxp-imx/mfgtools/releases/download/uuu_1.4.182/uuu
+ - download uuu utility and copy into /usr/bin. For ex
+ - sudo cp ~/Downloads/uuu /usr/bin
+ - sudo chmod +x /usr/bin/uuu
+ 
+Recovery Mode
+-------------
+ - set the boot switch into recovery mode
+ - connect USB OTG cable with the host
+ - power on the board
+
+Host preparation
+-----------------
+ - Download android release (For ex: LEC-IMX8MP-IPi-SMARC-PLUS_Android_11_V2_R5_2023_06_07.zip)
+ - extract the release file
+ - change into android release directory
+    
+For LEC-IMX8MP 2G Module
+-------------------------
+ - cp u-boot-imx8mp-2gb-uuu.imx u-boot-imx8mp-evk-uuu.imx
+ - sudo ./uuu_imx_android_flash.sh -f imx8mp -e -m -c 28
+ 
+For LEC-IMX8MP 4G Module
+-------------------------
+ - cp u-boot-imx8mp-4gb-uuu.imx u-boot-imx8mp-evk-uuu.imx
+ - sudo ./uuu_imx_android_flash.sh -f imx8mp -e -m -c 28 -u 4gb
+
+For LEC-IMX8MP 8G Module
+-------------------------
+ - cp u-boot-imx8mp-8gb-uuu.imx u-boot-imx8mp-evk-uuu.imx
+ - sudo ./uuu_imx_android_flash.sh -f imx8mp -e -m -c 28 -u 8gb
 
 

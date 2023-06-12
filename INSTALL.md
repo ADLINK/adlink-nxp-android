@@ -53,6 +53,7 @@ To apply the patches
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0002-LEC-IMX8MP-Android_Device_files.patch
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0003-bluetooth-driver-config.patch
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0004-pcie-ssd-automount.patch
+- patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0005-emmc-uboot-uuu-config.patch
 
 - cd ~/android_build/vendor/nxp-opensource/kernel_imx
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/vendor/nxp-opensource/kernel_imx/0001-LEC-IMX8MP-Kernel_Config_Device_Tree.patch
@@ -62,6 +63,7 @@ To apply the patches
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/vendor/nxp-opensource/kernel_imx/0005-pcie-uart-console-pins-conflict.patch
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/vendor/nxp-opensource/kernel_imx/0006-bludroid-driver.patch
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/vendor/nxp-opensource/kernel_imx/0007-nvme-support.patch
+- patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/vendor/nxp-opensource/kernel_imx/0008-mipi-dsi-panel-support.patch
 
 - cd ~/android_build/vendor/nxp-opensource/
 - rm -rf uboot-imx
