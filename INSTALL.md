@@ -54,6 +54,9 @@ To apply the patches
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0003-bluetooth-driver-config.patch
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0004-pcie-ssd-automount.patch
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0005-emmc-uboot-uuu-config.patch
+- cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png imx8m/lec_imx8mp/overlay/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png
+- cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-sw600dp-nodpi/default_wallpaper.png imx8m/lec_imx8mp/overlay/frameworks/base/core/res/res/drawable-sw600dp-nodpi/default_wallpaper.png
+- cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-sw720dp-nodpi/default_wallpaper.png imx8m/lec_imx8mp/overlay/frameworks/base/core/res/res/drawable-sw720dp-nodpi/default_wallpaper.png
 
 - cd ~/android_build/vendor/nxp-opensource/kernel_imx
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/vendor/nxp-opensource/kernel_imx/0001-LEC-IMX8MP-Kernel_Config_Device_Tree.patch
