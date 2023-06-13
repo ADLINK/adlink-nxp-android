@@ -69,11 +69,9 @@ Flashing the image and booting:
 2. Ensure, the device node of the micro SD card using dmesg.
 3. Change to the release and bin directory.
 4. Execute the command for a 32 GB Micro-SD card:
-  # sudo ./imx-sdcard-partition.sh -f imx8mp -c 28 /dev/sdX
-
-</dev/sdX need to be changed to actual device node of the micro SD card>
-
-For more details, please refer: https://www.nxp.com/docs/en/user-guide/ANDROID_USERS_GUIDE.pdf
+	- sudo ./imx-sdcard-partition.sh -f imx8mp -c 28 /dev/sdX
+	- /dev/sdX need to be changed to actual device node of the micro SD card>
+	- For more details, please refer: https://www.nxp.com/docs/en/user-guide/ANDROID_USERS_GUIDE.pdf
 
 Interface details:
 ==================
