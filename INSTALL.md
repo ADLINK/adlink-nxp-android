@@ -55,6 +55,7 @@ To apply the patches
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0004-pcie-ssd-automount.patch
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0005-emmc-uboot-uuu-config.patch
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0006-uuu-ram-option.patch
+- patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0007-uuu-tool-option-pcf8563-rtc.patch
 - cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png imx8m/lec_imx8mp/overlay/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png
 - cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-sw600dp-nodpi/default_wallpaper.png imx8m/lec_imx8mp/overlay/frameworks/base/core/res/res/drawable-sw600dp-nodpi/default_wallpaper.png
 - cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-sw720dp-nodpi/default_wallpaper.png imx8m/lec_imx8mp/overlay/frameworks/base/core/res/res/drawable-sw720dp-nodpi/default_wallpaper.png
@@ -68,6 +69,7 @@ To apply the patches
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/vendor/nxp-opensource/kernel_imx/0006-bludroid-driver.patch
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/vendor/nxp-opensource/kernel_imx/0007-nvme-support.patch
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/vendor/nxp-opensource/kernel_imx/0008-mipi-dsi-panel-support.patch
+- patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/vendor/nxp-opensource/kernel_imx/0009-rtc-pcf8563-adlbmc.patch
 
 - cd ~/android_build/vendor/nxp-opensource/
 - rm -rf uboot-imx
