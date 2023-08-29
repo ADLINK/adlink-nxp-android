@@ -304,7 +304,7 @@ Current data/time stored in RTC can be read as:
 -------------------------------------------------
 
 AW-CM276NF Wifi/BT support. Wifi is working with Android UI.
-BT works using bluez utils hciconfig & hcitool.
+BT works fine with Android UI.
 
 -------------------------------------------------
 4.12 eMMC Installation procedure
