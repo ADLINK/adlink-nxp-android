@@ -56,6 +56,8 @@ To apply the patches
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0005-emmc-uboot-uuu-config.patch
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0006-uuu-ram-option.patch
 - patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0007-uuu-tool-option-pcf8563-rtc.patch
+- patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0008-sd-card-support-on-emmc-boot.patch
+- patch -p1 < ~/LEC-iMX8MP-ANDROID_11/patches/imx-android-11.0.0_2.6.0/android_build/device/nxp/0009-android-reboot-failed-fix.patch
 - cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png imx8m/lec_imx8mp/overlay/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png
 - cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-sw600dp-nodpi/default_wallpaper.png imx8m/lec_imx8mp/overlay/frameworks/base/core/res/res/drawable-sw600dp-nodpi/default_wallpaper.png
 - cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-sw720dp-nodpi/default_wallpaper.png imx8m/lec_imx8mp/overlay/frameworks/base/core/res/res/drawable-sw720dp-nodpi/default_wallpaper.png
