@@ -1,9 +1,9 @@
-ADLINK LEC-iMX8MP module with Android 11
+ADLINK SP2-IMX8MP  with Android 13
 =========================================================================
 
-Platform        : LEC-iMX8MP 
+Platform        : SP2-IMX8MP 
 ================================================
-Kernel version  : 5.10.72
+Kernel version  : 5.15.74
 ================================================
 
 Change log:
@@ -11,57 +11,46 @@ Change log:
 1v0
 ---------------------
  + USB Device Support is added
- + USB Debugging support is enabled
- + HDMI Audio / WM8960 Audio support is added
- + WiFi Hotspot is added
- + Bluetooth on Linux driver using hciconfig and hcitool
- + adlink_pwm command added.
- + PCIe host tested using lspci 
- + WiFi Driver functioning on Android.
- + Added WiFi Driver - Able to scan WiFi networks using iw utility
- + Added spitest
- + Enabled WM8960 Audio Interface
- + Enabled I2C Interface
- + Enabled CAN Interface
- + Enabled SPI Interface
- + Enabled PCIe
- + Added support for FEC Ethernet controller in U-Boot
- + Added support for USB adb in Android
+
+ + Ethernet support added for : LAN1 LAN2
+
+ + Uart3
+
+ + Uart4
+
  + RAM memory updated to 4 GB
- + imx-dwmac ethernet enabling issue fixed
+
  + Interfaces tested:
-	- USB 2.0 and 3.0 ports
-	- HDMI display
-	- Ethernet (FEC and imx-DWMAC)
-	- Micro SD interface
-	- Onboard eMMC device
+	
+	​		- Serial console
+	
+	​		- HDMI
+	
+	​		- USB-2.0
+	
+	​		- LAN0
+	
+	​		- LAN1
+	
+	​		- UART3 (RS485)
+	
+	​		- UART4 (RS232)
 
 
-2v4
----
- - Dual Display - HDMI + DSI Display Support added
-
-2v5
----
- - eMMC flashing support is added.
 
 Supported interfaces:
 =====================
  - Serial console
- - USB 2.0 and 3.0
+
+ - USB 2.0  
+
  - HDMI display
+
  - Ethernet (FEC and imx-DWMAC)
+
  - Micro SD interface
- - OnBoard eMMC device
- - Android adb support on micro USB port
- - I2C interface
- - CAN interface
- - SPI interface
- - GPIO on expansion connector
- - GPIO PWM on expansion connector
- - WM8960 Audio codec
- - Wifi/BT
- - rtc 
+
+   
 
 Flashing the image and booting:
 ===============================
@@ -73,61 +62,40 @@ Flashing the image and booting:
 	- /dev/sdX need to be changed to actual device node of the micro SD card>
 	- For more details, please refer: https://www.nxp.com/docs/en/user-guide/ANDROID_USERS_GUIDE.pdf
 
-Interface details:
-==================
-1. FEC in U-Boot:
- - Press any key to break into U-Boot command prompt.
- - Execute, the below commands (The following are provided as an example, please change appropriately)
-       => setenv ipaddr 192.168.2.126
-       => setenv serverip 192.168.2.5
-       => setenv netmask 255.255.255.0
-       => setenv ethaddr 00:a8:44:1f:1f:10
-
-2. Running adb:
- - After the Board Booted up, connect the micro USB port on the ADLINK board with the Host system using a Micro USB cable.
- - On a Ubuntu machine, install adb
- - Execute the below command:
-    - sudo adb usb
-    - sudo adb shell ls <to list the current directory on the Android board>
-
 
 
 Readme Contents
 =================================================
 
    1. Hardware setup
+
    2. Package structure
+
    3. Steps to boot with prebuilts
+
    4. Peripheral testing
-      4.1. USB type A ports
-      4.2. Micro USB (Device mode)
-      4.3. HDMI
-      4.4. UART
-      4.5. WM8960 Audio codec
-      4.6. GPIO on expansion connector
-      4.7. PWM GPIO
-      4.8. SPI on expansion connector
-      4.9. CAN interface
-      4.10. RTC
-      4.11. Wifi/BT
+      4.1. Console Logs
+      4.2. HDMI
+      4.3. USB
+      4.4. LAN 1 LAN2
+      4.5. UART3
+      4.6. UART4
 
-1) Hardware setup
-=================================================
+      
 
- Module		- LEC-iMX8MP
- Base		- ADLINK LEC-iMX8MP
- Host Machine 	- Linux Ubuntu
+1.Hardware setup
+================================================
+       Target		-  SP2-IMX8MP
+       Host Machine - Linux Ubuntu
 
+2.Package structure
+================================================
 
-2) Package structure
-=================================================
+Unzip SP2-IMX8MP-4G-Android-tiramisu_1V1.0.1_24_03_04.zip
 
-  |----- ADLINK_LEC_IMX8MP_2G_ANDROID_11_1V15
-	  |----- bin           // android images
-    	  |----- Readme.txt
+SP2-IMX8MP-4G-Android-tiramisu_1V1.0.1_24_03_04/
 
-
-3) Steps to boot with prebuilts
+3.Steps to boot with prebuilts
 =================================================
 
 ------------------------------------------------------
@@ -142,206 +110,143 @@ system. Follow below steps:
   3. insert an sdcard
   4. Run the imx-sdcard-partition.sh
 
-Note: First boot from SD card can be slow. Subsequent boots will
-be faster
+Note: - First boot from SD card can be slow. Subsequent boots will be faster
 
+​          - Boot setting 1100 for booting from SD card 
 
-4) Peripheral testing
+4.Peripheral testing
 =================================================
 
 -------------------------------------------------
-4.1 USB Type A
+4.1 Console Logs
 -------------------------------------------------
 
- All USB type A ports are validated.
-
- Any storage device connected on these ports will be mounted at
- /mnt/media_rw/. Device can also be accessed from Android GUI.
-
----------------------------------------------------
-4.2 Micro USB (Device mode)
----------------------------------------------------
-
- Connect micro USB cable to access device in client mode.
- Devices can be accessed using adb commands.
-
--------------------------------------------------
-4.3 HDMI
--------------------------------------------------
-
-  HDMI function is enabled by default.
-
-
--------------------------------------------------
-4.4 UART
--------------------------------------------------
-
- Connect UART cable on expansion connector to get android boot logs.
+ Connect UART cable on expansion connector CN9 to get android boot logs.
  Pin connection:
-     pin 8  - UART TX
-     pin 10 - UART RX
-     pin 9  - GND
+     pin 1  -  UART TX
+     pin 2 -   UART RX
+     pin 3  - GND
+
+---------------------------------------------------
+4.2  HDMI
+---------------------------------------------------
+
+ - Connect the HDMI cable to HDMI port on board
+
+ - Check display on HDMI panel 
+
+ - When the board is powered on, the HDMI display starts with the Android logo.
+
+ - User can unlock HDMI display 
+
+   using mouse 
+
+-------------------------------------------------
+4.3 USB 
+-------------------------------------------------
+
+ - Supports USB 2.0 
+ - When attached and detach USB storage device  its displays dmesg
+ - User can also find the device using command  'lsusb'.
+ - USB HID Mouse, keyboard & Mass Storage are supported
 
 
 -------------------------------------------------
-4.5 WM8960 Audio Codec
+4.4 LAN 
 -------------------------------------------------
 
-Connect headphone on the jack, execute the following command to play on headphone
-tinyplay <wav file> -D 1
+ - Connect the LAN cable to Ethernet port LAN1 and LAN2 
 
-To play the wav file on HDMI, execute the command below
-tinyplay <wav file> -D 0
-
--------------------------------------------------
-4.6 GPIO on Expansion Connector
--------------------------------------------------
-
- GPIO on Exapnsion connector (CN1001) can be used using following commands:
-        => cd /sys/class/gpio/
-        => echo GPIO_NUM > export
-        => cd gpio<GPIO_NUM>
-        => echo out > direction ("out" is to enable pin as ouput, "in" for input)
-        => echo 1 > value ("1" to drive high, "0" to drive low)
-
- The GPIO_NUM mentioned above are mapped to following pin numbers:
-
- The GPIO_NUM mentioned above are mapped to following pin numbers:
-
- Pin on expansion  		   Gpio number
-    pin7		     	-   	 497
-    pin11			-	 499
-    pin12			-   	 498
-    pin13			-   	 500
-    pin15			-   	 501
-    pin16  		        -    	 502
-    pin18   	 		-   	 503
-    pin22 	   		-   	 504
-    pin29			-   	 461
-    pin31			-   	 462
-    pin32			-   	 463
-    pin33			-   	 464
-    pin35			-   	 465
-    pin36			-   	 466
-    pin37			-   	 467
-    pin38			-   	 468
-    pin40			-   	 469
+ - Use 'ifconfig' command to check if IP is assigned , then do ping test .
 
 
 -------------------------------------------------
-4.7 PWM GPIO's
+4.5 UART3
 -------------------------------------------------
 
-Few gpio on expansion connector has additional PWM
-feature via SX1509 I/O expander. Following pins support
-pwm:
-    29, 31, 32, 33, 35, 36, 37, 38, 40
+RS485 communication.
 
-adlink_pwm utility can be used to generate pwm
-signal on above gpio. Use below command to turn
-on pwm:
-   adlink_pwm <pin> <state> <duty>
+ - Connect  the COM port cable on CN10 connector.
 
-eg: for 30% duty cycle on pin 29:
-       # adlink_pwm 29 ON 30
-    to turn of pwm on pin 29:
-       # adlink_pwm 29 OFF
+ - COM port cable   DB-RS485  
+
+ - Connection DB9-RS485 to RS485 to USB converter
+
+   | DB9-Rs485 | RS485 to USB converter |
+   | --------- | ---------------------- |
+   | Pin1      | B-                     |
+   | Pin2      | A+                     |
+   | Pin5      | GND                    |
+
+1) Configure the Baudrate for uart3 ports at SP2_imx8mp side and Host side 
+
+```shell
+- On target : stty -F /dev/ttymxc2 115200
+
+- On Host machine : minicom -D /dev/ttyUSB1 -b 115200
+```
+
+2) Send and Receive data between Host and Target
+
+```shell
+echo " from_target_check_rs485 123!@#" > /dev/ttymxc2
+```
+
+check on host side you would have received data
+
+use below command to start read data from host machine
+
+```shell
+cat /dev/ttymxc2
+```
+
+send data from host using minicom  "from_host_checkrs485 1%$##"
+
+check on Target side you would have received data
 
 
--------------------------------------------------
-4.8 SPI on expansion connector (CN1602)
--------------------------------------------------
- SPI on expansion connected is enabled. Follow below procedure:
-
- 1. In connect CN1602, Connect pin27 (MOSI) and pin28 (MISO) on expansion connecter
- 2. Run the below command to send a dummy message on spi line:
-	- spidev_test -D /dev/spidev1.0 -v
-
-
--------------------------------------------------
-4.9 CAN interface (CN1602)
--------------------------------------------------
-
-Setup CAN0 & CAN1 Loop : Conn CN1602 => connect 13 & 14, 15 & 16
-
-Sender should execute below commands:
-
-1) Configure the CAN0 ports as
-   - ip link set can0 type can bitrate 500000
-   - ip link set can0 up
-
-2) Configure the CAN1 ports as
-   - ip link set can1 type can bitrate 500000
-   - ip link set can1 up
-
-3) Dump CAN data on can0:
-   - candump can0 &
-
-4) Send data over can1:
-   - cansend can1 01a#11223344AABBCCDD
-
-Now send data will be dump back on CAN0.
 
 -------------------------------------------------
-4.10 RTC
+4.6 UART4
 -------------------------------------------------
 
-If connected to network android will update date/time from network
-service. Date/time settings in android available under:
-   Settings => system => Date&Time
+RS232 communication.
 
-To disable network update uncheck "Use network-provided time".
+- Connect  the COM port cable on CN10 connector
 
-Now if date/time is manually set it can be stored to RTC using
-below command:
-	- $ hwclock -w
+- Connection: DB9-COM to RS232 to USB converter
 
-Current data/time stored in RTC can be read as:
-	- $ hwclock
+| DB9-COM | RS232 to USB |
+| ------- | ------------ |
+| Pin2    | Pin3         |
+| Pin3    | Pin2         |
+| PIN3    | PIN3         |
 
--------------------------------------------------
-4.11 Wifi/BT 
--------------------------------------------------
+Connect the other end of Rs232 to USB to host machine.
 
-AW-CM276NF Wifi/BT support. Wifi is working with Android UI.
-BT works fine with Android UI.
+1) Configure the Baud rate for uart4 ports at SP2_imx8mp side and Host side
 
--------------------------------------------------
-4.12 eMMC Installation procedure
--------------------------------------------------
-Download uuu utility
---------------------
- - validated using uuu version (1.4.182)
- - https://github.com/nxp-imx/mfgtools/releases/download/uuu_1.4.182/uuu
- - download uuu utility and copy into /usr/bin. For ex
- - sudo cp ~/Downloads/uuu /usr/bin
- - sudo chmod +x /usr/bin/uuu
- 
-Recovery Mode
--------------
- - set the boot switch into recovery mode
- - connect USB OTG cable with the host
- - power on the board
+```shell
+- On target : stty -F /dev/ttymxc3 115200
 
-Host preparation
------------------
- - Download android release (For ex: LEC-IMX8MP-IPi-SMARC-PLUS_Android_11_V2_R5_2023_06_07.zip)
- - extract the release file
- - change into android release directory
-    
-For LEC-IMX8MP 2G Module
--------------------------
- - cp u-boot-imx8mp-2gb-uuu.imx u-boot-imx8mp-evk-uuu.imx
- - sudo ./uuu_imx_android_flash.sh -f imx8mp -e -m -c 28
- 
-For LEC-IMX8MP 4G Module
--------------------------
- - cp u-boot-imx8mp-4gb-uuu.imx u-boot-imx8mp-evk-uuu.imx
- - sudo ./uuu_imx_android_flash.sh -f imx8mp -e -m -c 28 -u 4gb
+- On Host machine : #minicom -D /dev/ttyUSB1 -b 115200
+```
 
-For LEC-IMX8MP 8G Module
--------------------------
- - cp u-boot-imx8mp-8gb-uuu.imx u-boot-imx8mp-evk-uuu.imx
- - sudo ./uuu_imx_android_flash.sh -f imx8mp -e -m -c 28 -u 8gb
+2) Send and Receive data between Host and Target
 
+```shell
+echo " from_target_check_123#." > /dev/ttymxc3
+```
+
+check on host side you would have received data
+
+use below command to start read data from host machine
+
+```shell
+cat /dev/ttymxc3
+```
+
+send data from host using minicom  "from_host_checkrs232 1%$##"
+
+check on Target side you would have received data
 
