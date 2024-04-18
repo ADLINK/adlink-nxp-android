@@ -3,7 +3,7 @@
 PATCHROOTDIR=$(dirname $0)
 
 usage () {
-        echo "Syntex:"
+        echo "Syntax:"
         echo "  setup_patches.sh [clear]"
         echo "  please run the setup_patches.sh script from android's build directory"
 }
