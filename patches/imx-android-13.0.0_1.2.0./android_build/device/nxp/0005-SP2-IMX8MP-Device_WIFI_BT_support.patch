@@ -1,0 +1,20 @@
+commit 0ee87d14b87af94ea97380e56017aa7e2f5eb3b7
+Author: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
+Date:   Tue Apr 30 12:47:04 2024 +0530
+
+    wifi_BT
+
+diff --git a/imx8m/sp2_imx8mp/sp2_imx8mp.mk b/imx8m/sp2_imx8mp/sp2_imx8mp.mk
+index 56b00416..9b942cdd 100644
+--- a/imx8m/sp2_imx8mp/sp2_imx8mp.mk
++++ b/imx8m/sp2_imx8mp/sp2_imx8mp.mk
+@@ -382,7 +382,8 @@ PRODUCT_PACKAGES += \
+ 
+ # nxp 8997 wifi and bluetooth combo Firmware
+ PRODUCT_COPY_FILES += \
+-    vendor/nxp/imx-firmware/nxp/FwImage_8997/pcieuart8997_combo_v4.bin:vendor/firmware/pcieuart8997_combo_v4.bin \
++    vendor/nxp/imx-firmware/nxp/FwImage_8997_SD/sdiouart8997_combo_v4.bin:vendor/firmware/sdiouart8997_combo_v4.bin \
++    hardware/nxp/libbt/conf/nxp/evk_8mp/bt_vendor.conf:vendor/etc/bluetooth/bt_vendor.conf \
+     vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf
+ 
+ # Wifi regulatory
