@@ -1,0 +1,28 @@
+commit a66792fce5ef250acb42787102e107a64116b996
+Author: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
+Date:   Tue Apr 30 10:32:46 2024 +0530
+
+    LVDS_touch
+
+diff --git a/arch/arm64/configs/sp2imx8mp_gki.fragment b/arch/arm64/configs/sp2imx8mp_gki.fragment
+index f6e78004d3a7..d0f648bd2844 100644
+--- a/arch/arm64/configs/sp2imx8mp_gki.fragment
++++ b/arch/arm64/configs/sp2imx8mp_gki.fragment
+@@ -145,7 +145,7 @@ CONFIG_REALTEK_PHY=m
+ CONFIG_SYSFS=y
+ CONFIG_GPIOLIB=y
+ CONFIG_GPIO_SYSFS=y
+-CONFIG_EXTCON_USB_GPIO=y
++CONFIG_EXTCON_USB_GPIO=m
+ CONFIG_RTC_DRV_PCF85063=y
+ CONFIG_PINCTRL_SX150X=y
+ CONFIG_MTD=y
+@@ -159,7 +159,4 @@ CONFIG_CAN_RAW=y
+ CONFIG_CAN=y
+ CONFIG_CAN_BCM=y
+ CONFIG_CAN_GW=y
+-
+-CONFIG_DRM_PANEL_LVDS=y
+-CONFIG_DRM_IMX8MP_LDB=y
+-
++CONFIG_DRM_PANEL_LVDS=m

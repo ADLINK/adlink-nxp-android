@@ -1,0 +1,30 @@
+commit 9faa92927bee2935427a522ed1c773dd5edaba29
+Author: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
+Date:   Tue Apr 30 10:31:49 2024 +0530
+
+    touch support
+
+diff --git a/imx8m/sp2_imx8mp/SharedBoardConfig.mk b/imx8m/sp2_imx8mp/SharedBoardConfig.mk
+index d77912bc..9deb6df9 100644
+--- a/imx8m/sp2_imx8mp/SharedBoardConfig.mk
++++ b/imx8m/sp2_imx8mp/SharedBoardConfig.mk
+@@ -78,7 +78,8 @@ BOARD_VENDOR_KERNEL_MODULES += \
+     $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko \
+     $(KERNEL_OUT)/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.ko \
+     $(KERNEL_OUT)/drivers/net/ethernet/stmicro/stmmac/stmmac-platform.ko \
+-    $(KERNEL_OUT)/drivers/net/ethernet/stmicro/stmmac/stmmac.ko
++    $(KERNEL_OUT)/drivers/net/ethernet/stmicro/stmmac/stmmac.ko \
++    $(KERNEL_OUT)/drivers/extcon/extcon-usb-gpio.ko
+ ifeq ($(POWERSAVE),true)
+ BOARD_VENDOR_KERNEL_MODULES += \
+     $(KERNEL_OUT)/drivers/soc/imx/lpa_ctrl.ko \
+@@ -226,7 +227,8 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
+     $(KERNEL_OUT)/drivers/trusty/trusty-ipc.ko \
+     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko \
+     $(KERNEL_OUT)/net/wireless/cfg80211.ko \
+-    $(KERNEL_OUT)/net/mac80211/mac80211.ko
++    $(KERNEL_OUT)/net/mac80211/mac80211.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-lvds.ko
+ else
+ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
+     $(KERNEL_OUT)/drivers/input/touchscreen/goodix.ko \
