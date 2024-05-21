@@ -57,6 +57,20 @@ git config --global user.name "First Last"
 git config --global user.email "first.last@company.com
 ```
 
+Repo Setup
+---------
+Use the following commands for setting up repo .
+
+
+```Shell
+mkdir ~/bin
+
+PATH=~/bin:$PATH
+
+curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+
+chmod a+x ~/bin/repo
+```
 
 
 ## To setup GCC Compiler
@@ -142,7 +156,11 @@ Build Instructions
   
   patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0002-SP2-IMX8MP-Android_Device_files.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0003-device_changes_2g_hdmi_cma_fix.patch
+  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0003-SP2-IMX8MP-Device_changes_2g_hdmi_cma_fix.patch
+  
+  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0004-SP2-IMX8MP-Device_changes_touch.patch
+  
+  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0005-SP2-IMX8MP-Device_WIFI_BT_support.patch
   
   cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png imx8m/sp2_imx8mp/overlay/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png
   
@@ -150,7 +168,7 @@ Build Instructions
   
   cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-sw720dp-nodpi/default_wallpaper.png imx8m/sp2_imx8mp/overlay/frameworks/base/core/res/res/drawable-sw720dp-nodpi/default_wallpaper.png
   ```
-
+  
 - Apply kernel_imx patches  
 
   ```Shell
@@ -189,7 +207,11 @@ Build Instructions
   
   patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0016-sp2-imx8mp-patch-ili9881c-mipi-dsi-panel-add-support.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0017-panel_fix.patch
+  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0017-sp2-imx8mp-panel_fix.patch
+  
+  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0018-sp2-imx8mp-Kernel-touch-support.patch
+  
+  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0019-sp2-imx8mp-Kernel-WIFI-BT.patch
   
   
   ```
