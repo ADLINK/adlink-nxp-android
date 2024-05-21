@@ -11,8 +11,6 @@ This document outlines the procedures for Build and Flash Android BSP for SP2IX8
 5.Flash Procedure for Android 13 SP2-IMX8MP
 ```
 
-
-
 Prerequisite
 ===========
 
@@ -20,11 +18,11 @@ Prerequisite
 
 - Machine: x86
 
-- The Linux host must be Ubuntu 20.04 or later,
+- The Linux host must be Ubuntu 20.04 
 
--  RAM: Minimum of 16 GB RAM.
+- RAM: Minimum of 16 GB RAM.
 
--  Storage : 300GB 
+- Storage : 300GB 
   (Recommended storage medium SSD ,Encountered unexpected build error in HDD)
 
 Host Machine Setup
@@ -146,7 +144,6 @@ Build Instructions
   
   patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0001-SP2-IMX8MP-Android_Devices.patch 
   
-  
   patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0002-SP2-IMX8MP-Android_Device_files.patch
   
   patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0003-SP2-IMX8MP-Device_changes_2g_hdmi_cma_fix.patch
@@ -168,7 +165,6 @@ Build Instructions
   cd ~/android_bsp/android_build/vendor/nxp-opensource/kernel_imx
   
   patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0001-Andorid_gki_dts.patch 
-  
   
   patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0002-sp2-imx8mp-patch-drm-panel-enhancement-to-take-addit.patch
   
@@ -208,7 +204,7 @@ Build Instructions
   
   
   ```
-
+  
 - Apply uboot-imx patches  
 
   ```Shell
@@ -293,60 +289,79 @@ Flash Procedure for Android 13 SP2-IMX8MP
 
 ==================================================================
 
-- SP2-IMX8MP Boot setting for SD card boot 1100 
+#### Flash image to SD card
 
-- Connect the 32-GB SD card to the SD card reader on the host machine.
+* SP2-IMX8MP Boot setting for SD card boot 1100
 
-- Find the SD card mounted under /dev/sdx.
+* Execute the following command for a 32 GB Micro-SD card
 
-  ```shell
-  ls /dev/sdx 
-  ```
+   For SP2IMX8MP-DEVKIT
 
-  
+   ```shell
+   sudo ./imx-sdcard-partition.sh -f  imx8mp -c 28 /dev/sdc
+   ```
 
-- Use the below command to flash the image on SD card.
+   For SP2IMX8MP-7inch panel
 
-  ```Shell
-  cd ~/android_bsp/android_build/out/target/product/sp2_imx8mp/
-  sudo ./imx-sdcard-partition.sh -f imx8mp -c 28 /dev/sdx
-  ```
+   ```shell
+   sudo ./imx-sdcard-partition.sh -d lvds -f  imx8mp -c 28 /dev/sdc
+   ```
 
-Note: if you come across the make_f2fs error while flashing using imx-sdcard-partition.sh on the SD card 
+   For SP2IMX8MP-10inch panel
 
-```
-Missing make_f2fs, fallback to erase the metadata partition 
-```
+   ```shell
+   sudo ./imx-sdcard-partition.sh -d lvds-panel -f  imx8mp -c 28 /dev/sdc
+   ```
 
-- Edit the  imx-sdcard-partion.sh 
+* /dev/sdX need to be changed to actual device node of the micro SD card
 
-  ​               replace mafe_f2fs  with   ../../../host/linux-x86/bin/make_f2fs as shown below
-  
-  ```shell
-  function format_partition
-  {
-      num=`gdisk -l ${node} | grep -w $1 | awk '{print $1}'`
-      if [ ${num} -gt 0 ] 2>/dev/null; then
-          get_current_device_base_name
-  
-          echo "format_partition: $1:${current_device_base_name}${num} ${2:-ext4}"
-          if [ "$2" != "f2fs" ]; then
-              mkfs.ext4 -F ${current_device_base_name}${num} -L$1
-          else
-              # check whether make_f2fs exists
-              command -v  ../../../host/linux-x86/bin/make_f2fs >/dev/null 2>&1 || { echo -e >&2 "${RED}Missing make_f2fs, fallback to erase the $1 partition ${STD}" ; erase_partition $1 ; return ; }
-      
-              get_partition_size $1
-              randome_part=$RANDOM
-              # generate a sparse filesystem image with f2fs type and the size of the partition
-              ../../../host/linux-x86/bin/make_f2fs -S $(( g_sizes*1024*1024 )) -g android /tmp/TemporaryFile_${randome_part}
-              simg2img /tmp/TemporaryFile_${randome_part} ${current_device_base_name}${num}
-              rm /tmp/TemporaryFile_${randome_part}
-          fi
-      fi
-  
-  }
-  ```
-  
-  
+* For more details, please refer: https://www.nxp.com/docs/en/user-guide/ANDROID_USERS_GUIDE.pd
 
+  Note: First boot from SD card can be slow. Subsequent boot will be faster
+
+
+### eMMC Boot
+
+#### Download uuu utility
+
+ - Validated using uuu version (1.4.182)
+
+ - https://github.com/nxp-imx/mfgtools/releases/download/uuu_1.4.182/uuu
+
+ - Download uuu utility and copy to /usr/bin
+
+   ```
+   $ sudo cp ~/Downloads/uuu /usr/bin
+   $ sudo chmod +x /usr/bin/uuu
+   ```
+
+#### Boot into Recovery Mode
+
+ * Set the boot switch into recovery mode (1000)
+ * Connect USB OTG cable to host
+ * Power on the board
+
+#### Flash image to eMMC
+
+* Execute the following command to start flashing Android image to eMMC
+
+   For SP2IMX8MP-DEVKIT
+
+   ```shell
+   sudo ./uuu_imx_android_flash.sh -f imx8mp -e -m -c 28
+   ```
+
+   For SP2IMX8MP-7inch panel
+
+   ```shell
+   sudo ./uuu_imx_android_flash.sh -f imx8mp -e -m -c 28 -d lvds
+   ```
+
+   For SP2IMX8MP-10inch panel
+
+   ```shell
+   sudo ./uuu_imx_android_flash.sh -f imx8mp -e -m -c 28 -d lvds-panel
+   ```
+
+ * Once flash completed user will get done.
+ * Change the boot switch into emmc mode (0100) and powe on to boot from EMMC
