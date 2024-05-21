@@ -24,5 +24,5 @@ You can follow the same steps to build your own customized BSP based on your int
 
 # 4. Software Documentation
 
-Refer to the [wiki](https://github.com/ADLINK/meta-adlink-nxp/wiki) page for instructions on building the Android as well as flashing the image.
+Refer to the [wiki](https://github.com/ADLINK/imx8mp_android/wiki) page for instructions on building the Android as well as flashing the image.
 
