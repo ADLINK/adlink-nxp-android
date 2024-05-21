@@ -35,16 +35,9 @@ Installing Dependency Packages
 Use the following commands to install the dependency packages.
 
 ```Shell
-sudo apt-get install uuid uuid-dev zlib1g-dev liblz-dev liblzo2-2 liblzo2-dev lzop 
-sudo apt-get install git curl u-boot-tools mtd-utils android-sdk-libsparse-utils android-sdk-ext4-utils 
-sudo apt-get install device-tree-compiler gdisk m4 zlib1g-dev bison flex make libssl-dev gcc-multilib 
-sudo apt-get install libghc-gnutls-dev swig liblz4-tool liblz4-tool libdw-dev dwarves bc cpio tar 
-sudo apt-get install lz4 rsync ninja-build clang libelf-dev
-
-
-sudo apt-get install android-sdk-libsparse-utils
-sudo apt install linux-generic dkms git
-sudo apt install simh
+$ sudo apt-get install uuid uuid-dev zlib1g-dev liblz-dev liblzo2-2 liblzo2-dev lzop git curl u-boot-tools mtd-utils android-sdk-libsparse-utils
+$ sudo apt-get install device-tree-compiler gdisk m4 bison flex make libssl-dev gcc-multilib libgnutls28-dev swig liblz4-tool libdw-dev
+$ sudo apt-get install dwarves bc cpio tar lz4 rsync ninja-build clang libelf-dev build-essential libncurses5
 
 ```
 
