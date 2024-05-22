@@ -46,11 +46,11 @@
 ## 3 Package structure
 
  ```
-  |---adlink-lec-imx8mp-android-tiramisu_V2_R1_240517
+  |---adlink-lec-imx8mp-android-tiramisu_V2_R1_240520
      |--- android images
      |--- README.md
  ```
-- Download Android release (adlink-lec-imx8mp-android-tiramisu_V2_R1_240517.zip) and extract it.
+- Download Android release (adlink-lec-imx8mp-android-tiramisu_V2_R1_240520.zip) and extract it.
 
 
 
@@ -64,7 +64,7 @@
 
 2. Check the device node of the micro SD card using dmesg command.
 
-3. Move into android release directory ```adlink-lec-imx8mp-android-tiramisu_V2_R1_240517```
+3. Move into android release directory ```adlink-lec-imx8mp-android-tiramisu_V2_R1_240520```
 
    ```
    $ sudo cp tools/lib64/libc++.so /lib/x86_64-linux-gnu
