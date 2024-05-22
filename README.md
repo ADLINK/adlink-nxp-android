@@ -1,4 +1,4 @@
-This repo is dedicated to the NXP IMX-based modules. Here you can find the Android BSP recipes.
+This repo is dedicated to the NXP i.MX8M Plus based modules. Here you can find the Android BSP recipes.
 
 You can follow the same steps to build your own customized BSP based on your interests.
 
@@ -18,8 +18,8 @@ You can follow the same steps to build your own customized BSP based on your int
 
 # 3. Adlink Supported Patches
 
-- Patches for the NXP-based products for the Adlink dev kit will be found [here](https://github.com/ADLINK/imx8mp_android/tree/Android-13/patches/imx-android-13.0.0_1.2.0/android_build).
-- The patches that we created and have are based on the NXP GitHub Kernel.
+- Patches for the NXP i.MX8M Plus based products for the Adlink dev kit will be found [here](https://github.com/ADLINK/imx8mp_android/tree/Android-13/patches/imx-android-13.0.0_1.2.0/android_build).
+- The patches that we created and have are based on the NXP GitHub kernel.
 - This patch is based on kernel 5.15.x version.
 
 # 4. Software Documentation
