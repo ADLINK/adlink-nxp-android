@@ -36,7 +36,7 @@
 | **Module** | **LEC-iMX8MP** |
 
 ## 2 Software Details
-|   Android   |   Ver. 13   |
+|   Android   |   Ver  13   |
 |:-----------:|:-----------:|
 | **Kernel**  | **5.15.74** |
 | **U-Boot**  | **2022.04** |
@@ -50,13 +50,11 @@
      |--- android images
      |--- README.md
  ```
-- Download android release (adlink-lec-imx8mp-android-tiramisu_V2_R1_240517.zip)
+- Download Android release (adlink-lec-imx8mp-android-tiramisu_V2_R1_240517.zip) and extract it.
 
-- Extract the release file
 
-- Change into android release directory
 
-## 4 Flashing the image and booting
+## 4 Flashing the Image and Booting
 
 ### 4.1 SD Boot
 
@@ -64,7 +62,7 @@
 
 1. On a linux host machine, insert the micro SD card (through an USB adapter).
 
-2. Ensure, the device node of the micro SD card using dmesg.
+2. Check the device node of the micro SD card using dmesg command.
 
 3. Change into android release directory ```adlink-lec-imx8mp-android-tiramisu_V2_R1_240517```
 
@@ -80,7 +78,7 @@
 
 #### Flash image to SD card
 
-* Execute the following command for a 32 GB Micro-SD card
+* Execute the following command for a 32 GB Micro-SD card.
    ```
    $ sudo ./imx-sdcard-partition.sh -f imx8mp -c 28 -u <N>gb /dev/sdX
    ```
@@ -90,18 +88,16 @@
 
 * For more details, please refer: https://www.nxp.com/docs/en/user-guide/ANDROID_USERS_GUIDE.pd
 
-  Note: First boot from SD card can be slow. Subsequent boot will be faster
+  Note: First boot from SD card can be slow,subsequent boot will be faster
 
 
 ### 4.2 eMMC Boot
 
 #### Download uuu utility
 
- - Validated using uuu version (1.4.182)
+ - Download uuu utility and copy to /usr/bin
 
  - https://github.com/nxp-imx/mfgtools/releases/download/uuu_1.4.182/uuu
-
- - Download uuu utility and copy to /usr/bin
 
    ```
    $ sudo cp ~/Downloads/uuu /usr/bin
@@ -110,21 +106,21 @@
 
 #### Boot into Recovery Mode
 
- * Set the boot switch into recovery mode
- * Connect USB OTG cable to host
- * Power on the board
+ * Set the boot switch into recovery mode.
+ * Connect USB OTG cable to host.
+ * Power on the board.
 
 #### Flash image to eMMC
 
-* Execute the following command to start flashing Android image to eMMC
+* Execute the following command to start flashing Android image to eMMC.
 
    ```
    $ sudo ./uuu_imx_android_flash.sh -f imx8mp -e -c 28 -u <N>gb
    ```
 
-* Replace N with size of RAM installed in the module
-* After flashing is completed, power off the board and change boot settings to eMMC mode
-* Power on the board to boot Android from eMMC
+* Replace N with size of RAM installed in the module.
+* Once flashing completed, power off the board and change boot settings to eMMC mode.
+* Power on the board to boot Android from eMMC.
 * A detailed guide on using UUU tool is available in: https://www.ipi.wiki/pages/imx8mplus-docs?page=HowToFlashImageeMMCUsingUUUTool.html
 
 
@@ -132,7 +128,7 @@
 ### 5.1 USB Type A
 
 * All USB type A ports are validated.
-* Any storage device connected on these ports will be mounted at /mnt/media_rw
+* Any storage device connected on these ports will be mounted at "/mnt/media_rw" location.
 * Device can also be accessed from Android GUI.
 
 
@@ -142,9 +138,8 @@
  * Devices can be accessed using adb commands.
 
  #### Running adb
- * After the Board Booted up, connect the micro USB port on the ADLINK board with the Host system using a Micro USB cable.
- * On a Ubuntu machine, install adb
- * Execute the below command:
+ * After Board boots up, connect the micro USB port on the ADLINK board with the Host system using a Micro USB cable.
+ * On a Ubuntu machine, install adb using below commands.
    ```
    $ sudo adb usb
    $ sudo adb shell ls <to list the current directory on the Android board>
@@ -156,7 +151,7 @@ HDMI function is enabled by default.
 
 ### 5.4 UART1 - Console
 
-* Connect UART cable to CN1001 expansion connector to get android boot logs
+* Connect UART cable to CN1001 expansion connector to get android boot logs.
 * Console UART works at TTL level. Use TTL compatible USB Serial adapter to get logs.
 
 Pin connection:
@@ -181,8 +176,8 @@ Pin connection:
 | 5 | GND     |
 
 #### UART Tx Test
-* Open minicom for 115200 baudrate with no hardware flow control setting
-* Run the below commands from adb shell to transmit data to Minicom
+* Open minicom, 115200 baudrate with no hardware flow control setting.
+* Run the below commands from adb shell to transmit data to Minicom.
    ```
    $ stty -F /dev/ttymxc2 115200 cs8 -cstopb -parenb
    $ echo 'ADLINK' > /dev/ttymxc2
@@ -214,7 +209,7 @@ $ tinyplay <wav file> -D 1
 
 ### 5.7 GPIO on Expansion Connector
 
- GPIO on Exapnsion connector (CN1001) can be accessed using following commands:
+ GPIO on expansion connector (CN1001) can be accessed using following commands:
 
 ```
 $ cd /sys/class/gpio/
@@ -295,7 +290,7 @@ $ echo 1 > value       ("1" to drive high, "0" to drive low)
 
 ### 5.10 CAN interface (CN1602)
 
-Setup CAN0 & CAN1 Loopback: Connect Pins (13 - 14) and (15 - 16) in CN1602 connector
+Setup CAN0 & CAN1 Loopback: Connect Pins (13 - 14) and (15 - 16) in CN1602 connector.
 
 Sender should execute below commands:
 
@@ -326,7 +321,7 @@ Sender should execute below commands:
 
 ### 5.11 RTC
 
-If connected to network android will update date/time from network
+If connected to network android will update date/time from network.
 service. Date/time settings in android available under:
 Settings -> System -> Date & time
 
@@ -344,13 +339,13 @@ $ date
 
 ### 5.12 Wifi/BT 
 
-WiFi/BT is supported in Android and functionalities can be realised by using Android Settings
+WiFi/BT supported in Android and functionalities can be realised by using Android Settings.
 
 ### 5.13. MIPI DSI display
 
-* DSI display feature can be enabled by flashing corresponding DTB file during SD/eMMC boot media preparation
-* Append "-d mipi-panel' to SD/eMMC flash command to enable DSI feature
-* Android will support HDMI + DSI dual display feature with this flash command
+* DSI display feature can be enabled by flashing corresponding DTB file during SD/eMMC boot media preparation.
+* Append "-d mipi-panel' to SD/eMMC flash command to enable DSI feature.
+* Android will support HDMI + DSI dual display feature with this flash command.
 
 Example:
 
@@ -362,8 +357,8 @@ to flash image to eMMC with DSI feature enabled for 4G module
 
 ### 5.14. LVDS display
 
-* LVDS feature can be enabled by adding '-d lvds-panel' to flash command
-* Android will support HDMI + LVDS dual display feature with this flash
+* LVDS feature can be enabled by adding '-d lvds-panel' to flash command.
+* Android will support HDMI + LVDS dual display feature with this flash.
 
 Example:
 
@@ -375,13 +370,13 @@ to flash image to eMMC with LVDS feature enabled for 2G module
 
 
 ### 5.15. MIPI CSI camera
-* OV5640 camera is enabled by default
-* Connect camera to 2-lane MIPI CSI connector
-* Camera App can be used to stream video from camera
+* OV5640 camera is enabled by default.
+* Connect camera to 2-lane MIPI CSI connector.
+* Camera App can be used to stream video from camera.
 
 ### 5.16. PCIe
-* Run ```lspci``` command from adb shell to list connected PCI devices
-* Vendor ID details can be extracted by running lspci command with '-n' argument
+* Run ```lspci``` command from adb shell to list connected PCI devices.
+* Vendor ID details can be extracted by running lspci command with '-n' argument.
 
 ### 5.17 Ethernet 
 
@@ -394,7 +389,7 @@ to flash image to eMMC with LVDS feature enabled for 2G module
    u-boot=> setenv netmask 255.255.255.0
    ```
 ##### ETH0 - FEC
-* Execute the below commands to ping from ETH0 port 
+* Execute the below commands to ping from ETH0 port. 
 
       u-boot=> setenv ethact eth0
       u-boot=> ping 192.168.1.1
@@ -408,4 +403,4 @@ to flash image to eMMC with LVDS feature enabled for 2G module
 #### 5.17.2 Ethernet in Android
 * Android supports both Ethernet
 * Open Settings -> Network & internet -> Internet -> Ethernet to view details of ETH0/ETH1 port
-* Ethernet configuration can also be obtained by running ```ifconfig``` command from adb shell
+* Ethernet configuration can be obtained by running ```ifconfig``` command from adb shell
