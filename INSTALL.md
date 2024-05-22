@@ -16,9 +16,10 @@ $ git config --global user.email "first.last@company.com"
 ```
 
 ### Setup GCC Compiler
-
+Download GCC [Click here](https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-aarch64-none-elf.tar.xz) and copy into ${HOME} directory
 ```
-$ sudo tar -xvJf gcc-arm-9.2-2019.12-x86_64-aarch64-none-elf.tar.xz -C /opt
+
+$ sudo tar -xvJf ${HOME}/gcc-arm-9.2-2019.12-x86_64-aarch64-none-elf.tar.xz -C /opt
 $ export AARCH64_GCC_CROSS_COMPILE=/opt/gcc-arm-9.2-2019.12-x86_64-aarch64-none-elf/bin/aarch64-none-elf-
 ```
 
