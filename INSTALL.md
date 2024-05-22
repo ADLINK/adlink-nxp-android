@@ -19,7 +19,7 @@ $ git config --global user.email "first.last@company.com"
 
 ```
 $ sudo tar -xvJf gcc-arm-9.2-2019.12-x86_64-aarch64-none-elf.tar.xz -C /opt
-$ export AARCH64_GCC_CROSS_COMPILE=/opt/gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
+$ export AARCH64_GCC_CROSS_COMPILE=/opt/gcc-arm-9.2-2019.12-x86_64-aarch64-none-elf/bin/aarch64-none-elf-
 ```
 
 ### Setup CLANG Compiler
@@ -31,57 +31,59 @@ $ sudo git checkout d20e409261d6ad80a0c29ac2055bf5c3bb996ef4
 $ export CLANG_PATH=/opt/prebuilt-android-clang
 ```
 
-## Download Android source from NXP
-
+## Download Android source from NXP and patches from Adlink GitHub
+Download the "imx-android-13.0.0_1.2.0.tar.gz" from NXP site [Click here](https://www.nxp.com/webapp/Download?colCode=13.0.0_1.2.0_ANDROID_SOURCE&appType=license) and copy into ${HOME} directory
 ```
 $ mkdir ~/bin
 $ curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
 $ chmod a+x ~/bin/repo
 $ export PATH=${PATH}:~/bin
+$ cd ${HOME}
+$ git clone https://github.com/ADLINK/imx8mp_android.git -b Android-13
 $ tar -zxvf imx-android-13.0.0_1.2.0.tar.gz
-$ source ~/imx-android-13.0.0_1.2.0/imx_android_setup.sh
+$ source ${HOME}/imx-android-13.0.0_1.2.0/imx_android_setup.sh
 ```
 
 
 ## Apply LEC-iMX8MP patches 
 ### 1. Android Device
 ```
-$ cd ~/android_build/device/nxp
-$ git am ~/adlink-lec-imx8mp-android-tiramisu_V2_R1_240520/patches/imx-android-13.0.0_1.2.0/android_build/device/nxp/0001-lec-imx8mp-Add-device-support.patch
+$ cd ${HOME}/android_build/device/nxp
+$ git am ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0/android_build/device/nxp/0001-lec-imx8mp-Add-device-support.patch
 ```
 
 ### 2. Kernel
 ```
-$ cd ~/android_build/vendor/nxp-opensource/kernel_imx
-$ git am < ~/adlink-lec-imx8mp-android-tiramisu_V2_R1_240520/patches/imx-android-13.0.0_1.2.0/android_build/vendor/nxp-opensource/kernel_imx/0001-lec-imx8mp-Add-initial-board-support.patch
+$ cd ${HOME}/android_build/vendor/nxp-opensource/kernel_imx
+$ git am ${HOME}/imx8mp_android/imx-android-13.0.0_1.2.0/android_build/vendor/nxp-opensource/kernel_imx/0001-lec-imx8mp-Add-initial-board-support.patch
 ```
 
 ### 3. U-boot
 ```
-$ cd ~/android_build/vendor/nxp-opensource/uboot-imx
-$ git am ~/adlink-lec-imx8mp-android-tiramisu_V2_R1_240520/patches/imx-android-13.0.0_1.2.0/android_build/vendor/nxp-opensource/kernel_imx/0001-lec-imx8mp-Add-initial-board-support.patch
+$ cd ${HOME}/android_build/vendor/nxp-opensource/uboot-imx
+$ git am ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0/android_build/vendor/nxp-opensource/kernel_imx/0001-lec-imx8mp-Add-initial-board-support.patch
 ```
 
 ### 4. imx-mkimage
 ```
-$ cd ~/android_build/vendor/nxp-opensource/imx-mkimage
-$ git am ~/adlink-lec-imx8mp-android-tiramisu_V2_R1_240520/patches/imx-android-13.0.0_1.2.0/android_build/vendor/nxp-opensource/imx-mkimage/0001-lec-imx8mp-add-support-to-compile-lec-dtb.patch
+$ cd ${HOME}/android_build/vendor/nxp-opensource/imx-mkimage
+$ git am ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0/android_build/vendor/nxp-opensource/imx-mkimage/0001-lec-imx8mp-add-support-to-compile-lec-dtb.patch
 ```
 
 ### 5. Libbt
 ```
-$ cd ~/android_build/hardware/nxp/libbt
-$ git am ~/adlink-lec-imx8mp-android-tiramisu_V2_R1_240520/patches/imx-android-13.0.0_1.2.0/android_build/hardware/nxp/libbt/0001-lec-imx8mp-Add-bt-uart-support.patch
+$ cd ${HOME}/android_build/hardware/nxp/libbt
+$ git am ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0/android_build/hardware/nxp/libbt/0001-lec-imx8mp-Add-bt-uart-support.patch
 ```
 
 ### 6. External Libraries
 ```
-$ cd ~/android_build/external
-$ git apply ~/adlink-lec-imx8mp-android-tiramisu_V2_R1_240520/patches/imx-android-13.0.0_1.2.0/android_build/external/0001-can-spi-pwm-utils.patch
+$ cd ${HOME}/android_build/external
+$ git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0/android_build/external/0001-can-spi-pwm-utils.patch
 ```
 ```
-$ cd ~/android_build/external/toybox
-$ git am ~/adlink-lec-imx8mp-android-tiramisu_V2_R1_240520/patches/imx-android-13.0.0_1.2.0/android_build/external/toybox/0001-lec-imx8mp-fix-lspci-listing-issue.patch
+$ cd ${HOME}/android_build/external/toybox
+$ git am ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0/android_build/external/toybox/0001-lec-imx8mp-fix-lspci-listing-issue.patch
 ```
 
 Compile Android 13 BSP
