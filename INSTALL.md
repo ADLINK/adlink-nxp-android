@@ -2,7 +2,7 @@
 
 ## Preparation
 
-### Installing Dependency Packagages
+### Installing Dependency Packages
 ```
 $ sudo apt-get install uuid uuid-dev zlib1g-dev liblz-dev liblzo2-2 liblzo2-dev lzop git curl u-boot-tools mtd-utils android-sdk-libsparse-utils
 $ sudo apt-get install device-tree-compiler gdisk m4 bison flex make libssl-dev gcc-multilib libgnutls28-dev swig liblz4-tool libdw-dev
@@ -22,7 +22,7 @@ $ sudo tar -xvJf gcc-arm-9.2-2019.12-x86_64-aarch64-none-elf.tar.xz -C /opt
 $ export AARCH64_GCC_CROSS_COMPILE=/opt/gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
 ```
 
-### Setup CLANG compiler
+### Setup CLANG Compiler
 
 ```
 $ sudo git clone https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86 /opt/prebuilt-android-clang
@@ -41,10 +41,9 @@ $ export PATH=${PATH}:~/bin
 $ tar -zxvf imx-android-13.0.0_1.2.0.tar.gz
 $ source ~/imx-android-13.0.0_1.2.0/imx_android_setup.sh
 ```
-Now Android 13 source will be downloaded into android_build directory
 
 
-## Apply LEC-iMX8MP patches for Android 13
+## Apply LEC-iMX8MP patches 
 ### 1. Android Device
 ```
 $ cd ~/android_build/device/nxp
