@@ -1,8 +1,24 @@
-commit 85d07884485f381d440de2aad80820553fa19787
-Author: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
-Date:   Fri Apr 5 17:40:26 2024 +0530
+From 9c891c2888dfdfd996e357c1eb4331e30bcba9f3 Mon Sep 17 00:00:00 2001
+From: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
+Date: Tue, 21 May 2024 18:13:16 +0530
+Subject: [PATCH] sp2-imx8mp-uboot_android_defconfig
 
-    uboot_Android_support
+Signed-off-by: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
+---
+ arch/arm/dts/Makefile                         |   3 +-
+ arch/arm/dts/sp2imx8mp-u-boot.dtsi            | 255 +++++++
+ arch/arm/dts/sp2imx8mp.dts                    | 701 ++++++++++++++++++
+ configs/imx8mp_sp2_android_defconfig          | 218 ++++++
+ .../imx8mp_sp2_android_trusty_dual_defconfig  | 218 ++++++
+ ...ndroid_trusty_secure_unlock_dual_defconfig | 224 ++++++
+ configs/imx8mp_sp2_android_uuu_defconfig      | 246 ++++++
+ 7 files changed, 1864 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/dts/sp2imx8mp-u-boot.dtsi
+ create mode 100755 arch/arm/dts/sp2imx8mp.dts
+ create mode 100644 configs/imx8mp_sp2_android_defconfig
+ create mode 100644 configs/imx8mp_sp2_android_trusty_dual_defconfig
+ create mode 100644 configs/imx8mp_sp2_android_trusty_secure_unlock_dual_defconfig
+ create mode 100644 configs/imx8mp_sp2_android_uuu_defconfig
 
 diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
 index 5c32345b78..cac3b95451 100644
@@ -281,7 +297,7 @@ index 0000000000..056bcdabff
 +};
 diff --git a/arch/arm/dts/sp2imx8mp.dts b/arch/arm/dts/sp2imx8mp.dts
 new file mode 100755
-index 0000000000..5e8e519a9c
+index 0000000000..d7e9dc5303
 --- /dev/null
 +++ b/arch/arm/dts/sp2imx8mp.dts
 @@ -0,0 +1,701 @@
@@ -296,7 +312,7 @@ index 0000000000..5e8e519a9c
 +#include "imx8mp.dtsi"
 +
 +/ {
-+	model = "A13_ADLINK Smart Panel - IMX8MP board";
++	model = "ADLINK Smart Panel - IMX8MP board";
 +	compatible = "fsl,imx8mp-evk", "fsl,imx8mp";
 +
 +	chosen {
@@ -439,7 +455,7 @@ index 0000000000..5e8e519a9c
 +
 +		ethphy1: ethernet-phy@1 {
 +			compatible = "ethernet-phy-ieee802.3-c22";
-+			reg = <1>;
++			reg = <2>;
 +			eee-broken-1000t;
 +		};
 +	};
@@ -1666,10 +1682,10 @@ index 0000000000..f3cf22c1d1
 +CONFIG_IMX_HAB=y
 diff --git a/configs/imx8mp_sp2_android_uuu_defconfig b/configs/imx8mp_sp2_android_uuu_defconfig
 new file mode 100644
-index 0000000000..35dae0addb
+index 0000000000..34ffacec4a
 --- /dev/null
 +++ b/configs/imx8mp_sp2_android_uuu_defconfig
-@@ -0,0 +1,223 @@
+@@ -0,0 +1,246 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_IMX8M=y
 +CONFIG_SYS_TEXT_BASE=0x40200000
@@ -1688,9 +1704,8 @@ index 0000000000..35dae0addb
 +CONFIG_SYS_I2C_MXC_I2C2=y
 +CONFIG_SYS_I2C_MXC_I2C3=y
 +CONFIG_DM_GPIO=y
-+CONFIG_DEFAULT_DEVICE_TREE="sp2imx8mp"
 +CONFIG_SPL_TEXT_BASE=0x920000
-+CONFIG_USB_TCPC=y
++# CONFIG_USB_TCPC is not set
 +CONFIG_TARGET_IMX8MP_SP2=y
 +CONFIG_FSL_CAAM=y
 +#CONFIG_DM_RNG=y
@@ -1699,18 +1714,20 @@ index 0000000000..35dae0addb
 +CONFIG_SPL_DRIVERS_MISC=y
 +CONFIG_SPL=y
 +CONFIG_SPL_IMX_ROMAPI_LOADADDR=0x48000000
++CONFIG_DEFAULT_DEVICE_TREE="sp2imx8mp"
 +CONFIG_OF_BOARD_FIXUP=y
 +CONFIG_DISTRO_DEFAULTS=y
 +CONFIG_SYS_LOAD_ADDR=0x40400000
++CONFIG_BOOTCOMMAND="run distro_bootcmd;run bsp_bootcmd"
 +CONFIG_FIT=y
 +CONFIG_FIT_EXTERNAL_OFFSET=0x3000
 +CONFIG_FIT_SIGNATURE=y
 +CONFIG_SPL_LOAD_FIT=y
++CONFIG_OF_BOARD_FIXUP=y
 +CONFIG_SPL_LOAD_FIT_APPLY_OVERLAY=y
 +CONFIG_LEGACY_IMAGE_FORMAT=y
 +CONFIG_OF_BOARD_SETUP=y
 +CONFIG_OF_SYSTEM_SETUP=y
-+CONFIG_BOOTCOMMAND="run distro_bootcmd;run bsp_bootcmd"
 +CONFIG_DEFAULT_FDT_FILE="sp2imx8mp.dtb"
 +CONFIG_ARCH_MISC_INIT=y
 +CONFIG_BOARD_EARLY_INIT_F=y
@@ -1719,6 +1736,7 @@ index 0000000000..35dae0addb
 +CONFIG_BLOBLIST_ADDR=0x98FC00
 +CONFIG_HANDOFF=y
 +CONFIG_SPL_BOARD_INIT=y
++CONFIG_SPL_SYS_MALLOC_SIMPLE=y
 +CONFIG_SPL_BOOTROM_SUPPORT=y
 +CONFIG_SPL_SEPARATE_BSS=y
 +CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_SECTOR=y
@@ -1774,13 +1792,17 @@ index 0000000000..35dae0addb
 +CONFIG_CLK_COMPOSITE_CCF=y
 +CONFIG_SPL_CLK_IMX8MP=y
 +CONFIG_CLK_IMX8MP=y
++CONFIG_FASTBOOT=y
 +CONFIG_DFU_TFTP=y
 +CONFIG_DFU_MMC=y
 +CONFIG_DFU_RAM=y
++
 +CONFIG_USB_FUNCTION_FASTBOOT=y
-+CONFIG_UDP_FUNCTION_FASTBOOT=y
++CONFIG_CMD_FASTBOOT=y
++CONFIG_ANDROID_BOOT_IMAGE=y
++CONFIG_FASTBOOT_UUU_SUPPORT=y
 +CONFIG_FASTBOOT_BUF_ADDR=0x42800000
-+CONFIG_FASTBOOT_BUF_SIZE=0x40000000
++CONFIG_FASTBOOT_BUF_SIZE=0xc800000
 +CONFIG_FASTBOOT_FLASH=y
 +CONFIG_MXC_GPIO=y
 +CONFIG_DM_PCA953X=y
@@ -1789,6 +1811,7 @@ index 0000000000..35dae0addb
 +CONFIG_LED=y
 +CONFIG_LED_GPIO=y
 +CONFIG_DM_MMC=y
++CONFIG_EFI_PARTITION=y
 +CONFIG_SPL_I2C_EEPROM=y
 +CONFIG_SUPPORT_EMMC_RPMB=y
 +CONFIG_SUPPORT_EMMC_BOOT=y
@@ -1812,6 +1835,16 @@ index 0000000000..35dae0addb
 +CONFIG_MII=y
 +CONFIG_PHY=y
 +CONFIG_PHY_IMX8MQ_USB=y
++CONFIG_DM_SPI_FLASH=y
++CONFIG_SF_DEFAULT_MODE=0
++CONFIG_SF_DEFAULT_SPEED=40000000
++
++CONFIG_SPI_FLASH=y
++CONFIG_SPI_FLASH_BAR=y
++CONFIG_SPI_FLASH_STMICRO=y
++CONFIG_SF_DEFAULT_BUS=0
++CONFIG_SF_DEFAULT_CS=0
++
 +CONFIG_PINCTRL=y
 +CONFIG_SPL_PINCTRL=y
 +CONFIG_PINCTRL_IMX8M=y
@@ -1840,6 +1873,7 @@ index 0000000000..35dae0addb
 +CONFIG_USB_XHCI_DWC3=y
 +CONFIG_USB_DWC3=y
 +CONFIG_USB_GADGET=y
++CONFIG_USB_STORAGE=y
 +CONFIG_USB_GADGET_MANUFACTURER="FSL"
 +CONFIG_USB_GADGET_VENDOR_NUM=0x1fc9
 +CONFIG_USB_GADGET_PRODUCT_NUM=0x0152
@@ -1861,6 +1895,7 @@ index 0000000000..35dae0addb
 +CONFIG_BMP_32BPP=y
 +CONFIG_VIDEO_ADV7535=y
 +CONFIG_SPL_RSA=y
++CONFIG_LEGACY_IMAGE_FORMAT=y
 +CONFIG_SHA384=y
 +CONFIG_LZO=y
 +CONFIG_BZIP2=y
@@ -1885,11 +1920,18 @@ index 0000000000..35dae0addb
 +CONFIG_BACKLIGHT=y
 +CONFIG_BACKLIGHT_PWM=y
 +
-+CONFIG_FASTBOOT_UUU_SUPPORT=n
++CONFIG_FASTBOOT_UUU_SUPPORT=y
++
++CONFIG_LZ4=y
++CONFIG_FLASH_MCUFIRMWARE_SUPPORT=y
 +CONFIG_APPEND_BOOTARGS=y
++CONFIG_SPL_MMC_SUPPORT=y
 +CONFIG_AVB_WARNING_LOGO=y
 +CONFIG_AVB_WARNING_LOGO_COLS=0x320
 +CONFIG_AVB_WARNING_LOGO_ROWS=0xc0
 +CONFIG_VIRTUAL_AB_SUPPORT=y
 +CONFIG_ANDROID_SUPPORT=y
 +CONFIG_ANDROID_AB_SUPPORT=y
+-- 
+2.25.1
+

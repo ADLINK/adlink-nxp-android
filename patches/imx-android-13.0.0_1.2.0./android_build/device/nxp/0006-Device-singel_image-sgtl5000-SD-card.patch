@@ -1,0 +1,158 @@
+From 470ebca1e234413da04c704a02c7582aa75f4c94 Mon Sep 17 00:00:00 2001
+From: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
+Date: Mon, 10 Jun 2024 12:24:17 +0530
+Subject: [PATCH] Device-singel_image-sgtl5000-SD-card
+
+Signed-off-by: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
+---
+ common/audio-json/sgtl5000_config.json | 27 ++++++++++++++++++++++++++
+ common/tools/uuu_imx_android_flash.sh  |  4 ++--
+ imx8m/sp2_imx8mp/AndroidUboot.sh       |  2 +-
+ imx8m/sp2_imx8mp/BoardConfig.mk        |  8 ++++----
+ imx8m/sp2_imx8mp/SharedBoardConfig.mk  |  5 ++---
+ imx8m/sp2_imx8mp/fstab.nxp             |  2 ++
+ imx8m/sp2_imx8mp/sp2_imx8mp.mk         |  2 +-
+ 7 files changed, 39 insertions(+), 11 deletions(-)
+ create mode 100644 common/audio-json/sgtl5000_config.json
+
+diff --git a/common/audio-json/sgtl5000_config.json b/common/audio-json/sgtl5000_config.json
+new file mode 100644
+index 00000000..90f904ce
+--- /dev/null
++++ b/common/audio-json/sgtl5000_config.json
+@@ -0,0 +1,27 @@
++{
++  "driver_name": "audio-sgtl5000",
++  "bus_name": "bus1_system_sound_out",
++  "supported_out_devices": ["speaker", "wired_headphone", "wired_headset", "bus", "line"],
++  "supported_in_devices": ["builtin_mic", "wired_headset"],
++  "support_lpa": 1,
++  "support_compress": 1,
++
++  "init_ctl": [
++    {"name": "Left Output Mixer PCM Playback Switch", "type": "int", "val": 1},
++    {"name": "Right Output Mixer PCM Playback Switch", "type": "int", "val": 1},
++    {"name": "Playback Volume", "type": "int", "val": 230},
++    {"name": "Speaker Playback Volume", "type": "int", "val": 120},
++    {"name": "Headphone Playback Volume", "type": "int", "val": 120}
++  ],
++
++  "builtin_mic_ctl": [
++    {"name": "ALC Function", "type": "int", "val": 3},
++    {"name": "Left Input Mixer Boost Switch", "type": "int", "val": 1},
++    {"name": "ADC PCM Capture Volume", "type": "int", "val": 230},
++    {"name": "Capture Volume", "type": "int", "val": 60}
++  ],
++
++  "out_volume_ctl": [
++    "Playback Volume"
++  ]
++}
+diff --git a/common/tools/uuu_imx_android_flash.sh b/common/tools/uuu_imx_android_flash.sh
+index 5356bd99..556d6c7b 100755
+--- a/common/tools/uuu_imx_android_flash.sh
++++ b/common/tools/uuu_imx_android_flash.sh
+@@ -66,7 +66,7 @@ options:
+                            ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+                            │   imx8mq       │  dual mipi-panel mipi-panel-rm67191                                                                  │
+                            ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+-                           │   imx8mp       │  rpmsg lvds-panel lvds mipi-panel mipi-panel-rm67191 basler powersave powersave-non-rpmsg            │
++                           │   imx8mp       │  rpmsg lvds-7 lvds-10 lvds-panel lvds mipi-panel mipi-panel-rm67191 basler powersave powersave-non-rpmsg            │
+                            │                │  basler-ov5640 ov5640.img sof dual-basler os08a20-ov5640 os08a20                                     │
+                            ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+                            │   imx8qxp      │  sof                                                                                                 │
+@@ -425,7 +425,7 @@ imx93_uboot_feature=(dual evk-uuu)
+ imx8mm_dtb_feature=(ddr4 m4 mipi-panel mipi-panel-rm67191)
+ imx8mn_dtb_feature=(mipi-panel mipi-panel-rm67191 rpmsg ddr4 ddr4-mipi-panel ddr4-mipi-panel-rm67191 ddr4-rpmsg)
+ imx8mq_dtb_feature=(dual mipi-panel mipi-panel-rm67191 mipi)
+-imx8mp_dtb_feature=(rpmsg lvds-panel lvds mipi-panel mipi-panel-rm67191 basler powersave powersave-non-rpmsg basler-ov5640 ov5640 sof dual-basler os08a20-ov5640 os08a20)
++imx8mp_dtb_feature=(rpmsg lvds-7 lvds-10 lvds-panel lvds mipi-panel mipi-panel-rm67191 basler powersave powersave-non-rpmsg basler-ov5640 ov5640 sof dual-basler os08a20-ov5640 os08a20)
+ imx8qxp_dtb_feature=(sof)
+ imx8qm_dtb_feature=(hdmi hdmi-rx mipi-panel mipi-panel-rm67191 md xen esai sof)
+ imx8ulp_dtb_feature=(hdmi epdc 9x9 9x9-hdmi sof lpa)
+diff --git a/imx8m/sp2_imx8mp/AndroidUboot.sh b/imx8m/sp2_imx8mp/AndroidUboot.sh
+index 53b94803..c6968a38 100644
+--- a/imx8m/sp2_imx8mp/AndroidUboot.sh
++++ b/imx8m/sp2_imx8mp/AndroidUboot.sh
+@@ -78,7 +78,7 @@ build_imx_uboot()
+ 	cp ${UBOOT_OUT}/u-boot-nodtb.$1 ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
+ 	cp ${UBOOT_OUT}/spl/u-boot-spl.bin  ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
+ 	cp ${UBOOT_OUT}/tools/mkimage  ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/mkimage_uboot
+-	cp ${UBOOT_OUT}/arch/arm/dts/imx8mp-evk.dtb ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
++	cp ${UBOOT_OUT}/arch/arm/dts/sp2imx8mp.dtb ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
+ 	cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/ddr/synopsys/lpddr4_pmu_train* ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
+ 
+ 	# build ATF based on whether tee is involved
+diff --git a/imx8m/sp2_imx8mp/BoardConfig.mk b/imx8m/sp2_imx8mp/BoardConfig.mk
+index 549e965e..b1228c41 100644
+--- a/imx8m/sp2_imx8mp/BoardConfig.mk
++++ b/imx8m/sp2_imx8mp/BoardConfig.mk
+@@ -186,10 +186,10 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
+     else
+     TARGET_BOARD_DTS_CONFIG += imx8mp-rpmsg:imx8mp-evk-rpmsg.dtb
+     endif
+-    # Support LVDS interface
+-    TARGET_BOARD_DTS_CONFIG += imx8mp-lvds:imx8mp-evk-it6263-lvds-dual-channel.dtb
+-    # Support LVDS panel
+-    TARGET_BOARD_DTS_CONFIG += imx8mp-lvds-panel:imx8mp-evk-jdi-wuxga-lvds-panel.dtb
++    # Support LVDS interface #7
++    TARGET_BOARD_DTS_CONFIG += imx8mp-lvds-7:sp2-imx8mp-7inch.dtb
++    # Support LVDS panel #10
++    TARGET_BOARD_DTS_CONFIG += imx8mp-lvds-10:sp2-imx8mp-10inch.dtb
+     # Support rm67199 MIPI panel
+     TARGET_BOARD_DTS_CONFIG += imx8mp-mipi-panel:imx8mp-evk-rm67199.dtb
+     # Support rm67191 MIPI panel
+diff --git a/imx8m/sp2_imx8mp/SharedBoardConfig.mk b/imx8m/sp2_imx8mp/SharedBoardConfig.mk
+index 9deb6df9..2fc57e87 100644
+--- a/imx8m/sp2_imx8mp/SharedBoardConfig.mk
++++ b/imx8m/sp2_imx8mp/SharedBoardConfig.mk
+@@ -42,12 +42,13 @@ BOARD_VENDOR_KERNEL_MODULES += \
+     $(KERNEL_OUT)/drivers/gpu/drm/bridge/synopsys/dw-hdmi-cec.ko \
+     $(KERNEL_OUT)/drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.ko \
+     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-hdmi-codec.ko \
+-    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8960.ko \
++    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-sgtl5000.ko \
+     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-bt-sco.ko \
+     $(KERNEL_OUT)/sound/soc/generic/snd-soc-simple-card-utils.ko \
+     $(KERNEL_OUT)/sound/soc/generic/snd-soc-simple-card.ko \
+     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-card.ko \
+     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-hdmi.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-sgtl5000.ko \
+     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-audmux.ko \
+     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-asoc-card.ko \
+     $(KERNEL_OUT)/drivers/mxc/hantro_vc8000e/hx280enc_vc8000e.ko \
+@@ -62,8 +63,6 @@ BOARD_VENDOR_KERNEL_MODULES += \
+     $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-rpmsg.ko \
+     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-rpmsg.ko \
+     $(KERNEL_OUT)/sound/soc/fsl/imx-audio-rpmsg.ko \
+-    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-rpmsg-wm8960.ko \
+-    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-rpmsg-wm8960-i2c.ko \
+     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-pcm512x-rpmsg.ko \
+     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-rpmsg.ko \
+     $(KERNEL_OUT)/drivers/firmware/imx/imx-dsp.ko \
+diff --git a/imx8m/sp2_imx8mp/fstab.nxp b/imx8m/sp2_imx8mp/fstab.nxp
+index c7eba71b..424a09c0 100644
+--- a/imx8m/sp2_imx8mp/fstab.nxp
++++ b/imx8m/sp2_imx8mp/fstab.nxp
+@@ -15,3 +15,5 @@ system_ext                     /system_ext   erofs ro
+ vendor                         /vendor       erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
+ vendor_dlkm                    /vendor_dlkm  erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
+ product                        /product      erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
++
++/devices/platform/soc@0/30800000.bus/30b50000.mmc/mmc_host/* auto auto defaults voldmanaged=sdcard1:auto,encryptable=userdata
+diff --git a/imx8m/sp2_imx8mp/sp2_imx8mp.mk b/imx8m/sp2_imx8mp/sp2_imx8mp.mk
+index 9b942cdd..57d1eea1 100644
+--- a/imx8m/sp2_imx8mp/sp2_imx8mp.mk
++++ b/imx8m/sp2_imx8mp/sp2_imx8mp.mk
+@@ -242,7 +242,7 @@ $(call inherit-product-if-exists, vendor/nxp-private/widevine/nxp_widevine_tee_8
+ 
+ # Audio card json
+ PRODUCT_COPY_FILES += \
+-    $(CONFIG_REPO_PATH)/common/audio-json/wm8960_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8960_config.json \
++    $(CONFIG_REPO_PATH)/common/audio-json/sgtl5000_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/sgtl5000_config.json \
+     $(CONFIG_REPO_PATH)/common/audio-json/micfil_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/micfil_config.json \
+     $(CONFIG_REPO_PATH)/common/audio-json/hdmi_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/hdmi_config.json \
+     $(CONFIG_REPO_PATH)/common/audio-json/btsco_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/btsco_config.json \
+-- 
+2.25.1
+
