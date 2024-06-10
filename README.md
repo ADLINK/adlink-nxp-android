@@ -1,252 +1,429 @@
-ADLINK SP2-IMX8MP  with Android 13
-=========================================================================
+# Android 13 for ADLINK SP2-IMX8MP
 
-Platform        : SP2-IMX8MP 
-================================================
-Kernel version  : 5.15.74
-================================================
+## Contents
+```
+1. Hardware Details
+2. Software Details
+3. Package structure
+4. Flashing the image and booting
+   4.1. SD boot
+   4.2. eMMC boot
+5. Peripheral testing
+   5.1. USB type A ports
+   5.2. Micro USB (Device mode)
+   5.3. HDMI
+   5.4. UART2 - Console
+   5.5. UART3 - RS485
+   5.6. UART4 - RS232
+   5.7. SGTL5000 Audio codec
+   5.8. GPIO on expansion connector
+   5.9. SPI on expansion connector
+   5.10. CAN interface
+   5.11. RTC
+   5.12. Wifi/BT
+   5.13. ETHERNET
+         5.13.1. Ethernet in U-boot
+         5.13.2. Ethernet in Android
+   5.14. LVDS display
+```
+## 1 Hardware Details
 
-Change log:
-===========
-1v0
----------------------
- + USB Device Support is added
+| **Module** | **SP2-IMX8MP** |
+|:----------------|:-----------|
 
- + Ethernet support added for : LAN1 LAN2
+## 2 Software Details
 
- + Uart3
+|   Android   |   Ver  13   |
+|:-----------:|:-----------:|
+| **Kernel**  | **5.15.74** |
+| **U-Boot**  | **2022.04** |
+| **Host OS** | **Ubuntu 22.04.1** |
 
- + Uart4
+## 3 Package structure
 
- + RAM memory updated to 4 GB
+ ```
+  |---SP2-IMX8MP-Android-tiramisu_1V1.0.4_10-06-2024
+     |--- android images
+     |--- README.md
+ ```
+- Download Android release (SP2-IMX8MP-Android-tiramisu_1V1.0.4_10-06-2024) and extract it.
 
- + Interfaces tested:
-	
-	​		- Serial console
-	
-	​		- HDMI
-	
-	​		- USB-2.0
-	
-	​		- LAN0
-	
-	​		- LAN1
-	
-	​		- UART3 (RS485)
-	
-	​		- UART4 (RS232)
+## 4 Flashing the Image and Booting
 
+### 4.1 SD Boot
 
+#### Host preparation
 
-Supported interfaces:
-=====================
- - Serial console
+1. On a linux host machine, insert the micro SD card (through an USB adapter).
 
- - USB 2.0  
+2. Check the device node of the micro SD card using dmesg command.
 
- - HDMI display
+3. Move into android release directory ```SP2-IMX8MP-Android-tiramisu_1V1.0.4_10-06-2024```
 
- - Ethernet (FEC and imx-DWMAC)
+   ```shell
+   $ sudo cp tools/lib64/libc++.so /lib/x86_64-linux-gnu
+   $ sudo chmod +x /lib/x86_64-linux-gnu/libc++.so
+   ```
 
- - Micro SD interface
+   ```shell
+   $ sudo cp tools/bin/make_f2fs /usr/bin
+   $ sudo chmod +x /usr/bin/make_f2fs
+   ```
+
+#### Flash image to SD card
+
+* Execute the following command for a 32 GB Micro-SD card.
+  
+   - For SP2IMX8MP with 7 inch panel
+   
+     ```Shell
+	  $ sudo ./imx-sdcard-partition.sh -d lvds-7 -f  imx8mp -c 28 /dev/sdX
+     ```
 
    
+  - For SP2IMX8MP with 10.1 inch panel
+  
+    ```Shell
+    $ sudo ./imx-sdcard-partition.sh -d lvds-10 -f  imx8mp -c 28 /dev/sdX
+    ```
+  
+    
+  
+* /dev/sdX need to be changed to actual device node of the micro SD card
 
-Flashing the image and booting:
-===============================
-1. On a linux host machine, insert the micro SD card (through an USB adapter).
-2. Ensure, the device node of the micro SD card using dmesg.
-3. Change to the release and bin directory.
-4. Execute the command for a 32 GB Micro-SD card:
-	- sudo ./imx-sdcard-partition.sh -f imx8mp -c 28 /dev/sdX
-	- /dev/sdX need to be changed to actual device node of the micro SD card>
-	- For more details, please refer: https://www.nxp.com/docs/en/user-guide/ANDROID_USERS_GUIDE.pdf
+* For more details, please refer: https://www.nxp.com/docs/en/user-guide/ANDROID_USERS_GUIDE.pd
+
+  Note: First boot from SD card can be slow,subsequent boot will be faster
+
+### 4.2 eMMC Boot
+
+#### Download uuu utility
+
+ - Download uuu utility and copy to /usr/bin
+
+ - https://github.com/nxp-imx/mfgtools/releases/download/uuu_1.4.182/uuu
+
+   ```shell
+   $ sudo cp ~/Downloads/uuu /usr/bin
+   $ sudo chmod +x /usr/bin/uuu
+   ```
+
+#### Boot into Recovery Mode
+
+ * Set the boot switch into recovery mode.(1000)
+ * Connect USB OTG cable to host.
+ * Power on the board.
+
+#### Flash image to eMMC
+
+* Execute the following command to start flashing Android image to eMMC.
+
+   * For SP2IMX8MP with 7 inch panel
+   
+     ```Shell
+     $ sudo ./uuu_imx_android_flash.sh -d lvds-7 -f imx8mp -e -m -c 28 
+     ```
+   
+   * For SP2IMX8MP with 10 inch panel
+   
+     ```shell
+     $ sudo ./uuu_imx_android_flash.sh -d lvds-10 -f imx8mp -e -m -c 28 
+     ```
+   
+* Once flashing completed, power off the board and change boot settings to eMMC mode.(0100)
+
+* Power on the board to boot Android from eMMC.
+
+* A detailed guide on using UUU tool is available in: https://www.ipi.wiki/pages/imx8mplus-docs?page=HowToFlashImageeMMCUsingUUUTool.html
+
+## 5 Peripheral testing
+
+### 5.1 USB Type A
+
+* All USB type A ports are validated.
+* Any storage device connected on these ports will be mounted at "/mnt/media_rw" location.
+* Device can also be accessed from Android GUI.
 
 
+### 5.2 Micro USB (Device mode)
 
-Readme Contents
-=================================================
+ * Connect micro USB cable to access device in client mode.
+ * Devices can be accessed using adb commands.
 
-   1. Hardware setup
+ #### Running adb
+ * After Board boots up, connect the micro USB port on the ADLINK board with the Host system using a Micro USB cable.
+ * On a Ubuntu machine, install adb using below commands.
+   ```shell
+   $ sudo adb usb
+   $ sudo adb shell ls <to list the current directory on the Android board>
+   ```
 
-   2. Package structure
+### 5.3 HDMI
 
-   3. Steps to boot with prebuilts
+HDMI function is enabled by default.
 
-   4. Peripheral testing
-      4.1. Console Logs
-      4.2. HDMI
-      4.3. USB
-      4.4. LAN 1 LAN2
-      4.5. UART3
-      4.6. UART4
+### 5.4 UART2 - Console
 
-      
+* Connect UART cable to CN9 expansion connector to get android boot logs.
+* Console UART works at TTL level. Use TTL compatible USB Serial adapter to get logs.
 
-1.Hardware setup
-================================================
-       Target		-  SP2-IMX8MP
-       Host Machine - Linux Ubuntu
+Pin connection:
 
-2.Package structure
-================================================
+| Pin  | Function |
+|:----:|:--------:|
+| 1 | UART TX |
+| 2  | UART RX |
+| 3  | GND     |
 
-Unzip SP2-IMX8MP-4G-Android-tiramisu_1V1.0.1_24_03_04.zip
 
-SP2-IMX8MP-4G-Android-tiramisu_1V1.0.1_24_03_04/
+### 5.5 UART3 - RS485
 
-3.Steps to boot with prebuilts
-=================================================
+ Connect RS485 compatible UART cable to CN10 expansion connector(DB9-RS485).
 
-------------------------------------------------------
-3.1 Using SD card image
-------------------------------------------------------
-
-The SD card image packs bootloader, kernel and android file
-system. Follow below steps:
-
-  1. Unzip release package ADLINK_LEC_IMX8MP_4G_ANDROID_11_1V15
-  2. Go to directory ADLINK_LEC_IMX8MP_4G_ANDROID_11_1V15/bin
-  3. insert an sdcard
-  4. Run the imx-sdcard-partition.sh
-
-Note: - First boot from SD card can be slow. Subsequent boots will be faster
-
-​          - Boot setting 1100 for booting from SD card 
-
-4.Peripheral testing
-=================================================
-
--------------------------------------------------
-4.1 Console Logs
--------------------------------------------------
-
- Connect UART cable on expansion connector CN9 to get android boot logs.
  Pin connection:
-     pin 1  -  UART TX
-     pin 2 -   UART RX
-     pin 3  - GND
 
----------------------------------------------------
-4.2  HDMI
----------------------------------------------------
+| Pin  | Function |
+|:----:|:--------:|
+| 1 | B- |
+| 2 | A+ |
+| 5 | GND     |
 
- - Connect the HDMI cable to HDMI port on board
+#### RS485 Tx Test
+* Open minicom, 115200 baudrate with no hardware flow control setting.
+* Run the below commands from adb shell to transmit data to Minicom.
+   ```shell
+   $ stty -F /dev/ttymxc2 115200 cs8 -cstopb -parenb
+   $ echo 'ADLINK' > /dev/ttymxc2
+   ```
+   'ADLINK' string will be displayed in minicom
 
- - Check display on HDMI panel 
+#### RS485 Rx Test
+* Run below command in adb shell
+   ```shell
+   $ cat /dev/ttymxc2
+   ```
+   Type some data and press enter in Minicom. 
+   The data will be received in adb shell.
 
- - When the board is powered on, the HDMI display starts with the Android logo.
+### 5.6 UART4 - RS232
 
- - User can unlock HDMI display 
+ Connect USB to RS232 compatible  cable to CN10 connector(DB9-COM).
 
-   using mouse 
+ Pin connection:
 
--------------------------------------------------
-4.3 USB 
--------------------------------------------------
+| Pin  | USB to RS232 |
+| :--: | :----------: |
+|  2   |      3       |
+|  3   |      2       |
+|  5   |      5       |
 
- - Supports USB 2.0 
- - When attached and detach USB storage device  its displays dmesg
- - User can also find the device using command  'lsusb'.
- - USB HID Mouse, keyboard & Mass Storage are supported
+#### RS232Tx Test
 
+* Open minicom, 115200 baud rate with no hardware flow control setting.
 
--------------------------------------------------
-4.4 LAN 
--------------------------------------------------
+* Run the below commands from adb shell to transmit data to Minicom.
 
- - Connect the LAN cable to Ethernet port LAN1 and LAN2 
+  ```shell
+  $ stty -F /dev/ttymxc3 115200 cs8 -cstopb -parenb
+  $ echo 'ADLINK' > /dev/ttymxc3
+  ```
 
- - Use 'ifconfig' command to check if IP is assigned , then do ping test .
+  'ADLINK' string will be displayed in minicom
 
+#### RS232 Rx Test
 
--------------------------------------------------
-4.5 UART3
--------------------------------------------------
+* Run below command in adb shell
 
-RS485 communication.
+  ```shell
+  $ cat /dev/ttymxc3
+  ```
 
- - Connect  the COM port cable on CN10 connector.
+  Type some data and press enter in Minicom. 
+  The data will be received in adb shell.
 
- - COM port cable   DB-RS485  
+### 5.7 SGTL5000 Audio Codec
 
- - Connection DB9-RS485 to RS485 to USB converter
+------
 
-   | DB9-Rs485 | RS485 to USB converter |
-   | --------- | ---------------------- |
-   | Pin1      | B-                     |
-   | Pin2      | A+                     |
-   | Pin5      | GND                    |
+Playback - Speaker
 
-1) Configure the Baudrate for uart3 ports at SP2_imx8mp side and Host side 
-
-```shell
-- On target : stty -F /dev/ttymxc2 115200
-
-- On Host machine : minicom -D /dev/ttyUSB1 -b 115200
+```Shell
+$ tinymix -D 1 10 1
+$ tinymix -D 1 9 20 20
+$ tinyplay  <wav file> -D 1
 ```
 
-2) Send and Receive data between Host and Target
+Playback - Headphones
+
+Connect headphone on the jack, execute the following command to play on headphone:
 
 ```shell
-echo " from_target_check_rs485 123!@#" > /dev/ttymxc2
+$ tinymix -D 1 6 1
+$ tinyplay <wav file> -D 1
 ```
 
-check on host side you would have received data
-
-use below command to start read data from host machine
+To play the wav file on HDMI, execute the command below:
 
 ```shell
-cat /dev/ttymxc2
+$ tinyplay <wav file> -D 0
 ```
 
-send data from host using minicom  "from_host_checkrs485 1%$##"
-
-check on Target side you would have received data
-
-
-
--------------------------------------------------
-4.6 UART4
--------------------------------------------------
-
-RS232 communication.
-
-- Connect  the COM port cable on CN10 connector
-
-- Connection: DB9-COM to RS232 to USB converter
-
-| DB9-COM | RS232 to USB |
-| ------- | ------------ |
-| Pin2    | Pin3         |
-| Pin3    | Pin2         |
-| PIN3    | PIN3         |
-
-Connect the other end of Rs232 to USB to host machine.
-
-1) Configure the Baud rate for uart4 ports at SP2_imx8mp side and Host side
+Capture - Headphones
 
 ```shell
-- On target : stty -F /dev/ttymxc3 115200
-
-- On Host machine : #minicom -D /dev/ttyUSB1 -b 115200
+$ tinymix -D 1 4 1
+$ tinymix -D 1 1  11 11 
 ```
 
-2) Send and Receive data between Host and Target
+To record and play recorded audio, connect a microphone and utilise the Sound Recorder App from Android UI.
+
+### 5.8 GPIO on Expansion Connector
+
+ GPIO on expansion connector (CN22) can be accessed using following commands:
 
 ```shell
-echo " from_target_check_123#." > /dev/ttymxc3
+$ cd /sys/class/gpio/
+$ echo GPIO_NUM > export
+$ cd gpio<GPIO_NUM>
+$ echo out > direction ("out" is to enable pin as ouput, "in" for input)
+$ echo 1 > value       ("1" to drive high, "0" to drive low)
 ```
 
-check on host side you would have received data
+ The GPIO_NUM mentioned above are mapped to following pin numbers:
 
-use below command to start read data from host machine
+| Pin on expansion | Kernel Gpio number |
+|:----------------:|:------------------:|
+|      DI0     |   495    |
+|      DI1    |      496    |
+|      DI2    |     497    |
+|      DI3    |    498    |
+|      DO0    |    499    |
+|      DO1    |     500    |
+|      DO2    |     501    |
+|      DO3    |     502    |
 
-```shell
-cat /dev/ttymxc3
+### 5.9 SPI on expansion connector
+Follow below procedure to perform loop-back test:
+
+#### SPI1 Loopback test
+* Connect Pin 8 (MOSI) and 10 (MISO) in CN22 expander 
+* Run below command to send and receive data over SPI1
+
+```Shell
+$ spidevtest -D /dev/spidev1.0 -p "12345" -N -v
 ```
 
-send data from host using minicom  "from_host_checkrs232 1%$##"
+### 5.10 CAN interface (CN1602)
 
-check on Target side you would have received data
+For CAN testing, two boards with CAN support are needed 
+
+Connect  the COM port cable on CN10 ,Connect DB9-CAN Pins (PIN 2 CAN0_L - CAN_L ) , (PIN 7 CAN0_H - CAN_H) & (PIN 6 GND - GND)  in CN10 connector.
+
+Sender should execute below commands:
+
+1. Configure the CAN0 ports as ( on the First Board)
+   ```shell
+   $ ip link set can0 type can bitrate 500000
+   $ ip link set can0 up
+   ```
+
+2. Configure the CAN0 ports as ( on the Second board)
+   ```shell
+   $ ip link set can1 type can bitrate 500000
+   $ ip link set can1 up 
+   ```
+
+3. Dump CAN data on can0: ( on First board start listening )
+   ```shell
+   $ candump can0 & 
+   ```
+
+4. Send data over can1: ( from Second board transmit data)
+   ```shell
+   $ cansend can1 01a#11223344AABBCCDD 
+   ```
+
+    Now, data sent from First board will be dumped back on Second board.
+
+
+### 5.11 RTC
+
+While connected to network android will update date/time from network service. 
+
+Using Android UI Go -> Setting > System> Date & time -> Region
+
+Under Time zone , Select Time Zone -> Region.
+
+Time would updated , Disconnect from network (Ethernet )
+
+Now power off the target for some time 
+
+Power on and check the time,Time would be updated
+
+### 5.12 Wifi/BT 
+
+WiFi/BT supported in Android and functionalities can be realised by using Android Settings.
+
+### 5.13 Ethernet
+
+#### 5.13.1 Ethernet in u-boot
+ * Press any key to break into U-Boot command prompt.
+ * Execute the below commands to configure u-boot network (The following are provided as an example, please change appropriately)
+   ```shell
+   u-boot=> setenv ipaddr 192.168.1.126
+   u-boot=> setenv serverip 192.168.1.5
+   u-boot=> setenv netmask 255.255.255.0
+   ```
+
+##### ETH1
+* Execute the below commands to ping from ETH1 port
+
+  ```shell
+  u-boot=> setenv ethact eth1
+  u-boot=> ping 192.168.1.1
+  ```
+
+#### 5.13.2 Ethernet in Android
+
+* Android supports both Ethernet
+* Open Settings -> Network & internet -> Internet -> Ethernet to view details of ETH0/ETH1 port
+* Ethernet configuration can be obtained by running ```ifconfig``` command from adb shell
+
+
+### 5.14. LVDS display
+
+* LVDS feature can be enabled by adding '-d lvds-Y' to flash command. (Y -7 or 10)
+* Android will support HDMI + LVDS dual display feature with this flash.
+
+Example:
+
+for 7 inch Display:
+
+* SD card flash with LVDS feature  
+
+  ```shell
+  $ sudo ./imx-sdcard-partition.sh -d lvds-7 -f  imx8mp -c 28 /dev/sdX
+  ```
+
+* eMMC flash with LVDS feature  
+
+  ```shell
+  $ sudo ./uuu_imx_android_flash.sh -d lvds-7 -f imx8mp -e -m -c 28
+  ```
+
+for 10.1 inch Disaplay:
+
+* SD card  flash with LVDS feature  
+
+  ```shell
+  $ sudo ./imx-sdcard-partition.sh -d lvds-10 -f  imx8mp -c 28 /dev/sdX
+  ```
+
+* eMMC  flash with LVDS feature  
+
+  ```shell
+  $ sudo ./uuu_imx_android_flash.sh -d lvds-10 -f imx8mp -e -m -c 28
+  ```
+
+note : /dev/sdX need to be changed to actual device node of the micro SD card
 
