@@ -39,7 +39,7 @@ $ sudo apt-get install dwarves bc cpio tar lz4 rsync ninja-build clang libelf-de
 
 ```
 
-Git Setup
+Setup GIT
 ---------
 Use the following commands for git configuration.
 
@@ -48,23 +48,10 @@ git config --global user.name "First Last"
 git config --global user.email "first.last@company.com
 ```
 
-Repo Setup
----------
-Use the following commands for setting up repo .
 
 
-```Shell
-mkdir ~/bin
 
-PATH=~/bin:$PATH
-
-curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-
-chmod a+x ~/bin/repo
-```
-
-
-## To setup GCC Compiler
+## Setup GCC Compiler
 
 Download the gcc from : https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
 
@@ -76,7 +63,7 @@ export AARCH64_GCC_CROSS_COMPILE=/opt/arm-gnu-toolchain-13.2.Rel1-x86_64-aarch64
 
 
 
-## To setup CLANG compiler
+## Setup CLANG Compiler
 
 ```Shell
 sudo git clone https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86  /opt/prebuilt-android-clang
@@ -90,67 +77,43 @@ export CLANG_PATH=/opt/prebuilt-android-clang
 
 
 
-Download the source from NXP 
-==================================================================
+## Download Android source from NXP and patches from Adlink GitHub
 
-- Create a new project folder and initiate the repository using below commands 
+- Download the "imx-android-13.0.0_1.2.0.tar.gz" from NXP site [Click here](https://www.nxp.com/webapp/Download?colCode=13.0.0_1.2.0_ANDROID_SOURCE&appType=license) and copy into ${HOME} directory
 
-  Note : for illustration of step we have used project folder : ~/android_bsp 
-  
   ```shell
-  mkdir ~/android_bsp/
-  cd ~/android_bsp
-  ```
-  
-  Download the bsp soruce from below url and place ~/android_bsp
-  
-  URL : https://www.nxp.com/design/design-center/software/embedded-software/i-mx-software/android-os-for-i-mx-applications-processors:IMXANDROID
-  Under Downloads select  13.0.0_1.2.0_ANDROID_SOURCE  
-  
-  
-  
-  Extract the source to project folder :
-  
-  ```shell
-  tar xzvf imx-android-13.0.0_1.2.0.tar.gz -C ~/android_bsp/
-  cd ~/android_bsp
-  source imx-android-13.0.0_1.2.0/imx_android_setup.sh
+  $ mkdir ${HOME}/bin
+  $ curl https://storage.googleapis.com/git-repo-downloads/repo > ${HOME}/bin/repo
+  $ chmod a+x ${HOME}/bin/repo
+  $ export PATH=${PATH}:${HOME}/bin
+  $ cd ${HOME}
+  $ git clone --branch SP2-IMX8MP https://github.com/ADLINK/imx8mp_android.git 
+  $ tar -zxvf imx-android-13.0.0_1.2.0.tar.gz
+  $ source ${HOME}/imx-android-13.0.0_1.2.0/imx_android_setup.sh
   ```
   
   
 
-Build Instructions
-==================================================================
+## Apply SP2-IMX8MP patches
 
 
 
-## To apply the patches
+### 1. Android Device
 
+  ```Shell
+cd ${HOME}/android_build/device/nxp
 
-
-- Git clone the patches from git to the android project folder 
-
-  ```shell
-  cd ~/android_bsp
-  git clone --branch SP2-IMX8MP https://github.com/ADLINK/imx8mp_android.git 
-  ```
-
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0001-SP2-IMX8MP-Android_Devices.patch
   
-
-- ```Shell
-  Apply device patches  
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0002-SP2-IMX8MP-Android_Device_files.patch
   
-  cd ~/android_bsp/android_build/device/nxp/
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0003-SP2-IMX8MP-Device_changes_2g_hdmi_cma_fix.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0001-SP2-IMX8MP-Android_Devices.patch 
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0004-SP2-IMX8MP-Device_changes_touch.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0002-SP2-IMX8MP-Android_Device_files.patch
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0005-SP2-IMX8MP-Device_WIFI_BT_support.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0003-SP2-IMX8MP-Device_changes_2g_hdmi_cma_fix.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0004-SP2-IMX8MP-Device_changes_touch.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0005-SP2-IMX8MP-Device_WIFI_BT_support.patch
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0006-Device-singel_image-sgtl5000-SD-card.patch
   
   cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png imx8m/sp2_imx8mp/overlay/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png
   
@@ -158,116 +121,116 @@ Build Instructions
   
   cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-sw720dp-nodpi/default_wallpaper.png imx8m/sp2_imx8mp/overlay/frameworks/base/core/res/res/drawable-sw720dp-nodpi/default_wallpaper.png
   ```
-  
-- Apply kernel_imx patches  
+
+### 2. Kernel
+
+```Shell
+cd ${HOME}/android_build/vendor/nxp-opensource/kernel_imx
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0001-Andorid_gki_dts.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0002-sp2-imx8mp-patch-drm-panel-enhancement-to-take-addit.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0003-sp2-imx8mp-patch-pcie_phy-modify-nxp-pcie-phy-to-tun.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0004-sp2-imx8mp-patch-sgtl5000-switch-to-highest-voltage-.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0005-sp2-imx8mp-patch-core.c-allow-dual-role-for-imx8mp-w.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0006-sp2-imx8mp-patch-panel-simple-move-ampire-am1024600d.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0007-sp2-imx8mp-patch-snd-fsl-sai-provide-mclk-TODO.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0008-sp2-imx8mp-patch-snd-fsl-sai-enable-transmitter-when.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0009-sp2-imx8mp-patch-snd-sgtl5000-enable-mclk-only-when-.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0010-sp2-imx8mp-patch-snd-sgtl5000-fixup-enable-mclk-only.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0011-sp2-imx8mp-patch-panel-simple-parse-additional-delay.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0012-sp2-imx8mp-patch-pwm-backlight-add-pre-pwm-on-delay-.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0013-sp2-imx8mp-patch-panel-lvds-introduce-delays-to-tune.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0014-sp2-imx8mp-patch-pwm-bl-and-panel-lvds-move-power-of.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0015-sp2-imx8mp-patch-realtek-phy-modify-driver-to-config.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0016-sp2-imx8mp-patch-ili9881c-mipi-dsi-panel-add-support.patch
+
+git apply ${HOME}//imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0017-sp2-imx8mp-panel_fix.patch
+
+git apply ${HOME}//imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0018-sp2-imx8mp-Kernel-touch-support.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0019-sp2-imx8mp-Kernel-WIFI-BT.patch
+```
+
+### 3. U-boot 
 
   ```Shell
-  cd ~/android_bsp/android_build/vendor/nxp-opensource/kernel_imx
+  cd ${HOME}/android_build/vendor/nxp-opensource/uboot-imx
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0001-Andorid_gki_dts.patch 
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0001-sp2-imx8mp-patch-add-source-for-sp2imx8mp-board.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0002-sp2-imx8mp-patch-drm-panel-enhancement-to-take-addit.patch
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0002-sp2-imx8mp-patch-msgpack-add-c-6.0.0-msgpack-source.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0003-sp2-imx8mp-patch-pcie_phy-modify-nxp-pcie-phy-to-tun.patch
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0003-sp2-imx8mp-patch-msgpack-fix-build-float-point-relat.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0004-sp2-imx8mp-patch-sgtl5000-switch-to-highest-voltage-.patch
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0004-sp2-imx8mp-patch-handoff-redirect-handoff.h-to-asm-a.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0005-sp2-imx8mp-patch-core.c-allow-dual-role-for-imx8mp-w.patch
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0005-sp2-imx8mp-patch-lvds-Add-i.MX8MP-LVDS-support-in-ub.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0006-sp2-imx8mp-patch-panel-simple-move-ampire-am1024600d.patch
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0006-sp2-imx8mp-patch-lvds-fix-build-warnings-after-patch.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0007-sp2-imx8mp-patch-snd-fsl-sai-provide-mclk-TODO.patch
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0007-sp2-imx8mp-patch-dsi-panel-ilitek-ili9881c-cherry-pi.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0008-sp2-imx8mp-patch-snd-fsl-sai-enable-transmitter-when.patch
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0008-sp2-imx8mp-patch-lvds-add-panel-generic-lvds-support.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0009-sp2-imx8mp-patch-snd-sgtl5000-enable-mclk-only-when-.patch
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0009-sp2-imx8mp-patch-pwm_backlight-work-around-to-fix-lv.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0010-sp2-imx8mp-patch-snd-sgtl5000-fixup-enable-mclk-only.patch
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0010-sp2-imx8mp-patch-ldb-fix-wrong-color-display-by-enab.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0011-sp2-imx8mp-patch-panel-simple-parse-additional-delay.patch
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0011-sp2-imx8mp-patch-u-boot-add-fn_key-gpio-input-for-um.patch
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0012-sp2-imx8mp-patch-pwm-backlight-add-pre-pwm-on-delay-.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0013-sp2-imx8mp-patch-panel-lvds-introduce-delays-to-tune.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0014-sp2-imx8mp-patch-pwm-bl-and-panel-lvds-move-power-of.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0015-sp2-imx8mp-patch-realtek-phy-modify-driver-to-config.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0016-sp2-imx8mp-patch-ili9881c-mipi-dsi-panel-add-support.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0017-sp2-imx8mp-panel_fix.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0018-sp2-imx8mp-Kernel-touch-support.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0019-sp2-imx8mp-Kernel-WIFI-BT.patch
-  
-  
-  ```
-  
-- Apply uboot-imx patches  
-
-  ```Shell
-  cd ~/android_bsp/android_build/vendor/nxp-opensource/uboot-imx
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0001-sp2-imx8mp-patch-add-source-for-sp2imx8mp-board.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0002-sp2-imx8mp-patch-msgpack-add-c-6.0.0-msgpack-source.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0003-sp2-imx8mp-patch-msgpack-fix-build-float-point-relat.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0004-sp2-imx8mp-patch-handoff-redirect-handoff.h-to-asm-a.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0005-sp2-imx8mp-patch-lvds-Add-i.MX8MP-LVDS-support-in-ub.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0006-sp2-imx8mp-patch-lvds-fix-build-warnings-after-patch.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0007-sp2-imx8mp-patch-dsi-panel-ilitek-ili9881c-cherry-pi.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0008-sp2-imx8mp-patch-lvds-add-panel-generic-lvds-support.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0009-sp2-imx8mp-patch-pwm_backlight-work-around-to-fix-lv.patch
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0010-sp2-imx8mp-patch-ldb-fix-wrong-color-display-by-enab.patch 
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0011-sp2-imx8mp-patch-u-boot-add-fn_key-gpio-input-for-um.patch 
-  
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0012-sp2-imx8mp-uboot_android_defconfigs.patch
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0012-sp2-imx8mp-uboot_android_defconfigs.patch
   ```
 
-- Apply build patches
+### 4. Build
 
   ```Shell
-  cd  ~/android_bsp/android_build/build  
+  cd ${HOME}/android_build/build 
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/build/0001-Build_can_spi.patch
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/build/0001-Build_can_spi.patch
   
   ```
 
-- Apply external patches 
+### 5.  External Libraries
 
   ```shell
-  cd ~/android_bsp/android_build/external/
+  cd ${HOME}/android_build/external/
   
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/external/0001-external_can_spi_utils.patch 
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/external/0001-can-spi-utils.patch
   ```
 
-  
+### 
 
-- Apply  Bionic patches
+### 6. imx-mkimage
 
   ```shell
-  cd ~/android_bsp/android_build/bionic/ 
-  patch -p1 < ~/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/bionic/0001-Bionic_spi_fix.patch 
+  cd ${HOME}/android_build/vendor/nxp-opensource/imx-mkimage/
+  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/imx-mkimage/0001-sp2-imx8mp-add-support-to-compile-sp2-dtb.patch
+  
   
   ```
+
 
   ## To Compile the Android 13 BSP
 
 - After applying all patches, build the source
   
   ```shell
-  cd ~/android_bsp/android_build
+  cd ${HOME}/android_build
   source build/envsetup.sh
   lunch sp2_imx8mp-userdebug
   ./imx-make.sh -j3 2>&1 | tee build-log.txt
@@ -279,7 +242,7 @@ Build Instructions
 Output Image Path
 --------------------------------------
 
-Image will be generate in the  path :  android_build/out/target/product/sp2_imx8mp/
+Image will be generate in the  path :  ${HOME}/android_build/out/target/product/sp2_imx8mp/
 
 
 
@@ -304,13 +267,13 @@ Flash Procedure for Android 13 SP2-IMX8MP
    For SP2IMX8MP-7inch panel
 
    ```shell
-   sudo ./imx-sdcard-partition.sh -d lvds -f  imx8mp -c 28 /dev/sdc
+   sudo ./imx-sdcard-partition.sh -d lvds-7 -f  imx8mp -c 28 /dev/sdX
    ```
 
    For SP2IMX8MP-10inch panel
 
    ```shell
-   sudo ./imx-sdcard-partition.sh -d lvds-panel -f  imx8mp -c 28 /dev/sdc
+   sudo ./imx-sdcard-partition.sh -d lvds-10 -f  imx8mp -c 28 /dev/sdc
    ```
 
 * /dev/sdX need to be changed to actual device node of the micro SD card
@@ -354,14 +317,14 @@ Flash Procedure for Android 13 SP2-IMX8MP
    For SP2IMX8MP-7inch panel
 
    ```shell
-   sudo ./uuu_imx_android_flash.sh -f imx8mp -e -m -c 28 -d lvds
+   sudo ./uuu_imx_android_flash.sh -d lvds-7 -f imx8mp -e -m -c 28
    ```
 
-   For SP2IMX8MP-10inch panel
+   For SP2IMX8MP-10 inch panel
 
    ```shell
-   sudo ./uuu_imx_android_flash.sh -f imx8mp -e -m -c 28 -d lvds-panel
+   sudo ./uuu_imx_android_flash.sh -d lvds-10 -f imx8mp -e -m -c 28
    ```
 
- * Once flash completed user will get done.
- * Change the boot switch into emmc mode (0100) and powe on to boot from EMMC
+ * Once flashing completed, power off the board and change boot settings to eMMC mode.
+ * Power on the board to boot Android from eMMC.
