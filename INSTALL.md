@@ -159,9 +159,9 @@ git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build
 
 git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0016-sp2-imx8mp-patch-ili9881c-mipi-dsi-panel-add-support.patch
 
-git apply ${HOME}//imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0017-sp2-imx8mp-panel_fix.patch
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0017-sp2-imx8mp-panel_fix.patch
 
-git apply ${HOME}//imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0018-sp2-imx8mp-Kernel-touch-support.patch
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0018-sp2-imx8mp-Kernel-touch-support.patch
 
 git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0019-sp2-imx8mp-Kernel-WIFI-BT.patch
 ```
@@ -171,29 +171,29 @@ git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build
   ```Shell
   cd ${HOME}/android_build/vendor/nxp-opensource/uboot-imx
   
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0001-sp2-imx8mp-patch-add-source-for-sp2imx8mp-board.patch
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0001-sp2-imx8mp-patch-add-source-for-sp2imx8mp-board.patch
   
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0002-sp2-imx8mp-patch-msgpack-add-c-6.0.0-msgpack-source.patch
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0002-sp2-imx8mp-patch-msgpack-add-c-6.0.0-msgpack-source.patch
   
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0003-sp2-imx8mp-patch-msgpack-fix-build-float-point-relat.patch
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0003-sp2-imx8mp-patch-msgpack-fix-build-float-point-relat.patch
   
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0004-sp2-imx8mp-patch-handoff-redirect-handoff.h-to-asm-a.patch
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0004-sp2-imx8mp-patch-handoff-redirect-handoff.h-to-asm-a.patch
   
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0005-sp2-imx8mp-patch-lvds-Add-i.MX8MP-LVDS-support-in-ub.patch
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0005-sp2-imx8mp-patch-lvds-Add-i.MX8MP-LVDS-support-in-ub.patch
   
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0006-sp2-imx8mp-patch-lvds-fix-build-warnings-after-patch.patch
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0006-sp2-imx8mp-patch-lvds-fix-build-warnings-after-patch.patch
   
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0007-sp2-imx8mp-patch-dsi-panel-ilitek-ili9881c-cherry-pi.patch
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0007-sp2-imx8mp-patch-dsi-panel-ilitek-ili9881c-cherry-pi.patch
   
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0008-sp2-imx8mp-patch-lvds-add-panel-generic-lvds-support.patch
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0008-sp2-imx8mp-patch-lvds-add-panel-generic-lvds-support.patch
   
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0009-sp2-imx8mp-patch-pwm_backlight-work-around-to-fix-lv.patch
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0009-sp2-imx8mp-patch-pwm_backlight-work-around-to-fix-lv.patch
   
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0010-sp2-imx8mp-patch-ldb-fix-wrong-color-display-by-enab.patch
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0010-sp2-imx8mp-patch-ldb-fix-wrong-color-display-by-enab.patch
   
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0011-sp2-imx8mp-patch-u-boot-add-fn_key-gpio-input-for-um.patch
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0011-sp2-imx8mp-patch-u-boot-add-fn_key-gpio-input-for-um.patch
   
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0012-sp2-imx8mp-uboot_android_defconfigs.patch
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0012-sp2-imx8mp-uboot_android_defconfigs.patch
   ```
 
 ### 4. Build
@@ -201,7 +201,7 @@ git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build
   ```Shell
   cd ${HOME}/android_build/build 
   
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/build/0001-Build_can_spi.patch
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/build/0001-Build_can_spi.patch
   
   ```
 
@@ -210,7 +210,7 @@ git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build
   ```shell
   cd ${HOME}/android_build/external/
   
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/external/0001-can-spi-utils.patch
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/external/0001-can-spi-utils.patch
   ```
 
 ### 
@@ -219,7 +219,8 @@ git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build
 
   ```shell
   cd ${HOME}/android_build/vendor/nxp-opensource/imx-mkimage/
-  git apply ${HOME}/android_bsp/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/imx-mkimage/0001-sp2-imx8mp-add-support-to-compile-sp2-dtb.patch
+
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/imx-mkimage/0001-sp2-imx8mp-add-support-to-compile-sp2-dtb.patch
   
   
   ```
