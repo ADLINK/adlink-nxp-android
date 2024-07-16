@@ -1,7 +1,7 @@
-From 470ebca1e234413da04c704a02c7582aa75f4c94 Mon Sep 17 00:00:00 2001
+From f3167c45cdb808204174e6346199949dcd6cd5f5 Mon Sep 17 00:00:00 2001
 From: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
 Date: Mon, 10 Jun 2024 12:24:17 +0530
-Subject: [PATCH] Device-singel_image-sgtl5000-SD-card
+Subject: [PATCH] Device-singel_image-sgtl5000-SD-card_usb3.0
 
 Signed-off-by: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
 ---
@@ -10,9 +10,9 @@ Signed-off-by: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
  imx8m/sp2_imx8mp/AndroidUboot.sh       |  2 +-
  imx8m/sp2_imx8mp/BoardConfig.mk        |  8 ++++----
  imx8m/sp2_imx8mp/SharedBoardConfig.mk  |  5 ++---
- imx8m/sp2_imx8mp/fstab.nxp             |  2 ++
+ imx8m/sp2_imx8mp/fstab.nxp             |  6 ++++++
  imx8m/sp2_imx8mp/sp2_imx8mp.mk         |  2 +-
- 7 files changed, 39 insertions(+), 11 deletions(-)
+ 7 files changed, 43 insertions(+), 11 deletions(-)
  create mode 100644 common/audio-json/sgtl5000_config.json
 
 diff --git a/common/audio-json/sgtl5000_config.json b/common/audio-json/sgtl5000_config.json
@@ -131,15 +131,26 @@ index 9deb6df9..2fc57e87 100644
      $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-rpmsg.ko \
      $(KERNEL_OUT)/drivers/firmware/imx/imx-dsp.ko \
 diff --git a/imx8m/sp2_imx8mp/fstab.nxp b/imx8m/sp2_imx8mp/fstab.nxp
-index c7eba71b..424a09c0 100644
+index c7eba71b..af46550d 100644
 --- a/imx8m/sp2_imx8mp/fstab.nxp
 +++ b/imx8m/sp2_imx8mp/fstab.nxp
-@@ -15,3 +15,5 @@ system_ext                     /system_ext   erofs ro
+@@ -4,6 +4,7 @@
+ # specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+ 
+ /devices/platform/soc@0/32f10108.usb/38200000.usb/* auto auto defaults voldmanaged=usb:auto
++
+ /dev/block/by-name/userdata    /data        f2fs    nodev,noatime,nosuid,inlinecrypt,reserve_root=32768 latemount,wait,check,quota,formattable,fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized,fscompress,keydirectory=/metadata/vold/metadata_encryption,checkpoint=fs
+ /dev/block/by-name/metadata    /metadata    f2fs    noatime,nosuid,nodev,discard,sync,fsync_mode=nobarrier                           wait,formattable,first_stage_mount,check
+ /dev/block/by-name/misc        /misc        emmc    defaults                                                                         defaults
+@@ -15,3 +16,8 @@ system_ext                     /system_ext   erofs ro
  vendor                         /vendor       erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
  vendor_dlkm                    /vendor_dlkm  erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
  product                        /product      erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
 +
++#sd card automount
 +/devices/platform/soc@0/30800000.bus/30b50000.mmc/mmc_host/* auto auto defaults voldmanaged=sdcard1:auto,encryptable=userdata
++#usb3.0 auto mount
++/devices/platform/soc@0/32f10100.usb/38100000.usb/* auto auto defaults voldmanaged=usb:auto
 diff --git a/imx8m/sp2_imx8mp/sp2_imx8mp.mk b/imx8m/sp2_imx8mp/sp2_imx8mp.mk
 index 9b942cdd..57d1eea1 100644
 --- a/imx8m/sp2_imx8mp/sp2_imx8mp.mk
@@ -154,5 +165,5 @@ index 9b942cdd..57d1eea1 100644
      $(CONFIG_REPO_PATH)/common/audio-json/hdmi_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/hdmi_config.json \
      $(CONFIG_REPO_PATH)/common/audio-json/btsco_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/btsco_config.json \
 -- 
-2.25.1
+2.45.2
 

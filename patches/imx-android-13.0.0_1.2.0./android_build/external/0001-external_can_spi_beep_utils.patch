@@ -1,179 +1,188 @@
-diff --git a/canutils/.travis.yml b/canutils/.travis.yml
+From 397400b202b117e263a408596bef8e2a4bde69c5 Mon Sep 17 00:00:00 2001
+From: shivaadlink <shivashankar.thiruchitrambalam@adlinktech.com>
+Date: Tue, 16 Jul 2024 17:31:54 +0530
+Subject: [PATCH] external_can_spi_beep_utils
+
+Signed-off-by: shivaadlink <shivashankar.thiruchitrambalam@adlinktech.com>
+---
+ beep/Android.bp                               |   57 +
+ beep/LICENSE                                  |  241 +++
+ beep/src/beep.c                               |   51 +
+ canutils/.travis.yml                          |  164 ++
+ canutils/Android.bp                           |   95 +
+ canutils/CMakeLists.txt                       |  102 +
+ canutils/GNUmakefile.am                       |  122 ++
+ canutils/LICENSE                              |  241 +++
+ canutils/LICENSES/BSD-3-Clause                |   27 +
+ canutils/LICENSES/GPL-2.0-only.txt            |  340 +++
+ canutils/LICENSES/Linux-syscall-note.txt      |   12 +
+ canutils/Makefile                             |  146 ++
+ canutils/README.md                            |   77 +
+ canutils/asc2log.c                            |  542 +++++
+ canutils/autogen.sh                           |   22 +
+ canutils/bcmserver.c                          |  365 ++++
+ canutils/can-calc-bit-timing.c                | 1902 +++++++++++++++++
+ canutils/can-j1939-install-kernel-module.md   |  180 ++
+ canutils/can-j1939-kickstart.md               |  197 ++
+ canutils/can-j1939.md                         |   98 +
+ canutils/canbusload.c                         |  432 ++++
+ canutils/candump.c                            |  875 ++++++++
+ canutils/canfdtest.c                          |  577 +++++
+ canutils/canframelen.c                        |  283 +++
+ canutils/canframelen.h                        |   85 +
+ canutils/cangen.c                             |  582 +++++
+ canutils/cangw.c                              | 1029 +++++++++
+ canutils/canlogserver.c                       |  441 ++++
+ canutils/canplayer.c                          |  556 +++++
+ canutils/cansend.c                            |  173 ++
+ canutils/cansequence.c                        |  367 ++++
+ canutils/cansniffer.c                         |  966 +++++++++
+ canutils/cmake/make_uninstall.cmake           |   19 +
+ .../m4/.secret-world-domination-project       |    0
+ canutils/configure.ac                         |  120 ++
+ canutils/include/linux/can.h                  |  247 +++
+ canutils/include/linux/can/bcm.h              |  105 +
+ canutils/include/linux/can/error.h            |  125 ++
+ canutils/include/linux/can/gw.h               |  222 ++
+ canutils/include/linux/can/isotp.h            |  182 ++
+ canutils/include/linux/can/j1939.h            |  108 +
+ canutils/include/linux/can/netlink.h          |  145 ++
+ canutils/include/linux/can/raw.h              |   67 +
+ canutils/include/linux/can/vxcan.h            |   13 +
+ canutils/include/linux/errqueue.h             |   54 +
+ canutils/include/linux/kernel.h               |   96 +
+ canutils/include/linux/net_tstamp.h           |  162 ++
+ canutils/include/linux/netlink.h              |  252 +++
+ canutils/isotpdump.c                          |  515 +++++
+ canutils/isotpperf.c                          |  422 ++++
+ canutils/isotprecv.c                          |  259 +++
+ canutils/isotpsend.c                          |  323 +++
+ canutils/isotpserver.c                        |  441 ++++
+ canutils/isotpsniffer.c                       |  402 ++++
+ canutils/isotptun.c                           |  407 ++++
+ canutils/j1939acd.c                           |  652 ++++++
+ canutils/j1939cat.c                           |  790 +++++++
+ canutils/j1939spy.c                           |  304 +++
+ canutils/j1939sr.c                            |  221 ++
+ canutils/lib.c                                |  687 ++++++
+ canutils/lib.h                                |  224 ++
+ canutils/libj1939.c                           |  196 ++
+ canutils/libj1939.h                           |   35 +
+ canutils/log2asc.c                            |  327 +++
+ canutils/log2long.c                           |   83 +
+ canutils/mcp251xfd/99-devcoredump.rules       |    1 +
+ canutils/mcp251xfd/devcoredump                |   11 +
+ canutils/mcp251xfd/mcp251xfd-dev-coredump.c   |  257 +++
+ canutils/mcp251xfd/mcp251xfd-dump-userspace.h |   61 +
+ canutils/mcp251xfd/mcp251xfd-dump.c           |  882 ++++++++
+ canutils/mcp251xfd/mcp251xfd-dump.h           |   45 +
+ canutils/mcp251xfd/mcp251xfd-main.c           |   97 +
+ canutils/mcp251xfd/mcp251xfd-regmap.c         |   81 +
+ canutils/mcp251xfd/mcp251xfd.h                |  389 ++++
+ canutils/page.theme                           |   20 +
+ canutils/slcan_attach.c                       |  272 +++
+ canutils/slcand.c                             |  452 ++++
+ canutils/slcanpty.c                           |  558 +++++
+ canutils/style.css                            |   68 +
+ canutils/terminal.h                           |   95 +
+ canutils/testj1939.c                          |  315 +++
+ spidevtest/Android.bp                         |   57 +
+ spidevtest/LICENSE                            |  241 +++
+ spidevtest/spdev_refer                        |   19 +
+ spidevtest/src/spidev_test.c                  |  495 +++++
+ 85 files changed, 23968 insertions(+)
+ create mode 100644 beep/Android.bp
+ create mode 100644 beep/LICENSE
+ create mode 100644 beep/src/beep.c
+ create mode 100644 canutils/.travis.yml
+ create mode 100644 canutils/Android.bp
+ create mode 100644 canutils/CMakeLists.txt
+ create mode 100644 canutils/GNUmakefile.am
+ create mode 100644 canutils/LICENSE
+ create mode 100644 canutils/LICENSES/BSD-3-Clause
+ create mode 100644 canutils/LICENSES/GPL-2.0-only.txt
+ create mode 100644 canutils/LICENSES/Linux-syscall-note.txt
+ create mode 100644 canutils/Makefile
+ create mode 100644 canutils/README.md
+ create mode 100644 canutils/asc2log.c
+ create mode 100755 canutils/autogen.sh
+ create mode 100644 canutils/bcmserver.c
+ create mode 100644 canutils/can-calc-bit-timing.c
+ create mode 100644 canutils/can-j1939-install-kernel-module.md
+ create mode 100644 canutils/can-j1939-kickstart.md
+ create mode 100644 canutils/can-j1939.md
+ create mode 100644 canutils/canbusload.c
+ create mode 100644 canutils/candump.c
+ create mode 100644 canutils/canfdtest.c
+ create mode 100644 canutils/canframelen.c
+ create mode 100644 canutils/canframelen.h
+ create mode 100644 canutils/cangen.c
+ create mode 100644 canutils/cangw.c
+ create mode 100644 canutils/canlogserver.c
+ create mode 100644 canutils/canplayer.c
+ create mode 100644 canutils/cansend.c
+ create mode 100644 canutils/cansequence.c
+ create mode 100644 canutils/cansniffer.c
+ create mode 100644 canutils/cmake/make_uninstall.cmake
+ create mode 100644 canutils/config/m4/.secret-world-domination-project
+ create mode 100644 canutils/configure.ac
+ create mode 100644 canutils/include/linux/can.h
+ create mode 100644 canutils/include/linux/can/bcm.h
+ create mode 100644 canutils/include/linux/can/error.h
+ create mode 100644 canutils/include/linux/can/gw.h
+ create mode 100644 canutils/include/linux/can/isotp.h
+ create mode 100644 canutils/include/linux/can/j1939.h
+ create mode 100644 canutils/include/linux/can/netlink.h
+ create mode 100644 canutils/include/linux/can/raw.h
+ create mode 100644 canutils/include/linux/can/vxcan.h
+ create mode 100644 canutils/include/linux/errqueue.h
+ create mode 100644 canutils/include/linux/kernel.h
+ create mode 100644 canutils/include/linux/net_tstamp.h
+ create mode 100644 canutils/include/linux/netlink.h
+ create mode 100644 canutils/isotpdump.c
+ create mode 100644 canutils/isotpperf.c
+ create mode 100644 canutils/isotprecv.c
+ create mode 100644 canutils/isotpsend.c
+ create mode 100644 canutils/isotpserver.c
+ create mode 100644 canutils/isotpsniffer.c
+ create mode 100644 canutils/isotptun.c
+ create mode 100644 canutils/j1939acd.c
+ create mode 100644 canutils/j1939cat.c
+ create mode 100644 canutils/j1939spy.c
+ create mode 100644 canutils/j1939sr.c
+ create mode 100644 canutils/lib.c
+ create mode 100644 canutils/lib.h
+ create mode 100644 canutils/libj1939.c
+ create mode 100644 canutils/libj1939.h
+ create mode 100644 canutils/log2asc.c
+ create mode 100644 canutils/log2long.c
+ create mode 100644 canutils/mcp251xfd/99-devcoredump.rules
+ create mode 100644 canutils/mcp251xfd/devcoredump
+ create mode 100644 canutils/mcp251xfd/mcp251xfd-dev-coredump.c
+ create mode 100644 canutils/mcp251xfd/mcp251xfd-dump-userspace.h
+ create mode 100644 canutils/mcp251xfd/mcp251xfd-dump.c
+ create mode 100644 canutils/mcp251xfd/mcp251xfd-dump.h
+ create mode 100644 canutils/mcp251xfd/mcp251xfd-main.c
+ create mode 100644 canutils/mcp251xfd/mcp251xfd-regmap.c
+ create mode 100644 canutils/mcp251xfd/mcp251xfd.h
+ create mode 100644 canutils/page.theme
+ create mode 100644 canutils/slcan_attach.c
+ create mode 100644 canutils/slcand.c
+ create mode 100644 canutils/slcanpty.c
+ create mode 100644 canutils/style.css
+ create mode 100644 canutils/terminal.h
+ create mode 100644 canutils/testj1939.c
+ create mode 100644 spidevtest/Android.bp
+ create mode 100644 spidevtest/LICENSE
+ create mode 100644 spidevtest/spdev_refer
+ create mode 100644 spidevtest/src/spidev_test.c
+
+diff --git a/beep/Android.bp b/beep/Android.bp
 new file mode 100644
-index 0000000000..5c5e11e8c1
+index 0000000..de0df09
 --- /dev/null
-+++ b/canutils/.travis.yml
-@@ -0,0 +1,164 @@
-+language: c
-+
-+matrix:
-+    include:
-+
-+# native
-+
-+        - env: test="x64 4.8.4 (make)"
-+          os: linux
-+          dist: trusty
-+          compiler: gcc
-+          script: make
-+
-+        - env: test="x64 4.8.4 (autotools)"
-+          os: linux
-+          dist: trusty
-+          compiler: gcc
-+          script: ./autogen.sh && ./configure CFLAGS="-Werror -Wno-unused-result" && make distcheck
-+
-+        - env: test="x64 5.0 (autotools)"
-+          os: linux
-+          dist: trusty
-+          compiler: clang
-+          script: ./autogen.sh && ./configure CFLAGS="-Werror -Wno-unused-result" && make distcheck
-+
-+        - env: test="x64 4.8.4 (CMake gcc)"
-+          os: linux
-+          dist: trusty
-+          compiler: gcc
-+          before_script:
-+              - mkdir gcc_rel && cd gcc_rel
-+              - cmake ..
-+          script: make
-+
-+        - env: test="x64 5.0 (CMake clang)"
-+          os: linux
-+          dist: trusty
-+          compiler: clang
-+          before_script:
-+              - mkdir clang_rel && cd clang_rel
-+              - cmake ..
-+          script: make
-+
-+        - env: test="x64 5.0 (CMake clang - Ninja) Debug"
-+          os: linux
-+          dist: trusty
-+          compiler: clang
-+          before_script:
-+              - mkdir clang_ninja_dbg && cd clang_ninja_dbg
-+              - cmake .. -GNinja -DCMAKE_BUILD_TYPE=Debug
-+          script: ninja
-+
-+# ppc64le
-+
-+        - env: test="ppc64le 4.8.4 (make)"
-+          os: linux
-+          dist: trusty
-+          compiler: gcc
-+          script: make
-+          arch: ppc64le
-+
-+        - env: test="ppc64le 4.8.4 (autotools)"
-+          os: linux
-+          dist: trusty
-+          compiler: gcc
-+          script: ./autogen.sh && ./configure CFLAGS="-Werror -Wno-unused-result" && make distcheck
-+          arch: ppc64le
-+
-+        - env: test="ppc64le 5.0 (autotools)"
-+          os: linux
-+          dist: trusty
-+          compiler: clang
-+          script: ./autogen.sh && ./configure CFLAGS="-Werror -Wno-unused-result" && make distcheck
-+          arch: ppc64le
-+
-+        - env: test="ppc64le 4.8.4 (CMake gcc)"
-+          os: linux
-+          dist: trusty
-+          compiler: gcc
-+          before_script:
-+              - mkdir gcc_rel && cd gcc_rel
-+              - cmake ..
-+          script: make
-+          arch: ppc64le
-+
-+        - env: test="ppc64le 5.0 (CMake clang)"
-+          os: linux
-+          dist: trusty
-+          compiler: clang
-+          before_script:
-+              - mkdir clang_rel && cd clang_rel
-+              - cmake ..
-+          script: make
-+          arch: ppc64le
-+
-+        - env: test="ppc64le 5.0 (CMake clang - Ninja) Debug"
-+          os: linux
-+          dist: trusty
-+          compiler: clang
-+          before_script:
-+              - mkdir clang_ninja_dbg && cd clang_ninja_dbg
-+              - cmake .. -GNinja -DCMAKE_BUILD_TYPE=Debug
-+          script: ninja
-+          arch: ppc64le
-+
-+# Android
-+
-+        - env: test="Android NDK (CMake)"
-+          os: linux
-+          language: android
-+          android:
-+              components:
-+                  - build-tools-25.0.2
-+          install:
-+              - echo y | sdkmanager "ndk-bundle"
-+              - echo y | sdkmanager "cmake;3.6.4111459"
-+          before_script:
-+              - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
-+              - export ANDROID_CMAKE=$ANDROID_HOME/cmake/3.6.4111459/bin/cmake
-+              - export ANDROID_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake
-+          script:
-+              - pushd . && mkdir android15_armeabiv7a_rel && cd android15_armeabiv7a_rel
-+              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-15 -DANDROID_ABI=armeabi-v7a -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
-+              - make && popd
-+
-+              - pushd . && mkdir android15_x86_rel && cd android15_x86_rel
-+              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-15 -DANDROID_ABI=x86 -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
-+              - make && popd
-+
-+              - pushd . && mkdir android21_arm64-v8a_rel && cd android21_arm64-v8a_rel
-+              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-21 -DANDROID_ABI=arm64-v8a -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
-+              - make && popd
-+
-+              - pushd . && mkdir android21_x86_64_rel && cd android21_x86_64_rel
-+              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-21 -DANDROID_ABI=x86_64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
-+              - make && popd
-+
-+              - pushd . && mkdir android15_armeabiv7a_dbg && cd android15_armeabiv7a_dbg
-+              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-15 -DANDROID_ABI=armeabi-v7a -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
-+              - make && popd
-+
-+              - pushd . && mkdir android15_x86_dbg && cd android15_x86_dbg
-+              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-15 -DANDROID_ABI=x86 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
-+              - make && popd
-+
-+              - pushd . && mkdir android21_arm64-v8a_dbg && cd android21_arm64-v8a_dbg
-+              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-21 -DANDROID_ABI=arm64-v8a -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
-+              - make && popd
-+
-+              - pushd . && mkdir android21_x86_64_dbg && cd android21_x86_64_dbg
-+              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-21 -DANDROID_ABI=x86_64 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
-+              - make && popd
-+
-+addons:
-+    apt:
-+        packages:
-+            - autoconf
-+            - automake
-+            - libtool
-+            - m4
-+            - cmake
-+            - ninja-build
-+        sources:
-+            - ubuntu-toolchain-r-test
-diff --git a/canutils/Android.bp b/canutils/Android.bp
-new file mode 100644
-index 0000000000..5bc90ff139
---- /dev/null
-+++ b/canutils/Android.bp
-@@ -0,0 +1,95 @@
++++ b/beep/Android.bp
+@@ -0,0 +1,57 @@
 +// Copyright (C) 2019 The Android Open Source Project
 +//
 +// Licensed under the Apache License, Version 2.0 (the "License");
@@ -189,7 +198,7 @@ index 0000000000..5bc90ff139
 +// limitations under the License.
 +
 +package {
-+    default_applicable_licenses: ["external_canutils_license"],
++    default_applicable_licenses: ["external_pwm-beeper_license"],
 +}
 +
 +// Added automatically by a large-scale-change that took the approach of
@@ -207,7 +216,7 @@ index 0000000000..5bc90ff139
 +// used in the current project.
 +// See: http://go/android-license-faq
 +license {
-+    name: "external_canutils_license",
++    name: "external_pwm-beeper_license",
 +    visibility: [":__subpackages__"],
 +    license_kinds: [
 +        "SPDX-license-identifier-BSD",
@@ -221,298 +230,24 @@ index 0000000000..5bc90ff139
 +    ],
 +}
 +
-+cc_defaults {
-+    name: "can-utils_defaults",
 +
++cc_binary {
++    name: "beep",
++    srcs: [
++        "src/*.c",
++    ],
 +    cflags: [
-+	"-O2",
-+	"-g",
-+	"-W",
-+	"-Wall",
 +        "-Wno-unused-parameter",
-+	"-DSO_RXQ_OVFL=40",
-+	"-DPF_CAN=29",
-+	"-DAF_CAN=PF_CAN",
-+    ],
-+    local_include_dirs: [
-+        "include",
 +    ],
 +}
-+
-+cc_library {
-+    name: "libcan",
-+    defaults: ["can-utils_defaults"],
-+    srcs: [
-+        "lib.c",
-+	"canframelen.c",
-+    ],
-+}
-+
-+cc_binary {
-+    name: "candump",
-+    defaults: ["can-utils_defaults"],
-+    srcs: [
-+        "candump.c",
-+    ],
-+    static_libs: [
-+        "libcan",
-+    ],
-+}
-+
-+cc_binary {
-+    name: "cansend",
-+    defaults: ["can-utils_defaults"],
-+    srcs: [
-+        "cansend.c",
-+    ],
-+    static_libs: [
-+        "libcan",
-+    ],
-+}
-diff --git a/canutils/CMakeLists.txt b/canutils/CMakeLists.txt
+diff --git a/beep/LICENSE b/beep/LICENSE
 new file mode 100644
-index 0000000000..fea4171a1b
+index 0000000..b9ef026
 --- /dev/null
-+++ b/canutils/CMakeLists.txt
-@@ -0,0 +1,102 @@
-+cmake_minimum_required(VERSION 3.3)
-+
-+project(can-utils LANGUAGES C)
-+
-+include (CheckSymbolExists)
-+include (GNUInstallDirs)
-+
-+if(NOT CMAKE_BUILD_TYPE)
-+  set(CMAKE_BUILD_TYPE Release)
-+endif()
-+
-+add_definitions(-D_GNU_SOURCE)
-+
-+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-parentheses")
-+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing")
-+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSO_RXQ_OVFL=40")
-+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DPF_CAN=29")
-+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DAF_CAN=PF_CAN")
-+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DN_SLCAN=17")
-+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSCM_TIMESTAMPING_OPT_STATS=54")
-+
-+include_directories (.)
-+include_directories (./include)
-+
-+set(PROGRAMS_CANLIB
-+    asc2log
-+    canbusload
-+    candump
-+    cangen
-+    canlogserver
-+    canplayer
-+    cansend
-+    cansequence
-+    log2asc
-+    log2long
-+)
-+
-+set(PROGRAMS_J1939
-+    j1939acd
-+    j1939cat
-+    j1939spy
-+    j1939sr
-+    testj1939
-+)
-+
-+set(PROGRAMS
-+    ${PROGRAMS_CANLIB}
-+    bcmserver
-+    can-calc-bit-timing
-+    canfdtest
-+    cangw
-+    cansniffer
-+    isotpdump
-+    isotpperf
-+    isotprecv
-+    isotpsend
-+    isotpserver
-+    isotpsniffer
-+    isotptun
-+    slcan_attach
-+    slcand
-+    slcanpty
-+)
-+
-+add_executable(mcp251xfd-dump
-+    mcp251xfd/mcp251xfd-dev-coredump.c
-+    mcp251xfd/mcp251xfd-dump.c
-+    mcp251xfd/mcp251xfd-main.c
-+    mcp251xfd/mcp251xfd-regmap.c
-+)
-+
-+if(NOT ANDROID)
-+  list(APPEND PROGRAMS ${PROGRAMS_J1939})
-+
-+  add_library(j1939 STATIC
-+      libj1939.c
-+  )
-+endif()
-+
-+add_library(can STATIC
-+    lib.c
-+    canframelen.c
-+)
-+
-+foreach(name ${PROGRAMS})
-+  add_executable(${name} ${name}.c)
-+
-+  if("${name}" IN_LIST PROGRAMS_J1939)
-+    target_link_libraries(${name}
-+        PRIVATE j1939
-+    )
-+  elseif("${name}" IN_LIST PROGRAMS_CANLIB)
-+    target_link_libraries(${name}
-+        PRIVATE can
-+    )
-+  endif()
-+
-+  install(TARGETS ${name} DESTINATION ${CMAKE_INSTALL_BINDIR})
-+endforeach()
-+
-+
-+ADD_CUSTOM_TARGET(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_SOURCE_DIR}/cmake/make_uninstall.cmake")
-diff --git a/canutils/GNUmakefile.am b/canutils/GNUmakefile.am
-new file mode 100644
-index 0000000000..02c37abcf3
---- /dev/null
-+++ b/canutils/GNUmakefile.am
-@@ -0,0 +1,122 @@
-+ACLOCAL_AMFLAGS = -I config/m4
-+
-+AM_CPPFLAGS = \
-+	-I$(top_srcdir)/include \
-+	-I$(top_builddir)/include \
-+	$(linux_CFLAGS)
-+
-+# link every app against libcan, it's static so it wouldn't hurt
-+LDADD = \
-+	libcan.la
-+
-+noinst_HEADERS = \
-+	canframelen.h \
-+	lib.h \
-+	libj1939.h \
-+	terminal.h \
-+	include/linux/can.h \
-+	include/linux/can/bcm.h \
-+	include/linux/can/error.h \
-+	include/linux/can/gw.h \
-+	include/linux/can/isotp.h \
-+	include/linux/can/j1939.h \
-+	include/linux/can/netlink.h \
-+	include/linux/can/raw.h \
-+	include/linux/can/vxcan.h \
-+	include/linux/errqueue.h \
-+	include/linux/kernel.h \
-+	include/linux/net_tstamp.h \
-+	include/linux/netlink.h
-+
-+noinst_LTLIBRARIES = \
-+	libcan.la \
-+	libj1939.la
-+
-+libcan_la_SOURCES = \
-+	lib.c \
-+	canframelen.c
-+
-+libj1939_la_SOURCES = \
-+	libj1939.c
-+
-+mcp251xfd_dump_SOURCES = \
-+	mcp251xfd/mcp251xfd-dev-coredump.c \
-+	mcp251xfd/mcp251xfd-dump-userspace.h \
-+	mcp251xfd/mcp251xfd-dump.c \
-+	mcp251xfd/mcp251xfd-dump.h \
-+	mcp251xfd/mcp251xfd-main.c \
-+	mcp251xfd/mcp251xfd-regmap.c \
-+	mcp251xfd/mcp251xfd.h
-+
-+bin_PROGRAMS = \
-+	asc2log \
-+	bcmserver \
-+	can-calc-bit-timing \
-+	canbusload \
-+	candump \
-+	canfdtest \
-+	cangen \
-+	cangw \
-+	canlogserver \
-+	canplayer \
-+	cansend \
-+	cansequence \
-+	cansniffer \
-+	isotpdump \
-+	isotpperf \
-+	isotprecv \
-+	isotpsend \
-+	isotpserver \
-+	isotpsniffer \
-+	isotptun \
-+	j1939acd \
-+	j1939cat \
-+	j1939spy \
-+	j1939sr \
-+	log2asc \
-+	log2long \
-+	mcp251xfd-dump \
-+	slcan_attach \
-+	slcand \
-+	slcanpty \
-+	testj1939
-+
-+j1939acd_LDADD = libj1939.la
-+j1939cat_LDADD = libj1939.la
-+j1939spy_LDADD = libj1939.la
-+j1939sr_LDADD = libj1939.la
-+testj1939_LDADD = libj1939.la
-+
-+EXTRA_DIST = \
-+	.travis.yml \
-+	Android.mk \
-+	README.md \
-+	autogen.sh \
-+	can-j1939-kickstart.md \
-+	can-j1939.md \
-+	mcp251xfd/99-devcoredump.rules \
-+	mcp251xfd/devcoredump
-+
-+MAINTAINERCLEANFILES = \
-+	configure \
-+	GNUmakefile.in \
-+	aclocal.m4 \
-+	config/autoconf/compile \
-+	config/autoconf/config.guess \
-+	config/autoconf/config.sub \
-+	config/autoconf/depcomp \
-+	config/autoconf/install-sh \
-+	config/autoconf/ltmain.sh \
-+	config/autoconf/mdate-sh \
-+	config/autoconf/missing \
-+	config/autoconf/texinfo.tex \
-+	config/m4/libtool.m4 \
-+	config/m4/ltoptions.m4 \
-+	config/m4/ltsugar.m4 \
-+	config/m4/ltversion.m4 \
-+	config/m4/lt~obsolete.m4 \
-+	$(DIST_ARCHIVES)
-+
-+maintainer-clean-local:
-+	-chmod -R a+rw $(distdir)
-+	-rm -fr $(distdir)
-diff --git a/canutils/LICENSE b/canutils/LICENSE
-new file mode 100644
-index 0000000000..3ae3bbf3f0
---- /dev/null
-+++ b/canutils/LICENSE
-@@ -0,0 +1,244 @@
++++ b/beep/LICENSE
+@@ -0,0 +1,241 @@
 +"iperf, Copyright (c) 2014-2020, The Regents of the University of California,
-+through Lawrence Berkeley National Laboratory (subject to receipt of any 
++through Lawrence Berkeley National Laboratory (subject to receipt of any
 +required approvals from the U.S. Dept. of Energy).  All rights reserved."
 +
 +Redistribution and use in source and binary forms, with or without
@@ -752,12 +487,820 @@ index 0000000000..3ae3bbf3f0
 +// I, Mathias Panzenböck, place this file hereby into the public domain. Use it at your own risk for whatever you like.
 +
 +=====
+diff --git a/beep/src/beep.c b/beep/src/beep.c
+new file mode 100644
+index 0000000..7f6d073
+--- /dev/null
++++ b/beep/src/beep.c
+@@ -0,0 +1,51 @@
++#include<stdint.h>
++#include<string.h>
++#include<fcntl.h>
++#include<unistd.h>
++#include<stdio.h>
++#include<stdlib.h>
++#include<linux/input.h>
++#include<unistd.h>
++
++int main(int argc, char *argv[])
++{
++	int fd, duration, ret;
++	struct input_event event;
++
++	if (argc == 1) {
++		printf("Usage: beep </dev/input/eventX> [freq] [duration]");
++		return 1;
++	}
++	if ((fd = open(argv[1], O_RDWR)) < 0) {
++		perror("beep test");
++		return 1;
++	}
++	if (argc == 2) {
++		event.value = 1000;
++		duration = 3;
++	} else if (argc == 3) {
++		event.value = atoi(argv[2]);
++		duration = 3;
++	} else if (argc == 4) {
++		event.value = atoi(argv[2]);
++		duration = atoi(argv[3]);
++	} else {
++		printf("Usage: beep </dev/input/eventX> [freq] [duration]");
++		return 1;
++	}
++	event.type = EV_SND;
++	event.code = SND_TONE;
++
++	printf("Open %s with SND_TONE %d for %d seconds\n", argv[1], event.value, duration);
++	ret = write(fd, &event, sizeof(struct input_event));
++	printf("ret = %d\n", ret);
++	sleep(duration);
++	event.value = 0;
++	ret = write(fd, &event, sizeof(struct input_event));
++	printf("ret = %d\n", ret);
++
++	close(fd);
++
++	return ret;
++}
++
+diff --git a/canutils/.travis.yml b/canutils/.travis.yml
+new file mode 100644
+index 0000000..5c5e11e
+--- /dev/null
++++ b/canutils/.travis.yml
+@@ -0,0 +1,164 @@
++language: c
++
++matrix:
++    include:
++
++# native
++
++        - env: test="x64 4.8.4 (make)"
++          os: linux
++          dist: trusty
++          compiler: gcc
++          script: make
++
++        - env: test="x64 4.8.4 (autotools)"
++          os: linux
++          dist: trusty
++          compiler: gcc
++          script: ./autogen.sh && ./configure CFLAGS="-Werror -Wno-unused-result" && make distcheck
++
++        - env: test="x64 5.0 (autotools)"
++          os: linux
++          dist: trusty
++          compiler: clang
++          script: ./autogen.sh && ./configure CFLAGS="-Werror -Wno-unused-result" && make distcheck
++
++        - env: test="x64 4.8.4 (CMake gcc)"
++          os: linux
++          dist: trusty
++          compiler: gcc
++          before_script:
++              - mkdir gcc_rel && cd gcc_rel
++              - cmake ..
++          script: make
++
++        - env: test="x64 5.0 (CMake clang)"
++          os: linux
++          dist: trusty
++          compiler: clang
++          before_script:
++              - mkdir clang_rel && cd clang_rel
++              - cmake ..
++          script: make
++
++        - env: test="x64 5.0 (CMake clang - Ninja) Debug"
++          os: linux
++          dist: trusty
++          compiler: clang
++          before_script:
++              - mkdir clang_ninja_dbg && cd clang_ninja_dbg
++              - cmake .. -GNinja -DCMAKE_BUILD_TYPE=Debug
++          script: ninja
++
++# ppc64le
++
++        - env: test="ppc64le 4.8.4 (make)"
++          os: linux
++          dist: trusty
++          compiler: gcc
++          script: make
++          arch: ppc64le
++
++        - env: test="ppc64le 4.8.4 (autotools)"
++          os: linux
++          dist: trusty
++          compiler: gcc
++          script: ./autogen.sh && ./configure CFLAGS="-Werror -Wno-unused-result" && make distcheck
++          arch: ppc64le
++
++        - env: test="ppc64le 5.0 (autotools)"
++          os: linux
++          dist: trusty
++          compiler: clang
++          script: ./autogen.sh && ./configure CFLAGS="-Werror -Wno-unused-result" && make distcheck
++          arch: ppc64le
++
++        - env: test="ppc64le 4.8.4 (CMake gcc)"
++          os: linux
++          dist: trusty
++          compiler: gcc
++          before_script:
++              - mkdir gcc_rel && cd gcc_rel
++              - cmake ..
++          script: make
++          arch: ppc64le
++
++        - env: test="ppc64le 5.0 (CMake clang)"
++          os: linux
++          dist: trusty
++          compiler: clang
++          before_script:
++              - mkdir clang_rel && cd clang_rel
++              - cmake ..
++          script: make
++          arch: ppc64le
++
++        - env: test="ppc64le 5.0 (CMake clang - Ninja) Debug"
++          os: linux
++          dist: trusty
++          compiler: clang
++          before_script:
++              - mkdir clang_ninja_dbg && cd clang_ninja_dbg
++              - cmake .. -GNinja -DCMAKE_BUILD_TYPE=Debug
++          script: ninja
++          arch: ppc64le
++
++# Android
++
++        - env: test="Android NDK (CMake)"
++          os: linux
++          language: android
++          android:
++              components:
++                  - build-tools-25.0.2
++          install:
++              - echo y | sdkmanager "ndk-bundle"
++              - echo y | sdkmanager "cmake;3.6.4111459"
++          before_script:
++              - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
++              - export ANDROID_CMAKE=$ANDROID_HOME/cmake/3.6.4111459/bin/cmake
++              - export ANDROID_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake
++          script:
++              - pushd . && mkdir android15_armeabiv7a_rel && cd android15_armeabiv7a_rel
++              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-15 -DANDROID_ABI=armeabi-v7a -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
++              - make && popd
++
++              - pushd . && mkdir android15_x86_rel && cd android15_x86_rel
++              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-15 -DANDROID_ABI=x86 -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
++              - make && popd
++
++              - pushd . && mkdir android21_arm64-v8a_rel && cd android21_arm64-v8a_rel
++              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-21 -DANDROID_ABI=arm64-v8a -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
++              - make && popd
++
++              - pushd . && mkdir android21_x86_64_rel && cd android21_x86_64_rel
++              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-21 -DANDROID_ABI=x86_64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
++              - make && popd
++
++              - pushd . && mkdir android15_armeabiv7a_dbg && cd android15_armeabiv7a_dbg
++              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-15 -DANDROID_ABI=armeabi-v7a -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
++              - make && popd
++
++              - pushd . && mkdir android15_x86_dbg && cd android15_x86_dbg
++              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-15 -DANDROID_ABI=x86 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
++              - make && popd
++
++              - pushd . && mkdir android21_arm64-v8a_dbg && cd android21_arm64-v8a_dbg
++              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-21 -DANDROID_ABI=arm64-v8a -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
++              - make && popd
++
++              - pushd . && mkdir android21_x86_64_dbg && cd android21_x86_64_dbg
++              - $ANDROID_CMAKE -DANDROID_PLATFORM=android-21 -DANDROID_ABI=x86_64 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=$ANDROID_TOOLCHAIN_FILE ..
++              - make && popd
++
++addons:
++    apt:
++        packages:
++            - autoconf
++            - automake
++            - libtool
++            - m4
++            - cmake
++            - ninja-build
++        sources:
++            - ubuntu-toolchain-r-test
+diff --git a/canutils/Android.bp b/canutils/Android.bp
+new file mode 100644
+index 0000000..5bc90ff
+--- /dev/null
++++ b/canutils/Android.bp
+@@ -0,0 +1,95 @@
++// Copyright (C) 2019 The Android Open Source Project
++//
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++//
++//      http://www.apache.org/licenses/LICENSE-2.0
++//
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++
++package {
++    default_applicable_licenses: ["external_canutils_license"],
++}
++
++// Added automatically by a large-scale-change that took the approach of
++// 'apply every license found to every target'. While this makes sure we respect
++// every license restriction, it may not be entirely correct.
++//
++// e.g. GPL in an MIT project might only apply to the contrib/ directory.
++//
++// Please consider splitting the single license below into multiple licenses,
++// taking care not to lose any license_kind information, and overriding the
++// default license using the 'licenses: [...]' property on targets as needed.
++//
++// For unused files, consider creating a 'fileGroup' with "//visibility:private"
++// to attach the license to, and including a comment whether the files may be
++// used in the current project.
++// See: http://go/android-license-faq
++license {
++    name: "external_canutils_license",
++    visibility: [":__subpackages__"],
++    license_kinds: [
++        "SPDX-license-identifier-BSD",
++        "SPDX-license-identifier-MIT",
++        "SPDX-license-identifier-NCSA",
++        "legacy_notice",
++        "legacy_unencumbered",
++    ],
++    license_text: [
++        "LICENSE",
++    ],
++}
++
++cc_defaults {
++    name: "can-utils_defaults",
++
++    cflags: [
++	"-O2",
++	"-g",
++	"-W",
++	"-Wall",
++        "-Wno-unused-parameter",
++	"-DSO_RXQ_OVFL=40",
++	"-DPF_CAN=29",
++	"-DAF_CAN=PF_CAN",
++    ],
++    local_include_dirs: [
++        "include",
++    ],
++}
++
++cc_library {
++    name: "libcan",
++    defaults: ["can-utils_defaults"],
++    srcs: [
++        "lib.c",
++	"canframelen.c",
++    ],
++}
++
++cc_binary {
++    name: "candump",
++    defaults: ["can-utils_defaults"],
++    srcs: [
++        "candump.c",
++    ],
++    static_libs: [
++        "libcan",
++    ],
++}
++
++cc_binary {
++    name: "cansend",
++    defaults: ["can-utils_defaults"],
++    srcs: [
++        "cansend.c",
++    ],
++    static_libs: [
++        "libcan",
++    ],
++}
+diff --git a/canutils/CMakeLists.txt b/canutils/CMakeLists.txt
+new file mode 100644
+index 0000000..fea4171
+--- /dev/null
++++ b/canutils/CMakeLists.txt
+@@ -0,0 +1,102 @@
++cmake_minimum_required(VERSION 3.3)
++
++project(can-utils LANGUAGES C)
++
++include (CheckSymbolExists)
++include (GNUInstallDirs)
++
++if(NOT CMAKE_BUILD_TYPE)
++  set(CMAKE_BUILD_TYPE Release)
++endif()
++
++add_definitions(-D_GNU_SOURCE)
++
++set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-parentheses")
++set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing")
++set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSO_RXQ_OVFL=40")
++set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DPF_CAN=29")
++set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DAF_CAN=PF_CAN")
++set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DN_SLCAN=17")
++set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSCM_TIMESTAMPING_OPT_STATS=54")
++
++include_directories (.)
++include_directories (./include)
++
++set(PROGRAMS_CANLIB
++    asc2log
++    canbusload
++    candump
++    cangen
++    canlogserver
++    canplayer
++    cansend
++    cansequence
++    log2asc
++    log2long
++)
++
++set(PROGRAMS_J1939
++    j1939acd
++    j1939cat
++    j1939spy
++    j1939sr
++    testj1939
++)
++
++set(PROGRAMS
++    ${PROGRAMS_CANLIB}
++    bcmserver
++    can-calc-bit-timing
++    canfdtest
++    cangw
++    cansniffer
++    isotpdump
++    isotpperf
++    isotprecv
++    isotpsend
++    isotpserver
++    isotpsniffer
++    isotptun
++    slcan_attach
++    slcand
++    slcanpty
++)
++
++add_executable(mcp251xfd-dump
++    mcp251xfd/mcp251xfd-dev-coredump.c
++    mcp251xfd/mcp251xfd-dump.c
++    mcp251xfd/mcp251xfd-main.c
++    mcp251xfd/mcp251xfd-regmap.c
++)
++
++if(NOT ANDROID)
++  list(APPEND PROGRAMS ${PROGRAMS_J1939})
++
++  add_library(j1939 STATIC
++      libj1939.c
++  )
++endif()
++
++add_library(can STATIC
++    lib.c
++    canframelen.c
++)
++
++foreach(name ${PROGRAMS})
++  add_executable(${name} ${name}.c)
++
++  if("${name}" IN_LIST PROGRAMS_J1939)
++    target_link_libraries(${name}
++        PRIVATE j1939
++    )
++  elseif("${name}" IN_LIST PROGRAMS_CANLIB)
++    target_link_libraries(${name}
++        PRIVATE can
++    )
++  endif()
++
++  install(TARGETS ${name} DESTINATION ${CMAKE_INSTALL_BINDIR})
++endforeach()
 +
 +
++ADD_CUSTOM_TARGET(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_SOURCE_DIR}/cmake/make_uninstall.cmake")
+diff --git a/canutils/GNUmakefile.am b/canutils/GNUmakefile.am
+new file mode 100644
+index 0000000..02c37ab
+--- /dev/null
++++ b/canutils/GNUmakefile.am
+@@ -0,0 +1,122 @@
++ACLOCAL_AMFLAGS = -I config/m4
 +
++AM_CPPFLAGS = \
++	-I$(top_srcdir)/include \
++	-I$(top_builddir)/include \
++	$(linux_CFLAGS)
++
++# link every app against libcan, it's static so it wouldn't hurt
++LDADD = \
++	libcan.la
++
++noinst_HEADERS = \
++	canframelen.h \
++	lib.h \
++	libj1939.h \
++	terminal.h \
++	include/linux/can.h \
++	include/linux/can/bcm.h \
++	include/linux/can/error.h \
++	include/linux/can/gw.h \
++	include/linux/can/isotp.h \
++	include/linux/can/j1939.h \
++	include/linux/can/netlink.h \
++	include/linux/can/raw.h \
++	include/linux/can/vxcan.h \
++	include/linux/errqueue.h \
++	include/linux/kernel.h \
++	include/linux/net_tstamp.h \
++	include/linux/netlink.h
++
++noinst_LTLIBRARIES = \
++	libcan.la \
++	libj1939.la
++
++libcan_la_SOURCES = \
++	lib.c \
++	canframelen.c
++
++libj1939_la_SOURCES = \
++	libj1939.c
++
++mcp251xfd_dump_SOURCES = \
++	mcp251xfd/mcp251xfd-dev-coredump.c \
++	mcp251xfd/mcp251xfd-dump-userspace.h \
++	mcp251xfd/mcp251xfd-dump.c \
++	mcp251xfd/mcp251xfd-dump.h \
++	mcp251xfd/mcp251xfd-main.c \
++	mcp251xfd/mcp251xfd-regmap.c \
++	mcp251xfd/mcp251xfd.h
++
++bin_PROGRAMS = \
++	asc2log \
++	bcmserver \
++	can-calc-bit-timing \
++	canbusload \
++	candump \
++	canfdtest \
++	cangen \
++	cangw \
++	canlogserver \
++	canplayer \
++	cansend \
++	cansequence \
++	cansniffer \
++	isotpdump \
++	isotpperf \
++	isotprecv \
++	isotpsend \
++	isotpserver \
++	isotpsniffer \
++	isotptun \
++	j1939acd \
++	j1939cat \
++	j1939spy \
++	j1939sr \
++	log2asc \
++	log2long \
++	mcp251xfd-dump \
++	slcan_attach \
++	slcand \
++	slcanpty \
++	testj1939
++
++j1939acd_LDADD = libj1939.la
++j1939cat_LDADD = libj1939.la
++j1939spy_LDADD = libj1939.la
++j1939sr_LDADD = libj1939.la
++testj1939_LDADD = libj1939.la
++
++EXTRA_DIST = \
++	.travis.yml \
++	Android.mk \
++	README.md \
++	autogen.sh \
++	can-j1939-kickstart.md \
++	can-j1939.md \
++	mcp251xfd/99-devcoredump.rules \
++	mcp251xfd/devcoredump
++
++MAINTAINERCLEANFILES = \
++	configure \
++	GNUmakefile.in \
++	aclocal.m4 \
++	config/autoconf/compile \
++	config/autoconf/config.guess \
++	config/autoconf/config.sub \
++	config/autoconf/depcomp \
++	config/autoconf/install-sh \
++	config/autoconf/ltmain.sh \
++	config/autoconf/mdate-sh \
++	config/autoconf/missing \
++	config/autoconf/texinfo.tex \
++	config/m4/libtool.m4 \
++	config/m4/ltoptions.m4 \
++	config/m4/ltsugar.m4 \
++	config/m4/ltversion.m4 \
++	config/m4/lt~obsolete.m4 \
++	$(DIST_ARCHIVES)
++
++maintainer-clean-local:
++	-chmod -R a+rw $(distdir)
++	-rm -fr $(distdir)
+diff --git a/canutils/LICENSE b/canutils/LICENSE
+new file mode 100644
+index 0000000..b9ef026
+--- /dev/null
++++ b/canutils/LICENSE
+@@ -0,0 +1,241 @@
++"iperf, Copyright (c) 2014-2020, The Regents of the University of California,
++through Lawrence Berkeley National Laboratory (subject to receipt of any
++required approvals from the U.S. Dept. of Energy).  All rights reserved."
++
++Redistribution and use in source and binary forms, with or without
++modification, are permitted provided that the following conditions are met:
++
++(1) Redistributions of source code must retain the above copyright notice, this
++list of conditions and the following disclaimer.
++
++(2) Redistributions in binary form must reproduce the above copyright notice,
++this list of conditions and the following disclaimer in the documentation and/
++or other materials provided with the distribution.
++
++(3) Neither the name of the University of California, Lawrence Berkeley
++National Laboratory, U.S. Dept. of Energy nor the names of its contributors may
++be used to endorse or promote products derived from this software without
++specific prior written permission.
++
++THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
++ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
++WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
++DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
++ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
++(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
++LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
++ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++
++You are under no obligation whatsoever to provide any bug fixes, patches, or
++upgrades to the features, functionality or performance of the source code
++("Enhancements") to anyone; however, if you choose to make your Enhancements
++available either publicly, or directly to Lawrence Berkeley National
++Laboratory, without imposing a separate written license agreement for such
++Enhancements, then you hereby grant the following license: a  non-exclusive,
++royalty-free perpetual license to install, use, modify, prepare derivative
++works, incorporate into other computer software, distribute, and sublicense
++such enhancements or derivative works thereof, in binary and source code form.
++
++=====
++
++This software contains source code (src/cjson.{c,h}) that is:
++
++  Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
++
++  Permission is hereby granted, free of charge, to any person obtaining a copy
++  of this software and associated documentation files (the "Software"), to deal
++  in the Software without restriction, including without limitation the rights
++  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++  copies of the Software, and to permit persons to whom the Software is
++  furnished to do so, subject to the following conditions:
++
++  The above copyright notice and this permission notice shall be included in
++  all copies or substantial portions of the Software.
++
++  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
++  THE SOFTWARE.
++
++=====
++
++This software contains source code (src/net.{c,h}) that is:
++
++  This software was developed as part of a project at MIT.
++
++  Copyright (c) 2005-2007 Russ Cox,
++		     Massachusetts Institute of Technology
++
++  Permission is hereby granted, free of charge, to any person obtaining
++  a copy of this software and associated documentation files (the
++  "Software"), to deal in the Software without restriction, including
++  without limitation the rights to use, copy, modify, merge, publish,
++  distribute, sublicense, and/or sell copies of the Software, and to
++  permit persons to whom the Software is furnished to do so, subject to
++  the following conditions:
++
++  The above copyright notice and this permission notice shall be
++  included in all copies or substantial portions of the Software.
++
++  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
++  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
++  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
++  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++
++  ===
++
++  Contains parts of an earlier library that has:
++
++  /*
++   * The authors of this software are Rob Pike, Sape Mullender, and Russ Cox
++   *              Copyright (c) 2003 by Lucent Technologies.
++   * Permission to use, copy, modify, and distribute this software for any
++   * purpose without fee is hereby granted, provided that this entire notice
++   * is included in all copies of any software which is or includes a copy
++   * or modification of this software and in all copies of the supporting
++   * documentation for such software.
++   * THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
++   * WARRANTY.  IN PARTICULAR, NEITHER THE AUTHORS NOR LUCENT TECHNOLOGIES MAKE ANY
++   * REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
++   * OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
++  */
++
++=====
++
++This software contains source code (src/net.c) that is:
++
++/*
++ * Copyright (c) 2001 Eric Jackson <ericj@monkey.org>
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright
++ *   notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *   notice, this list of conditions and the following disclaimer in the
++ *   documentation and/or other materials provided with the distribution.
++ * 3. The name of the author may not be used to endorse or promote products
++ *   derived from this software without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
++ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
++ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
++ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
++ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
++ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++=====
++
++This software contains source code (src/queue.h) that is:
++
++  /*
++   * Copyright (c) 1991, 1993
++   *      The Regents of the University of California.  All rights reserved.
++   *
++   * Redistribution and use in source and binary forms, with or without
++   * modification, are permitted provided that the following conditions
++   * are met:
++   * 1. Redistributions of source code must retain the above copyright
++   *    notice, this list of conditions and the following disclaimer.
++   * 2. Redistributions in binary form must reproduce the above copyright
++   *    notice, this list of conditions and the following disclaimer in the
++   *    documentation and/or other materials provided with the distribution.
++   * 3. Neither the name of the University nor the names of its contributors
++   *    may be used to endorse or promote products derived from this software
++   *    without specific prior written permission.
++   *
++   * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++   * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++   * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++   * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++   * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++   * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++   * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++   * SUCH DAMAGE.
++   *
++   *      @(#)queue.h     8.5 (Berkeley) 8/20/94
++   */
++
++=====
++
++This software contains source code (src/units.{c.h}) that is:
++
++  /*---------------------------------------------------------------
++   * Copyright (c) 1999,2000,2001,2002,2003
++   * The Board of Trustees of the University of Illinois
++   * All Rights Reserved.
++   *---------------------------------------------------------------
++   * Permission is hereby granted, free of charge, to any person
++   * obtaining a copy of this software (Iperf) and associated
++   * documentation files (the "Software"), to deal in the Software
++   * without restriction, including without limitation the
++   * rights to use, copy, modify, merge, publish, distribute,
++   * sublicense, and/or sell copies of the Software, and to permit
++   * persons to whom the Software is furnished to do
++   * so, subject to the following conditions:
++   *
++   *
++   * Redistributions of source code must retain the above
++   * copyright notice, this list of conditions and
++   * the following disclaimers.
++   *
++   *
++   * Redistributions in binary form must reproduce the above
++   * copyright notice, this list of conditions and the following
++   * disclaimers in the documentation and/or other materials
++   * provided with the distribution.
++   *
++   *
++   * Neither the names of the University of Illinois, NCSA,
++   * nor the names of its contributors may be used to endorse
++   * or promote products derived from this Software without
++   * specific prior written permission.
++   *
++   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++   * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
++   * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++   * NONINFRINGEMENT. IN NO EVENT SHALL THE CONTIBUTORS OR COPYRIGHT
++   * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
++   * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
++   * ARISING FROM, OUT OF OR IN CONNECTION WITH THE
++   * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++   * ________________________________________________________________
++   * National Laboratory for Applied Network Research
++   * National Center for Supercomputing Applications
++   * University of Illinois at Urbana-Champaign
++   * http://www.ncsa.uiuc.edu
++   * ________________________________________________________________
++   *
++   * stdio.c
++   * by Mark Gates <mgates@nlanr.net>
++   * and Ajay Tirumalla <tirumala@ncsa.uiuc.edu>
++   * -------------------------------------------------------------------
++   * input and output numbers, converting with kilo, mega, giga
++   * ------------------------------------------------------------------- */
++
++=====
++
++This software contains source code (src/portable_endian.h) that is:
++
++// "License": Public Domain
++// I, Mathias Panzenböck, place this file hereby into the public domain. Use it at your own risk for whatever you like.
++
++=====
 diff --git a/canutils/LICENSES/BSD-3-Clause b/canutils/LICENSES/BSD-3-Clause
 new file mode 100644
-index 0000000000..5858df50a1
+index 0000000..5858df5
 --- /dev/null
 +++ b/canutils/LICENSES/BSD-3-Clause
 @@ -0,0 +1,27 @@
@@ -790,7 +1333,7 @@ index 0000000000..5858df50a1
 +POSSIBILITY OF SUCH DAMAGE.
 diff --git a/canutils/LICENSES/GPL-2.0-only.txt b/canutils/LICENSES/GPL-2.0-only.txt
 new file mode 100644
-index 0000000000..2b7b643ff4
+index 0000000..8f6e782
 --- /dev/null
 +++ b/canutils/LICENSES/GPL-2.0-only.txt
 @@ -0,0 +1,340 @@
@@ -851,7 +1394,7 @@ index 0000000000..2b7b643ff4
 +
 +  The precise terms and conditions for copying, distribution and
 +modification follow.
-+
++
 +		    GNU GENERAL PUBLIC LICENSE
 +   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 +
@@ -906,7 +1449,7 @@ index 0000000000..2b7b643ff4
 +    License.  (Exception: if the Program itself is interactive but
 +    does not normally print such an announcement, your work based on
 +    the Program is not required to print an announcement.)
-+
++
 +These requirements apply to the modified work as a whole.  If
 +identifiable sections of that work are not derived from the Program,
 +and can be reasonably considered independent and separate works in
@@ -964,7 +1507,7 @@ index 0000000000..2b7b643ff4
 +access to copy the source code from the same place counts as
 +distribution of the source code, even though third parties are not
 +compelled to copy the source along with the object code.
-+
++
 +  4. You may not copy, modify, sublicense, or distribute the Program
 +except as expressly provided under this License.  Any attempt
 +otherwise to copy, modify, sublicense or distribute the Program is
@@ -1021,7 +1564,7 @@ index 0000000000..2b7b643ff4
 +
 +This section is intended to make thoroughly clear what is believed to
 +be a consequence of the rest of this License.
-+
++
 +  8. If the distribution and/or use of the Program is restricted in
 +certain countries either by patents or by copyrighted interfaces, the
 +original copyright holder who places the Program under this License
@@ -1074,7 +1617,7 @@ index 0000000000..2b7b643ff4
 +POSSIBILITY OF SUCH DAMAGES.
 +
 +		     END OF TERMS AND CONDITIONS
-+
++
 +	    How to Apply These Terms to Your New Programs
 +
 +  If you develop a new program, and you want it to be of the greatest
@@ -1136,7 +1679,7 @@ index 0000000000..2b7b643ff4
 +Public License instead of this License.
 diff --git a/canutils/LICENSES/Linux-syscall-note.txt b/canutils/LICENSES/Linux-syscall-note.txt
 new file mode 100644
-index 0000000000..3d7ab24a40
+index 0000000..3d7ab24
 --- /dev/null
 +++ b/canutils/LICENSES/Linux-syscall-note.txt
 @@ -0,0 +1,12 @@
@@ -1154,7 +1697,7 @@ index 0000000000..3d7ab24a40
 +			Linus Torvalds
 diff --git a/canutils/Makefile b/canutils/Makefile
 new file mode 100644
-index 0000000000..fb526434af
+index 0000000..fb52643
 --- /dev/null
 +++ b/canutils/Makefile
 @@ -0,0 +1,146 @@
@@ -1306,10 +1849,10 @@ index 0000000000..fb526434af
 +	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 diff --git a/canutils/README.md b/canutils/README.md
 new file mode 100644
-index 0000000000..4b3037bb69
+index 0000000..c01100b
 --- /dev/null
 +++ b/canutils/README.md
-@@ -0,0 +1,78 @@
+@@ -0,0 +1,77 @@
 +<p align="center">
 +<img src="https://github.com/linux-can/can-logos/raw/master/png/SocketCAN-logo-60dpi.png" alt="SocketCAN logo"/>
 +</p>
@@ -1387,10 +1930,9 @@ index 0000000000..4b3037bb69
 +*   [SocketCAN Documentation (Linux Kernel)](https://www.kernel.org/doc/Documentation/networking/can.txt)
 +*   [Elinux.org CAN Bus Page](http://elinux.org/CAN_Bus)
 +*   [Debian Package Description](https://packages.debian.org/sid/can-utils)
-+
 diff --git a/canutils/asc2log.c b/canutils/asc2log.c
 new file mode 100644
-index 0000000000..ea6b486322
+index 0000000..788482c
 --- /dev/null
 +++ b/canutils/asc2log.c
 @@ -0,0 +1,542 @@
@@ -1486,7 +2028,7 @@ index 0000000000..ea6b486322
 +		idstring[strlen(idstring)-1] = 0;
 +	} else
 +		cf->can_id = 0;
-+    
++
 +	cf->can_id |= strtoul(idstring, NULL, base);
 +}
 +
@@ -1506,7 +2048,7 @@ index 0000000000..ea6b486322
 +
 +	} else { /* relative */
 +
-+		if (((!tv->tv_sec) && (!tv->tv_usec)) && 
++		if (((!tv->tv_sec) && (!tv->tv_usec)) &&
 +		    (date_tv->tv_sec || date_tv->tv_usec)) {
 +			tv->tv_sec  = date_tv->tv_sec; /* initial date/time */
 +			tv->tv_usec = date_tv->tv_usec;
@@ -1890,7 +2432,7 @@ index 0000000000..ea6b486322
 +				continue;
 +			}
 +
-+			/* check for the original logging date in the header */ 
++			/* check for the original logging date in the header */
 +			if ((!date_tv.tv_sec) &&
 +			    (!strncmp(buf, "date", 4))) {
 +
@@ -1938,7 +2480,7 @@ index 0000000000..ea6b486322
 +}
 diff --git a/canutils/autogen.sh b/canutils/autogen.sh
 new file mode 100755
-index 0000000000..6d1c20a24f
+index 0000000..6d1c20a
 --- /dev/null
 +++ b/canutils/autogen.sh
 @@ -0,0 +1,22 @@
@@ -1966,7 +2508,7 @@ index 0000000000..6d1c20a24f
 +banner "Finished"
 diff --git a/canutils/bcmserver.c b/canutils/bcmserver.c
 new file mode 100644
-index 0000000000..8b8288a532
+index 0000000..7241c78
 --- /dev/null
 +++ b/canutils/bcmserver.c
 @@ -0,0 +1,365 @@
@@ -2166,7 +2708,7 @@ index 0000000000..8b8288a532
 +		exit(1);
 +	}
 +
-+	while (1) { 
++	while (1) {
 +		sa = accept(sl,(struct sockaddr *)&clientaddr, &sin_size);
 +		if (sa > 0 ){
 +			if (!fork())
@@ -2267,7 +2809,7 @@ index 0000000000..8b8288a532
 +
 +			items = sscanf(buf, format,
 +				       ifr.ifr_name,
-+				       &cmd, 
++				       &cmd,
 +				       &msg.msg_head.ival2.tv_sec,
 +				       &msg.msg_head.ival2.tv_usec,
 +				       &msg.msg_head.can_id,
@@ -2337,7 +2879,7 @@ index 0000000000..8b8288a532
 +}
 diff --git a/canutils/can-calc-bit-timing.c b/canutils/can-calc-bit-timing.c
 new file mode 100644
-index 0000000000..dc2a62c146
+index 0000000..dc2a62c
 --- /dev/null
 +++ b/canutils/can-calc-bit-timing.c
 @@ -0,0 +1,1902 @@
@@ -4245,7 +4787,7 @@ index 0000000000..dc2a62c146
 +}
 diff --git a/canutils/can-j1939-install-kernel-module.md b/canutils/can-j1939-install-kernel-module.md
 new file mode 100644
-index 0000000000..7de99a3531
+index 0000000..f4e3a47
 --- /dev/null
 +++ b/canutils/can-j1939-install-kernel-module.md
 @@ -0,0 +1,180 @@
@@ -4333,7 +4875,7 @@ index 0000000000..7de99a3531
 +
 +#### 2. Add can-j1939 module to kernel ####
 +
-+First we need some packages for **menuconfig** 
++First we need some packages for **menuconfig**
 +
 +```
 +sudo apt-get install libncurses5 libncurses5-dev
@@ -4403,7 +4945,7 @@ index 0000000000..7de99a3531
 +sudo insmod /lib/modules/5.8.10/kernel/net/can/j1939/can-j1939.ko
 +```
 +
-+If it does then all you need to do is 
++If it does then all you need to do is
 +
 +```
 +sudo depmod -av
@@ -4431,7 +4973,7 @@ index 0000000000..7de99a3531
 +That is the minimum for compiling some **J1939** C code, but you might want to upgrade other header files as well. That's up to you. Enjoy!
 diff --git a/canutils/can-j1939-kickstart.md b/canutils/can-j1939-kickstart.md
 new file mode 100644
-index 0000000000..721656aa7b
+index 0000000..721656a
 --- /dev/null
 +++ b/canutils/can-j1939-kickstart.md
 @@ -0,0 +1,197 @@
@@ -4634,7 +5176,7 @@ index 0000000000..721656aa7b
 +## dynamic addressing
 diff --git a/canutils/can-j1939.md b/canutils/can-j1939.md
 new file mode 100644
-index 0000000000..4b970851a3
+index 0000000..4b97085
 --- /dev/null
 +++ b/canutils/can-j1939.md
 @@ -0,0 +1,98 @@
@@ -4738,7 +5280,7 @@ index 0000000000..4b970851a3
 +    *name* != 0 indicates dynamic addressing
 diff --git a/canutils/canbusload.c b/canutils/canbusload.c
 new file mode 100644
-index 0000000000..e4dfc021a6
+index 0000000..2b837b8
 --- /dev/null
 +++ b/canutils/canbusload.c
 @@ -0,0 +1,432 @@
@@ -4825,7 +5367,7 @@ index 0000000000..e4dfc021a6
 +	unsigned int recv_bits_dbitrate;
 +} stat[MAXSOCK+1];
 +
-+static int  max_devname_len; /* to prevent frazzled device name output */ 
++static int  max_devname_len; /* to prevent frazzled device name output */
 +static int  max_bitrate_len;
 +static int  currmax;
 +static unsigned char redraw;
@@ -4957,10 +5499,10 @@ index 0000000000..e4dfc021a6
 +				else
 +					printf(".");
 +			}
-+	    
++
 +			printf("|");
 +		}
-+	
++
 +		if (color)
 +			printf("%s", ATTRESET);
 +
@@ -5036,7 +5578,7 @@ index 0000000000..e4dfc021a6
 +		print_usage(prg);
 +		exit(0);
 +	}
-+	
++
 +	currmax = argc - optind; /* find real number of CAN devices */
 +
 +	if (currmax > MAXSOCK) {
@@ -5176,7 +5718,7 @@ index 0000000000..e4dfc021a6
 +}
 diff --git a/canutils/candump.c b/canutils/candump.c
 new file mode 100644
-index 0000000000..6fe30bbb38
+index 0000000..6fe30bb
 --- /dev/null
 +++ b/canutils/candump.c
 @@ -0,0 +1,875 @@
@@ -6057,7 +6599,7 @@ index 0000000000..6fe30bbb38
 +}
 diff --git a/canutils/canfdtest.c b/canutils/canfdtest.c
 new file mode 100644
-index 0000000000..704524f52f
+index 0000000..704524f
 --- /dev/null
 +++ b/canutils/canfdtest.c
 @@ -0,0 +1,577 @@
@@ -6640,7 +7182,7 @@ index 0000000000..704524f52f
 +}
 diff --git a/canutils/canframelen.c b/canutils/canframelen.c
 new file mode 100644
-index 0000000000..e0ca1f572c
+index 0000000..e0ca1f5
 --- /dev/null
 +++ b/canutils/canframelen.c
 @@ -0,0 +1,283 @@
@@ -6929,7 +7471,7 @@ index 0000000000..e0ca1f572c
 +}
 diff --git a/canutils/canframelen.h b/canutils/canframelen.h
 new file mode 100644
-index 0000000000..47739b202c
+index 0000000..47739b2
 --- /dev/null
 +++ b/canutils/canframelen.h
 @@ -0,0 +1,85 @@
@@ -7020,7 +7562,7 @@ index 0000000000..47739b202c
 +#endif
 diff --git a/canutils/cangen.c b/canutils/cangen.c
 new file mode 100644
-index 0000000000..232706467b
+index 0000000..2327064
 --- /dev/null
 +++ b/canutils/cangen.c
 @@ -0,0 +1,582 @@
@@ -7608,10 +8150,10 @@ index 0000000000..232706467b
 +}
 diff --git a/canutils/cangw.c b/canutils/cangw.c
 new file mode 100644
-index 0000000000..f7a6678f47
+index 0000000..022b786
 --- /dev/null
 +++ b/canutils/cangw.c
-@@ -0,0 +1,1030 @@
+@@ -0,0 +1,1029 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
 + * cangw.c - manage PF_CAN netlink gateway
@@ -7899,7 +8441,7 @@ index 0000000000..f7a6678f47
 +
 +	for (i = 0; i < len; i++) {
 +		if (!sscanf(asc+(i*2), "%2hhx", bin+i))
-+			return 1;	
++			return 1;
 +	}
 +	return 0;
 +}
@@ -8641,10 +9183,9 @@ index 0000000000..f7a6678f47
 +
 +	return err;
 +}
-+
 diff --git a/canutils/canlogserver.c b/canutils/canlogserver.c
 new file mode 100644
-index 0000000000..6425ca4219
+index 0000000..45e29e3
 --- /dev/null
 +++ b/canutils/canlogserver.c
 @@ -0,0 +1,441 @@
@@ -8802,7 +9343,7 @@ index 0000000000..6425ca4219
 +	return i;
 +}
 +
-+/* 
++/*
 + * This is a Signalhandler. When we get a signal, that a child
 + * terminated, we wait for it, so the zombie will disappear.
 + */
@@ -9064,14 +9605,14 @@ index 0000000000..6425ca4219
 +
 +				sprintf(temp, "(%lu.%06lu) %*s ",
 +					tv.tv_sec, tv.tv_usec, max_devname_len, devname[idx]);
-+				sprint_canframe(temp+strlen(temp), &frame, 0, maxdlen); 
++				sprint_canframe(temp+strlen(temp), &frame, 0, maxdlen);
 +				strcat(temp, "\n");
 +
 +				if (write(accsocket, temp, strlen(temp)) < 0) {
 +					perror("writeaccsock");
 +					return 1;
 +				}
-+		    
++
 +#if 0
 +				/* print CAN frame in log file style to stdout */
 +				printf("(%lu.%06lu) ", tv.tv_sec, tv.tv_usec);
@@ -9091,7 +9632,7 @@ index 0000000000..6425ca4219
 +}
 diff --git a/canutils/canplayer.c b/canutils/canplayer.c
 new file mode 100644
-index 0000000000..51adc77b4d
+index 0000000..29d41ac
 --- /dev/null
 +++ b/canutils/canplayer.c
 @@ -0,0 +1,556 @@
@@ -9343,7 +9884,7 @@ index 0000000000..51adc77b4d
 +	struct timespec sleep_ts;
 +	int s; /* CAN_RAW socket */
 +	FILE *infile = stdin;
-+	unsigned long gap = DEFAULT_GAP; 
++	unsigned long gap = DEFAULT_GAP;
 +	int use_timestamps = 1;
 +	int interactive = 0; /* wait for ENTER keypress to process next frame */
 +	int count = 0; /* end replay after sending count frames. 0 = disabled */
@@ -9546,7 +10087,7 @@ index 0000000000..51adc77b4d
 +				}
 +
 +				txidx = get_txidx(device); /* get ifindex for sending the frame */
-+ 
++
 +				if ((!txidx) && (!assignments)) {
 +					/* ifindex not found and no user assignments */
 +					/* => assign this device automatically       */
@@ -9570,7 +10111,7 @@ index 0000000000..51adc77b4d
 +
 +					addr.can_family  = AF_CAN;
 +					addr.can_ifindex = txidx; /* send via this interface */
-+ 
++
 +					if (sendto(s, &frame, txmtu, 0,	(struct sockaddr*)&addr, sizeof(addr)) != txmtu) {
 +						perror("sendto");
 +						return 1;
@@ -9653,7 +10194,7 @@ index 0000000000..51adc77b4d
 +}
 diff --git a/canutils/cansend.c b/canutils/cansend.c
 new file mode 100644
-index 0000000000..ae031d9842
+index 0000000..7bfb6c8
 --- /dev/null
 +++ b/canutils/cansend.c
 @@ -0,0 +1,173 @@
@@ -9744,7 +10285,7 @@ index 0000000000..ae031d9842
 +
 +int main(int argc, char **argv)
 +{
-+	int s; /* can raw socket */ 
++	int s; /* can raw socket */
 +	int required_mtu;
 +	int mtu;
 +	int enable_canfd = 1;
@@ -9832,7 +10373,7 @@ index 0000000000..ae031d9842
 +}
 diff --git a/canutils/cansequence.c b/canutils/cansequence.c
 new file mode 100644
-index 0000000000..78cf5a589f
+index 0000000..78cf5a5
 --- /dev/null
 +++ b/canutils/cansequence.c
 @@ -0,0 +1,367 @@
@@ -10205,7 +10746,7 @@ index 0000000000..78cf5a589f
 +}
 diff --git a/canutils/cansniffer.c b/canutils/cansniffer.c
 new file mode 100644
-index 0000000000..5aa5e7ae5e
+index 0000000..5aa5e7a
 --- /dev/null
 +++ b/canutils/cansniffer.c
 @@ -0,0 +1,966 @@
@@ -11177,7 +11718,7 @@ index 0000000000..5aa5e7ae5e
 +}
 diff --git a/canutils/cmake/make_uninstall.cmake b/canutils/cmake/make_uninstall.cmake
 new file mode 100644
-index 0000000000..451614ee72
+index 0000000..358168d
 --- /dev/null
 +++ b/canutils/cmake/make_uninstall.cmake
 @@ -0,0 +1,19 @@
@@ -11202,10 +11743,10 @@ index 0000000000..451614ee72
 +endforeach()
 diff --git a/canutils/config/m4/.secret-world-domination-project b/canutils/config/m4/.secret-world-domination-project
 new file mode 100644
-index 0000000000..e69de29bb2
+index 0000000..e69de29
 diff --git a/canutils/configure.ac b/canutils/configure.ac
 new file mode 100644
-index 0000000000..f44a5e2121
+index 0000000..f44a5e2
 --- /dev/null
 +++ b/canutils/configure.ac
 @@ -0,0 +1,120 @@
@@ -11331,7 +11872,7 @@ index 0000000000..f44a5e2121
 +AC_OUTPUT
 diff --git a/canutils/include/linux/can.h b/canutils/include/linux/can.h
 new file mode 100644
-index 0000000000..4ed1af958c
+index 0000000..4ed1af9
 --- /dev/null
 +++ b/canutils/include/linux/can.h
 @@ -0,0 +1,247 @@
@@ -11584,7 +12125,7 @@ index 0000000000..4ed1af958c
 +#endif /* !_UAPI_CAN_H */
 diff --git a/canutils/include/linux/can/bcm.h b/canutils/include/linux/can/bcm.h
 new file mode 100644
-index 0000000000..dd2b925b09
+index 0000000..dd2b925
 --- /dev/null
 +++ b/canutils/include/linux/can/bcm.h
 @@ -0,0 +1,105 @@
@@ -11695,7 +12236,7 @@ index 0000000000..dd2b925b09
 +#endif /* !_UAPI_CAN_BCM_H */
 diff --git a/canutils/include/linux/can/error.h b/canutils/include/linux/can/error.h
 new file mode 100644
-index 0000000000..34633283de
+index 0000000..3463328
 --- /dev/null
 +++ b/canutils/include/linux/can/error.h
 @@ -0,0 +1,125 @@
@@ -11826,7 +12367,7 @@ index 0000000000..34633283de
 +#endif /* _UAPI_CAN_ERROR_H */
 diff --git a/canutils/include/linux/can/gw.h b/canutils/include/linux/can/gw.h
 new file mode 100644
-index 0000000000..e4f0957554
+index 0000000..e4f0957
 --- /dev/null
 +++ b/canutils/include/linux/can/gw.h
 @@ -0,0 +1,222 @@
@@ -12054,7 +12595,7 @@ index 0000000000..e4f0957554
 +#endif /* !_UAPI_CAN_GW_H */
 diff --git a/canutils/include/linux/can/isotp.h b/canutils/include/linux/can/isotp.h
 new file mode 100644
-index 0000000000..439c982f7e
+index 0000000..439c982
 --- /dev/null
 +++ b/canutils/include/linux/can/isotp.h
 @@ -0,0 +1,182 @@
@@ -12242,7 +12783,7 @@ index 0000000000..439c982f7e
 +#endif /* !_UAPI_CAN_ISOTP_H */
 diff --git a/canutils/include/linux/can/j1939.h b/canutils/include/linux/can/j1939.h
 new file mode 100644
-index 0000000000..38936460f6
+index 0000000..3893646
 --- /dev/null
 +++ b/canutils/include/linux/can/j1939.h
 @@ -0,0 +1,108 @@
@@ -12356,7 +12897,7 @@ index 0000000000..38936460f6
 +#endif /* !_UAPI_CAN_J1939_H_ */
 diff --git a/canutils/include/linux/can/netlink.h b/canutils/include/linux/can/netlink.h
 new file mode 100644
-index 0000000000..f730d443b9
+index 0000000..f730d44
 --- /dev/null
 +++ b/canutils/include/linux/can/netlink.h
 @@ -0,0 +1,145 @@
@@ -12507,7 +13048,7 @@ index 0000000000..f730d443b9
 +#endif /* !_UAPI_CAN_NETLINK_H */
 diff --git a/canutils/include/linux/can/raw.h b/canutils/include/linux/can/raw.h
 new file mode 100644
-index 0000000000..3386aa81fd
+index 0000000..3386aa8
 --- /dev/null
 +++ b/canutils/include/linux/can/raw.h
 @@ -0,0 +1,67 @@
@@ -12580,7 +13121,7 @@ index 0000000000..3386aa81fd
 +#endif /* !_UAPI_CAN_RAW_H */
 diff --git a/canutils/include/linux/can/vxcan.h b/canutils/include/linux/can/vxcan.h
 new file mode 100644
-index 0000000000..4fa9d8777a
+index 0000000..4fa9d87
 --- /dev/null
 +++ b/canutils/include/linux/can/vxcan.h
 @@ -0,0 +1,13 @@
@@ -12599,7 +13140,7 @@ index 0000000000..4fa9d8777a
 +#endif
 diff --git a/canutils/include/linux/errqueue.h b/canutils/include/linux/errqueue.h
 new file mode 100644
-index 0000000000..c0151200f7
+index 0000000..e3fecef
 --- /dev/null
 +++ b/canutils/include/linux/errqueue.h
 @@ -0,0 +1,54 @@
@@ -12610,7 +13151,7 @@ index 0000000000..c0151200f7
 +#include <linux/types.h>
 +
 +struct sock_extended_err {
-+	__u32	ee_errno;	
++	__u32	ee_errno;
 +	__u8	ee_origin;
 +	__u8	ee_type;
 +	__u8	ee_code;
@@ -12659,7 +13200,7 @@ index 0000000000..c0151200f7
 +#endif /* _UAPI_LINUX_ERRQUEUE_H */
 diff --git a/canutils/include/linux/kernel.h b/canutils/include/linux/kernel.h
 new file mode 100644
-index 0000000000..b7cbdb3625
+index 0000000..b7cbdb3
 --- /dev/null
 +++ b/canutils/include/linux/kernel.h
 @@ -0,0 +1,96 @@
@@ -12761,7 +13302,7 @@ index 0000000000..b7cbdb3625
 +#endif /* _LINUX_KERNEL_H */
 diff --git a/canutils/include/linux/net_tstamp.h b/canutils/include/linux/net_tstamp.h
 new file mode 100644
-index 0000000000..e5b39721c6
+index 0000000..e5b3972
 --- /dev/null
 +++ b/canutils/include/linux/net_tstamp.h
 @@ -0,0 +1,162 @@
@@ -12929,7 +13470,7 @@ index 0000000000..e5b39721c6
 +#endif /* _NET_TIMESTAMPING_H */
 diff --git a/canutils/include/linux/netlink.h b/canutils/include/linux/netlink.h
 new file mode 100644
-index 0000000000..8e8b8e7a7b
+index 0000000..1c2a016
 --- /dev/null
 +++ b/canutils/include/linux/netlink.h
 @@ -0,0 +1,252 @@
@@ -12951,7 +13492,7 @@ index 0000000000..8e8b8e7a7b
 +#define NETLINK_SELINUX		7	/* SELinux event notifications */
 +#define NETLINK_ISCSI		8	/* Open-iSCSI */
 +#define NETLINK_AUDIT		9	/* auditing */
-+#define NETLINK_FIB_LOOKUP	10	
++#define NETLINK_FIB_LOOKUP	10
 +#define NETLINK_CONNECTOR	11
 +#define NETLINK_NETFILTER	12	/* netfilter subsystem */
 +#define NETLINK_IP6_FW		13
@@ -12967,13 +13508,13 @@ index 0000000000..8e8b8e7a7b
 +
 +#define NETLINK_INET_DIAG	NETLINK_SOCK_DIAG
 +
-+#define MAX_LINKS 32		
++#define MAX_LINKS 32
 +
 +struct sockaddr_nl {
 +	__kernel_sa_family_t	nl_family;	/* AF_NETLINK	*/
 +	unsigned short	nl_pad;		/* zero		*/
 +	__u32		nl_pid;		/* port ID	*/
-+       	__u32		nl_groups;	/* multicast groups mask */
++	__u32		nl_groups;	/* multicast groups mask */
 +};
 +
 +struct nlmsghdr {
@@ -13187,7 +13728,7 @@ index 0000000000..8e8b8e7a7b
 +#endif /* _UAPI__LINUX_NETLINK_H */
 diff --git a/canutils/isotpdump.c b/canutils/isotpdump.c
 new file mode 100644
-index 0000000000..d22725ee6e
+index 0000000..833f96b
 --- /dev/null
 +++ b/canutils/isotpdump.c
 @@ -0,0 +1,515 @@
@@ -13294,7 +13835,7 @@ index 0000000000..d22725ee6e
 +		   (service >= 0x83 && service <= 0x88) ||
 +		   (service >= 0xBA && service <= 0xBE))
 +		flag = "[SRQ]";
-+	
++
 +	switch(service) {
 +	case 0x10: service_name = "DiagnosticSessionControl"; break;
 +	case 0x11: service_name = "ECUReset"; break;
@@ -13708,7 +14249,7 @@ index 0000000000..d22725ee6e
 +}
 diff --git a/canutils/isotpperf.c b/canutils/isotpperf.c
 new file mode 100644
-index 0000000000..154d5cd69f
+index 0000000..154d5cd
 --- /dev/null
 +++ b/canutils/isotpperf.c
 @@ -0,0 +1,422 @@
@@ -14136,7 +14677,7 @@ index 0000000000..154d5cd69f
 +}
 diff --git a/canutils/isotprecv.c b/canutils/isotprecv.c
 new file mode 100644
-index 0000000000..e07e36a4ee
+index 0000000..d6f401b
 --- /dev/null
 +++ b/canutils/isotprecv.c
 @@ -0,0 +1,259 @@
@@ -14355,7 +14896,7 @@ index 0000000000..e07e36a4ee
 +	    print_usage(basename(argv[0]));
 +	    exit(1);
 +    }
-+  
++
 +    if ((s = socket(PF_CAN, SOCK_DGRAM, CAN_ISOTP)) < 0) {
 +	perror("socket");
 +	exit(1);
@@ -14401,7 +14942,7 @@ index 0000000000..e07e36a4ee
 +}
 diff --git a/canutils/isotpsend.c b/canutils/isotpsend.c
 new file mode 100644
-index 0000000000..deac601821
+index 0000000..03367d1
 --- /dev/null
 +++ b/canutils/isotpsend.c
 @@ -0,0 +1,323 @@
@@ -14720,7 +15261,7 @@ index 0000000000..deac601821
 +	    goto loop;
 +    }
 +
-+    /* 
++    /*
 +     * due to a Kernel internal wait queue the PDU is sent completely
 +     * before close() returns.
 +     */
@@ -14730,7 +15271,7 @@ index 0000000000..deac601821
 +}
 diff --git a/canutils/isotpserver.c b/canutils/isotpserver.c
 new file mode 100644
-index 0000000000..6fdb0db5bf
+index 0000000..8299db3
 --- /dev/null
 +++ b/canutils/isotpserver.c
 @@ -0,0 +1,441 @@
@@ -14824,7 +15365,7 @@ index 0000000000..6fdb0db5bf
 +
 +	for (i = 0; i < len; i++) {
 +		if (!sscanf(asc+(i*2), "%2hhx", bin+i))
-+			return 1;	
++			return 1;
 +	}
 +	return 0;
 +}
@@ -14870,7 +15411,7 @@ index 0000000000..6fdb0db5bf
 +	extern int optind, opterr, optopt;
 +	int opt;
 +
-+	int sl, sa, sc; /* (L)isten, (A)ccept, (C)AN sockets */ 
++	int sl, sa, sc; /* (L)isten, (A)ccept, (C)AN sockets */
 +	struct sockaddr_in  saddr, clientaddr;
 +	struct sockaddr_can caddr;
 +	static struct can_isotp_options opts;
@@ -15019,7 +15560,7 @@ index 0000000000..6fdb0db5bf
 +		print_usage(basename(argv[0]));
 +		exit(1);
 +	}
-+  
++
 +	sigemptyset(&sigset);
 +	signalaction.sa_handler = &childdied;
 +	signalaction.sa_mask = sigset;
@@ -15050,7 +15591,7 @@ index 0000000000..6fdb0db5bf
 +		exit(1);
 +	}
 +
-+	while (1) { 
++	while (1) {
 +		sa = accept(sl,(struct sockaddr *)&clientaddr, &sin_size);
 +		if (sa > 0 ){
 +			if (!fork())
@@ -15177,13 +15718,13 @@ index 0000000000..6fdb0db5bf
 +}
 diff --git a/canutils/isotpsniffer.c b/canutils/isotpsniffer.c
 new file mode 100644
-index 0000000000..2b6de40743
+index 0000000..358b456
 --- /dev/null
 +++ b/canutils/isotpsniffer.c
 @@ -0,0 +1,402 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
-+ * isotpsniffer.c - dump ISO15765-2 datagrams using PF_CAN isotp protocol 
++ * isotpsniffer.c - dump ISO15765-2 datagrams using PF_CAN isotp protocol
 + *
 + * Copyright (c) 2008 Volkswagen Group Electronic Research
 + * All rights reserved.
@@ -15453,7 +15994,7 @@ index 0000000000..2b6de40743
 +		r = 1;
 +		goto out;
 +	}
-+  
++
 +	if ((opts.flags & CAN_ISOTP_RX_EXT_ADDR) && (!(opts.flags & CAN_ISOTP_EXTEND_ADDR))) {
 +		print_usage(basename(argv[0]));
 +		r = 1;
@@ -15585,7 +16126,7 @@ index 0000000000..2b6de40743
 +}
 diff --git a/canutils/isotptun.c b/canutils/isotptun.c
 new file mode 100644
-index 0000000000..ee473fdf1c
+index 0000000..19bf898
 --- /dev/null
 +++ b/canutils/isotptun.c
 @@ -0,0 +1,407 @@
@@ -15876,7 +16417,7 @@ index 0000000000..ee473fdf1c
 +		print_usage(basename(argv[0]));
 +		exit(EXIT_FAILURE);
 +	}
-+  
++
 +	if (!run_as_daemon)
 +		syslogger = fake_syslog;
 +
@@ -15998,10 +16539,10 @@ index 0000000000..ee473fdf1c
 +}
 diff --git a/canutils/j1939acd.c b/canutils/j1939acd.c
 new file mode 100644
-index 0000000000..a1d7162140
+index 0000000..79b07dc
 --- /dev/null
 +++ b/canutils/j1939acd.c
-@@ -0,0 +1,653 @@
+@@ -0,0 +1,652 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (c) 2011 EIA Electronics
@@ -16654,10 +17195,9 @@ index 0000000000..a1d7162140
 +	save_cache();
 +	return 0;
 +}
-+
 diff --git a/canutils/j1939cat.c b/canutils/j1939cat.c
 new file mode 100644
-index 0000000000..34a8c03b51
+index 0000000..34a8c03
 --- /dev/null
 +++ b/canutils/j1939cat.c
 @@ -0,0 +1,790 @@
@@ -17453,10 +17993,10 @@ index 0000000000..34a8c03b51
 +}
 diff --git a/canutils/j1939spy.c b/canutils/j1939spy.c
 new file mode 100644
-index 0000000000..e49ed14f74
+index 0000000..4acbbc0
 --- /dev/null
 +++ b/canutils/j1939spy.c
-@@ -0,0 +1,305 @@
+@@ -0,0 +1,304 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (c) 2011 EIA Electronics
@@ -17761,13 +18301,12 @@ index 0000000000..e49ed14f74
 +	free(buf);
 +	return 0;
 +}
-+
 diff --git a/canutils/j1939sr.c b/canutils/j1939sr.c
 new file mode 100644
-index 0000000000..cdf6da5744
+index 0000000..3b42669
 --- /dev/null
 +++ b/canutils/j1939sr.c
-@@ -0,0 +1,222 @@
+@@ -0,0 +1,221 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (c) 2011 EIA Electronics
@@ -17989,10 +18528,9 @@ index 0000000000..cdf6da5744
 +	free(buf);
 +	return 0;
 +}
-+
 diff --git a/canutils/lib.c b/canutils/lib.c
 new file mode 100644
-index 0000000000..3c1a0d9491
+index 0000000..3c1a0d9
 --- /dev/null
 +++ b/canutils/lib.c
 @@ -0,0 +1,687 @@
@@ -18685,7 +19223,7 @@ index 0000000000..3c1a0d9491
 +}
 diff --git a/canutils/lib.h b/canutils/lib.h
 new file mode 100644
-index 0000000000..a4d3ce5c83
+index 0000000..a4d3ce5
 --- /dev/null
 +++ b/canutils/lib.h
 @@ -0,0 +1,224 @@
@@ -18915,10 +19453,10 @@ index 0000000000..a4d3ce5c83
 +#endif
 diff --git a/canutils/libj1939.c b/canutils/libj1939.c
 new file mode 100644
-index 0000000000..506b525282
+index 0000000..306e2cc
 --- /dev/null
 +++ b/canutils/libj1939.c
-@@ -0,0 +1,197 @@
+@@ -0,0 +1,196 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (c) 2011 EIA Electronics
@@ -19115,10 +19653,9 @@ index 0000000000..506b525282
 +
 +	return buf;
 +}
-+
 diff --git a/canutils/libj1939.h b/canutils/libj1939.h
 new file mode 100644
-index 0000000000..b6832cfe92
+index 0000000..b6832cf
 --- /dev/null
 +++ b/canutils/libj1939.h
 @@ -0,0 +1,35 @@
@@ -19159,7 +19696,7 @@ index 0000000000..b6832cfe92
 +#endif
 diff --git a/canutils/log2asc.c b/canutils/log2asc.c
 new file mode 100644
-index 0000000000..a1cf364d63
+index 0000000..b6f749d
 --- /dev/null
 +++ b/canutils/log2asc.c
 @@ -0,0 +1,327 @@
@@ -19410,7 +19947,7 @@ index 0000000000..a1cf364d63
 +		print_usage(basename(argv[0]));
 +		return 1;
 +	}
-+	
++
 +	//printf("Found %d CAN devices!\n", maxdev);
 +
 +	while (fgets(buf, BUFSZ-1, infile)) {
@@ -19492,7 +20029,7 @@ index 0000000000..a1cf364d63
 +}
 diff --git a/canutils/log2long.c b/canutils/log2long.c
 new file mode 100644
-index 0000000000..25814e2853
+index 0000000..25814e2
 --- /dev/null
 +++ b/canutils/log2long.c
 @@ -0,0 +1,83 @@
@@ -19581,14 +20118,14 @@ index 0000000000..25814e2853
 +}
 diff --git a/canutils/mcp251xfd/99-devcoredump.rules b/canutils/mcp251xfd/99-devcoredump.rules
 new file mode 100644
-index 0000000000..01bb6ce4a3
+index 0000000..01bb6ce
 --- /dev/null
 +++ b/canutils/mcp251xfd/99-devcoredump.rules
 @@ -0,0 +1 @@
 +ACTION=="add", SUBSYSTEM=="devcoredump", RUN+="/usr/sbin/devcoredump"
 diff --git a/canutils/mcp251xfd/devcoredump b/canutils/mcp251xfd/devcoredump
 new file mode 100644
-index 0000000000..edf829e820
+index 0000000..edf829e
 --- /dev/null
 +++ b/canutils/mcp251xfd/devcoredump
 @@ -0,0 +1,11 @@
@@ -19605,7 +20142,7 @@ index 0000000000..edf829e820
 +echo "devcoredump ${DEVPATH}" | logger
 diff --git a/canutils/mcp251xfd/mcp251xfd-dev-coredump.c b/canutils/mcp251xfd/mcp251xfd-dev-coredump.c
 new file mode 100644
-index 0000000000..5874d24095
+index 0000000..5874d24
 --- /dev/null
 +++ b/canutils/mcp251xfd/mcp251xfd-dev-coredump.c
 @@ -0,0 +1,257 @@
@@ -19868,7 +20405,7 @@ index 0000000000..5874d24095
 +}
 diff --git a/canutils/mcp251xfd/mcp251xfd-dump-userspace.h b/canutils/mcp251xfd/mcp251xfd-dump-userspace.h
 new file mode 100644
-index 0000000000..890821ee81
+index 0000000..890821e
 --- /dev/null
 +++ b/canutils/mcp251xfd/mcp251xfd-dump-userspace.h
 @@ -0,0 +1,61 @@
@@ -19935,7 +20472,7 @@ index 0000000000..890821ee81
 +#endif
 diff --git a/canutils/mcp251xfd/mcp251xfd-dump.c b/canutils/mcp251xfd/mcp251xfd-dump.c
 new file mode 100644
-index 0000000000..e84e580ff3
+index 0000000..e84e580
 --- /dev/null
 +++ b/canutils/mcp251xfd/mcp251xfd-dump.c
 @@ -0,0 +1,882 @@
@@ -20823,7 +21360,7 @@ index 0000000000..e84e580ff3
 +}
 diff --git a/canutils/mcp251xfd/mcp251xfd-dump.h b/canutils/mcp251xfd/mcp251xfd-dump.h
 new file mode 100644
-index 0000000000..e7560b0712
+index 0000000..e7560b0
 --- /dev/null
 +++ b/canutils/mcp251xfd/mcp251xfd-dump.h
 @@ -0,0 +1,45 @@
@@ -20874,7 +21411,7 @@ index 0000000000..e7560b0712
 +#endif
 diff --git a/canutils/mcp251xfd/mcp251xfd-main.c b/canutils/mcp251xfd/mcp251xfd-main.c
 new file mode 100644
-index 0000000000..4acd548cbc
+index 0000000..4acd548
 --- /dev/null
 +++ b/canutils/mcp251xfd/mcp251xfd-main.c
 @@ -0,0 +1,97 @@
@@ -20977,7 +21514,7 @@ index 0000000000..4acd548cbc
 +}
 diff --git a/canutils/mcp251xfd/mcp251xfd-regmap.c b/canutils/mcp251xfd/mcp251xfd-regmap.c
 new file mode 100644
-index 0000000000..61105f0811
+index 0000000..61105f0
 --- /dev/null
 +++ b/canutils/mcp251xfd/mcp251xfd-regmap.c
 @@ -0,0 +1,81 @@
@@ -21064,7 +21601,7 @@ index 0000000000..61105f0811
 +}
 diff --git a/canutils/mcp251xfd/mcp251xfd.h b/canutils/mcp251xfd/mcp251xfd.h
 new file mode 100644
-index 0000000000..42b9621f95
+index 0000000..42b9621
 --- /dev/null
 +++ b/canutils/mcp251xfd/mcp251xfd.h
 @@ -0,0 +1,389 @@
@@ -21459,10 +21996,10 @@ index 0000000000..42b9621f95
 +#endif
 diff --git a/canutils/page.theme b/canutils/page.theme
 new file mode 100644
-index 0000000000..e850a9befc
+index 0000000..949c79e
 --- /dev/null
 +++ b/canutils/page.theme
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,20 @@
 +<!DOCTYPE html>
 +<html>
 +<head>
@@ -21483,10 +22020,9 @@ index 0000000000..e850a9befc
 +</div>
 +</body>
 +</html>
-+
 diff --git a/canutils/slcan_attach.c b/canutils/slcan_attach.c
 new file mode 100644
-index 0000000000..df0dc98ee1
+index 0000000..df0dc98
 --- /dev/null
 +++ b/canutils/slcan_attach.c
 @@ -0,0 +1,272 @@
@@ -21764,7 +22300,7 @@ index 0000000000..df0dc98ee1
 +}
 diff --git a/canutils/slcand.c b/canutils/slcand.c
 new file mode 100644
-index 0000000000..4a15697b04
+index 0000000..cb3d7a4
 --- /dev/null
 +++ b/canutils/slcand.c
 @@ -0,0 +1,452 @@
@@ -22141,7 +22677,7 @@ index 0000000000..4a15697b04
 +		perror("ioctl TIOCSETD");
 +		exit(EXIT_FAILURE);
 +	}
-+	
++
 +	/* retrieve the name of the created CAN netdevice */
 +	if (ioctl(fd, SIOCGIFNAME, ifr.ifr_name) < 0) {
 +		perror("ioctl SIOCGIFNAME");
@@ -22149,7 +22685,7 @@ index 0000000000..4a15697b04
 +	}
 +
 +	syslogger(LOG_NOTICE, "attached TTY %s to netdevice %s\n", ttypath, ifr.ifr_name);
-+	
++
 +	/* try to rename the created netdevice */
 +	if (name) {
 +		int s = socket(PF_INET, SOCK_DGRAM, 0);
@@ -22169,7 +22705,7 @@ index 0000000000..4a15697b04
 +				syslogger(LOG_NOTICE, "netdevice %s renamed to %s\n", buf, name);
 +
 +			close(s);
-+		}	
++		}
 +	}
 +
 +	/* Daemonize */
@@ -22222,7 +22758,7 @@ index 0000000000..4a15697b04
 +}
 diff --git a/canutils/slcanpty.c b/canutils/slcanpty.c
 new file mode 100644
-index 0000000000..e6f1efe119
+index 0000000..f0a2de6
 --- /dev/null
 +++ b/canutils/slcanpty.c
 @@ -0,0 +1,558 @@
@@ -22480,7 +23016,7 @@ index 0000000000..e6f1efe119
 +
 +	if ((cmd | 0x20) == 'r' && buf[ptr] != '0') {
 +
-+		/* 
++		/*
 +		 * RTR frame without dlc information!
 +		 * This is against the SLCAN spec but sent
 +		 * by a commercial CAN tool ... so we are
@@ -22648,8 +23184,8 @@ index 0000000000..e6f1efe119
 +int main(int argc, char **argv)
 +{
 +	fd_set rdfs;
-+	int p; /* pty master file */ 
-+	int s; /* can raw socket */ 
++	int p; /* pty master file */
++	int s; /* can raw socket */
 +	struct sockaddr_can addr;
 +	struct termios topts;
 +	int select_stdin = 0;
@@ -22786,7 +23322,7 @@ index 0000000000..e6f1efe119
 +}
 diff --git a/canutils/style.css b/canutils/style.css
 new file mode 100644
-index 0000000000..6be67d23c5
+index 0000000..6be67d2
 --- /dev/null
 +++ b/canutils/style.css
 @@ -0,0 +1,68 @@
@@ -22860,7 +23396,7 @@ index 0000000000..6be67d23c5
 +}
 diff --git a/canutils/terminal.h b/canutils/terminal.h
 new file mode 100644
-index 0000000000..198b48ec0d
+index 0000000..198b48e
 --- /dev/null
 +++ b/canutils/terminal.h
 @@ -0,0 +1,95 @@
@@ -22961,10 +23497,10 @@ index 0000000000..198b48ec0d
 +#endif /* TERMINAL_H */
 diff --git a/canutils/testj1939.c b/canutils/testj1939.c
 new file mode 100644
-index 0000000000..a59be4ac01
+index 0000000..f15ba10
 --- /dev/null
 +++ b/canutils/testj1939.c
-@@ -0,0 +1,316 @@
+@@ -0,0 +1,315 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (c) 2013 EIA Electronics
@@ -23280,10 +23816,9 @@ index 0000000000..a59be4ac01
 +			sleep(1);
 +	return 0;
 +}
-+
 diff --git a/spidevtest/Android.bp b/spidevtest/Android.bp
 new file mode 100644
-index 0000000000..9f3f1fcfc0
+index 0000000..9f3f1fc
 --- /dev/null
 +++ b/spidevtest/Android.bp
 @@ -0,0 +1,57 @@
@@ -23346,12 +23881,12 @@ index 0000000000..9f3f1fcfc0
 +}
 diff --git a/spidevtest/LICENSE b/spidevtest/LICENSE
 new file mode 100644
-index 0000000000..3ae3bbf3f0
+index 0000000..b9ef026
 --- /dev/null
 +++ b/spidevtest/LICENSE
-@@ -0,0 +1,244 @@
+@@ -0,0 +1,241 @@
 +"iperf, Copyright (c) 2014-2020, The Regents of the University of California,
-+through Lawrence Berkeley National Laboratory (subject to receipt of any 
++through Lawrence Berkeley National Laboratory (subject to receipt of any
 +required approvals from the U.S. Dept. of Energy).  All rights reserved."
 +
 +Redistribution and use in source and binary forms, with or without
@@ -23591,12 +24126,9 @@ index 0000000000..3ae3bbf3f0
 +// I, Mathias Panzenböck, place this file hereby into the public domain. Use it at your own risk for whatever you like.
 +
 +=====
-+
-+
-+
 diff --git a/spidevtest/spdev_refer b/spidevtest/spdev_refer
 new file mode 100644
-index 0000000000..217ea4f001
+index 0000000..217ea4f
 --- /dev/null
 +++ b/spidevtest/spdev_refer
 @@ -0,0 +1,19 @@
@@ -23621,10 +24153,10 @@ index 0000000000..217ea4f001
 +include $(BUILD_EXECUTABLE)
 diff --git a/spidevtest/src/spidev_test.c b/spidevtest/src/spidev_test.c
 new file mode 100644
-index 0000000000..079c436767
+index 0000000..4fa28bc
 --- /dev/null
 +++ b/spidevtest/src/spidev_test.c
-@@ -0,0 +1,498 @@
+@@ -0,0 +1,495 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * SPI testing utility (using spidev driver)
@@ -23651,9 +24183,6 @@ index 0000000000..079c436767
 +#include <linux/spi/spidev.h>
 +
 +#define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
-+
-+#define	SPI_TX_OCTAL	0x2000			/* transmit with 8 wires */
-+#define	SPI_RX_OCTAL	0x4000			/* receive with 8 wires */
 +
 +static void pabort(const char *s)
 +{
@@ -24123,3 +24652,6 @@ index 0000000000..079c436767
 +
 +	return ret;
 +}
+-- 
+2.45.2
+

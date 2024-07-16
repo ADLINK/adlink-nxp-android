@@ -1,7 +1,7 @@
-From 8c93b90904987cf9d1a0070d6b594872fcf8e3cf Mon Sep 17 00:00:00 2001
+From 5efc0d1efdb404a7311c0aa89473c72fd9744a65 Mon Sep 17 00:00:00 2001
 From: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
 Date: Tue, 21 May 2024 19:23:29 +0530
-Subject: [PATCH] Kerneldtbo single image,sgtl5000,WIFI/BT
+Subject: [PATCH] Kerneldtbo single image,sgtl5000_default,WIFI/BT
 
 Signed-off-by: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
 ---
@@ -10,7 +10,8 @@ Signed-off-by: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
  .../boot/dts/freescale/sp2-imx8mp-7inch.dts   | 1349 +++++++++++++++++
  arch/arm64/boot/dts/freescale/sp2-imx8mp.dts  |  126 +-
  arch/arm64/configs/sp2imx8mp_gki.fragment     |    9 +-
- 5 files changed, 2776 insertions(+), 52 deletions(-)
+ sound/soc/codecs/sgtl5000.c                   |   12 +-
+ 6 files changed, 2782 insertions(+), 58 deletions(-)
  create mode 100644 arch/arm64/boot/dts/freescale/sp2-imx8mp-10inch.dts
  create mode 100755 arch/arm64/boot/dts/freescale/sp2-imx8mp-7inch.dts
 
@@ -2947,6 +2948,37 @@ index d0f648bd2844..0657bc5240fd 100644
 +CONFIG_FW_LOADER=y
 +CONFIG_WLAN_VENDOR_MARVELL=y
 +CONFIG_PWRSEQ_SIMPLE=y
+diff --git a/sound/soc/codecs/sgtl5000.c b/sound/soc/codecs/sgtl5000.c
+index 51a180d03c15..e1dc42e009e3 100644
+--- a/sound/soc/codecs/sgtl5000.c
++++ b/sound/soc/codecs/sgtl5000.c
+@@ -41,20 +41,20 @@
+ /* default value of sgtl5000 registers */
+ static const struct reg_default sgtl5000_reg_defaults[] = {
+ 	{ SGTL5000_CHIP_DIG_POWER,		0x0000 },
+-	{ SGTL5000_CHIP_I2S_CTRL,		0x0010 },
++	{ SGTL5000_CHIP_I2S_CTRL,		0x001b },
+ 	{ SGTL5000_CHIP_SSS_CTRL,		0x0010 },
+ 	{ SGTL5000_CHIP_ADCDAC_CTRL,		0x020c },
+ 	{ SGTL5000_CHIP_DAC_VOL,		0x3c3c },
+ 	{ SGTL5000_CHIP_PAD_STRENGTH,		0x015f },
+-	{ SGTL5000_CHIP_ANA_ADC_CTRL,		0x0000 },
++	{ SGTL5000_CHIP_ANA_ADC_CTRL,		0x00bb },
+ 	{ SGTL5000_CHIP_ANA_HP_CTRL,		0x1818 },
+-	{ SGTL5000_CHIP_ANA_CTRL,		0x0111 },
++	{ SGTL5000_CHIP_ANA_CTRL,		0x0022 },
+ 	{ SGTL5000_CHIP_REF_CTRL,		0x0000 },
+ 	{ SGTL5000_CHIP_MIC_CTRL,		0x0000 },
+ 	{ SGTL5000_CHIP_LINE_OUT_CTRL,		0x0000 },
+-	{ SGTL5000_CHIP_LINE_OUT_VOL,		0x0404 },
+-	{ SGTL5000_CHIP_PLL_CTRL,		0x5000 },
+-	{ SGTL5000_CHIP_CLK_TOP_CTRL,		0x0000 },
++	{ SGTL5000_CHIP_LINE_OUT_VOL,		0x1f1f },
++	{ SGTL5000_CHIP_PLL_CTRL,		0xa3d7 },
++	{ SGTL5000_CHIP_CLK_TOP_CTRL,		0x0008},
+ 	{ SGTL5000_CHIP_ANA_STATUS,		0x0000 },
+ 	{ SGTL5000_CHIP_SHORT_CTRL,		0x0000 },
+ 	{ SGTL5000_CHIP_ANA_TEST2,		0x0000 },
 -- 
-2.25.1
+2.45.2
 
