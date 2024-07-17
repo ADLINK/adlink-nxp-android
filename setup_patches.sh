@@ -43,25 +43,34 @@ clear_previous_patch () {
 				git checkout -f 5630078b73dbd1ecce85868ca9766f64709f3354
 				;;
 			*external)
-				echo "rm -rf spidevtest/ canutils/"
-				rm -rf spidevtest/ canutils/
+				echo "rm -rf spidevtest/ canutils/ beep/"
+				rm -rf spidevtest/ canutils/ beep/
 				;;
 			*build)
 				echo "patch -r -p1 < ../$pf"
 				patch -r -p1 < ../$pf
 				;;
 			*device/nxp)
-				rm -fr imx8m/sp2_imx8mp/
+				echo "rm -rf imx8m/sp2_imx8mp/ common/"
+				rm -fr imx8m/sp2_imx8mp/ common/
 				echo "git checkout -f f0c720836e6526d305ad0afda0be6d825be8d07f"
 				git checkout -f f0c720836e6526d305ad0afda0be6d825be8d07f
 				;;
+			*vendor/nxp-opensource/imx-mkimage)
+				echo "rm -rf iMX8M/"
+				rm -fr iMX8M/
+				git checkout -f 4981b7703933418e81b3d1e4b7f65e5954f7e033
+				;;
 			*vendor/nxp-opensource/kernel_imx)
+				echo "rm -rf arch/arm64/boot/ arch/arm64/configs/"
 				rm -fr arch/arm64/boot/ arch/arm64/configs/
 				echo "git checkout -f 1daca5e35461400d33b72e067cfd7d613cc5587b"
 				git checkout -f 1daca5e35461400d33b72e067cfd7d613cc5587b
 				;;
 			*vendor/nxp-opensource/uboot-imx)
+				echo "rm -rf board/adlink include/msgpack/ lib/msgpack/"
 				rm -rf board/adlink include/msgpack/ lib/msgpack/
+				echo "rm -rf arch/arm/ cmd/ configs/ drivers/video/ include/"
 				rm -rf arch/arm/ cmd/ configs/ drivers/video/ include/
 				echo "git checkout -f 20eaeb1407cc9c562fb549e51dfd0d4f7e180bba"
 				git checkout -f 20eaeb1407cc9c562fb549e51dfd0d4f7e180bba
