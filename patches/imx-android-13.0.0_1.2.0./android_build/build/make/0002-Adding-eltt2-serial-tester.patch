@@ -1,0 +1,26 @@
+From 123b85d277a37802b184f1ce8588aad45cc091f0 Mon Sep 17 00:00:00 2001
+From: shivaadlink <shivashankar.thiruchitrambalam@adlinktech.com>
+Date: Tue, 30 Jul 2024 19:11:15 +0530
+Subject: [PATCH] Adding-eltt2-serial-tester
+
+Signed-off-by: shivaadlink <shivashankar.thiruchitrambalam@adlinktech.com>
+---
+ target/product/base_system.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/target/product/base_system.mk b/target/product/base_system.mk
+index 9c26359f3c..d75a03e7a5 100644
+--- a/target/product/base_system.mk
++++ b/target/product/base_system.mk
+@@ -379,6 +379,8 @@ PRODUCT_PACKAGES_DEBUG := \
+     candump \
+     cansend \
+     beep \
++    eltt2 \
++    serial-tester \
+     iperf3 \
+     iw \
+     logpersist.start \
+-- 
+2.45.2
+
