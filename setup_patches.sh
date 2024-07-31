@@ -30,6 +30,7 @@ get_patch_files () {
 
 clear_previous_patch () {
 	echo $PATCHREVERSE
+
 	for pf in $PATCHREVERSE; do
 		# crop the directory where patch is applying
 		TARGET_FILE=${pf#*android_build/}
@@ -45,10 +46,14 @@ clear_previous_patch () {
 			*external)
 				echo "rm -rf spidevtest/ canutils/ beep/"
 				rm -rf spidevtest/ canutils/ beep/
+				echo "rm -rf eltt2/ serial-tester/"
+				rm -rf eltt2/ serial-tester/
 				;;
 			*build)
 				echo "patch -r -p1 < ../$pf"
 				patch -r -p1 < ../$pf
+				echo "clear build/target/product/base_system.mk"
+				rm -rf build/target/product/base_system.mk
 				;;
 			*device/nxp)
 				echo "rm -rf imx8m/sp2_imx8mp/ common/"
