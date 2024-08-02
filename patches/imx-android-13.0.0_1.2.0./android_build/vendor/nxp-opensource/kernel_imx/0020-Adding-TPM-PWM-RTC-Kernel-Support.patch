@@ -1,4 +1,4 @@
-From cb9511e46bcf323aab941e574a7a4329abbcdacb Mon Sep 17 00:00:00 2001
+From 1704812bb8270250ac3c1af39b3523243036eb54 Mon Sep 17 00:00:00 2001
 From: shivaadlink <shivashankar.thiruchitrambalam@adlinktech.com>
 Date: Thu, 25 Jul 2024 11:27:16 +0530
 Subject: [PATCH] Adding-TPM-PWM-RTC-Kernel-Support
@@ -8,14 +8,14 @@ Signed-off-by: shivaadlink <shivashankar.thiruchitrambalam@adlinktech.com>
  .../boot/dts/freescale/sp2-imx8mp-10inch.dts  |  18 ++
  .../boot/dts/freescale/sp2-imx8mp-7inch.dts   |  18 ++
  arch/arm64/boot/dts/freescale/sp2-imx8mp.dts  |  18 ++
- arch/arm64/configs/sp2imx8mp_gki.fragment     |   6 +-
+ arch/arm64/configs/sp2imx8mp_gki.fragment     |   4 +
  drivers/char/tpm/Kconfig                      |  13 +
  drivers/char/tpm/Makefile                     |   1 +
  drivers/char/tpm/tpm-interface.c              |  17 +-
  drivers/char/tpm/tpm_tis_core.c               | 162 +++++++---
  drivers/char/tpm/tpm_tis_core.h               |  41 ++-
  drivers/char/tpm/tpm_tis_i2c.c                | 288 ++++++++++++++++++
- 10 files changed, 526 insertions(+), 56 deletions(-)
+ 10 files changed, 525 insertions(+), 55 deletions(-)
  create mode 100644 drivers/char/tpm/tpm_tis_i2c.c
 
 diff --git a/arch/arm64/boot/dts/freescale/sp2-imx8mp-10inch.dts b/arch/arm64/boot/dts/freescale/sp2-imx8mp-10inch.dts
@@ -127,18 +127,9 @@ index 5813d61f3e26..ab4a99a102b7 100755
  
  	pinctrl_usbhub_spkamp: usbhubspkampgrp {
 diff --git a/arch/arm64/configs/sp2imx8mp_gki.fragment b/arch/arm64/configs/sp2imx8mp_gki.fragment
-index 0657bc5240fd..bd42f8ee8850 100644
+index 0657bc5240fd..94f0eabf7130 100644
 --- a/arch/arm64/configs/sp2imx8mp_gki.fragment
 +++ b/arch/arm64/configs/sp2imx8mp_gki.fragment
-@@ -146,7 +146,7 @@ CONFIG_SYSFS=y
- CONFIG_GPIOLIB=y
- CONFIG_GPIO_SYSFS=y
- CONFIG_EXTCON_USB_GPIO=m
--CONFIG_RTC_DRV_PCF85063=y
-+CONFIG_RTC_DRV_PCF85063=m
- CONFIG_PINCTRL_SX150X=y
- CONFIG_MTD=y
- CONFIG_SPI_IMX=y
 @@ -163,3 +163,7 @@ CONFIG_DRM_PANEL_LVDS=m
  CONFIG_FW_LOADER=y
  CONFIG_WLAN_VENDOR_MARVELL=y

@@ -1,4 +1,4 @@
-From 8f7250168b0936b08699d29c41d0467754ed888b Mon Sep 17 00:00:00 2001
+From d20dcd96820d2af96f79720fedf231684df19caf Mon Sep 17 00:00:00 2001
 From: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
 Date: Mon, 10 Jun 2024 12:24:17 +0530
 Subject: [PATCH] Device-Single_image-sgtl5000-SDcard-usb3.0-TPM
@@ -10,10 +10,10 @@ Signed-off-by: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
  imx8m/sp2_imx8mp/AndroidUboot.sh       |  2 +-
  imx8m/sp2_imx8mp/Auart-mode.sh         | 71 ++++++++++++++++++++++++++
  imx8m/sp2_imx8mp/BoardConfig.mk        |  8 +--
- imx8m/sp2_imx8mp/SharedBoardConfig.mk  |  9 ++--
+ imx8m/sp2_imx8mp/SharedBoardConfig.mk  |  8 +--
  imx8m/sp2_imx8mp/fstab.nxp             |  6 +++
  imx8m/sp2_imx8mp/sp2_imx8mp.mk         |  5 +-
- 8 files changed, 121 insertions(+), 11 deletions(-)
+ 8 files changed, 120 insertions(+), 11 deletions(-)
  create mode 100644 common/audio-json/sgtl5000_config.json
  create mode 100755 imx8m/sp2_imx8mp/Auart-mode.sh
 
@@ -182,7 +182,7 @@ index 549e965e..b1228c41 100644
      TARGET_BOARD_DTS_CONFIG += imx8mp-mipi-panel:imx8mp-evk-rm67199.dtb
      # Support rm67191 MIPI panel
 diff --git a/imx8m/sp2_imx8mp/SharedBoardConfig.mk b/imx8m/sp2_imx8mp/SharedBoardConfig.mk
-index 9deb6df9..45af74ea 100644
+index 9deb6df9..ec63b91e 100644
 --- a/imx8m/sp2_imx8mp/SharedBoardConfig.mk
 +++ b/imx8m/sp2_imx8mp/SharedBoardConfig.mk
 @@ -42,12 +42,13 @@ BOARD_VENDOR_KERNEL_MODULES += \
@@ -209,15 +209,7 @@ index 9deb6df9..45af74ea 100644
      $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-pcm512x-rpmsg.ko \
      $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-rpmsg.ko \
      $(KERNEL_OUT)/drivers/firmware/imx/imx-dsp.ko \
-@@ -72,6 +71,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
-     $(KERNEL_OUT)/sound/soc/sof/xtensa/snd-sof-xtensa-dsp.ko \
-     $(KERNEL_OUT)/sound/soc/sof/imx/imx-common.ko \
-     $(KERNEL_OUT)/sound/soc/sof/imx/snd-sof-imx8m.ko \
-+    $(KERNEL_OUT)/drivers/rtc/rtc-pcf85063.ko \
-     $(KERNEL_OUT)/drivers/rtc/rtc-snvs.ko \
-     $(KERNEL_OUT)/drivers/pci/controller/dwc/pci-imx6.ko \
-     $(KERNEL_OUT)/drivers/net/phy/realtek.ko \
-@@ -79,6 +79,9 @@ BOARD_VENDOR_KERNEL_MODULES += \
+@@ -79,6 +78,9 @@ BOARD_VENDOR_KERNEL_MODULES += \
      $(KERNEL_OUT)/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.ko \
      $(KERNEL_OUT)/drivers/net/ethernet/stmicro/stmmac/stmmac-platform.ko \
      $(KERNEL_OUT)/drivers/net/ethernet/stmicro/stmmac/stmmac.ko \
