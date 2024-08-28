@@ -1,21 +1,22 @@
-From d20dcd96820d2af96f79720fedf231684df19caf Mon Sep 17 00:00:00 2001
+From e781353560466ae6a56c661ff3df05174c6e41c6 Mon Sep 17 00:00:00 2001
 From: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
 Date: Mon, 10 Jun 2024 12:24:17 +0530
-Subject: [PATCH] Device-Single_image-sgtl5000-SDcard-usb3.0-TPM
+Subject: [PATCH] 
+ Device-Support-Single_image-sgtl5000-SDcard-usb3.0-TPM-Battery
 
-Signed-off-by: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
+Signed-off-by: adlinkshiva <shivashankar.t@adlinktech.com>
 ---
- common/audio-json/sgtl5000_config.json | 27 ++++++++++
+ common/audio-json/sgtl5000_config.json | 27 +++++++++++
  common/tools/uuu_imx_android_flash.sh  |  4 +-
  imx8m/sp2_imx8mp/AndroidUboot.sh       |  2 +-
- imx8m/sp2_imx8mp/Auart-mode.sh         | 71 ++++++++++++++++++++++++++
- imx8m/sp2_imx8mp/BoardConfig.mk        |  8 +--
- imx8m/sp2_imx8mp/SharedBoardConfig.mk  |  8 +--
+ imx8m/sp2_imx8mp/BoardConfig.mk        |  8 ++--
+ imx8m/sp2_imx8mp/SharedBoardConfig.mk  |  9 ++--
  imx8m/sp2_imx8mp/fstab.nxp             |  6 +++
  imx8m/sp2_imx8mp/sp2_imx8mp.mk         |  5 +-
- 8 files changed, 120 insertions(+), 11 deletions(-)
+ imx8m/sp2_imx8mp/uart-mode.sh          | 65 ++++++++++++++++++++++++++
+ 8 files changed, 114 insertions(+), 12 deletions(-)
  create mode 100644 common/audio-json/sgtl5000_config.json
- create mode 100755 imx8m/sp2_imx8mp/Auart-mode.sh
+ create mode 100755 imx8m/sp2_imx8mp/uart-mode.sh
 
 diff --git a/common/audio-json/sgtl5000_config.json b/common/audio-json/sgtl5000_config.json
 new file mode 100644
@@ -85,83 +86,6 @@ index 53b94803..c6968a38 100644
  	cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/ddr/synopsys/lpddr4_pmu_train* ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
  
  	# build ATF based on whether tee is involved
-diff --git a/imx8m/sp2_imx8mp/Auart-mode.sh b/imx8m/sp2_imx8mp/Auart-mode.sh
-new file mode 100755
-index 00000000..675cdd40
---- /dev/null
-+++ b/imx8m/sp2_imx8mp/Auart-mode.sh
-@@ -0,0 +1,71 @@
-+# uart-mode.sh
-+#!/bin/bash
-+
-+usage () {
-+	echo "syntax: uart-mode.sh <mode> "
-+	echo "      mode: loopback, rs232, rs485, rs422"
-+}
-+
-+if ! [ $# -ge 0 -a $# -le 4 ]; then
-+	usage
-+	exit 1
-+elif [ "$1" = "-h" -o "$1" = '--help' ]; then
-+	usage
-+	exit 0
-+fi
-+
-+UART_MODE=${1:-rs232}    # default to rs232
-+MODE0_PIN=${2:-120}       # default to pin24 #Mode0
-+MODE1_PIN=${3:-121}       # default to pin25 #Mode1
-+
-+if [ $# -eq 0 ]; then
-+	echo "Using default: uart-mode = $UART_MODE, gpio controller = $GPIO_NUM, mode0_pin = $MODE0_PIN, mode1_pin = $MODE1_PIN"
-+fi
-+#check for root
-+BEROOT=""
-+	if [ $(id -u) -ne 0 ];then
-+	    BEROOT=sudo
-+	fi
-+	$BEROOT echo out > /sys/class/gpio/gpio120/direction
-+	$BEROOT echo out > /sys/class/gpio/gpio121/direction
-+	case "${UART_MODE}" in
-+		"loopback")
-+			# $BEROOT gpioset $GPIO_NUM $MODE0_PIN=0;
-+			# $BEROOT gpioset $GPIO_NUM $MODE1_PIN=0;
-+                        $BEROOT echo 0 > /sys/class/gpio/gpio120/value
-+                        $BEROOT echo 0 > /sys/class/gpio/gpio121/value
-+                        echo "Mode0 gpio120 :$(</sys/class/gpio/gpio120/value )"
-+                        echo "Mode1 gpio121 :$(</sys/class/gpio/gpio121/value )"
-+
-+			;;
-+		"rs485")
-+			# $BEROOT gpioset $GPIO_NUM $MODE0_PIN=0;
-+			# $BEROOT gpioset $GPIO_NUM $MODE1_PIN=1;
-+                        $BEROOT echo 0 > /sys/class/gpio/gpio120/value
-+                        $BEROOT echo 1 > /sys/class/gpio/gpio121/value
-+                        echo "Mode0 gpio120 :$(</sys/class/gpio/gpio120/value )"
-+                        echo "Mode1 gpio121 :$(</sys/class/gpio/gpio121/value )"
-+
-+			;;
-+		"rs422")
-+                        $BEROOT echo 1 > /sys/class/gpio/gpio120/value
-+                        $BEROOT echo 1 > /sys/class/gpio/gpio121/value
-+                        echo "Mode0 gpio120 :$(</sys/class/gpio/gpio120/value )"
-+                        echo "Mode1 gpio121 :$(</sys/class/gpio/gpio121/value )"
-+
-+			;;
-+		"rs232")
-+			# $BEROOT gpioset $GPIO_NUM $MODE0_PIN=1;
-+			# $BEROOT gpioset $GPIO_NUM $MODE1_PIN=0;
-+			$BEROOT echo 1 > /sys/class/gpio/gpio120/value
-+			$BEROOT echo 0 > /sys/class/gpio/gpio121/value
-+                        echo "Mode0 gpio120 :$(</sys/class/gpio/gpio120/value )"
-+                        echo "Mode1 gpio121 :$(</sys/class/gpio/gpio121/value )"
-+
-+			;;
-+		*)
-+			usage
-+			exit 1
-+			;;
-+	esac;
-+exit 0
 diff --git a/imx8m/sp2_imx8mp/BoardConfig.mk b/imx8m/sp2_imx8mp/BoardConfig.mk
 index 549e965e..b1228c41 100644
 --- a/imx8m/sp2_imx8mp/BoardConfig.mk
@@ -182,7 +106,7 @@ index 549e965e..b1228c41 100644
      TARGET_BOARD_DTS_CONFIG += imx8mp-mipi-panel:imx8mp-evk-rm67199.dtb
      # Support rm67191 MIPI panel
 diff --git a/imx8m/sp2_imx8mp/SharedBoardConfig.mk b/imx8m/sp2_imx8mp/SharedBoardConfig.mk
-index 9deb6df9..ec63b91e 100644
+index 9deb6df9..1e64a54a 100644
 --- a/imx8m/sp2_imx8mp/SharedBoardConfig.mk
 +++ b/imx8m/sp2_imx8mp/SharedBoardConfig.mk
 @@ -42,12 +42,13 @@ BOARD_VENDOR_KERNEL_MODULES += \
@@ -219,6 +143,14 @@ index 9deb6df9..ec63b91e 100644
      $(KERNEL_OUT)/drivers/extcon/extcon-usb-gpio.ko
  ifeq ($(POWERSAVE),true)
  BOARD_VENDOR_KERNEL_MODULES += \
+@@ -205,7 +207,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
+     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-simple.ko \
+     $(KERNEL_OUT)/drivers/usb/dwc3/dwc3-imx8mp.ko \
+     $(KERNEL_OUT)/drivers/usb/typec/mux/gpio-switch.ko \
+-    $(KERNEL_OUT)/drivers/power/supply/dummy_battery.ko \
+     $(KERNEL_OUT)/drivers/nvmem/nvmem-imx-ocotp.ko \
+     $(KERNEL_OUT)/drivers/thermal/device_cooling.ko \
+     $(KERNEL_OUT)/drivers/perf/fsl_imx8_ddr_perf.ko \
 diff --git a/imx8m/sp2_imx8mp/fstab.nxp b/imx8m/sp2_imx8mp/fstab.nxp
 index c7eba71b..af46550d 100644
 --- a/imx8m/sp2_imx8mp/fstab.nxp
@@ -241,7 +173,7 @@ index c7eba71b..af46550d 100644
 +#usb3.0 auto mount
 +/devices/platform/soc@0/32f10100.usb/38100000.usb/* auto auto defaults voldmanaged=usb:auto
 diff --git a/imx8m/sp2_imx8mp/sp2_imx8mp.mk b/imx8m/sp2_imx8mp/sp2_imx8mp.mk
-index 9b942cdd..25246281 100644
+index 9b942cdd..987c5c0b 100644
 --- a/imx8m/sp2_imx8mp/sp2_imx8mp.mk
 +++ b/imx8m/sp2_imx8mp/sp2_imx8mp.mk
 @@ -242,7 +242,7 @@ $(call inherit-product-if-exists, vendor/nxp-private/widevine/nxp_widevine_tee_8
@@ -258,11 +190,82 @@ index 9b942cdd..25246281 100644
      $(IMX_DEVICE_PATH)/init.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.usb.rc
  
 +PRODUCT_COPY_FILES += \
-+    $(IMX_DEVICE_PATH)/Auart-mode.sh:/system/bin/Auart-mode.sh
++    $(IMX_DEVICE_PATH)/uart-mode.sh:/system/bin/uart-mode.sh
 +
  PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
      sys.usb.mtp.batchcancel=1
  
+diff --git a/imx8m/sp2_imx8mp/uart-mode.sh b/imx8m/sp2_imx8mp/uart-mode.sh
+new file mode 100755
+index 00000000..ed3deb60
+--- /dev/null
++++ b/imx8m/sp2_imx8mp/uart-mode.sh
+@@ -0,0 +1,65 @@
++# uart-mode.sh
++#!/bin/bash
++
++usage () {
++	echo "syntax: uart-mode.sh <mode> "
++	echo "      mode: loopback, rs232, rs485, rs422"
++}
++
++if ! [ $# -ge 0 -a $# -le 4 ]; then
++	usage
++	exit 1
++elif [ "$1" = "-h" -o "$1" = '--help' ]; then
++	usage
++	exit 0
++fi
++
++UART_MODE=${1:-rs232}    # default to rs232
++MODE0_PIN=${2:-120}       # default to pin24 #Mode0
++MODE1_PIN=${3:-121}       # default to pin25 #Mode1
++
++if [ $# -eq 0 ]; then
++	echo "Using default: uart-mode = $UART_MODE, mode0_pin = $MODE0_PIN, mode1_pin = $MODE1_PIN"
++fi
++#check for root
++BEROOT=""
++	if [ $(id -u) -ne 0 ];then
++	    BEROOT=sudo
++	fi
++	$BEROOT echo out > /sys/class/gpio/gpio120/direction
++	$BEROOT echo out > /sys/class/gpio/gpio121/direction
++	case "${UART_MODE}" in
++		"loopback")
++                        $BEROOT echo 0 > /sys/class/gpio/gpio120/value
++                        $BEROOT echo 0 > /sys/class/gpio/gpio121/value
++                        echo "Mode0 gpio120 :$(</sys/class/gpio/gpio120/value )"
++                        echo "Mode1 gpio121 :$(</sys/class/gpio/gpio121/value )"
++
++			;;
++		"rs485")
++                        $BEROOT echo 0 > /sys/class/gpio/gpio120/value
++                        $BEROOT echo 1 > /sys/class/gpio/gpio121/value
++                        echo "Mode0 gpio120 :$(</sys/class/gpio/gpio120/value )"
++                        echo "Mode1 gpio121 :$(</sys/class/gpio/gpio121/value )"
++
++			;;
++		"rs422")
++                        $BEROOT echo 1 > /sys/class/gpio/gpio120/value
++                        $BEROOT echo 1 > /sys/class/gpio/gpio121/value
++                        echo "Mode0 gpio120 :$(</sys/class/gpio/gpio120/value )"
++                        echo "Mode1 gpio121 :$(</sys/class/gpio/gpio121/value )"
++
++			;;
++		"rs232")
++			$BEROOT echo 1 > /sys/class/gpio/gpio120/value
++			$BEROOT echo 0 > /sys/class/gpio/gpio121/value
++                        echo "Mode0 gpio120 :$(</sys/class/gpio/gpio120/value )"
++                        echo "Mode1 gpio121 :$(</sys/class/gpio/gpio121/value )"
++
++			;;
++		*)
++			usage
++			exit 1
++			;;
++	esac;
++exit 0
 -- 
 2.45.2
 

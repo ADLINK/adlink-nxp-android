@@ -1,100 +1,70 @@
-From 1704812bb8270250ac3c1af39b3523243036eb54 Mon Sep 17 00:00:00 2001
-From: shivaadlink <shivashankar.thiruchitrambalam@adlinktech.com>
-Date: Thu, 25 Jul 2024 11:27:16 +0530
-Subject: [PATCH] Adding-TPM-PWM-RTC-Kernel-Support
+From 7c11ef6843e1fe7ea7542584a0a7f64e73141968 Mon Sep 17 00:00:00 2001
+From: shivaadlink <shivashankar.t@adlinktech.com>
+Date: Tue, 27 Aug 2024 19:41:53 +0530
+Subject: [PATCH] Adding-TPM-PWM-Kernel-Support
 
-Signed-off-by: shivaadlink <shivashankar.thiruchitrambalam@adlinktech.com>
+Signed-off-by: shivaadlink <shivashankar.t@adlinktech.com>
 ---
- .../boot/dts/freescale/sp2-imx8mp-10inch.dts  |  18 ++
+ .../boot/dts/freescale/sp2-imx8mp-10inch.dts  | 169 +++++-----
  .../boot/dts/freescale/sp2-imx8mp-7inch.dts   |  18 ++
- arch/arm64/boot/dts/freescale/sp2-imx8mp.dts  |  18 ++
- arch/arm64/configs/sp2imx8mp_gki.fragment     |   4 +
+ arch/arm64/boot/dts/freescale/sp2-imx8mp.dts  |  35 ++-
+ arch/arm64/configs/sp2imx8mp_gki.fragment     |   5 +-
  drivers/char/tpm/Kconfig                      |  13 +
  drivers/char/tpm/Makefile                     |   1 +
  drivers/char/tpm/tpm-interface.c              |  17 +-
  drivers/char/tpm/tpm_tis_core.c               | 162 +++++++---
  drivers/char/tpm/tpm_tis_core.h               |  41 ++-
  drivers/char/tpm/tpm_tis_i2c.c                | 288 ++++++++++++++++++
- 10 files changed, 525 insertions(+), 55 deletions(-)
+ 10 files changed, 605 insertions(+), 144 deletions(-)
  create mode 100644 drivers/char/tpm/tpm_tis_i2c.c
 
 diff --git a/arch/arm64/boot/dts/freescale/sp2-imx8mp-10inch.dts b/arch/arm64/boot/dts/freescale/sp2-imx8mp-10inch.dts
-index d64a43324217..dec6caacf997 100644
+index d64a43324217..45b581351610 100644
 --- a/arch/arm64/boot/dts/freescale/sp2-imx8mp-10inch.dts
 +++ b/arch/arm64/boot/dts/freescale/sp2-imx8mp-10inch.dts
-@@ -587,6 +587,18 @@ &i2c3 {
- 	pinctrl-0 = <&pinctrl_i2c3>;
- 	status = "okay";
- 
-+        /* TPM: ST33HTPH2X32AHD5 */
-+          tpm: st33htph77@2e {
-+                  compatible = "st,st33htpm-i2c";
-+                  reg = <0x2e>;
-+                  pinctrl-names = "default";
-+                  pinctrl-0 = <&pinctrl_tpm>;
-+                  interrupt-parent = <&gpio3>;
-+                  interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
-+                  tpm-reset = <&gpio1 6 GPIO_ACTIVE_LOW>;
-+                  status = "okay";
-+          };
-+
- 	pca6416: gpio@20 {
- 		compatible = "ti,tca6416";
- 		reg = <0x20>;
-@@ -905,6 +917,12 @@ MX8MP_IOMUXC_SAI5_RXFS__PWM4_OUT	0x116
- 		>;
+@@ -239,18 +239,19 @@ pwm-beeper {
+ 		compatible = "pwm-beeper";
+ 		pwms = <&pwm4 0 500000 0>;
  	};
- 
-+        pinctrl_tpm: tpmgrp {
-+                fsl,pins = <
-+                        MX8MP_IOMUXC_NAND_DQS__GPIO3_IO14               0xd6    // TPM IRQ
-+                        MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06             0x156   // TPM reset
-+                >;
+-	usdhc1_pwrseq: usdhc1_pwrseq {			
+-		compatible = "mmc-pwrseq-simple";
+-		reset-gpios = <&gpio2 6 1>; /* GPIO_ACTIVE_LOW = 1 */
+-	};
++        usdhc1_pwrseq: usdhc1_pwrseq {
++                compatible = "mmc-pwrseq-simple";
++                reset-gpios = <&gpio2 6 1>; /* GPIO_ACTIVE_LOW = 1 */
++        };
++
++        reg_ex_sdio_3v: regulator-ex-sdio-3v {
++                compatible = "regulator-fixed";
++                regulator-name = "ex-sdio-3V";
++                regulator-min-microvolt = <3300000>;
++                regulator-max-microvolt = <3300000>;
++                regulator-always-on;
 +        };
  
- 	pinctrl_usbhub_spkamp: usbhubspkampgrp {
- 		fsl,pins = <
-diff --git a/arch/arm64/boot/dts/freescale/sp2-imx8mp-7inch.dts b/arch/arm64/boot/dts/freescale/sp2-imx8mp-7inch.dts
-index 118e75ec450e..34436e26dc67 100755
---- a/arch/arm64/boot/dts/freescale/sp2-imx8mp-7inch.dts
-+++ b/arch/arm64/boot/dts/freescale/sp2-imx8mp-7inch.dts
-@@ -592,6 +592,18 @@ &i2c3 {
- 	pinctrl-0 = <&pinctrl_i2c3>;
+-	reg_ex_sdio_3v: regulator-ex-sdio-3v {
+-		compatible = "regulator-fixed";
+-		regulator-name = "ex-sdio-3V";
+-		regulator-min-microvolt = <3300000>;
+-		regulator-max-microvolt = <3300000>;
+-		regulator-always-on;
+-	};
+ };
+ 
+ &A53_0 {
+@@ -273,6 +274,10 @@ &aud2htx {
  	status = "okay";
+ };
  
-+        /* TPM: ST33HTPH2X32AHD5 */
-+          tpm: st33htph77@2e {
-+                  compatible = "st,st33htpm-i2c";
-+                  reg = <0x2e>;
-+                  pinctrl-names = "default";
-+                  pinctrl-0 = <&pinctrl_tpm>;
-+                  interrupt-parent = <&gpio3>;
-+                  interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
-+                  tpm-reset = <&gpio1 6 GPIO_ACTIVE_LOW>;
-+                  status = "okay";
-+          };
++&dsp {
++	status = "okay";
++};
 +
- 	pca6416: gpio@20 {
- 		compatible = "ti,tca6416";
- 		reg = <0x20>;
-@@ -909,6 +921,12 @@ MX8MP_IOMUXC_SAI5_RXFS__PWM4_OUT	0x116
- 		>;
- 	};
- 
-+        pinctrl_tpm: tpmgrp {
-+                fsl,pins = <
-+                        MX8MP_IOMUXC_NAND_DQS__GPIO3_IO14               0xd6    // TPM IRQ
-+                        MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06             0x156   // TPM reset
-+                >;
-+        };
- 
- 	pinctrl_usbhub_spkamp: usbhubspkampgrp {
- 		fsl,pins = <
-diff --git a/arch/arm64/boot/dts/freescale/sp2-imx8mp.dts b/arch/arm64/boot/dts/freescale/sp2-imx8mp.dts
-index 5813d61f3e26..ab4a99a102b7 100755
---- a/arch/arm64/boot/dts/freescale/sp2-imx8mp.dts
-+++ b/arch/arm64/boot/dts/freescale/sp2-imx8mp.dts
-@@ -579,6 +579,18 @@ &i2c3 {
+ &gpio1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_gpio1_hog>;
+@@ -587,6 +592,18 @@ &i2c3 {
  	pinctrl-0 = <&pinctrl_i2c3>;
  	status = "okay";
  
@@ -113,24 +83,268 @@ index 5813d61f3e26..ab4a99a102b7 100755
  	pca6416: gpio@20 {
  		compatible = "ti,tca6416";
  		reg = <0x20>;
-@@ -893,6 +905,12 @@ pinctrl_buzz_pwm4: buzzpwm4grp {
- 			MX8MP_IOMUXC_SAI5_RXFS__PWM4_OUT	0x116
+@@ -815,28 +832,27 @@ &usb_dwc3_1 {
+ 	status = "okay";
+ };
+ 
+-&usdhc1
+-	{
++&usdhc1	{
+         pinctrl-names = "default", "state_100mhz", "state_200mhz";
+-	pinctrl-0 = <&pinctrl_usdhc1>;
+-	pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
+-	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
+-	keep-power-in-suspend;
+-	non-removable;
+-	wakeup-source;
+-	vmmc-supply = <&reg_ex_sdio_3v>;
+-	mmc-pwrseq = <&usdhc1_pwrseq>;
+-	fsl,sdio-async-interrupt-enabled;
+-	status = "okay";
+-
+-	wifi_wake_host {
+-		compatible = "nxp,wifi-wake-host";
+-		interrupt-parent = <&gpio2>;
+-		interrupts = <9 8>; /* IRQ_TYPE_LEVEL_LOW = 8 */
+-		interrupt-names = "host-wake";
+-		};
+-	
+-	};
++        pinctrl-0 = <&pinctrl_usdhc1>;
++        pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
++        pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
++        keep-power-in-suspend;
++        non-removable;
++        wakeup-source;
++        vmmc-supply = <&reg_ex_sdio_3v>;
++        mmc-pwrseq = <&usdhc1_pwrseq>;
++        fsl,sdio-async-interrupt-enabled;
++        status = "okay";
++
++        wifi_wake_host {
++                compatible = "nxp,wifi-wake-host";
++                interrupt-parent = <&gpio2>;
++                interrupts = <9 8>; /* IRQ_TYPE_LEVEL_LOW = 8 */
++                interrupt-names = "host-wake";
++                };
++
++        };
+ 
+ &usdhc2 {
+ 	assigned-clocks = <&clk IMX8MP_CLK_USDHC2>;
+@@ -905,6 +921,12 @@ MX8MP_IOMUXC_SAI5_RXFS__PWM4_OUT	0x116
  		>;
  	};
-+	pinctrl_tpm: tpmgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_NAND_DQS__GPIO3_IO14		0xd6	// TPM IRQ
-+			MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06		0x156	// TPM reset
-+		>;
-+	};
  
++        pinctrl_tpm: tpmgrp {
++                fsl,pins = <
++                        MX8MP_IOMUXC_NAND_DQS__GPIO3_IO14               0xd6    // TPM IRQ
++                        MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06             0x156   // TPM reset
++                >;
++        };
  
  	pinctrl_usbhub_spkamp: usbhubspkampgrp {
+ 		fsl,pins = <
+@@ -1263,47 +1285,50 @@ pinctrl_wdog: wdoggrp {
+ 			MX8MP_IOMUXC_GPIO1_IO02__WDOG1_WDOG_B	0x166
+ 		>;
+ 	};
+-	pinctrl_usdhc1: usdhc1grp {
+-		fsl,pins = <
+-			/* MX8MP_IOMUXC_SD1_CLK__USDHC1_CLK */
+-			0x08C 0x2EC 0x000 0x0 0x0	0x190
+-			/* MX8MP_IOMUXC_SD1_CMD__USDHC1_CMD	*/
+-			0x090 0x2F0 0x000 0x0 0x0	0x1d0
+-			/* MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0 */
+-			0x094 0x2F4 0x000 0x0 0x0	0x1d0
+-			/* MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1 */
+-			0x098 0x2F8 0x000 0x0 0x0	0x1d0
+-			/* MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2 */
+-			0x09C 0x2FC 0x000 0x0 0x0	0x1d0
+-			/* MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3 */
+-			0x0A0 0x300 0x000 0x0 0x0	0x1d0
+-			/* MX8MP_IOMUXC_SD1_RESET_B__GPIO2_IO10 */
+-			0x0B4 0x314 0x000 0x5 0x0	0x10
+-			>;
+-			};
+-	pinctrl_usdhc1_100mhz: usdhc1grp-100mhz {
+-		fsl,pins = <
+-			0x08C 0x2EC 0x000 0x0 0x0	0x194
+-			0x090 0x2F0 0x000 0x0 0x0	0x1d4
+-			0x094 0x2F4 0x000 0x0 0x0	0x1d4
+-			0x098 0x2F8 0x000 0x0 0x0	0x1d4
+-			0x09C 0x2FC 0x000 0x0 0x0	0x1d4
+-			0x0A0 0x300 0x000 0x0 0x0	0x1d4
+-			0x0B4 0x314 0x000 0x5 0x0	0x10
+-			>;
+-			};
+ 
+-	pinctrl_usdhc1_200mhz: usdhc1grp-200mhz {
+-		fsl,pins = <
+-			0x08C 0x2EC 0x000 0x0 0x0	0x196
+-			0x090 0x2F0 0x000 0x0 0x0	0x1d6
+-			0x094 0x2F4 0x000 0x0 0x0	0x1d6
+-			0x098 0x2F8 0x000 0x0 0x0	0x1d6
+-			0x09C 0x2FC 0x000 0x0 0x0	0x1d6
+-			0x0A0 0x300 0x000 0x0 0x0	0x1d6
+-			0x0B4 0x314 0x000 0x5 0x0	0x10
+-			>;
+-			};
++        pinctrl_usdhc1: usdhc1grp {
++                fsl,pins = <
++                        /* MX8MP_IOMUXC_SD1_CLK__USDHC1_CLK */
++                        0x08C 0x2EC 0x000 0x0 0x0       0x190
++                        /* MX8MP_IOMUXC_SD1_CMD__USDHC1_CMD     */
++                        0x090 0x2F0 0x000 0x0 0x0       0x1d0
++                        /* MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0 */
++                        0x094 0x2F4 0x000 0x0 0x0       0x1d0
++                        /* MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1 */
++                        0x098 0x2F8 0x000 0x0 0x0       0x1d0
++                        /* MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2 */
++                        0x09C 0x2FC 0x000 0x0 0x0       0x1d0
++                        /* MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3 */
++                        0x0A0 0x300 0x000 0x0 0x0       0x1d0
++                        /* MX8MP_IOMUXC_SD1_RESET_B__GPIO2_IO10 */
++                        0x0B4 0x314 0x000 0x5 0x0       0x10
++                        >;
++        };
++
++        pinctrl_usdhc1_100mhz: usdhc1grp-100mhz {
++                fsl,pins = <
++                        0x08C 0x2EC 0x000 0x0 0x0       0x194
++                        0x090 0x2F0 0x000 0x0 0x0       0x1d4
++                        0x094 0x2F4 0x000 0x0 0x0       0x1d4
++                        0x098 0x2F8 0x000 0x0 0x0       0x1d4
++                        0x09C 0x2FC 0x000 0x0 0x0       0x1d4
++                        0x0A0 0x300 0x000 0x0 0x0       0x1d4
++                        0x0B4 0x314 0x000 0x5 0x0       0x10
++                        >;
++        };
++
++        pinctrl_usdhc1_200mhz: usdhc1grp-200mhz {
++                fsl,pins = <
++                        0x08C 0x2EC 0x000 0x0 0x0       0x196
++                        0x090 0x2F0 0x000 0x0 0x0       0x1d6
++                        0x094 0x2F4 0x000 0x0 0x0       0x1d6
++                        0x098 0x2F8 0x000 0x0 0x0       0x1d6
++                        0x09C 0x2FC 0x000 0x0 0x0       0x1d6
++                        0x0A0 0x300 0x000 0x0 0x0       0x1d6
++                        0x0B4 0x314 0x000 0x5 0x0       0x10
++                        >;
++        };
++
+ };
+ 
+ &vpu_g1 {
+diff --git a/arch/arm64/boot/dts/freescale/sp2-imx8mp-7inch.dts b/arch/arm64/boot/dts/freescale/sp2-imx8mp-7inch.dts
+index 118e75ec450e..ba7f5aecaee9 100755
+--- a/arch/arm64/boot/dts/freescale/sp2-imx8mp-7inch.dts
++++ b/arch/arm64/boot/dts/freescale/sp2-imx8mp-7inch.dts
+@@ -592,6 +592,18 @@ &i2c3 {
+ 	pinctrl-0 = <&pinctrl_i2c3>;
+ 	status = "okay";
+ 
++	/* TPM: ST33HTPH2X32AHD5 */
++	tpm: st33htph77@2e {
++		compatible = "st,st33htpm-i2c";
++		reg = <0x2e>;
++		pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_tpm>;
++		interrupt-parent = <&gpio3>;
++		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
++		tpm-reset = <&gpio1 6 GPIO_ACTIVE_LOW>;
++		status = "okay";
++	};
++
+ 	pca6416: gpio@20 {
+ 		compatible = "ti,tca6416";
+ 		reg = <0x20>;
+@@ -909,6 +921,12 @@ MX8MP_IOMUXC_SAI5_RXFS__PWM4_OUT	0x116
+ 		>;
+ 	};
+ 
++        pinctrl_tpm: tpmgrp {
++                fsl,pins = <
++                        MX8MP_IOMUXC_NAND_DQS__GPIO3_IO14               0xd6    // TPM IRQ
++                        MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06             0x156   // TPM reset
++                >;
++        };
+ 
+ 	pinctrl_usbhub_spkamp: usbhubspkampgrp {
+ 		fsl,pins = <
+diff --git a/arch/arm64/boot/dts/freescale/sp2-imx8mp.dts b/arch/arm64/boot/dts/freescale/sp2-imx8mp.dts
+index 5813d61f3e26..065adaed8159 100755
+--- a/arch/arm64/boot/dts/freescale/sp2-imx8mp.dts
++++ b/arch/arm64/boot/dts/freescale/sp2-imx8mp.dts
+@@ -164,22 +164,7 @@ sound {
+ 	};
+ 
+ 	lvds_backlight: lvds_backlight {
+-//10inc
+-		pre-pwm-on-delay-ms = <200>;
+-		pwm-on-delay-ms = <25>;
+-		post-pwm-on-delay-ms = <10>;
+-		pwm-off-delay-ms = <10>;
+-		post-pwm-off-delay-ms = <200>;
+-
+-//
+-/*7inch
+-                pre-pwm-on-delay-ms = <160>;
+-                pwm-on-delay-ms = <25>;
+-                post-pwm-on-delay-ms = <10>;
+-                pwm-off-delay-ms = <10>;
+-                post-pwm-off-delay-ms = <110>;
+-                skip-blpwr-off;
+-*/
++
+ 		compatible = "pwm-backlight";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_reg_bl_en>;
+@@ -579,6 +564,18 @@ &i2c3 {
+ 	pinctrl-0 = <&pinctrl_i2c3>;
+ 	status = "okay";
+ 
++	/* TPM: ST33HTPH2X32AHD5 */
++	tpm: st33htph77@2e {
++		compatible = "st,st33htpm-i2c";
++		reg = <0x2e>;
++		pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_tpm>;
++		interrupt-parent = <&gpio3>;
++		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
++		tpm-reset = <&gpio1 6 GPIO_ACTIVE_LOW>;
++		status = "okay";
++	};
++
+ 	pca6416: gpio@20 {
+ 		compatible = "ti,tca6416";
+ 		reg = <0x20>;
+@@ -894,6 +891,12 @@ MX8MP_IOMUXC_SAI5_RXFS__PWM4_OUT	0x116
+ 		>;
+ 	};
+ 
++        pinctrl_tpm: tpmgrp {
++                fsl,pins = <
++                        MX8MP_IOMUXC_NAND_DQS__GPIO3_IO14               0xd6    // TPM IRQ
++                        MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06             0x156   // TPM reset
++                >;
++        };
+ 
+ 	pinctrl_usbhub_spkamp: usbhubspkampgrp {
+ 		fsl,pins = <
 diff --git a/arch/arm64/configs/sp2imx8mp_gki.fragment b/arch/arm64/configs/sp2imx8mp_gki.fragment
-index 0657bc5240fd..94f0eabf7130 100644
+index 0657bc5240fd..4fc071b5c135 100644
 --- a/arch/arm64/configs/sp2imx8mp_gki.fragment
 +++ b/arch/arm64/configs/sp2imx8mp_gki.fragment
-@@ -163,3 +163,7 @@ CONFIG_DRM_PANEL_LVDS=m
+@@ -102,7 +102,6 @@ CONFIG_MXC_HANTRO_VC8000E=m
+ CONFIG_MXC_HANTRO_845=m
+ CONFIG_MXC_HANTRO_V4L2=m
+ 
+-CONFIG_BATTERY_DUMMY=m
+ 
+ CONFIG_RESET_IMX7=m
+ CONFIG_IMX8M_BUSFREQ=m
+@@ -163,3 +162,7 @@ CONFIG_DRM_PANEL_LVDS=m
  CONFIG_FW_LOADER=y
  CONFIG_WLAN_VENDOR_MARVELL=y
  CONFIG_PWRSEQ_SIMPLE=y
