@@ -69,6 +69,7 @@ clear_previous_patch () {
 			*vendor/nxp-opensource/kernel_imx)
 				echo "rm -rf arch/arm64/boot/ arch/arm64/configs/"
 				rm -fr arch/arm64/boot/ arch/arm64/configs/
+				rm -fr drivers/char/tpm/
 				echo "git checkout -f 1daca5e35461400d33b72e067cfd7d613cc5587b"
 				git checkout -f 1daca5e35461400d33b72e067cfd7d613cc5587b
 				;;
