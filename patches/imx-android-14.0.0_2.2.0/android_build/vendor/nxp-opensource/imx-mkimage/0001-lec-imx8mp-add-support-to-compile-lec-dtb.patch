@@ -1,0 +1,26 @@
+From 3e202e9f3e61d1e216ccffddef184c40cdad705d Mon Sep 17 00:00:00 2001
+From: Santhana Kumar A <santhanakumar@adlinktech.com>
+Date: Tue, 19 Nov 2024 09:06:49 +0000
+Subject: [PATCH] lec-imx8mp: add support to compile lec dtb
+
+Signed-off-by: Santhana Kumar A <santhanakumar@adlinktech.com>
+
+diff --git a/iMX8M/soc.mak b/iMX8M/soc.mak
+index e7c762b..93dc862 100644
+--- a/iMX8M/soc.mak
++++ b/iMX8M/soc.mak
+@@ -151,9 +151,9 @@ u-boot-atf-tee.bin: u-boot.bin bl31.bin $(TEE)
+ clean:
+ 	@rm -f $(MKIMG) u-boot-atf.bin u-boot-atf-tee.bin u-boot-spl-ddr.bin u-boot.itb u-boot.its u-boot-ddr3l.itb u-boot-ddr3l.its u-boot-spl-ddr3l.bin u-boot-ddr4.itb u-boot-ddr4.its u-boot-spl-ddr4.bin u-boot-ddr4-evk.itb u-boot-ivt.itb u-boot-ddr4-evk.its $(OUTIMG)
+ 
+-dtb = evk.dtb
++dtb = lec.dtb
+ $(dtb):
+-	./$(DTB_PREPROC) $(PLAT)-evk.dtb $(dtb) $(dtbs)
++	./$(DTB_PREPROC) lec-imx8mp.dtb $(dtb) $(dtbs)
+ 
+ u-boot.itb: $(dtb) $(supp_dtbs)
+ 	./$(PAD_IMAGE) $(TEE)
+-- 
+2.43.0
+
