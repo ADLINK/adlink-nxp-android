@@ -1,0 +1,40 @@
+From a99fe48b99ef2b11cca10483987e1877389073c2 Mon Sep 17 00:00:00 2001
+From: shivaadlink <shivashankar.t@adlinktech.com>
+Date: Thu, 21 Nov 2024 15:34:17 +0530
+Subject: [PATCH] Adding-lvds-23-device-changes
+
+Signed-off-by: shivaadlink <shivashankar.t@adlinktech.com>
+---
+ imx8m/sp2_imx8mp/BoardConfig.mk | 2 ++
+ imx8m/sp2_imx8mp/sp2_imx8mp.mk  | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/imx8m/sp2_imx8mp/BoardConfig.mk b/imx8m/sp2_imx8mp/BoardConfig.mk
+index b1228c41..9369bb17 100644
+--- a/imx8m/sp2_imx8mp/BoardConfig.mk
++++ b/imx8m/sp2_imx8mp/BoardConfig.mk
+@@ -190,6 +190,8 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
+     TARGET_BOARD_DTS_CONFIG += imx8mp-lvds-7:sp2-imx8mp-7inch.dtb
+     # Support LVDS panel #10
+     TARGET_BOARD_DTS_CONFIG += imx8mp-lvds-10:sp2-imx8mp-10inch.dtb
++    # Support LVDS panel #23
++    TARGET_BOARD_DTS_CONFIG += imx8mp-lvds-23:sp2-imx8mp-23inch.dtb
+     # Support rm67199 MIPI panel
+     TARGET_BOARD_DTS_CONFIG += imx8mp-mipi-panel:imx8mp-evk-rm67199.dtb
+     # Support rm67191 MIPI panel
+diff --git a/imx8m/sp2_imx8mp/sp2_imx8mp.mk b/imx8m/sp2_imx8mp/sp2_imx8mp.mk
+index 987c5c0b..6590f775 100644
+--- a/imx8m/sp2_imx8mp/sp2_imx8mp.mk
++++ b/imx8m/sp2_imx8mp/sp2_imx8mp.mk
+@@ -51,7 +51,7 @@ TARGET_VENDOR_PROP := $(LOCAL_PATH)/product.prop
+ # Thermal HAL
+ PRODUCT_PACKAGES += \
+     android.hardware.thermal@2.0-service.imx
+-RODUCT_COPY_FILES += \
++PRODUCT_COPY_FILES += \
+     $(IMX_DEVICE_PATH)/thermal_info_config_imx8mp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx8mp.json
+ 
+ 
+-- 
+2.47.0
+

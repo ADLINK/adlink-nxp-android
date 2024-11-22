@@ -58,36 +58,21 @@
 
 2. Check the device node of the micro SD card using dmesg command.
 
-3. Move into android release directory ```SP2-IMX8MP-Android-tiramisu_1V1.0.4_10-06-2024```
+3. Move into android release directory ```Android-13-1.3.09```
 
-   ```shell
-   $ sudo cp tools/lib64/libc++.so /lib/x86_64-linux-gnu
-   $ sudo chmod +x /lib/x86_64-linux-gnu/libc++.so
-   ```
-
-   ```shell
-   $ sudo cp tools/bin/make_f2fs /usr/bin
-   $ sudo chmod +x /usr/bin/make_f2fs
-   ```
+   
 
 #### Flash image to SD card
 
 * Execute the following command for a 32 GB Micro-SD card.
   
-   - For SP2IMX8MP with 7 inch panel
+   - For SBC (Primary Display as HDMI)
    
-     ```Shell
-	  $ sudo ./imx-sdcard-partition.sh -d lvds-7 -f  imx8mp -c 28 /dev/sdX
+     ```shell
+	  $ sudo ./imx-sdcard-partition.sh -f imx8mp -c 28 /dev/sdX
      ```
-
-   
-  - For SP2IMX8MP with 10.1 inch panel
-  
-    ```Shell
-    $ sudo ./imx-sdcard-partition.sh -d lvds-10 -f  imx8mp -c 28 /dev/sdX
-    ```
-  
     
+     
   
 * /dev/sdX need to be changed to actual device node of the micro SD card
 
@@ -118,17 +103,13 @@
 
 * Execute the following command to start flashing Android image to eMMC.
 
-   * For SP2IMX8MP with 7 inch panel
-   
-     ```Shell
-     $ sudo ./uuu_imx_android_flash.sh -d lvds-7 -f imx8mp -e -m -c 28 
-     ```
-   
-   * For SP2IMX8MP with 10 inch panel
+   * For SBC (Primary Display as HDMI)
    
      ```shell
-     $ sudo ./uuu_imx_android_flash.sh -d lvds-10 -f imx8mp -e -m -c 28 
+     $ sudo ./uuu_imx_android_flash.sh -f imx8mp -e -m -c 28 
      ```
+   
+     
    
 * Once flashing completed, power off the board and change boot settings to eMMC mode.(0100)
 
@@ -392,38 +373,32 @@ WiFi/BT supported in Android and functionalities can be realised by using Androi
 
 ### 5.14. LVDS display
 
-* LVDS feature can be enabled by adding '-d lvds-Y' to flash command. (Y -7 or 10)
+* LVDS feature can be enabled by adding '-d lvds-Y' to flash command. (Y -7 or 10 or 23 based on panel inch)
 * Android will support HDMI + LVDS dual display feature with this flash.
 
 Example:
 
-for 7 inch Display:
+Android support  7 ,10 ,23 inch Display:
 
 * SD card flash with LVDS feature  
 
   ```shell
-  $ sudo ./imx-sdcard-partition.sh -d lvds-7 -f  imx8mp -c 28 /dev/sdX
+  $ sudo ./imx-sdcard-partition.sh -d lvds-Y -f  imx8mp -c 28 /dev/sdX
   ```
+
+  note : /dev/sdX need to be changed to actual device node of the micro SD card
 
 * eMMC flash with LVDS feature  
 
   ```shell
-  $ sudo ./uuu_imx_android_flash.sh -d lvds-7 -f imx8mp -e -m -c 28
+  $ sudo ./uuu_imx_android_flash.sh -d lvds-Y -f imx8mp -e -m -c 28
   ```
 
-for 10.1 inch Disaplay:
 
-* SD card  flash with LVDS feature  
 
-  ```shell
-  $ sudo ./imx-sdcard-partition.sh -d lvds-10 -f  imx8mp -c 28 /dev/sdX
-  ```
+Example for 7inch LVDS panel  : 
 
-* eMMC  flash with LVDS feature  
-
-  ```shell
-  $ sudo ./uuu_imx_android_flash.sh -d lvds-10 -f imx8mp -e -m -c 28
-  ```
-
-note : /dev/sdX need to be changed to actual device node of the micro SD card
+```shell
+sudo ./uuu_imx_android_flash.sh -d lvds-7 -f imx8mp -e -m -c 28
+```
 
