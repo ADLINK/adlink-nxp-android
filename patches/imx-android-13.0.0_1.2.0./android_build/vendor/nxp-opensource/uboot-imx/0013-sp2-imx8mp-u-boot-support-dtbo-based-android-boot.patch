@@ -1,0 +1,41 @@
+From dc343c3df9a1d36aad79051992645857b79a096e Mon Sep 17 00:00:00 2001
+From: Santhana Kumar A <santhanakumar@adlinktech.com>
+Date: Tue, 3 Dec 2024 15:02:50 +0530
+Subject: [PATCH] sp2-imx8mp: u-boot: support dtbo based android boot
+
+Signed-off-by: Santhana Kumar A <santhanakumar@adlinktech.com>
+
+diff --git a/drivers/fastboot/fb_fsl/fb_fsl_boot.c b/drivers/fastboot/fb_fsl/fb_fsl_boot.c
+index 74eb0f21323..0da09d234a5 100644
+--- a/drivers/fastboot/fb_fsl/fb_fsl_boot.c
++++ b/drivers/fastboot/fb_fsl/fb_fsl_boot.c
+@@ -1075,6 +1075,26 @@ int do_boota(struct cmd_tbl *cmdtp, int flag, int argc, char * const argv[]) {
+ 	if (fdt_size)
+ 		printf("fdt      @ %08x (%d)\n", fdt_addr, fdt_size);
+ 
++	char cmd[128];
++	u32 dev_no = mmc_get_env_dev();
++
++	sprintf(cmd, "setenv fdt_addr %x", fdt_addr);
++	run_command(cmd, 0);
++
++	env_set_ulong("mmcdev", dev_no);
++
++	sprintf(cmd, "mmc dev %d", dev_no);
++	run_command(cmd, 0);
++
++	sprintf(cmd, "setenv mmcpart e");
++	run_command(cmd, 0);
++
++	sprintf(cmd, "setenv scr_addr 0x48000000");
++	run_command(cmd, 0);
++
++	sprintf(cmd, "fatload mmc ${mmcdev}:${mmcpart} ${scr_addr} overlay.scr; source ${scr_addr};");
++	run_command(cmd, 0);
++
+ 	/* Set boot parameters */
+ 	char boot_addr_start[12];
+ 	char ramdisk_addr_start[25];
+-- 
+2.47.0
+

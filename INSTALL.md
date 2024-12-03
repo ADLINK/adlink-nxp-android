@@ -114,6 +114,8 @@ git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build
 git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0005-SP2-IMX8MP-Device_WIFI_BT_support.patch
   
 git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0006-Device-singel_image-sgtl5000-SD-card.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0007-sp2-imx8mp-Support-DTBO-based-Android-boot.patch
   
   cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png imx8m/sp2_imx8mp/overlay/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png
   
@@ -164,6 +166,10 @@ git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build
 git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0018-sp2-imx8mp-Kernel-touch-support.patch
 
 git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0019-sp2-imx8mp-Kernel-WIFI-BT.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0020-Adding-TPM-PWM-RTC-Kernel-Support.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/kernel_imx/0021-sp2-imx8mp-Move-device-trees-to-overlay.patch
 ```
 
 ### 3. U-boot 
@@ -194,6 +200,8 @@ git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build
   git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0011-sp2-imx8mp-patch-u-boot-add-fn_key-gpio-input-for-um.patch
   
   git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0012-sp2-imx8mp-uboot_android_defconfigs.patch
+
+  git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/vendor/nxp-opensource/uboot-imx/0013-sp2-imx8mp-u-boot-support-dtbo-based-android-boot.patch
   ```
 
 ### 4. Build

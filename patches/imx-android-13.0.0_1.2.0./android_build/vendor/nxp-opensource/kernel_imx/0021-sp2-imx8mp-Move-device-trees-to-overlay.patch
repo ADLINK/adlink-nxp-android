@@ -1,0 +1,1244 @@
+From 12974f1844d408cdee4be6508f7700c4eab37f15 Mon Sep 17 00:00:00 2001
+From: Santhana Kumar A <santhanakumar@adlinktech.com>
+Date: Tue, 3 Dec 2024 14:59:40 +0530
+Subject: [PATCH] sp2-imx8mp: Move device trees to overlay
+
+Signed-off-by: Santhana Kumar A <santhanakumar@adlinktech.com>
+
+diff --git a/arch/arm64/boot/dts/freescale/10inch-overlay.dts b/arch/arm64/boot/dts/freescale/10inch-overlay.dts
+new file mode 100644
+index 000000000000..188b961b7624
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/10inch-overlay.dts
+@@ -0,0 +1,80 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			lvds_backlight {
++				pre-pwm-on-delay-ms = <200>;
++				pwm-on-delay-ms = <25>;
++				post-pwm-on-delay-ms = <10>;
++				pwm-off-delay-ms = <10>;
++				post-pwm-off-delay-ms = <200>;
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@1 {
++		target-path = "/";
++		__overlay__ {
++			lvds0_panel {
++				compatible = "am,am1280800wutzqw", "panel-lvds";
++
++				height-mm = <135>;
++				width-mm = <217>;
++
++				post-prepare-delay-ms = <30>;
++				pre-disable-delay-ms = <15>;
++				post-unprepare-delay-ms = <500>;
++
++				status = "okay";
++
++				panel-timing {
++					clock-frequency = <71000000>;
++					hactive = <1280>;
++					vactive = <800>;
++					hback-porch = <80>;
++					hfront-porch = <70>;
++					vback-porch = <10>;
++					vfront-porch = <10>;
++					hsync-len = <10>;
++					vsync-len = <3>;
++				};
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <&ldb>;
++		__overlay__ {
++			status = "okay";
++			lvds-channel@0 {
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@3 {
++		target = <&lcdif2>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++
++	fragment@4 {
++		target = <&ldb_phy>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/23inch-overlay.dts b/arch/arm64/boot/dts/freescale/23inch-overlay.dts
+new file mode 100644
+index 000000000000..dbc995f9d771
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/23inch-overlay.dts
+@@ -0,0 +1,80 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			lvds_backlight {
++				pre-pwm-on-delay-ms = <200>;
++				post-pwm-on-delay-ms = <25>;
++				pwm-off-delay-ms = <10>;
++				post-pwm-off-delay-ms = <200>;
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@1 {
++		target-path = "/";
++		__overlay__ {
++			lvds0_panel {
++				compatible = "auo,p238hvt", "panel-lvds";
++
++				height-mm = <296>;
++				width-mm = <527>;
++
++				post-prepare-delay-ms = <30>;
++				pre-disable-delay-ms = <15>;
++				post-unprepare-delay-ms = <500>;
++
++				status = "okay";
++
++				panel-timing {
++					clock-frequency = <142400000>;
++					hactive = <1920>;
++					vactive = <1080>;
++					hback-porch = <100>;
++					hfront-porch = <80>;
++					vback-porch = <40>;
++					vfront-porch = <10>;
++					hsync-len = <1>;
++					vsync-len = <1>;
++				};
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <&ldb>;
++		__overlay__ {
++			fsl,dual-channel;
++			status = "okay";
++			lvds-channel@0 {
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@3 {
++		target = <&lcdif2>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++
++	fragment@4 {
++		target = <&ldb_phy>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/7dsi-overlay.dts b/arch/arm64/boot/dts/freescale/7dsi-overlay.dts
+new file mode 100644
+index 000000000000..ca15bab5894d
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/7dsi-overlay.dts
+@@ -0,0 +1,49 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			lvds_backlight {
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@1 {
++		target = <&mipi_dsi>;
++		__overlay__ {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "okay";
++			panel@0 {
++				compatible = "ampire,am-8001280gtzqw", "ilitek,ili9881c";
++				reg = <0>;
++				power-supply = <&reg_lvds_blpwr>;
++				reset-gpios = <&gpio4 27 1>; /* GPIO_ACTIVE_LOW */
++				backlight = <&lvds_backlight>;
++				/* enum mipi_dsi_pixel_format { MIPI_DSI_FMT_RGB888, MIPI_DSI_FMT_RGB666, MIPI_DSI_FMT_RGB666_PACKED, MIPI_DSI_FMT_RGB565, }; */
++				dsi-format = <2>;
++				flip-horizontal;
++				flip-vertical;
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <&lcdif1>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/7inch-overlay.dts b/arch/arm64/boot/dts/freescale/7inch-overlay.dts
+new file mode 100644
+index 000000000000..6a8a122f434c
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/7inch-overlay.dts
+@@ -0,0 +1,84 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			lvds_backlight {
++				pre-pwm-on-delay-ms = <160>;
++				pwm-on-delay-ms = <25>;
++				post-pwm-on-delay-ms = <10>;
++				pwm-off-delay-ms = <10>;
++				post-pwm-off-delay-ms = <110>;
++				skip-blpwr-off;
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@1 {
++		target-path = "/";
++		__overlay__ {
++			lvds0_panel {
++				compatible = "am,1024600DTZQW", "panel-lvds";
++
++				height-mm = <86>;
++				width-mm = <154>;
++
++				post-prepare-delay-ms = <30>;
++				pre-disable-delay-ms = <15>;
++				post-unprepare-delay-ms = <1000>;
++
++				power-supply = <&reg_lvds_blpwr>;
++				skip-blpwr-off;
++
++				status = "okay";
++
++				panel-timing {
++					clock-frequency = <51200000>;
++					hactive = <1024>;
++					vactive = <600>;
++					hback-porch = <150>;
++					hfront-porch = <150>;
++					vback-porch = <15>;
++					vfront-porch = <15>;
++					hsync-len = <20>;
++					vsync-len = <5>;
++				};
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <&ldb>;
++		__overlay__ {
++			status = "okay";
++			lvds-channel@0 {
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@3 {
++		target = <&lcdif2>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++
++	fragment@4 {
++		target = <&ldb_phy>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/7rlcd-overlay.dts b/arch/arm64/boot/dts/freescale/7rlcd-overlay.dts
+new file mode 100644
+index 000000000000..347793eee0f0
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/7rlcd-overlay.dts
+@@ -0,0 +1,49 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			lvds_backlight {
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@1 {
++		target = <&mipi_dsi>;
++		__overlay__ {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "okay";
++			panel@0 {
++				compatible = "hsd,p0711t";
++				reg = <0>;
++				power-supply = <&reg_lvds_blpwr>;
++				reset-gpios = <&gpio4 27 1>; /* GPIO_ACTIVE_LOW */
++				backlight = <&lvds_backlight>;
++				/* enum mipi_dsi_pixel_format { MIPI_DSI_FMT_RGB888, MIPI_DSI_FMT_RGB666, MIPI_DSI_FMT_RGB666_PACKED, MIPI_DSI_FMT_RGB565, }; */
++				dsi-format = <2>;
++				flip-horizontal;
++				flip-vertical;
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <&lcdif1>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 9e2d8170400a..05a0d73a71a8 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -101,7 +101,11 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-ddr4-evk.dtb imx8mn-ddr4-evk-ak5558.dtb imx8mn-
+ dtb-$(CONFIG_ARCH_MXC) += imx8mn-evk-root.dtb imx8mn-evk-inmate.dtb imx8mn-evk-lk.dtb imx8mn-ddr4-evk-lk.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mn-ab2.dtb imx8mn-ddr4-ab2.dtb imx8mn-ddr3l-ab2.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mn-var-som-symphony.dtb
+-dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb sp2-imx8mp.dtb sp2-imx8mp-7inch.dtb sp2-imx8mp-10inch.dtb  imx8mp-evk-rm67191.dtb imx8mp-evk-it6263-lvds-dual-channel.dtb \
++dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb imx8mp-evk-rm67191.dtb imx8mp-evk-it6263-lvds-dual-channel.dtb \
++			  sp2-imx8mp.dtb 10inch-overlay.dtbo 23inch-overlay.dtbo 7dsi-overlay.dtbo \
++			  7inch-overlay.dtbo 7rlcd-overlay.dtbo awcm276mapur-overlay.dtbo \
++			  awcm276masur-overlay.dtbo cma400mb-overlay.dtbo cma750mb-overlay.dtbo \
++			  cma950mb-overlay.dtbo eth0-overlay.dtbo eth1-overlay.dtbo snd-sgtl5000-overlay.dtbo \
+ 			  imx8mp-evk-pcie-ep.dtb  imx8mp-evk-rpmsg.dtb imx8mp-evk-ecspi-slave.dtb \
+ 			  imx8mp-evk-jdi-wuxga-lvds-panel.dtb imx8mp-evk-flexcan2.dtb \
+ 			  imx8mp-evk-root.dtb imx8mp-evk-inmate.dtb imx8mp-evk-ov2775.dtb \
+@@ -253,3 +257,5 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mq-evk-pcie1-m2-gki.dtb imx8mq-evk-lcdif-adv7535-g
+                           imx8mq-evk-dcss-rm67199-gki.dtb  imx8mq-evk-dcss-rm67191-gki.dtb imx8mq-evk-dual-display-gki.dtb
+ 
+ dtb-$(CONFIG_ARCH_MXC) += imx8ulp-watch.dtb
++
++DTC_FLAGS += -@ -H epapr
+diff --git a/arch/arm64/boot/dts/freescale/awcm276mapur-overlay.dts b/arch/arm64/boot/dts/freescale/awcm276mapur-overlay.dts
+new file mode 100644
+index 000000000000..cb5bbcd1066c
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/awcm276mapur-overlay.dts
+@@ -0,0 +1,75 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target = <&pcie_phy>;
++		__overlay__ {
++			ext_osc = <1>;
++			status = "okay";
++		};
++	};
++
++	fragment@1 {
++		target = <&pcie>;
++		__overlay__ {
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_pcie>;
++			disable-gpio = <&gpio2 6 1>;  /* GPIO_ACTIVE_LOW = 1 */
++			reset-gpio = <&gpio2 7 1>;  /* GPIO_ACTIVE_LOW = 1 */
++			ext_osc = <1>;
++			clocks = <&clk 268>, /* IMX8MP_CLK_HSIO_ROOT = 268 */
++					<&clk 120>, /* IMX8MP_CLK_PCIE_AUX = 120 */
++					<&clk 311>, /* IMX8MP_CLK_HSIO_AXI = 311 */
++					<&clk 217>; /* IMX8MP_CLK_PCIE_ROOT = 217 */
++			clock-names = "pcie", "pcie_aux", "pcie_phy", "pcie_bus";
++			assigned-clocks = <&clk 311>, /* IMX8MP_CLK_HSIO_AXI = 311 */
++							<&clk 120>; /* IMX8MP_CLK_PCIE_AUX = 120 */
++			assigned-clock-rates = <500000000>, <10000000>;
++			assigned-clock-parents = <&clk 64>, /* IMX8MP_SYS_PLL2_500M = 64 */
++									<&clk 57>; /* IMX8MP_SYS_PLL2_50M = 57 */
++			l1ss-disabled;
++			status = "okay";
++
++			wifi_wake_host {
++				compatible = "nxp,wifi-wake-host";
++				interrupt-parent = <&gpio5>;
++				interrupts = <21 8>;  /* IRQ_TYPE_LEVEL_LOW = 8 */
++				interrupt-names = "host-wake";
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <&iomuxc>;
++		__overlay__ {
++			pinctrl_pcie: pciegrp {
++				fsl,pins = <
++					/* MX8MP_IOMUXC_I2C4_SCL__PCIE_CLKREQ_B - open drain, pull up */
++					0x218 0x478 0x5A0 0x2 0x0	0x61
++					/* MX8MP_IOMUXC_SD1_DATA4__GPIO2_IO06 - PCIe disable */
++					0x0A4 0x304 0x000 0x5 0x0	0x41
++					/* MX8MP_IOMUXC_SD1_DATA5__GPIO2_IO07 - PCIe Reset */
++					0x0A8 0x308 0x000 0x5 0x0	0x41
++					/* MX8MP_IOMUXC_I2C4_SDA__GPIO5_IO21 - PCIe Wakeup */
++					0x21C 0x47C 0x000 0x5 0x0	0x1c4
++				>;
++			};
++		};
++	};
++
++	fragment@3 {
++		target = <&usdhc1>;
++		__overlay__ {
++			status = "disabled";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/awcm276masur-overlay.dts b/arch/arm64/boot/dts/freescale/awcm276masur-overlay.dts
+new file mode 100644
+index 000000000000..bb73a9029f48
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/awcm276masur-overlay.dts
+@@ -0,0 +1,116 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			usdhc1_pwrseq: usdhc1_pwrseq {
++				compatible = "mmc-pwrseq-simple";
++				reset-gpios = <&gpio2 6 1>; /* GPIO_ACTIVE_LOW = 1 */
++			};
++
++			reg_ex_sdio_3v: regulator-ex-sdio-3v {
++				compatible = "regulator-fixed";
++				regulator-name = "ex-sdio-3V";
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++			};
++		};
++	};
++
++	fragment@1 {
++		target = <&usdhc1>;
++		__overlay__ {
++			pinctrl-names = "default", "state_100mhz", "state_200mhz";
++			pinctrl-0 = <&pinctrl_usdhc1>;
++			pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
++			pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
++			keep-power-in-suspend;
++			non-removable;
++			wakeup-source;
++			vmmc-supply = <&reg_ex_sdio_3v>;
++			mmc-pwrseq = <&usdhc1_pwrseq>;
++			fsl,sdio-async-interrupt-enabled;
++			status = "okay";
++
++			wifi_wake_host {
++				compatible = "nxp,wifi-wake-host";
++				interrupt-parent = <&gpio2>;
++				interrupts = <9 8>; /* IRQ_TYPE_LEVEL_LOW = 8 */
++				interrupt-names = "host-wake";
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <&iomuxc>;
++		__overlay__ {
++			pinctrl_usdhc1: usdhc1grp {
++				fsl,pins = <
++					/* MX8MP_IOMUXC_SD1_CLK__USDHC1_CLK */
++					0x08C 0x2EC 0x000 0x0 0x0	0x190
++					/* MX8MP_IOMUXC_SD1_CMD__USDHC1_CMD	*/
++					0x090 0x2F0 0x000 0x0 0x0	0x1d0
++					/* MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0 */
++					0x094 0x2F4 0x000 0x0 0x0	0x1d0
++					/* MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1 */
++					0x098 0x2F8 0x000 0x0 0x0	0x1d0
++					/* MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2 */
++					0x09C 0x2FC 0x000 0x0 0x0	0x1d0
++					/* MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3 */
++					0x0A0 0x300 0x000 0x0 0x0	0x1d0
++					/* MX8MP_IOMUXC_SD1_RESET_B__GPIO2_IO10 */
++					0x0B4 0x314 0x000 0x5 0x0	0x10
++				>;
++			};
++
++			pinctrl_usdhc1_100mhz: usdhc1grp-100mhz {
++				fsl,pins = <
++					0x08C 0x2EC 0x000 0x0 0x0	0x194
++					0x090 0x2F0 0x000 0x0 0x0	0x1d4
++					0x094 0x2F4 0x000 0x0 0x0	0x1d4
++					0x098 0x2F8 0x000 0x0 0x0	0x1d4
++					0x09C 0x2FC 0x000 0x0 0x0	0x1d4
++					0x0A0 0x300 0x000 0x0 0x0	0x1d4
++					0x0B4 0x314 0x000 0x5 0x0	0x10
++				>;
++			};
++
++			pinctrl_usdhc1_200mhz: usdhc1grp-200mhz {
++				fsl,pins = <
++					0x08C 0x2EC 0x000 0x0 0x0	0x196
++					0x090 0x2F0 0x000 0x0 0x0	0x1d6
++					0x094 0x2F4 0x000 0x0 0x0	0x1d6
++					0x098 0x2F8 0x000 0x0 0x0	0x1d6
++					0x09C 0x2FC 0x000 0x0 0x0	0x1d6
++					0x0A0 0x300 0x000 0x0 0x0	0x1d6
++					0x0B4 0x314 0x000 0x5 0x0	0x10
++				>;
++			};
++		};
++	};
++
++	fragment@3 {
++		target = <&pcie>;
++		__overlay__ {
++			status = "disabled";
++		};
++	};
++
++	fragment@4 {
++		target = <&pcie_phy>;
++		__overlay__ {
++			status = "disabled";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/cma400mb-overlay.dts b/arch/arm64/boot/dts/freescale/cma400mb-overlay.dts
+new file mode 100644
+index 000000000000..0f22fcb6ca9a
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/cma400mb-overlay.dts
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			reserved-memory {
++				linux,cma {
++					/* 40000000 = 1073741824 (1GiB) */
++					/* 20000000 =  536870912 (512MiB) */
++					size = <0 0x1A000000>; /* 256+128MiB+32MiB (416MiB) */
++				};
++			};
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/cma750mb-overlay.dts b/arch/arm64/boot/dts/freescale/cma750mb-overlay.dts
+new file mode 100644
+index 000000000000..747594658caf
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/cma750mb-overlay.dts
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			reserved-memory {
++				linux,cma {
++					/* 40000000 = 1073741824 (1GiB) */
++					/* 20000000 =  536870912 (500MiB) */
++					size = <0 0x30000000>; /* 1073741824 - 268435456 (250MiB) = 805306368 (750MiB) */
++				};
++			};
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/cma950mb-overlay.dts b/arch/arm64/boot/dts/freescale/cma950mb-overlay.dts
+new file mode 100644
+index 000000000000..62e7c6028467
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/cma950mb-overlay.dts
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			reserved-memory {
++				linux,cma {
++					/* 40000000 = 1073741824 (1GiB) */
++					/* 20000000 =  536870912 (500MiB) */
++					size = <0 0x3c000000>; /* 1GiB - 50331648 (50MiB) = 950 MiB */
++				};
++			};
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/eth0-overlay.dts b/arch/arm64/boot/dts/freescale/eth0-overlay.dts
+new file mode 100644
+index 000000000000..fb86eea3730d
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/eth0-overlay.dts
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target = <&fec>;
++		__overlay__ {
++			status = "disabled";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/eth1-overlay.dts b/arch/arm64/boot/dts/freescale/eth1-overlay.dts
+new file mode 100644
+index 000000000000..3f25ac25c5a1
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/eth1-overlay.dts
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target = <&eqos>;
++		__overlay__ {
++			status = "disabled";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/snd-sgtl5000-overlay.dts b/arch/arm64/boot/dts/freescale/snd-sgtl5000-overlay.dts
+new file mode 100644
+index 000000000000..3c5a615a08fd
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/snd-sgtl5000-overlay.dts
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			sound {
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@1 {
++		target = <&sgtl5000>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/sp2-imx8mp.dts b/arch/arm64/boot/dts/freescale/sp2-imx8mp.dts
+index 065adaed8159..654c2a587d8f 100755
+--- a/arch/arm64/boot/dts/freescale/sp2-imx8mp.dts
++++ b/arch/arm64/boot/dts/freescale/sp2-imx8mp.dts
+@@ -161,17 +161,17 @@ sound {
+ 			"Ext Spk", "LINE_OUT";
+ 		mux-int-port = <1>;
+ 		mux-ext-port = <3>;
++		status = "disabled";
+ 	};
+ 
+ 	lvds_backlight: lvds_backlight {
+-
+ 		compatible = "pwm-backlight";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_reg_bl_en>;
+ 		enable-gpios = <&gpio1 0 GPIO_ACTIVE_HIGH>;
+ 		power-supply = <&reg_lvds_blpwr>;
+ 		pwms = <&pwm2 0 100000 0>;
+-		status = "okay";
++		status = "disabled";
+ 
+ 		brightness-levels = < 0  1  2  3  4  5  6  7  8  9
+ 							10 11 12 13 14 15 16 17 18 19
+@@ -188,17 +188,13 @@ lvds_backlight: lvds_backlight {
+ 	};
+ 
+ 	lvds0_panel {
+-                power-supply = <&reg_lvds_blpwr>;
+-                skip-blpwr-off;
+-
+-
+ 		backlight = <&lvds_backlight>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_reg_lvds_vdd>;
+ 		enable-gpios = <&gpio4 27 GPIO_ACTIVE_HIGH>;
+ 
+ 		data-mapping = "vesa-24";
+-		status = "okay";
++		status = "disabled";
+ 
+ 		port {
+ 			panel_lvds_in: endpoint {
+@@ -211,19 +207,6 @@ pwm-beeper {
+ 		compatible = "pwm-beeper";
+ 		pwms = <&pwm4 0 500000 0>;
+ 	};
+-        usdhc1_pwrseq: usdhc1_pwrseq {
+-                compatible = "mmc-pwrseq-simple";
+-                reset-gpios = <&gpio2 6 1>; /* GPIO_ACTIVE_LOW = 1 */
+-        };
+-
+-        reg_ex_sdio_3v: regulator-ex-sdio-3v {
+-                compatible = "regulator-fixed";
+-                regulator-name = "ex-sdio-3V";
+-                regulator-min-microvolt = <3300000>;
+-                regulator-max-microvolt = <3300000>;
+-                regulator-always-on;
+-        };
+-
+ };
+ 
+ &A53_0 {
+@@ -246,10 +229,6 @@ &aud2htx {
+ 	status = "okay";
+ };
+ 
+-&dsp {
+-	status = "okay";
+-};
+-
+ &gpio1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_gpio1_hog>;
+@@ -270,38 +249,61 @@ &gpio4 {
+ 		"", "", "", "", "", "", "", "",	\
+ 		"", "", "", "", "", "", "", "",	\
+ 		"UART_MODE0", "UART_MODE1", "", "", "HWID_2", "HWID_3", "", "";
++/*
++	uart_mode0 {
++		gpios = <&gpio4 24 GPIO_ACTIVE_HIGH>;
++		output-low;
++		line-name = "UART_MODE0";
+ 	};
+ 
+-&pwm2 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_bl_pwm2>;
+-	status = "okay";
++	uart_mode1 {
++		gpios = <&gpio4 25 GPIO_ACTIVE_HIGH>;
++		output-low;
++		line-name = "UART_MODE1";
++	};
++
++	hwid_2 {
++		gpios = <&gpio4 28 GPIO_ACTIVE_HIGH>;
++		input;
++		line-name = "HWID_2";
++	};
++
++	hwid_3 {
++		gpios = <&gpio4 29 GPIO_ACTIVE_HIGH>;
++		input;
++		line-name = "HWID_3";
++	};
++*/
+ };
+ 
+-&pwm4 {
++&gpio5 {
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_buzz_pwm4>;
+-	status = "okay";
++	pinctrl-0 = <&pinctrl_gpio5_hog>;
++
++	gpio-line-names =	\
++		"", "", "", "", "", "HWID_1", "", "",	\
++		"", "", "", "", "", "", "", "",	\
++		"", "", "", "", "", "", "", "",	\
++		"", "", "", "", "", "", "", "";
++/*
++	hwid_1 {
++		gpios = <&gpio5 5 GPIO_ACTIVE_HIGH>;
++		input;
++		line-name = "HWID_1";
++	};
++*/
+ };
+ 
+-&aud2htx {
++&pwm2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_bl_pwm2>;
+ 	status = "okay";
+ };
+ 
+-&ecspi2 {
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-	fsl,spi-num-chipselects = <1>;
++&pwm4 {
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_ecspi2 &pinctrl_ecspi2_cs>;
+-	cs-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
++	pinctrl-0 = <&pinctrl_buzz_pwm4>;
+ 	status = "okay";
+-
+-	spidev1: spi@0 {
+-		reg = <0>;
+-		compatible = "rohm,dh2228fv";
+-		spi-max-frequency = <500000>;
+-	};
+ };
+ 
+ &eqos {
+@@ -312,6 +314,7 @@ &eqos {
+ 	snps,force_thresh_dma_mode;
+ 	snps,mtl-tx-config = <&mtl_tx_setup>;
+ 	snps,mtl-rx-config = <&mtl_rx_setup>;
++	fsl,magic-packet;
+ 	status = "okay";
+ 
+ 	mdio {
+@@ -403,6 +406,9 @@ ethphy1: ethernet-phy@1 {
+ 			reset-deassert-us = <80000>;
+ 			realtek,aldps-enable;
+ 			realtek,clkout-disable;
++			interrupt-parent = <&gpio4>;
++			interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
++			wakeup-source;
+ 		};
+ 	};
+ };
+@@ -515,7 +521,7 @@ &flexcan1 {
+ 	status = "okay";
+ };
+ 
+-/*&ecspi2 {
++&ecspi2 {
+ 	#address-cells = <1>;
+ 	#size-cells = <0>;
+ 	fsl,spi-num-chipselects = <1>;
+@@ -524,21 +530,19 @@ &flexcan1 {
+ 	cs-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
+ 	status = "okay";
+ 
+-	flash@0 {
+-		#address-cells = <1>;
+-		#size-cells = <1>;
+-		compatible = "jedec,spi-nor";
++	spidev1: spi@0 {
+ 		reg = <0>;
+-		spi-max-frequency = <50000>;
++		compatible = "rohm,dh2228fv";
++		spi-max-frequency = <500000>;
+ 	};
+-};*/
++};
+ 
+ &i2c2 {
+ 	clock-frequency = <100000>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_i2c2>;
+ 	status = "okay";
+-
++	
+ 	/* RTC: PCF85063A */
+ 	rtc: pcf85063a@51 {
+ 		compatible = "nxp,pcf85063a";
+@@ -568,21 +572,15 @@ &i2c3 {
+ 	tpm: st33htph77@2e {
+ 		compatible = "st,st33htpm-i2c";
+ 		reg = <0x2e>;
++
+ 		pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_tpm>;
++		pinctrl-0 = <&pinctrl_tpm>;
+ 		interrupt-parent = <&gpio3>;
+ 		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
+ 		tpm-reset = <&gpio1 6 GPIO_ACTIVE_LOW>;
+ 		status = "okay";
+ 	};
+ 
+-	pca6416: gpio@20 {
+-		compatible = "ti,tca6416";
+-		reg = <0x20>;
+-		gpio-controller;
+-		#gpio-cells = <2>;
+-	};
+-
+ 	/* sgtl5000 audio codec */
+ 	sgtl5000: audio-codec@a {
+ 		compatible = "fsl,sgtl5000";
+@@ -593,6 +591,7 @@ sgtl5000: audio-codec@a {
+ 		VDDIO-supply = <&reg_ex_audio_1v8>;
+ 		VDDD-supply = <&reg_ex_audio_1v8>;
+ 		clocks = <&ex_audio_clk>;
++		status = "disabled";
+ 	};
+ 
+ 	eeprom@50 {
+@@ -669,26 +668,23 @@ &lcdif1 {
+ };
+ 
+ &lcdif2 {
+-	status = "okay";
++	status = "disabled";
+ };
+ 
+ &lcdif3 {
+ 	status = "okay";
+ 
+-	thres-low  = <1 2>;             /* (FIFO * 1 / 2) */
+-	thres-high = <3 4>;             /* (FIFO * 3 / 4) */
+-};
+-
+-&ldb_phy
+-{
+-	status = "disabled";
++	thres-low  = <1 2>;	 /* (FIFO * 1 / 2) */
++	thres-high = <3 4>;	 /* (FIFO * 3 / 4) */
+ };
+ 
+ &ldb {
+ 	/* fsl,dual-channel; */
++
+ 	lvds-channel@0 {
+ 		fsl,data-mapping = "spwg";
+ 		fsl,data-width = <24>;
++
+ 		port@1 {
+ 			reg = <1>;
+ 
+@@ -758,7 +754,7 @@ &uart4 {
+ };
+ 
+ &usb3_phy0 {
+-	//vbus-power-source = <&ptn5110>;
++	//vbus-power-supply = <&ptn5110>;
+ 	fsl,phy-tx-vref-tune = <0xe>;
+ 	fsl,phy-tx-preemp-amp-tune = <3>;
+ 	fsl,phy-tx-vboost-level = <2>; /* set amplitude to 1.04v */
+@@ -802,28 +798,6 @@ &usb_dwc3_1 {
+ 	status = "okay";
+ };
+ 
+-&usdhc1	{
+-        pinctrl-names = "default", "state_100mhz", "state_200mhz";
+-        pinctrl-0 = <&pinctrl_usdhc1>;
+-        pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
+-        pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
+-        keep-power-in-suspend;
+-        non-removable;
+-        wakeup-source;
+-        vmmc-supply = <&reg_ex_sdio_3v>;
+-        mmc-pwrseq = <&usdhc1_pwrseq>;
+-        fsl,sdio-async-interrupt-enabled;
+-        status = "okay";
+-
+-        wifi_wake_host {
+-                compatible = "nxp,wifi-wake-host";
+-                interrupt-parent = <&gpio2>;
+-                interrupts = <9 8>; /* IRQ_TYPE_LEVEL_LOW = 8 */
+-                interrupt-names = "host-wake";
+-                };
+-
+-        };
+-
+ &usdhc2 {
+ 	assigned-clocks = <&clk IMX8MP_CLK_USDHC2>;
+ 	assigned-clock-rates = <400000000>;
+@@ -856,6 +830,12 @@ &wdog1 {
+ 	status = "okay";
+ };
+ 
++/*
++fsl,pins = <PIN_FUNC_ID CONFIG>,
++  - PIN_FUNC_ID is a pin (5-values) working on a specific function (MUX control)
++  - CONFIG is the pad setting (1-value) like pull-up for this pin. (PAD control)
++  see iomux-v3.h
++*/
+ &iomuxc {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_hog>;
+@@ -891,12 +871,12 @@ MX8MP_IOMUXC_SAI5_RXFS__PWM4_OUT	0x116
+ 		>;
+ 	};
+ 
+-        pinctrl_tpm: tpmgrp {
+-                fsl,pins = <
+-                        MX8MP_IOMUXC_NAND_DQS__GPIO3_IO14               0xd6    // TPM IRQ
+-                        MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06             0x156   // TPM reset
+-                >;
+-        };
++	pinctrl_tpm: tpmgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_NAND_DQS__GPIO3_IO14		0xd6	// TPM IRQ
++			MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06		0x156	// TPM reset
++		>;
++	};
+ 
+ 	pinctrl_usbhub_spkamp: usbhubspkampgrp {
+ 		fsl,pins = <
+@@ -944,7 +924,7 @@ MX8MP_IOMUXC_SAI1_TXD3__ENET1_RGMII_TD3		0x1f
+ 			MX8MP_IOMUXC_SAI1_TXD4__ENET1_RGMII_TX_CTL	0x1f
+ 			MX8MP_IOMUXC_SAI1_TXD5__ENET1_RGMII_TXC		0x1f
+ 			MX8MP_IOMUXC_SAI1_RXD1__GPIO4_IO03		0x00000106	//ENET1 INT
+-			MX8MP_IOMUXC_SAI1_RXD0__GPIO4_IO02		0x19            //ENET1_RESET
++			MX8MP_IOMUXC_SAI1_RXD0__GPIO4_IO02		0x19		//ENET1_RESET
+ 			MX8MP_IOMUXC_SAI1_RXC__ENET1_1588_EVENT0_OUT	0x00000106
+ 			MX8MP_IOMUXC_SAI1_RXFS__ENET1_1588_EVENT0_IN	0x00000106
+ 		>;
+@@ -1005,16 +985,6 @@ MX8MP_IOMUXC_UART4_TXD__I2C6_SDA	0x400001c2
+ 		>;
+ 	};
+ 
+-
+-/*        pinctrl_pcie: pciegrp {
+-                                fsl,pins = <
+-                                        0x218 0x478 0x5A0 0x2 0x0       0x61
+-                                        0x0A4 0x304 0x000 0x5 0x0       0x41
+-                                        0x0A8 0x308 0x000 0x5 0x0       0x41
+-                                        0x21C 0x47C 0x000 0x5 0x0       0x1c4
+-                                >;
+-                        };
+-*/
+ 	pinctrl_pmic: pmicgrp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_GPIO1_IO03__GPIO1_IO03	0x000001c0
+@@ -1067,9 +1037,9 @@ MX8MP_IOMUXC_SAI1_TXD7__GPIO4_IO19	0x1c4
+ 		>;
+ 	};
+ 
+-	pinctrl_usb0_pwr_en: usb0pwrengrp {
++	pinctrl_gpio_keys: gpiokeysgrp {
+ 		fsl,pins = <
+-			MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14	0x16
++			MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07		0x80 // FUNCTION_INT
+ 		>;
+ 	};
+ 
+@@ -1079,9 +1049,9 @@ MX8MP_IOMUXC_SAI1_MCLK__GPIO4_IO20	0x1C6
+ 		>;
+ 	};
+ 
+-	pinctrl_gpio_keys: gpiokeysgrp {
++	pinctrl_usb0_pwr_en: usb0pwrengrp {
+ 		fsl,pins = <
+-			MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07		0x80 // FUNCTION_INT
++			MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14	0x16
+ 		>;
+ 	};
+ 
+@@ -1198,7 +1168,7 @@ MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT 0xc1
+ 
+ 	pinctrl_usdhc2_gpio: usdhc2gpiogrp {
+ 		fsl,pins = <
+-			MX8MP_IOMUXC_SD2_CD_B__GPIO2_IO12	0x1c4
++            MX8MP_IOMUXC_SD2_CD_B__GPIO2_IO12       0x1c4
+ 		>;
+ 	};
+ 
+@@ -1255,50 +1225,6 @@ pinctrl_wdog: wdoggrp {
+ 			MX8MP_IOMUXC_GPIO1_IO02__WDOG1_WDOG_B	0x166
+ 		>;
+ 	};
+-
+-        pinctrl_usdhc1: usdhc1grp {
+-                fsl,pins = <
+-                        /* MX8MP_IOMUXC_SD1_CLK__USDHC1_CLK */
+-                        0x08C 0x2EC 0x000 0x0 0x0       0x190
+-                        /* MX8MP_IOMUXC_SD1_CMD__USDHC1_CMD     */
+-                        0x090 0x2F0 0x000 0x0 0x0       0x1d0
+-                        /* MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0 */
+-                        0x094 0x2F4 0x000 0x0 0x0       0x1d0
+-                        /* MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1 */
+-                        0x098 0x2F8 0x000 0x0 0x0       0x1d0
+-                        /* MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2 */
+-                        0x09C 0x2FC 0x000 0x0 0x0       0x1d0
+-                        /* MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3 */
+-                        0x0A0 0x300 0x000 0x0 0x0       0x1d0
+-                        /* MX8MP_IOMUXC_SD1_RESET_B__GPIO2_IO10 */
+-                        0x0B4 0x314 0x000 0x5 0x0       0x10
+-                        >;
+-        };
+-
+-        pinctrl_usdhc1_100mhz: usdhc1grp-100mhz {
+-                fsl,pins = <
+-                        0x08C 0x2EC 0x000 0x0 0x0       0x194
+-                        0x090 0x2F0 0x000 0x0 0x0       0x1d4
+-                        0x094 0x2F4 0x000 0x0 0x0       0x1d4
+-                        0x098 0x2F8 0x000 0x0 0x0       0x1d4
+-                        0x09C 0x2FC 0x000 0x0 0x0       0x1d4
+-                        0x0A0 0x300 0x000 0x0 0x0       0x1d4
+-                        0x0B4 0x314 0x000 0x5 0x0       0x10
+-                        >;
+-        };
+-
+-        pinctrl_usdhc1_200mhz: usdhc1grp-200mhz {
+-                fsl,pins = <
+-                        0x08C 0x2EC 0x000 0x0 0x0       0x196
+-                        0x090 0x2F0 0x000 0x0 0x0       0x1d6
+-                        0x094 0x2F4 0x000 0x0 0x0       0x1d6
+-                        0x098 0x2F8 0x000 0x0 0x0       0x1d6
+-                        0x09C 0x2FC 0x000 0x0 0x0       0x1d6
+-                        0x0A0 0x300 0x000 0x0 0x0       0x1d6
+-                        0x0B4 0x314 0x000 0x5 0x0       0x10
+-                        >;
+-        };
+-
+ };
+ 
+ &vpu_g1 {
+@@ -1333,5 +1259,4 @@ &mix_gpu_ml {
+ 	status = "okay";
+ };
+ 
+-
+ #include "imx8mp-android.dtsi"
+-- 
+2.47.0
+
