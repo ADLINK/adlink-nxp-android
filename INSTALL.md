@@ -118,6 +118,8 @@ git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build
 git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0007-sp2-imx8mp-Support-DTBO-based-Android-boot.patch
 
 git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0008-sp2-imx8mp-update-imx-sdcard-partition.sh-to-use-pla.patch
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_1.2.0./android_build/device/nxp/0009-sp2-imx8mp-generate-adlink-imx8mp.img-on-the-fly.patch
   
   cp imx8m/evk_8mp/overlay/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png imx8m/sp2_imx8mp/overlay/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png
   
