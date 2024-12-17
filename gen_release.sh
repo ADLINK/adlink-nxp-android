@@ -17,9 +17,6 @@ if [ -d ${CWD}/out/target/product/${1} ]; then
 		if [ -d Android ]; then
 			rm -rf Android/
 		fi
-		if [ -f ${CWD}/${PATCHROOTDIR}/imx-sdcard-partition.sh ]; then
-			cp -f ${CWD}/${PATCHROOTDIR}/imx-sdcard-partition.sh imx-sdcard-partition.sh
-		fi
 		unzip ${CWD}/${PATCHROOTDIR}/Android.zip
 		tar zcvf ../../../../android-13-${1}.tgz ${RELEASE_FILES} Android/
 	else

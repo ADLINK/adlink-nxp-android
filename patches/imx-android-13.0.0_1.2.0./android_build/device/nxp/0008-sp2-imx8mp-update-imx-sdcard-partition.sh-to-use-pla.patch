@@ -1,0 +1,30 @@
+From 7439794cd793a680b305832d967348fec51cb001 Mon Sep 17 00:00:00 2001
+From: Santhana Kumar A <santhanakumar@adlinktech.com>
+Date: Tue, 17 Dec 2024 14:20:35 +0530
+Subject: [PATCH 1/2] sp2-imx8mp: update imx-sdcard-partition.sh to use
+ platform tools from Android SDK
+
+Signed-off-by: Santhana Kumar A <santhanakumar@adlinktech.com>
+
+diff --git a/common/tools/imx-sdcard-partition.sh b/common/tools/imx-sdcard-partition.sh
+index ddac2149..bfa30fcc 100755
+--- a/common/tools/imx-sdcard-partition.sh
++++ b/common/tools/imx-sdcard-partition.sh
+@@ -233,12 +233,12 @@ function format_partition
+             mkfs.ext4 -F ${current_device_base_name}${num} -L$1
+         else
+             # check whether make_f2fs exists
+-            command -v make_f2fs >/dev/null 2>&1 || { echo -e >&2 "${RED}Missing make_f2fs, fallback to erase the $1 partition ${STD}" ; erase_partition $1 ; return ; }
++            command -v Android/Sdk/platform-tools/make_f2fs >/dev/null 2>&1 || { echo -e >&2 "${RED}Missing make_f2fs, fallback to erase the $1 partition ${STD}" ; erase_partition $1 ; return ; }
+ 
+             get_partition_size $1
+             randome_part=$RANDOM
+             # generate a sparse filesystem image with f2fs type and the size of the partition
+-            make_f2fs -S $(( g_sizes*1024*1024 )) -g android /tmp/TemporaryFile_${randome_part}
++            Android/Sdk/platform-tools/make_f2fs -S $(( g_sizes*1024*1024 )) -g android /tmp/TemporaryFile_${randome_part}
+             simg2img /tmp/TemporaryFile_${randome_part} ${current_device_base_name}${num}
+             rm /tmp/TemporaryFile_${randome_part}
+         fi
+-- 
+2.47.0
+
