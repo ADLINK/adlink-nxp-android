@@ -15,12 +15,14 @@ $ git config --global user.name "First Last"
 $ git config --global user.email "first.last@company.com"
 ```
 
-Compilers ,rust and tools related to Android 14 are placed in the directory  /opta14 
-
 ### Setup GCC Compiler
 
+Compilers ,rust and tools related to Android 14 are placed in the directory  /opta14
+
 Download GCC from [here](https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu/12.3.rel1/binrel/arm-gnu-toolchain-12.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz) and copy into ${HOME} directory
+
 ```shell
+$ sudo mkdir /opta14
 $ sudo tar -xvJf ${HOME}/arm-gnu-toolchain-12.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz -C /opta14
 $ export AARCH64_GCC_CROSS_COMPILE=/opta14/arm-gnu-toolchain-12.3.rel1-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
 ```
@@ -82,6 +84,7 @@ $ source ${HOME}/imx-android-14.0.0_2.2.0/imx_android_setup.sh
 $ cd ${HOME}/android_build/device/nxp
 $ git am ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/sp2-imx8mp/device/nxp/0001-sp2-imx8mp-Android-Devices.patch
 $ git am ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/sp2-imx8mp/device/nxp/0002-sp2-imx8mp-Android-adding-Device-files.patch
+$ git am ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/sp2-imx8mp/device/nxp/0003-sp2-imx8mp-Added-Android-SDK-for-supporting-make_f2f.patch
 ```
 
 ### 2. Kernel

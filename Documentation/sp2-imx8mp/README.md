@@ -39,11 +39,11 @@
 ## 3 Package structure
 
  ```
-  |---SP2-IMX8MP-Android-14 V1.4.01
+  |---SP2-IMX8MP-Android-14 V1.4.02
      |--- android images
      |--- README.md
  ```
-- Download Android release (SP2-IMX8MP-Android-14 V1.4.01) and extract it.
+- Download Android release (SP2-IMX8MP-Android-14 V1.4.02) and extract it.
 
 ## 4 Flashing the Image and Booting
 
@@ -287,7 +287,7 @@ WiFi/BT supported in Android and functionalities can be realised by using Androi
 
 ### 5.12. LVDS display
 
-* Android will support  LVDS  7 10 23 inch panel based on EERPOM setting . Use  image to update the EEPROM using below command.
+* Android will support  LVDS  7 10 23 inch panel based on EERPOM setting . Use yocto image to update the EEPROM using below command.
 
 ```shell
 $ sudo msgpacker.py set -b 1 -a 0x54 -k disp -v X
