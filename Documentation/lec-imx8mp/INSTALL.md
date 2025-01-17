@@ -78,37 +78,37 @@ $ source ${HOME}/imx-android-14.0.0_2.2.0/imx_android_setup.sh
 ### 1. Android Device
 ```
 $ cd ${HOME}/android_build/device/nxp
-$ git am ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/device/nxp/0001-lec-imx8mp-Add-device-support.patch
+$ git am ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/lec-imx8mp/device/nxp/0001-lec-imx8mp-Add-device-support.patch
 ```
 
 ### 2. Kernel
 ```
 $ cd ${HOME}/android_build/vendor/nxp-opensource/kernel_imx
-$ git am ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/vendor/nxp-opensource/kernel_imx/0001-lec-imx8mp-Add-initial-board-support.patch
+$ git am ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/lec-imx8mp/vendor/nxp-opensource/kernel_imx/0001-lec-imx8mp-Add-initial-board-support.patch
 ```
 
 ### 3. U-boot
 ```
 $ cd ${HOME}/android_build/vendor/nxp-opensource/uboot-imx
-$ git am ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/vendor/nxp-opensource/uboot-imx/0001-lec-imx8mp-Add-initial-board-support.patch
+$ git am ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/lec-imx8mp/vendor/nxp-opensource/uboot-imx/0001-lec-imx8mp-Add-initial-board-support.patch
 ```
 
 ### 4. imx-mkimage
 ```
 $ cd ${HOME}/android_build/vendor/nxp-opensource/imx-mkimage
-$ git am ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/vendor/nxp-opensource/imx-mkimage/0001-lec-imx8mp-add-support-to-compile-lec-dtb.patch
+$ git am ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/lec-imx8mp/vendor/nxp-opensource/imx-mkimage/0001-lec-imx8mp-add-support-to-compile-lec-dtb.patch
 ```
 
 ### 5. Libbt
 ```
 $ cd ${HOME}/android_build/hardware/nxp/libbt
-$ git am ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/hardware/nxp/libbt/0001-lec-imx8mp-Add-bt-uart-support.patch
+$ git am ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/lec-imx8mp/hardware/nxp/libbt/0001-lec-imx8mp-Add-bt-uart-support.patch
 ```
 
 ### 6. External Libraries
 ```
 $ cd ${HOME}/android_build/external
-$ git apply ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/external/0001-can-spi-pwm-utils.patch
+$ git apply ${HOME}/imx8mp_android/patches/imx-android-14.0.0_2.2.0/android_build/lec-imx8mp/external/0001-can-spi-pwm-utils.patch
 ```
 
 Compile Android 14 BSP
