@@ -1,0 +1,50 @@
+From c2d32c25204080d4afc0fc5fe0e4b5ba67858c4a Mon Sep 17 00:00:00 2001
+From: shivashankar <shivashankar.t@adlinktech.com>
+Date: Wed, 8 Jan 2025 21:49:53 +0530
+Subject: [PATCH] sp2-imx8mp: Android-Devices
+
+Signed-off-by: shivashankar <shivashankar.t@adlinktech.com>
+---
+ common/tools/imx-make.sh | 7 ++++++-
+ imx8m/AndroidProducts.mk | 3 +++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index f0a0d137..110b8c72 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -1,5 +1,10 @@
+ #!/bin/bash
+-
++export AARCH64_GCC_CROSS_COMPILE=/opta14/arm-gnu-toolchain-12.3.rel1-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
++export CLANG_PATH=/opta14/prebuilt-android-clang
++export LIBCLANG_PATH=/opta14/prebuilt-android-clang/clang-r510928/lib
++export PATH=/opta14/prebuilt-android-kernel-build-tools/linux-x86/bin:$PATH
++export PATH=/opta14/prebuilt-android-rust/linux-x86/1.73.0b/bin:$PATH
++export PATH=/opta14/prebuilt-android-clang-tools/linux-x86/bin:$PATH
+ # help function, it display the usage of this script.
+ help() {
+ cat << EOF
+diff --git a/imx8m/AndroidProducts.mk b/imx8m/AndroidProducts.mk
+index 667bc598..b3c67147 100644
+--- a/imx8m/AndroidProducts.mk
++++ b/imx8m/AndroidProducts.mk
+@@ -27,12 +27,15 @@
+ # Copied from build/target/product/AndroidProducts.mk
+ 
+ PRODUCT_MAKEFILES := \
++  $(LOCAL_DIR)/sp2_imx8mp/sp2_imx8mp.mk \
+   $(LOCAL_DIR)/evk_8mq/evk_8mq.mk \
+   $(LOCAL_DIR)/evk_8mm/evk_8mm.mk \
+   $(LOCAL_DIR)/evk_8mn/evk_8mn.mk \
+   $(LOCAL_DIR)/evk_8mp/evk_8mp.mk
+ 
+ COMMON_LUNCH_CHOICES := \
++  sp2_imx8mp-trunk_staging-user \
++  sp2_imx8mp-trunk_staging-userdebug \
+   evk_8mq-trunk_staging-user \
+   evk_8mq-trunk_staging-userdebug \
+   evk_8mm-trunk_staging-user \
+-- 
+2.25.1
+

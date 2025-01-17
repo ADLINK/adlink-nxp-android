@@ -1,0 +1,51 @@
+From a998422c261eab4d9096a95e2e82e30c83a3e96d Mon Sep 17 00:00:00 2001
+From: shivashankar <shivashankar.t@adlinktech.com>
+Date: Thu, 9 Jan 2025 11:44:11 +0530
+Subject: [PATCH] sp2-imx8mp:Updated build id and removed camera
+
+Change-Id: I19cd7c403192efcd90ab71d10692d187b64964e3
+Signed-off-by: shivashankar <shivashankar.t@adlinktech.com>
+---
+ core/build_id.mk                   | 2 +-
+ target/product/handheld_product.mk | 1 -
+ target/product/handheld_system.mk  | 2 --
+ 3 files changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/core/build_id.mk b/core/build_id.mk
+index bb2e290e7a..f287768a5b 100644
+--- a/core/build_id.mk
++++ b/core/build_id.mk
+@@ -18,4 +18,4 @@
+ # (like "CRB01").  It must be a single word, and is
+ # capitalized by convention.
+ 
+-BUILD_ID=AP2A.240805.005
++BUILD_ID=1.4.02
+diff --git a/target/product/handheld_product.mk b/target/product/handheld_product.mk
+index 8755ae6de4..cdef7b7a46 100644
+--- a/target/product/handheld_product.mk
++++ b/target/product/handheld_product.mk
+@@ -24,7 +24,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/media_product.mk)
+ PRODUCT_PACKAGES += \
+     Browser2 \
+     Calendar \
+-    Camera2 \
+     Contacts \
+     DeskClock \
+     Gallery2 \
+diff --git a/target/product/handheld_system.mk b/target/product/handheld_system.mk
+index d706372724..4d78e6792c 100644
+--- a/target/product/handheld_system.mk
++++ b/target/product/handheld_system.mk
+@@ -39,8 +39,6 @@ PRODUCT_PACKAGES += \
+     BookmarkProvider \
+     BuiltInPrintService \
+     CalendarProvider \
+-    cameraserver \
+-    CameraExtensionsProxy \
+     CaptivePortalLogin \
+     CertInstaller \
+     CredentialManager \
+-- 
+2.25.1
+

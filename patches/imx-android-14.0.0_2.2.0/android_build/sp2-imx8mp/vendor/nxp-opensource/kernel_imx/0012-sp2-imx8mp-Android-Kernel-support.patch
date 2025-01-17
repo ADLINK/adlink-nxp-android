@@ -1,0 +1,4252 @@
+From c011d815b95ea5ecc9a21149b42764d45d765873 Mon Sep 17 00:00:00 2001
+From: shivashankar <shivashankar.t@adlinktech.com>
+Date: Wed, 8 Jan 2025 21:27:39 +0530
+Subject: [PATCH 12/12] sp2-imx8mp: Android-Kernel-support
+
+Signed-off-by: shivashankar <shivashankar.t@adlinktech.com>
+---
+ .../boot/dts/freescale/10inch-overlay.dtso    |   81 ++
+ .../boot/dts/freescale/23inch-overlay.dtso    |   82 ++
+ .../boot/dts/freescale/7dsi-overlay.dtso      |   49 +
+ .../boot/dts/freescale/7inch-overlay.dtso     |   85 ++
+ .../boot/dts/freescale/7rlcd-overlay.dtso     |   49 +
+ arch/arm64/boot/dts/freescale/Makefile        |    6 +
+ .../dts/freescale/awcm276mapur-overlay.dtso   |   88 ++
+ .../dts/freescale/awcm276masur-overlay.dtso   |  116 ++
+ .../boot/dts/freescale/cma400mb-overlay.dtso  |   25 +
+ .../boot/dts/freescale/cma750mb-overlay.dtso  |   25 +
+ .../boot/dts/freescale/cma950mb-overlay.dtso  |   25 +
+ .../boot/dts/freescale/eth0-overlay.dtso      |   19 +
+ .../boot/dts/freescale/eth1-overlay.dtso      |   19 +
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi     |   18 +-
+ .../dts/freescale/snd-sgtl5000-overlay.dtso   |   27 +
+ arch/arm64/boot/dts/freescale/sp2imx8mp.dts   | 1283 +++++++++++++++++
+ arch/arm64/configs/sp2imx8mp_gki.fragment     |  162 +++
+ drivers/char/tpm/Makefile                     |    1 +
+ drivers/char/tpm/tpm-interface.c              |   18 +-
+ drivers/char/tpm/tpm_tis_core.c               |  624 ++++----
+ drivers/char/tpm/tpm_tis_core.h               |   74 +-
+ drivers/char/tpm/tpm_tis_i2c.c                |  480 +++---
+ drivers/gpu/drm/panel/panel-simple.c          |    8 +-
+ sound/soc/codecs/sgtl5000.c                   |   12 +-
+ 24 files changed, 2632 insertions(+), 744 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/10inch-overlay.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/23inch-overlay.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/7dsi-overlay.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/7inch-overlay.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/7rlcd-overlay.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/awcm276mapur-overlay.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/awcm276masur-overlay.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/cma400mb-overlay.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/cma750mb-overlay.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/cma950mb-overlay.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/eth0-overlay.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/eth1-overlay.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/snd-sgtl5000-overlay.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/sp2imx8mp.dts
+ create mode 100644 arch/arm64/configs/sp2imx8mp_gki.fragment
+
+diff --git a/arch/arm64/boot/dts/freescale/10inch-overlay.dtso b/arch/arm64/boot/dts/freescale/10inch-overlay.dtso
+new file mode 100644
+index 000000000000..abf46c42413a
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/10inch-overlay.dtso
+@@ -0,0 +1,81 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			lvds_backlight {
++				pre-pwm-on-delay-ms = <200>;
++				post-pwm-on-delay-ms = <25>;
++				pwm-off-delay-ms = <10>;
++				post-pwm-off-delay-ms = <200>;
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@1 {
++		target-path = "/";
++		__overlay__ {
++			lvds0_panel {
++				compatible = "am,am1280800wutzqw", "panel-lvds";
++
++				height-mm = <135>;
++				width-mm = <217>;
++
++				post-prepare-delay-ms = <30>;
++				pre-disable-delay-ms = <15>;
++				post-unprepare-delay-ms = <500>;
++
++				status = "okay";
++
++				panel-timing {
++					clock-frequency = <72400000>;
++					hactive = <1280>;
++					vactive = <800>;
++					hback-porch = <80>;
++					hfront-porch = <70>;
++					vback-porch = <10>;
++					vfront-porch = <10>;
++					hsync-len = <10>;
++					vsync-len = <3>;
++					de-active = <1>;
++					pixelclk-active = <1>;
++				};
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <&ldb>;
++		__overlay__ {
++			status = "okay";
++			lvds-channel@0 {
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@3 {
++		target = <&lcdif2>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++
++	fragment@4 {
++		target = <&ldb_phy>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/23inch-overlay.dtso b/arch/arm64/boot/dts/freescale/23inch-overlay.dtso
+new file mode 100644
+index 000000000000..59f8c92a8304
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/23inch-overlay.dtso
+@@ -0,0 +1,82 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			lvds_backlight {
++				pre-pwm-on-delay-ms = <200>;
++				post-pwm-on-delay-ms = <25>;
++				pwm-off-delay-ms = <10>;
++				post-pwm-off-delay-ms = <200>;
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@1 {
++		target-path = "/";
++		__overlay__ {
++			lvds0_panel {
++				compatible = "auo,p238hvt", "panel-lvds";
++
++				height-mm = <296>;
++				width-mm = <527>;
++
++				post-prepare-delay-ms = <30>;
++				pre-disable-delay-ms = <15>;
++				post-unprepare-delay-ms = <500>;
++
++				status = "okay";
++
++				panel-timing {
++					clock-frequency = <142400000>;
++					hactive = <1920>;
++					vactive = <1080>;
++					hback-porch = <100>;
++					hfront-porch = <80>;
++					vback-porch = <40>;
++					vfront-porch = <10>;
++					hsync-len = <1>;
++					vsync-len = <1>;
++					de-active = <1>;
++					pixelclk-active = <1>;
++				};
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <&ldb>;
++		__overlay__ {
++			fsl,dual-channel;
++			status = "okay";
++			lvds-channel@0 {
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@3 {
++		target = <&lcdif2>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++
++	fragment@4 {
++		target = <&ldb_phy>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/7dsi-overlay.dtso b/arch/arm64/boot/dts/freescale/7dsi-overlay.dtso
+new file mode 100644
+index 000000000000..ca15bab5894d
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/7dsi-overlay.dtso
+@@ -0,0 +1,49 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			lvds_backlight {
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@1 {
++		target = <&mipi_dsi>;
++		__overlay__ {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "okay";
++			panel@0 {
++				compatible = "ampire,am-8001280gtzqw", "ilitek,ili9881c";
++				reg = <0>;
++				power-supply = <&reg_lvds_blpwr>;
++				reset-gpios = <&gpio4 27 1>; /* GPIO_ACTIVE_LOW */
++				backlight = <&lvds_backlight>;
++				/* enum mipi_dsi_pixel_format { MIPI_DSI_FMT_RGB888, MIPI_DSI_FMT_RGB666, MIPI_DSI_FMT_RGB666_PACKED, MIPI_DSI_FMT_RGB565, }; */
++				dsi-format = <2>;
++				flip-horizontal;
++				flip-vertical;
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <&lcdif1>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/7inch-overlay.dtso b/arch/arm64/boot/dts/freescale/7inch-overlay.dtso
+new file mode 100644
+index 000000000000..b757a4bf1b6d
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/7inch-overlay.dtso
+@@ -0,0 +1,85 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			lvds_backlight {
++				pre-pwm-on-delay-ms = <160>;
++				post-pwm-on-delay-ms = <25>;
++				pwm-off-delay-ms = <10>;
++				post-pwm-off-delay-ms = <110>;
++				skip-blpwr-off;
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@1 {
++		target-path = "/";
++		__overlay__ {
++			lvds0_panel {
++				compatible = "am,1024600DTZQW", "panel-lvds";
++
++				height-mm = <86>;
++				width-mm = <154>;
++
++				post-prepare-delay-ms = <30>;
++				pre-disable-delay-ms = <15>;
++				post-unprepare-delay-ms = <1000>;
++
++				power-supply = <&reg_lvds_blpwr>;
++				skip-blpwr-off;
++
++				status = "okay";
++
++				panel-timing {
++					clock-frequency = <51200000>;
++					hactive = <1024>;
++					vactive = <600>;
++					hback-porch = <150>;
++					hfront-porch = <150>;
++					vback-porch = <15>;
++					vfront-porch = <15>;
++					hsync-len = <20>;
++					vsync-len = <5>;
++					de-active = <1>;
++					pixelclk-active = <1>;
++				};
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <&ldb>;
++		__overlay__ {
++			status = "okay";
++			lvds-channel@0 {
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@3 {
++		target = <&lcdif2>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++
++	fragment@4 {
++		target = <&ldb_phy>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/7rlcd-overlay.dtso b/arch/arm64/boot/dts/freescale/7rlcd-overlay.dtso
+new file mode 100644
+index 000000000000..347793eee0f0
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/7rlcd-overlay.dtso
+@@ -0,0 +1,49 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			lvds_backlight {
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@1 {
++		target = <&mipi_dsi>;
++		__overlay__ {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "okay";
++			panel@0 {
++				compatible = "hsd,p0711t";
++				reg = <0>;
++				power-supply = <&reg_lvds_blpwr>;
++				reset-gpios = <&gpio4 27 1>; /* GPIO_ACTIVE_LOW */
++				backlight = <&lvds_backlight>;
++				/* enum mipi_dsi_pixel_format { MIPI_DSI_FMT_RGB888, MIPI_DSI_FMT_RGB666, MIPI_DSI_FMT_RGB666_PACKED, MIPI_DSI_FMT_RGB565, }; */
++				dsi-format = <2>;
++				flip-horizontal;
++				flip-vertical;
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <&lcdif1>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index d930825e981f..0fd6fd34ba5f 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -121,6 +121,10 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-ab2.dtb imx8mn-ddr3l-ab2.dtb imx8mn-ddr4-ab2.dt
+ dtb-$(CONFIG_ARCH_MXC) += imx8mn-evk-iqaudio-dacplus.dtb imx8mn-evk-iqaudio-dacpro.dtb imx8mn-evk-hifiberry-dacplus.dtb \
+ 			  imx8mn-evk-hifiberry-dac2.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb imx8mp-evk-rm67191.dtb imx8mp-evk-it6263-lvds-dual-channel.dtb \
++		          sp2imx8mp.dtb 10inch-overlay.dtbo 23inch-overlay.dtbo 7dsi-overlay.dtbo \
++                          7inch-overlay.dtbo 7rlcd-overlay.dtbo awcm276mapur-overlay.dtbo \
++                          awcm276masur-overlay.dtbo cma400mb-overlay.dtbo cma750mb-overlay.dtbo \
++                          cma950mb-overlay.dtbo eth0-overlay.dtbo eth1-overlay.dtbo snd-sgtl5000-overlay.dtbo \
+ 			  imx8mp-evk-pcie-ep.dtb  imx8mp-evk-rpmsg.dtb imx8mp-evk-ecspi-slave.dtb \
+ 			  imx8mp-evk-jdi-wuxga-lvds-panel.dtb imx8mp-evk-flexcan2.dtb \
+ 			  imx8mp-evk-root.dtb imx8mp-evk-inmate.dtb imx8mp-evk-ov2775.dtb \
+@@ -747,3 +751,5 @@ imx95-19x19-verdin-os08a20-isp-adv7535-dtbs := imx95-19x19-verdin.dtb \
+ 					      imx95-19x19-evk-neoisp.dtbo \
+ 					      imx95-19x19-verdin-adv7535.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx95-19x19-verdin-os08a20-isp-adv7535.dtb
++
++DTC_FLAGS += -@ -H epapr
+diff --git a/arch/arm64/boot/dts/freescale/awcm276mapur-overlay.dtso b/arch/arm64/boot/dts/freescale/awcm276mapur-overlay.dtso
+new file mode 100644
+index 000000000000..57d8dbcfb9ea
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/awcm276mapur-overlay.dtso
+@@ -0,0 +1,88 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			pcie0_refclk: clock-pcie {
++				compatible = "fixed-clock";
++				#clock-cells = <0>;
++				clock-frequency = <100000000>;
++			};
++
++			reg_pcie0: regulator-pcie {
++				compatible = "regulator-fixed";
++				pinctrl-names = "default";
++				pinctrl-0 = <&pinctrl_pcie0_reg>;
++				regulator-name = "MPCIE_3V3";
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				gpio = <&gpio2 6 0>; /* GPIO_ACTIVE_HIGH = 0 */
++				enable-active-high;
++				regulator-always-on;
++			};
++		};
++	};
++
++	fragment@1 {
++		target = <&pcie_phy>;
++		__overlay__ {
++			fsl,refclk-pad-mode = <1>; /* IMX8_PCIE_REFCLK_PAD_INPUT = 1 */
++			clocks = <&pcie0_refclk>;
++			clock-names = "ref";
++			status = "okay";
++		};
++	};
++
++	fragment@2 {
++		target = <&pcie>;
++		__overlay__ {
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_pcie>;
++			fsl,refclk-pad-mode = <1>;
++			disable-gpio = <&gpio2 6 1>;  /* GPIO_ACTIVE_LOW = 1 */
++			reset-gpio = <&gpio2 7 1>;  /* GPIO_ACTIVE_LOW = 1 */
++			host-wake-gpios = <&gpio5 21 8>; /* IRQ_TYPE_LEVEL_LOW = 8 */
++			vpcie-supply = <&reg_pcie0>;
++			status = "okay";
++		};
++	};
++
++	fragment@3 {
++		target = <&iomuxc>;
++		__overlay__ {
++			pinctrl_pcie: pciegrp {
++				fsl,pins = <
++					/* MX8MP_IOMUXC_I2C4_SCL__PCIE_CLKREQ_B - open drain, pull up */
++					0x218 0x478 0x5A0 0x2 0x0	0x61
++					/* MX8MP_IOMUXC_SD1_DATA5__GPIO2_IO07 - PCIe Reset */
++					0x0A8 0x308 0x000 0x5 0x0	0x41
++					/* MX8MP_IOMUXC_I2C4_SDA__GPIO5_IO21 - PCIe Wakeup */
++					0x21C 0x47C 0x000 0x5 0x0	0x1c4
++				>;
++			};
++
++			pinctrl_pcie0_reg: pcie0reggrp {
++				fsl,pins = <
++					/* MX8MP_IOMUXC_SD1_DATA4__GPIO2_IO06 - PCIe disable */
++					0x0A4 0x304 0x000 0x5 0x0	0x41		>;
++			};
++		};
++	};
++
++	fragment@4 {
++		target = <&usdhc1>;
++		__overlay__ {
++			status = "disabled";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/awcm276masur-overlay.dtso b/arch/arm64/boot/dts/freescale/awcm276masur-overlay.dtso
+new file mode 100644
+index 000000000000..bb73a9029f48
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/awcm276masur-overlay.dtso
+@@ -0,0 +1,116 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			usdhc1_pwrseq: usdhc1_pwrseq {
++				compatible = "mmc-pwrseq-simple";
++				reset-gpios = <&gpio2 6 1>; /* GPIO_ACTIVE_LOW = 1 */
++			};
++
++			reg_ex_sdio_3v: regulator-ex-sdio-3v {
++				compatible = "regulator-fixed";
++				regulator-name = "ex-sdio-3V";
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++			};
++		};
++	};
++
++	fragment@1 {
++		target = <&usdhc1>;
++		__overlay__ {
++			pinctrl-names = "default", "state_100mhz", "state_200mhz";
++			pinctrl-0 = <&pinctrl_usdhc1>;
++			pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
++			pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
++			keep-power-in-suspend;
++			non-removable;
++			wakeup-source;
++			vmmc-supply = <&reg_ex_sdio_3v>;
++			mmc-pwrseq = <&usdhc1_pwrseq>;
++			fsl,sdio-async-interrupt-enabled;
++			status = "okay";
++
++			wifi_wake_host {
++				compatible = "nxp,wifi-wake-host";
++				interrupt-parent = <&gpio2>;
++				interrupts = <9 8>; /* IRQ_TYPE_LEVEL_LOW = 8 */
++				interrupt-names = "host-wake";
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <&iomuxc>;
++		__overlay__ {
++			pinctrl_usdhc1: usdhc1grp {
++				fsl,pins = <
++					/* MX8MP_IOMUXC_SD1_CLK__USDHC1_CLK */
++					0x08C 0x2EC 0x000 0x0 0x0	0x190
++					/* MX8MP_IOMUXC_SD1_CMD__USDHC1_CMD	*/
++					0x090 0x2F0 0x000 0x0 0x0	0x1d0
++					/* MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0 */
++					0x094 0x2F4 0x000 0x0 0x0	0x1d0
++					/* MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1 */
++					0x098 0x2F8 0x000 0x0 0x0	0x1d0
++					/* MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2 */
++					0x09C 0x2FC 0x000 0x0 0x0	0x1d0
++					/* MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3 */
++					0x0A0 0x300 0x000 0x0 0x0	0x1d0
++					/* MX8MP_IOMUXC_SD1_RESET_B__GPIO2_IO10 */
++					0x0B4 0x314 0x000 0x5 0x0	0x10
++				>;
++			};
++
++			pinctrl_usdhc1_100mhz: usdhc1grp-100mhz {
++				fsl,pins = <
++					0x08C 0x2EC 0x000 0x0 0x0	0x194
++					0x090 0x2F0 0x000 0x0 0x0	0x1d4
++					0x094 0x2F4 0x000 0x0 0x0	0x1d4
++					0x098 0x2F8 0x000 0x0 0x0	0x1d4
++					0x09C 0x2FC 0x000 0x0 0x0	0x1d4
++					0x0A0 0x300 0x000 0x0 0x0	0x1d4
++					0x0B4 0x314 0x000 0x5 0x0	0x10
++				>;
++			};
++
++			pinctrl_usdhc1_200mhz: usdhc1grp-200mhz {
++				fsl,pins = <
++					0x08C 0x2EC 0x000 0x0 0x0	0x196
++					0x090 0x2F0 0x000 0x0 0x0	0x1d6
++					0x094 0x2F4 0x000 0x0 0x0	0x1d6
++					0x098 0x2F8 0x000 0x0 0x0	0x1d6
++					0x09C 0x2FC 0x000 0x0 0x0	0x1d6
++					0x0A0 0x300 0x000 0x0 0x0	0x1d6
++					0x0B4 0x314 0x000 0x5 0x0	0x10
++				>;
++			};
++		};
++	};
++
++	fragment@3 {
++		target = <&pcie>;
++		__overlay__ {
++			status = "disabled";
++		};
++	};
++
++	fragment@4 {
++		target = <&pcie_phy>;
++		__overlay__ {
++			status = "disabled";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/cma400mb-overlay.dtso b/arch/arm64/boot/dts/freescale/cma400mb-overlay.dtso
+new file mode 100644
+index 000000000000..0f22fcb6ca9a
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/cma400mb-overlay.dtso
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			reserved-memory {
++				linux,cma {
++					/* 40000000 = 1073741824 (1GiB) */
++					/* 20000000 =  536870912 (512MiB) */
++					size = <0 0x1A000000>; /* 256+128MiB+32MiB (416MiB) */
++				};
++			};
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/cma750mb-overlay.dtso b/arch/arm64/boot/dts/freescale/cma750mb-overlay.dtso
+new file mode 100644
+index 000000000000..747594658caf
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/cma750mb-overlay.dtso
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			reserved-memory {
++				linux,cma {
++					/* 40000000 = 1073741824 (1GiB) */
++					/* 20000000 =  536870912 (500MiB) */
++					size = <0 0x30000000>; /* 1073741824 - 268435456 (250MiB) = 805306368 (750MiB) */
++				};
++			};
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/cma950mb-overlay.dtso b/arch/arm64/boot/dts/freescale/cma950mb-overlay.dtso
+new file mode 100644
+index 000000000000..62e7c6028467
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/cma950mb-overlay.dtso
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			reserved-memory {
++				linux,cma {
++					/* 40000000 = 1073741824 (1GiB) */
++					/* 20000000 =  536870912 (500MiB) */
++					size = <0 0x3c000000>; /* 1GiB - 50331648 (50MiB) = 950 MiB */
++				};
++			};
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/eth0-overlay.dtso b/arch/arm64/boot/dts/freescale/eth0-overlay.dtso
+new file mode 100644
+index 000000000000..fb86eea3730d
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/eth0-overlay.dtso
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target = <&fec>;
++		__overlay__ {
++			status = "disabled";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/eth1-overlay.dtso b/arch/arm64/boot/dts/freescale/eth1-overlay.dtso
+new file mode 100644
+index 000000000000..3f25ac25c5a1
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/eth1-overlay.dtso
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target = <&eqos>;
++		__overlay__ {
++			status = "disabled";
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+index bca84c2f8970..38667b7fe7ab 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+@@ -227,14 +227,14 @@ ocram: ocram@900000 {
+ 		linux,cma {
+ 			compatible = "shared-dma-pool";
+ 			reusable;
+-			size = <0 0x3c000000>;
++			size = <0 0x20000000>;
+ 			alloc-ranges = <0 0x40000000 0 0xC0000000>;
+ 			linux,cma-default;
+ 		};
+ 
+-		gpu_reserved: gpu_reserved@100000000 {
++		gpu_reserved: gpu_reserved@B0000000 {
+ 			no-map;
+-			reg = <0x1 0x00000000 0 0x10000000>;
++			reg = <0 0xB0000000 0 0x02000000>;
+ 		};
+ 
+ 		dsp_reserved: dsp@92400000 {
+@@ -353,11 +353,11 @@ busfreq { /* BUSFREQ */
+ 			 <&clk IMX8MP_SYS_PLL2_333M>, <&clk IMX8MP_CLK_NOC>,
+ 			 <&clk IMX8MP_CLK_AHB>, <&clk IMX8MP_CLK_MAIN_AXI>,
+ 			 <&clk IMX8MP_CLK_24M>, <&clk IMX8MP_SYS_PLL1_800M>,
+-			 <&clk IMX8MP_DRAM_PLL>, <&clk IMX8MP_CLK_GIC>;
++			 <&clk IMX8MP_DRAM_PLL>;
+ 		clock-names = "dram_pll", "dram_alt_src", "dram_apb_src", "dram_apb_pre_div",
+ 			      "dram_core", "dram_alt_root", "sys_pll1_40m", "sys_pll1_100m",
+ 			      "sys_pll2_333m", "noc_div", "ahb_div", "main_axi_src", "osc_24m",
+-			      "sys_pll1_800m", "dram_pll_div", "gic_div";
++			      "sys_pll1_800m", "dram_pll_div";
+ 	};
+ 
+ 	audiomix_pd: audiomix-pd {
+@@ -387,13 +387,13 @@ cpu-thermal {
+ 			thermal-sensors = <&tmu 0>;
+ 			trips {
+ 				cpu_alert0: trip0 {
+-					temperature = <85000>;
++					temperature = <100000>;
+ 					hysteresis = <2000>;
+ 					type = "passive";
+ 				};
+ 
+ 				cpu_crit0: trip1 {
+-					temperature = <95000>;
++					temperature = <105000>;
+ 					hysteresis = <2000>;
+ 					type = "critical";
+ 				};
+@@ -418,13 +418,13 @@ soc-thermal {
+ 			thermal-sensors = <&tmu 1>;
+ 			trips {
+ 				soc_alert0: trip0 {
+-					temperature = <85000>;
++					temperature = <100000>;
+ 					hysteresis = <2000>;
+ 					type = "passive";
+ 				};
+ 
+ 				soc_crit0: trip1 {
+-					temperature = <95000>;
++					temperature = <105000>;
+ 					hysteresis = <2000>;
+ 					type = "critical";
+ 				};
+diff --git a/arch/arm64/boot/dts/freescale/snd-sgtl5000-overlay.dtso b/arch/arm64/boot/dts/freescale/snd-sgtl5000-overlay.dtso
+new file mode 100644
+index 000000000000..3c5a615a08fd
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/snd-sgtl5000-overlay.dtso
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 ADLINK Technology Corp.
++ *
++ * Author: Po Cheng <po.cheng@adlinktech.com>
++ */
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			sound {
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@1 {
++		target = <&sgtl5000>;
++		__overlay__ {
++			status = "okay";
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/sp2imx8mp.dts b/arch/arm64/boot/dts/freescale/sp2imx8mp.dts
+new file mode 100644
+index 000000000000..a05f781c4dc8
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/sp2imx8mp.dts
+@@ -0,0 +1,1283 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2019 NXP
++ */
++
++/dts-v1/;
++
++#include <dt-bindings/phy/phy-imx8-pcie.h>
++#include <dt-bindings/usb/pd.h>
++#include "imx8mp.dtsi"
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/leds/common.h>
++
++/ {
++	model = "ADLINK Smart Panel - IMX8MP board";
++	compatible = "fsl,imx8mp-evk", "fsl,imx8mp";
++
++	chosen {
++		stdout-path = &uart2;
++	};
++
++	gpio-leds {
++		compatible = "gpio-leds";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio_led>;
++
++		status_led {
++			label = "green:sys-status";
++			gpios = <&gpio3 16 GPIO_ACTIVE_HIGH>;
++			default-state = "on"; /* LED GREEN */
++		};
++	};
++
++	memory@40000000 {
++		device_type = "memory";
++		reg = <0x0 0x40000000 0 0xc0000000>,
++		      <0x1 0x00000000 0 0xc0000000>;
++	};
++
++	/* 25MHz reference crystal */
++	ref25m: ref25xtal {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <25000000>;
++	};
++
++	reg_lvds_blpwr: regulator-lvds-pwr {
++		compatible = "regulator-fixed";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_reg_lvds_bl_pwr>;
++		regulator-name = "vdd";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		gpio = <&gpio3 20 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
++
++	reg_usb0_pwr_en: regulator-usb0pwren {
++		compatible = "regulator-fixed";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_usb0_pwr_en>;
++		regulator-name = "usb0-pwr-en";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		gpio = <&gpio1 14 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		regulator-always-on;
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio_keys>;
++
++		wakeup {
++			label = "Wake-Up";
++			gpios = <&gpio1 7 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_WAKEUP>;
++			debounce-interval = <10>;
++			wakeup-source;
++		};
++	};
++
++	extcon_usb0: extcon-usb-idvbus-grp0 {
++		compatible = "linux,extcon-usb-gpio";
++		id-gpio = <&gpio1 10 GPIO_ACTIVE_LOW>; /* GPIO1_IO10 */
++		// vbus-gpio = <&gpio1 15 GPIO_ACTIVE_LOW>; /* GPIO1_IO15 */
++	};
++
++	reg_usdhc2_vmmc: regulator-usdhc2 {
++		compatible = "regulator-fixed";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_reg_usdhc2_vmmc>;
++		regulator-name = "VSD_3V3";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
++
++	reg_ext_audio_3v: regulator-ext-audio-3v {
++		compatible = "regulator-fixed";
++		regulator-name = "ext-audio-3V";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-always-on;
++	};
++
++	reg_ext_audio_1v8: regulator-ext-audio-1v8 {
++		compatible = "regulator-fixed";
++		regulator-name = "+V1.8";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		regulator-always-on;
++	};
++
++	ex_audio_clk: sgtl5000_19M {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <19200000>; /* 19.2MHz */
++	};
++
++	reg_speaker_amp: regulator-audio-amplifier {
++		compatible = "regulator-fixed";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_usbhub_spkamp>;
++		regulator-name = "speaker-amp";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		gpios = <&gpio1 12 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		regulator-always-on;
++	};
++
++	sound-hdmi {
++		compatible = "fsl,imx-audio-hdmi";
++		model = "audio-hdmi";
++		audio-cpu = <&aud2htx>;
++		hdmi-out;
++		constraint-rate = <44100>,
++				<88200>,
++				<176400>,
++				<32000>,
++				<48000>,
++				<96000>,
++				<192000>;
++		status = "okay";
++	};
++
++	sound {
++		compatible = "fsl,imx-audio-sgtl5000";
++		model = "audio-sgtl5000";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_hpdet>;
++		hp-det-gpio = <&gpio4 20 GPIO_ACTIVE_LOW>;
++		codec-master;
++		ssi-controller = <&sai3>;
++		audio-codec = <&sgtl5000>;
++		audio-routing =
++			"MIC_IN", "Mic Jack",
++			"Mic Jack", "Mic Bias",
++			"Headphone Jack", "HP_OUT",
++			"Ext Spk", "LINE_OUT";
++		mux-int-port = <1>;
++		mux-ext-port = <3>;
++		status = "disabled";
++	};
++
++	lvds_backlight: lvds_backlight {
++		compatible = "pwm-backlight";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_reg_bl_en>;
++		enable-gpios = <&gpio1 0 GPIO_ACTIVE_HIGH>;
++		power-supply = <&reg_lvds_blpwr>;
++		pwms = <&pwm2 0 100000 0>;
++		status = "disabled";
++
++		brightness-levels = < 0  1  2  3  4  5  6  7  8  9
++				     10 11 12 13 14 15 16 17 18 19
++				     20 21 22 23 24 25 26 27 28 29
++				     30 31 32 33 34 35 36 37 38 39
++				     40 41 42 43 44 45 46 47 48 49
++				     50 51 52 53 54 55 56 57 58 59
++				     60 61 62 63 64 65 66 67 68 69
++				     70 71 72 73 74 75 76 77 78 79
++				     80 81 82 83 84 85 86 87 88 89
++				     90 91 92 93 94 95 96 97 98 99
++				    100>;
++		default-brightness-level = <80>;
++	};
++
++	lvds0_panel {
++		backlight = <&lvds_backlight>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_reg_lvds_vdd>;
++		enable-gpios = <&gpio4 27 GPIO_ACTIVE_HIGH>;
++
++		data-mapping = "vesa-24";
++		status = "disabled";
++
++		port {
++			panel_lvds_in: endpoint {
++				remote-endpoint = <&lvds_out>;
++			};
++		};
++	};
++
++	pwm-beeper {
++		compatible = "pwm-beeper";
++		pwms = <&pwm4 0 500000 0>;
++	};
++};
++
++&A53_0 {
++	cpu-supply = <&buck2>;
++};
++
++&A53_1 {
++	cpu-supply = <&buck2>;
++};
++
++&A53_2 {
++	cpu-supply = <&buck2>;
++};
++
++&A53_3 {
++	cpu-supply = <&buck2>;
++};
++
++&gpio1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_gpio1_hog>;
++
++	gpio-line-names =       \
++		"", "USB_MUX_SEL", "", "", "", "", "", "",  \
++		"", "", "", "", "", "", "", "",      \
++		"", "", "", "", "", "", "", "", \
++		"", "", "", "", "", "", "", "";
++};
++
++&gpio4 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_gpio4_hog>;
++
++	gpio-line-names =	\
++		"", "", "", "", "", "", "", "",	\
++		"", "", "", "", "", "", "", "",	\
++		"", "", "", "", "", "", "", "",	\
++		"UART_MODE0", "UART_MODE1", "", "", "HWID_2", "HWID_3", "", "";
++/*
++	uart_mode0 {
++		gpios = <&gpio4 24 GPIO_ACTIVE_HIGH>;
++		output-low;
++		line-name = "UART_MODE0";
++	};
++
++	uart_mode1 {
++		gpios = <&gpio4 25 GPIO_ACTIVE_HIGH>;
++		output-low;
++		line-name = "UART_MODE1";
++	};
++
++	hwid_2 {
++		gpios = <&gpio4 28 GPIO_ACTIVE_HIGH>;
++		input;
++		line-name = "HWID_2";
++	};
++
++	hwid_3 {
++		gpios = <&gpio4 29 GPIO_ACTIVE_HIGH>;
++		input;
++		line-name = "HWID_3";
++	};
++*/
++};
++
++&gpio5 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_gpio5_hog>;
++
++	gpio-line-names =	\
++		"", "", "", "", "", "HWID_1", "", "",	\
++		"", "", "", "", "", "", "", "",	\
++		"", "", "", "", "", "", "", "",	\
++		"", "", "", "", "", "", "", "";
++/*
++	hwid_1 {
++		gpios = <&gpio5 5 GPIO_ACTIVE_HIGH>;
++		input;
++		line-name = "HWID_1";
++	};
++*/
++};
++
++&pwm2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_bl_pwm2>;
++	status = "okay";
++};
++
++&pwm4 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_buzz_pwm4>;
++	status = "okay";
++};
++
++&aud2htx {
++	status = "okay";
++};
++
++&ecspi2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	fsl,spi-num-chipselects = <1>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_ecspi2 &pinctrl_ecspi2_cs>;
++	cs-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
++	status = "okay";
++
++	spidev1: spi@0 {
++		reg = <0>;
++		compatible = "rohm,dh2228fv";
++		spi-max-frequency = <500000>;
++	};
++};
++
++&eqos {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_eqos>;
++	phy-mode = "rgmii-id";
++	phy-handle = <&ethphy0>;
++	snps,force_thresh_dma_mode;
++	snps,mtl-tx-config = <&mtl_tx_setup>;
++	snps,mtl-rx-config = <&mtl_rx_setup>;
++	status = "okay";
++
++	mdio {
++		compatible = "snps,dwmac-mdio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		ethphy0: ethernet-phy@1 {
++			compatible = "ethernet-phy-ieee802.3-c22";
++			reg = <1>;
++			eee-broken-1000t;
++			reset-gpios = <&gpio4 22 GPIO_ACTIVE_LOW>;
++			reset-assert-us = <10000>;
++			reset-deassert-us = <80000>;
++			realtek,clkout-disable;
++		};
++	};
++
++	mtl_tx_setup: tx-queues-config {
++		snps,tx-queues-to-use = <5>;
++		snps,tx-sched-sp;
++
++		queue0 {
++			snps,dcb-algorithm;
++			snps,priority = <0x1>;
++		};
++
++		queue1 {
++			snps,dcb-algorithm;
++			snps,priority = <0x2>;
++		};
++
++		queue2 {
++			snps,dcb-algorithm;
++			snps,priority = <0x4>;
++		};
++
++		queue3 {
++			snps,dcb-algorithm;
++			snps,priority = <0x8>;
++		};
++
++		queue4 {
++			snps,dcb-algorithm;
++			snps,priority = <0xf0>;
++		};
++	};
++
++	mtl_rx_setup: rx-queues-config {
++		snps,rx-queues-to-use = <5>;
++		snps,rx-sched-sp;
++
++		queue0 {
++			snps,dcb-algorithm;
++			snps,priority = <0x1>;
++			snps,map-to-dma-channel = <0>;
++		};
++
++		queue1 {
++			snps,dcb-algorithm;
++			snps,priority = <0x2>;
++			snps,map-to-dma-channel = <1>;
++		};
++
++		queue2 {
++			snps,dcb-algorithm;
++			snps,priority = <0x4>;
++			snps,map-to-dma-channel = <2>;
++		};
++
++		queue3 {
++			snps,dcb-algorithm;
++			snps,priority = <0x8>;
++			snps,map-to-dma-channel = <3>;
++		};
++
++		queue4 {
++			snps,dcb-algorithm;
++			snps,priority = <0xf0>;
++			snps,map-to-dma-channel = <4>;
++		};
++	};
++};
++
++&fec {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_fec>;
++	phy-mode = "rgmii-id";
++	phy-handle = <&ethphy1>;
++	fsl,magic-packet;
++	status = "okay";
++
++	mdio {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		ethphy1: ethernet-phy@1 {
++			compatible = "ethernet-phy-ieee802.3-c22";
++			reg = <2>;
++			eee-broken-1000t;
++			reset-gpios = <&gpio4 2 GPIO_ACTIVE_LOW>;
++			reset-assert-us = <10000>;
++			reset-deassert-us = <80000>;
++			realtek,aldps-enable;
++			realtek,clkout-disable;
++			interrupt-parent = <&gpio4>;
++			interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
++			wakeup-source;
++		};
++	};
++};
++
++&flexcan1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_flexcan1>;
++	status = "okay";
++};
++
++&i2c1 {
++	clock-frequency = <400000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c1>;
++	status = "okay";
++
++	pmic@25 {
++		compatible = "nxp,pca9450c";
++		reg = <0x25>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pmic>;
++		interrupt-parent = <&gpio1>;
++		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
++
++		regulators {
++			buck1: BUCK1 {
++				regulator-name = "BUCK1";
++				regulator-min-microvolt = <600000>;
++				regulator-max-microvolt = <2187500>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <3125>;
++			};
++
++			buck2: BUCK2 {
++				regulator-name = "BUCK2";
++				regulator-min-microvolt = <600000>;
++				regulator-max-microvolt = <2187500>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <3125>;
++				nxp,dvs-run-voltage = <950000>;
++				nxp,dvs-standby-voltage = <850000>;
++			};
++
++			buck4: BUCK4{
++				regulator-name = "BUCK4";
++				regulator-min-microvolt = <600000>;
++				regulator-max-microvolt = <3400000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			buck5: BUCK5{
++				regulator-name = "BUCK5";
++				regulator-min-microvolt = <600000>;
++				regulator-max-microvolt = <3400000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			buck6: BUCK6 {
++				regulator-name = "BUCK6";
++				regulator-min-microvolt = <600000>;
++				regulator-max-microvolt = <3400000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo1: LDO1 {
++				regulator-name = "LDO1";
++				regulator-min-microvolt = <1600000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo2: LDO2 {
++				regulator-name = "LDO2";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <1150000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo3: LDO3 {
++				regulator-name = "LDO3";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo4: LDO4 {
++				regulator-name = "LDO4";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo5: LDO5 {
++				regulator-name = "LDO5";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++		};
++	};
++};
++
++&i2c2 {
++	clock-frequency = <100000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c2>;
++	status = "okay";
++
++	/* RTC: PCF85063A */
++	rtc: pcf85063a@51 {
++		compatible = "nxp,pcf85063a";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_rtc>;
++		quartz-load-femtofarads = <12500>;
++		reg = <0x51>;
++		interrupt-parent = <&gpio3>;
++		interrupts = <22 IRQ_TYPE_EDGE_FALLING>;
++	};
++
++	/* Comment to show an external PCIe CLK GEN: PI6CG33202C-ZDIEX */
++	/* pcieclk0: pi6cg33202@6a {
++		reg = <0x6a>;
++		compatible = "pi,6cg33202";
++	}; */
++
++};
++
++&i2c3 {
++	clock-frequency = <300000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c3>;
++	status = "okay";
++
++	/* TPM: ST33HTPH2X32AHD5 */
++	tpm: st33htph77@2e {
++		compatible = "st,st33htpm-i2c";
++		reg = <0x2e>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_tpm>;
++		interrupt-parent = <&gpio3>;
++		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
++		tpm-reset = <&gpio1 6 GPIO_ACTIVE_LOW>;
++		default-guard-time;
++		status = "okay";
++	};
++
++	/* sgtl5000 audio codec */
++	sgtl5000: audio-codec@a {
++		compatible = "fsl,sgtl5000";
++		#sound-dai-cells = <0>;
++		reg = <0x0a>;
++		micbias-voltage-m-volts = <2250>;
++		VDDA-supply = <&reg_ext_audio_3v>;
++		VDDIO-supply = <&reg_ext_audio_1v8>;
++		VDDD-supply = <&reg_ext_audio_1v8>;
++		clocks = <&ex_audio_clk>;
++		status = "disabled";
++	};
++
++	eeprom@50 {
++		compatible = "atmel,24c256";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0x50>;
++		pagesize = <64>;
++		size = <32768>;
++		address-width = <16>;
++	};
++};
++
++&i2c6 {
++	clock-frequency = <400000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c6>;
++	status = "okay";
++
++	/* SX1509 */
++	sx1509: gpioext0@3f {
++		#gpio-cells = <2>;
++		#interrupt-cells = <2>;
++		compatible = "semtech,sx1509q";
++		reg = <0x3f>;
++
++		semtech,probe-reset;
++		gpio-controller;
++		interrupt-controller;
++
++		interrupt-parent = <&gpio3>;
++		interrupts = <21 IRQ_TYPE_EDGE_FALLING>;
++
++		gpio-line-names =	\
++		"DI0", "DI1", "DI2", "DI3", "DO0", "DO1", "DO2", "DO3",	\
++		"", "", "", "", "", "", "", "";
++
++		status = "okay";
++
++		/* GPIO Expander 0 Mapping :
++		 * 0: CN_DI0, 1: CN_DI1, 2: CN_DI2, 3: CN_DI3,
++		 * 4: CN_DO0, 5: CN_DO1, 6: CN_DO2, 7: CN_DO3
++		 * 8~15: N/A
++		 */
++	};
++};
++
++&irqsteer_hdmi {
++	status = "okay";
++};
++
++&hdmi_blk_ctrl {
++	status = "okay";
++};
++
++&hdmi_pavi {
++	status = "okay";
++};
++
++&hdmi {
++	status = "okay";
++};
++
++&hdmiphy {
++	status = "okay";
++};
++
++&lcdif1 {
++	status = "disabled";
++};
++
++&lcdif2 {
++	status = "disabled";
++};
++
++&lcdif3 {
++	status = "okay";
++
++	thres-low  = <1 2>;             /* (FIFO * 1 / 2) */
++	thres-high = <3 4>;             /* (FIFO * 3 / 4) */
++};
++
++&ldb {
++	/* fsl,dual-channel; */
++
++	lvds-channel@0 {
++		fsl,data-mapping = "spwg";
++		fsl,data-width = <24>;
++
++		port@1 {
++			reg = <1>;
++
++			lvds_out: endpoint {
++				remote-endpoint = <&panel_lvds_in>;
++			};
++		};
++	};
++};
++
++&ldb_phy {
++	status = "okay";
++};
++
++&mipi_dsi {
++	/delete-node/ panel@0;
++};
++
++&snvs_pwrkey {
++	status = "okay";
++};
++
++&easrc {
++	fsl,asrc-rate  = <48000>;
++	status = "okay";
++};
++
++&sai3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_sai3>;
++	/* fsl,sai-mclk-direction-output; */
++	status = "okay";
++};
++
++&xcvr {
++	#sound-dai-cells = <0>;
++	status = "okay";
++};
++
++&sdma2 {
++	status = "okay";
++};
++
++&uart1 { /* BT */
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart1>;
++	assigned-clocks = <&clk IMX8MP_CLK_UART1>;
++	assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_80M>;
++	fsl,uart-has-rtscts;
++	status = "okay";
++};
++
++
++&uart2 {
++	/* console */
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart2>;
++	status = "okay";
++};
++
++&usb3_phy0 {
++	//vbus-power-supply = <&ptn5110>;
++	fsl,phy-tx-vref-tune = <0xe>;
++	fsl,phy-tx-preemp-amp-tune = <3>;
++	fsl,phy-tx-vboost-level = <2>; /* set amplitude to 1.04v */
++	fsl,phy-comp-dis-tune = <7>;
++	fsl,pcs-tx-deemph-3p5db = <0x21>;
++	fsl,phy-pcs-tx-swing-full = <0x7f>;
++	status = "okay";
++};
++
++&usb3_0 {
++	status = "okay";
++};
++
++&usb_dwc3_0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usb0_id>;
++	dr_mode = "otg";
++	// NOTE: don't set usb-role-switch to enable extcon
++	// (patch core.c to enable extcon fn in drd.c)
++	//usb-role-switch;
++	// NOTE: dual role, not real OTG for imx8mp, no host-negocitation or session-request
++	hnp-disable;
++	srp-disable;
++	extcon = <&extcon_usb0>;
++	otg-rev = <0x0200>;
++	status = "okay";
++};
++
++&usb3_phy1 {
++	fsl,phy-tx-preemp-amp-tune = <3>;
++	fsl,phy-tx-vref-tune = <0xb>;
++	status = "okay";
++};
++
++&usb3_1 {
++	status = "okay";
++};
++
++&usb_dwc3_1 {
++	dr_mode = "host";
++	status = "okay";
++};
++
++/* RS485 only */
++&uart3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart3>;
++	status = "okay";
++};
++
++/* SP399E RS232/RS422/RS485 */
++&uart4 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart4>;
++	assigned-clocks = <&clk IMX8MP_CLK_UART4>;
++	assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_80M>;
++	fsl,uart-has-rtscts;
++	status = "okay";
++};
++
++&usdhc2 {
++	assigned-clocks = <&clk IMX8MP_CLK_USDHC2>;
++	assigned-clock-rates = <400000000>;
++	pinctrl-names = "default", "state_100mhz", "state_200mhz";
++	pinctrl-0 = <&pinctrl_usdhc2>, <&pinctrl_usdhc2_gpio>;
++	pinctrl-1 = <&pinctrl_usdhc2_100mhz>, <&pinctrl_usdhc2_gpio>;
++	pinctrl-2 = <&pinctrl_usdhc2_200mhz>, <&pinctrl_usdhc2_gpio>;
++	cd-gpios = <&gpio2 12 GPIO_ACTIVE_LOW>;
++	vmmc-supply = <&reg_usdhc2_vmmc>;
++	bus-width = <4>;
++	status = "okay";
++};
++
++&usdhc3 {
++	assigned-clocks = <&clk IMX8MP_CLK_USDHC3>;
++	assigned-clock-rates = <400000000>;
++	pinctrl-names = "default", "state_100mhz", "state_200mhz";
++	pinctrl-0 = <&pinctrl_usdhc3>;
++	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
++	bus-width = <8>;
++	non-removable;
++	status = "okay";
++};
++
++&wdog1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wdog>;
++	fsl,ext-reset-output;
++	status = "okay";
++};
++
++/*
++fsl,pins = <PIN_FUNC_ID CONFIG>,
++  - PIN_FUNC_ID is a pin (5-values) working on a specific function (MUX control)
++  - CONFIG is the pad setting (1-value) like pull-up for this pin. (PAD control)
++  see iomux-v3.h
++*/
++&iomuxc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_hog>;
++
++	pinctrl_hog: hoggrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_HDMI_DDC_SCL__HDMIMIX_HDMI_SCL	0x400001c3
++			MX8MP_IOMUXC_HDMI_DDC_SDA__HDMIMIX_HDMI_SDA	0x400001c3
++			MX8MP_IOMUXC_HDMI_HPD__HDMIMIX_HDMI_HPD		0x40000019
++			MX8MP_IOMUXC_HDMI_CEC__HDMIMIX_HDMI_CEC		0x40000019
++
++			MX8MP_IOMUXC_SAI5_RXD2__GPIO3_IO23	0x00000106	// I2C6_INT#
++			MX8MP_IOMUXC_SD1_DATA6__GPIO2_IO08	0x00000106	// M.2 BT wakeup
++			MX8MP_IOMUXC_SD1_DATA7__GPIO2_IO09	0x00000106	// M.2 SDIO wakeup
++		>;
++	};
++
++	pinctrl_rtc: rtcgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI5_RXD1__GPIO3_IO22	0x80  /* RTC intr */
++		>;
++	};
++
++	pinctrl_bl_pwm2: blpwm2grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO11__PWM2_OUT	0x116
++		>;
++	};
++
++	pinctrl_buzz_pwm4: buzzpwm4grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI5_RXFS__PWM4_OUT	0x116
++		>;
++	};
++
++	pinctrl_tpm: tpmgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_NAND_DQS__GPIO3_IO14		0xd6	// TPM IRQ
++			MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06		0x156	// TPM reset
++		>;
++	};
++
++	pinctrl_usbhub_spkamp: usbhubspkampgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12		0x146	//HUB_RESET or AUDIO_AMP
++		>;
++	};
++
++	pinctrl_eqos: eqosgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_ENET_MDC__ENET_QOS_MDC				0x3
++			MX8MP_IOMUXC_ENET_MDIO__ENET_QOS_MDIO				0x3
++			MX8MP_IOMUXC_ENET_RD0__ENET_QOS_RGMII_RD0			0x91
++			MX8MP_IOMUXC_ENET_RD1__ENET_QOS_RGMII_RD1			0x91
++			MX8MP_IOMUXC_ENET_RD2__ENET_QOS_RGMII_RD2			0x91
++			MX8MP_IOMUXC_ENET_RD3__ENET_QOS_RGMII_RD3			0x91
++			MX8MP_IOMUXC_ENET_RXC__CCM_ENET_QOS_CLOCK_GENERATE_RX_CLK	0x91
++			MX8MP_IOMUXC_ENET_RX_CTL__ENET_QOS_RGMII_RX_CTL			0x91
++			MX8MP_IOMUXC_ENET_TD0__ENET_QOS_RGMII_TD0			0x1f
++			MX8MP_IOMUXC_ENET_TD1__ENET_QOS_RGMII_TD1			0x1f
++			MX8MP_IOMUXC_ENET_TD2__ENET_QOS_RGMII_TD2			0x1f
++			MX8MP_IOMUXC_ENET_TD3__ENET_QOS_RGMII_TD3			0x1f
++			MX8MP_IOMUXC_ENET_TX_CTL__ENET_QOS_RGMII_TX_CTL			0x1f
++			MX8MP_IOMUXC_ENET_TXC__CCM_ENET_QOS_CLOCK_GENERATE_TX_CLK	0x1f
++			MX8MP_IOMUXC_SAI2_RXC__GPIO4_IO22				0x19		//ENET RESET
++			MX8MP_IOMUXC_SAI2_RXFS__GPIO4_IO21				0x00000106	//ENET INT
++			MX8MP_IOMUXC_GPIO1_IO08__ENET_QOS_1588_EVENT0_IN		0x106
++			MX8MP_IOMUXC_GPIO1_IO09__ENET_QOS_1588_EVENT0_OUT		0x106
++		>;
++	};
++
++	pinctrl_fec: fecgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI1_RXD2__ENET1_MDC		0x3
++			MX8MP_IOMUXC_SAI1_RXD3__ENET1_MDIO		0x3
++			MX8MP_IOMUXC_SAI1_RXD4__ENET1_RGMII_RD0		0x91
++			MX8MP_IOMUXC_SAI1_RXD5__ENET1_RGMII_RD1		0x91
++			MX8MP_IOMUXC_SAI1_RXD6__ENET1_RGMII_RD2		0x91
++			MX8MP_IOMUXC_SAI1_RXD7__ENET1_RGMII_RD3		0x91
++			MX8MP_IOMUXC_SAI1_TXC__ENET1_RGMII_RXC		0x91
++			MX8MP_IOMUXC_SAI1_TXFS__ENET1_RGMII_RX_CTL	0x91
++			MX8MP_IOMUXC_SAI1_TXD0__ENET1_RGMII_TD0		0x1f
++			MX8MP_IOMUXC_SAI1_TXD1__ENET1_RGMII_TD1		0x1f
++			MX8MP_IOMUXC_SAI1_TXD2__ENET1_RGMII_TD2		0x1f
++			MX8MP_IOMUXC_SAI1_TXD3__ENET1_RGMII_TD3		0x1f
++			MX8MP_IOMUXC_SAI1_TXD4__ENET1_RGMII_TX_CTL	0x1f
++			MX8MP_IOMUXC_SAI1_TXD5__ENET1_RGMII_TXC		0x1f
++			MX8MP_IOMUXC_SAI1_RXD1__GPIO4_IO03		0x00000106	//ENET1 INT
++			MX8MP_IOMUXC_SAI1_RXD0__GPIO4_IO02		0x19		//ENET1_RESET
++			MX8MP_IOMUXC_SAI1_RXC__ENET1_1588_EVENT0_OUT	0x00000106
++			MX8MP_IOMUXC_SAI1_RXFS__ENET1_1588_EVENT0_IN	0x00000106
++		>;
++	};
++
++	pinctrl_flexcan1: flexcan1grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SPDIF_RX__CAN1_RX		0x154
++			MX8MP_IOMUXC_SPDIF_TX__CAN1_TX		0x154
++		>;
++	};
++
++	pinctrl_ecspi2: ecspi2grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_ECSPI2_SCLK__ECSPI2_SCLK		0x82
++			MX8MP_IOMUXC_ECSPI2_MOSI__ECSPI2_MOSI		0x82
++			MX8MP_IOMUXC_ECSPI2_MISO__ECSPI2_MISO		0x82
++		>;
++	};
++
++	pinctrl_ecspi2_cs: ecspi2cs {
++		fsl,pins = <
++			MX8MP_IOMUXC_ECSPI2_SS0__GPIO5_IO13		0x40000
++		>;
++	};
++
++	pinctrl_gpio_led: gpioledgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_NAND_READY_B__GPIO3_IO16	0x140
++		>;
++	};
++
++	pinctrl_i2c1: i2c1grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_I2C1_SCL__I2C1_SCL		0x400001c2
++			MX8MP_IOMUXC_I2C1_SDA__I2C1_SDA		0x400001c2
++		>;
++	};
++
++	pinctrl_i2c2: i2c2grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_I2C2_SCL__I2C2_SCL		0x400001c2
++			MX8MP_IOMUXC_I2C2_SDA__I2C2_SDA		0x400001c2
++		>;
++	};
++
++	pinctrl_i2c3: i2c3grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_I2C3_SCL__I2C3_SCL		0x400001c2
++			MX8MP_IOMUXC_I2C3_SDA__I2C3_SDA		0x400001c2
++		>;
++	};
++
++	pinctrl_i2c6: i2c6grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_UART4_RXD__I2C6_SCL	0x400001c2
++			MX8MP_IOMUXC_UART4_TXD__I2C6_SDA	0x400001c2
++		>;
++	};
++
++	pinctrl_pmic: pmicgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO03__GPIO1_IO03	0x000001c0
++		>;
++	};
++
++	pinctrl_reg_bl_en: regblengrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO00__GPIO1_IO00	0x16
++		>;
++	};
++
++	pinctrl_reg_lvds_vdd: reglvdsvddgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI2_MCLK__GPIO4_IO27	0x16
++		>;
++	};
++
++	pinctrl_reg_lvds_bl_pwr: reglvdsblpwrgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI5_RXC__GPIO3_IO20	0x106
++		>;
++	};
++
++	pinctrl_reg_usdhc2_vmmc: regusdhc2vmmcgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SD2_RESET_B__GPIO2_IO19	0x41
++		>;
++	};
++
++	pinctrl_sai3: sai3grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI3_TXFS__AUDIOMIX_SAI3_TX_SYNC	0xd6
++			MX8MP_IOMUXC_SAI3_TXC__AUDIOMIX_SAI3_TX_BCLK	0xd6
++			MX8MP_IOMUXC_SAI3_RXD__AUDIOMIX_SAI3_RX_DATA00	0xd6
++			MX8MP_IOMUXC_SAI3_TXD__AUDIOMIX_SAI3_TX_DATA00	0xd6
++			MX8MP_IOMUXC_SAI3_MCLK__AUDIOMIX_SAI3_MCLK	0xd6
++		>;
++	};
++
++	pinctrl_i2c2_irq: i2c2irqgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI1_TXD6__GPIO4_IO18	0x1c4
++		>;
++	};
++
++	pinctrl_i2c3_irq: i2c3irqgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI1_TXD7__GPIO4_IO19	0x1c4
++		>;
++	};
++
++	pinctrl_gpio_keys: gpiokeysgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07	0x80 // FUNCTION_INT
++		>;
++	};
++
++	pinctrl_hpdet: hpdetgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI1_MCLK__GPIO4_IO20	0x1C6
++		>;
++	};
++
++	pinctrl_usb0_pwr_en: usb0pwrengrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14	0x16
++		>;
++	};
++
++	pinctrl_gpio1_hog: gpio1hoggrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO01__GPIO1_IO01	0x19	// GPIO_USB_MUX_SEL(Need check boot status is high or low)
++		>;
++	};
++
++	pinctrl_gpio4_hog: gpio4hoggrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI2_TXFS__GPIO4_IO24	0x19	// UART_MODE0
++			MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25	0x19	// UART_MODE1
++			MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28	0x80	// HWID_2
++			MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29	0x80	// HWID_3
++		>;
++	};
++
++	pinctrl_gpio5_hog: gpio5hoggrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05	0x00000106	// HWID_1
++		>;
++	};
++
++	pinctrl_uart1: uart1grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_UART1_RXD__UART1_DCE_RX	0x140
++			MX8MP_IOMUXC_UART1_TXD__UART1_DCE_TX	0x140
++			MX8MP_IOMUXC_UART3_RXD__UART1_DCE_CTS	0x140
++			MX8MP_IOMUXC_UART3_TXD__UART1_DCE_RTS	0x140
++		>;
++	};
++
++	pinctrl_usb0_id: usb0-id-grp {
++		fsl,pins = <
++			// MX8MP_IOMUXC_GPIO1_IO10__USB1_ID		0x19 // DNU - do not use
++			MX8MP_IOMUXC_GPIO1_IO10__GPIO1_IO10		0x19
++		>;
++	};
++
++	pinctrl_usb0_oc: usb0-oc-grp {
++		fsl,pins = <
++			// MX8MP_IOMUXC_GPIO1_IO15__USB2_OC		0x19
++			MX8MP_IOMUXC_GPIO1_IO15__GPIO1_IO15		0x19
++		>;
++	};
++
++//	pinctrl_usb1_oc: usb1ocgrp {
++//		fsl,pins = <
++//			MX8MP_IOMUXC_GPIO1_IO13__USB1_OC		0x19
++//		>;
++//	};
++
++	pinctrl_uart2: uart2grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_UART2_RXD__UART2_DCE_RX	0x140
++			MX8MP_IOMUXC_UART2_TXD__UART2_DCE_TX	0x140
++		>;
++	};
++
++	pinctrl_uart3: uart3grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_ECSPI1_SCLK__UART3_DCE_RX		0x140
++			MX8MP_IOMUXC_ECSPI1_MOSI__UART3_DCE_TX		0x140
++			MX8MP_IOMUXC_ECSPI1_SS0__UART3_DCE_RTS		0x140
++			MX8MP_IOMUXC_ECSPI1_MISO__UART3_DCE_CTS		0x140
++		>;
++	};
++
++	pinctrl_uart4: uart4grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_NAND_DATA00__UART4_DCE_RX		0x140
++			MX8MP_IOMUXC_NAND_DATA01__UART4_DCE_TX		0x140
++			MX8MP_IOMUXC_NAND_DATA02__UART4_DCE_CTS		0x140
++			MX8MP_IOMUXC_NAND_DATA03__UART4_DCE_RTS		0x140
++		>;
++	};
++
++	pinctrl_usdhc2: usdhc2grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK	0x190
++			MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD	0x1d0
++			MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0	0x1d0
++			MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1	0x1d0
++			MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2	0x1d0
++			MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3	0x1d0
++			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0xc1
++		>;
++	};
++
++	pinctrl_usdhc2_100mhz: usdhc2-100mhzgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK	0x194
++			MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD	0x1d4
++			MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0	0x1d4
++			MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1	0x1d4
++			MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2	0x1d4
++			MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3	0x1d4
++			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT 0xc1
++		>;
++	};
++
++	pinctrl_usdhc2_200mhz: usdhc2-200mhzgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK	0x196
++			MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD	0x1d6
++			MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0	0x1d6
++			MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1	0x1d6
++			MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2	0x1d6
++			MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3	0x1d6
++			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT 0xc1
++		>;
++	};
++
++	pinctrl_usdhc2_gpio: usdhc2gpiogrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SD2_CD_B__GPIO2_IO12	0x1c4
++		>;
++	};
++
++	pinctrl_usdhc3: usdhc3grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_NAND_WE_B__USDHC3_CLK	0x190
++			MX8MP_IOMUXC_NAND_WP_B__USDHC3_CMD	0x1d0
++			MX8MP_IOMUXC_NAND_DATA04__USDHC3_DATA0	0x1d0
++			MX8MP_IOMUXC_NAND_DATA05__USDHC3_DATA1	0x1d0
++			MX8MP_IOMUXC_NAND_DATA06__USDHC3_DATA2	0x1d0
++			MX8MP_IOMUXC_NAND_DATA07__USDHC3_DATA3	0x1d0
++			MX8MP_IOMUXC_NAND_RE_B__USDHC3_DATA4	0x1d0
++			MX8MP_IOMUXC_NAND_CE2_B__USDHC3_DATA5	0x1d0
++			MX8MP_IOMUXC_NAND_CE3_B__USDHC3_DATA6	0x1d0
++			MX8MP_IOMUXC_NAND_CLE__USDHC3_DATA7	0x1d0
++			MX8MP_IOMUXC_NAND_CE1_B__USDHC3_STROBE	0x190
++		>;
++	};
++
++	pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_NAND_WE_B__USDHC3_CLK	0x194
++			MX8MP_IOMUXC_NAND_WP_B__USDHC3_CMD	0x1d4
++			MX8MP_IOMUXC_NAND_DATA04__USDHC3_DATA0	0x1d4
++			MX8MP_IOMUXC_NAND_DATA05__USDHC3_DATA1	0x1d4
++			MX8MP_IOMUXC_NAND_DATA06__USDHC3_DATA2	0x1d4
++			MX8MP_IOMUXC_NAND_DATA07__USDHC3_DATA3	0x1d4
++			MX8MP_IOMUXC_NAND_RE_B__USDHC3_DATA4	0x1d4
++			MX8MP_IOMUXC_NAND_CE2_B__USDHC3_DATA5	0x1d4
++			MX8MP_IOMUXC_NAND_CE3_B__USDHC3_DATA6	0x1d4
++			MX8MP_IOMUXC_NAND_CLE__USDHC3_DATA7	0x1d4
++			MX8MP_IOMUXC_NAND_CE1_B__USDHC3_STROBE	0x194
++		>;
++	};
++
++	pinctrl_usdhc3_200mhz: usdhc3-200mhzgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_NAND_WE_B__USDHC3_CLK	0x196
++			MX8MP_IOMUXC_NAND_WP_B__USDHC3_CMD	0x1d6
++			MX8MP_IOMUXC_NAND_DATA04__USDHC3_DATA0	0x1d6
++			MX8MP_IOMUXC_NAND_DATA05__USDHC3_DATA1	0x1d6
++			MX8MP_IOMUXC_NAND_DATA06__USDHC3_DATA2	0x1d6
++			MX8MP_IOMUXC_NAND_DATA07__USDHC3_DATA3	0x1d6
++			MX8MP_IOMUXC_NAND_RE_B__USDHC3_DATA4	0x1d6
++			MX8MP_IOMUXC_NAND_CE2_B__USDHC3_DATA5	0x1d6
++			MX8MP_IOMUXC_NAND_CE3_B__USDHC3_DATA6	0x1d6
++			MX8MP_IOMUXC_NAND_CLE__USDHC3_DATA7	0x1d6
++			MX8MP_IOMUXC_NAND_CE1_B__USDHC3_STROBE	0x196
++		>;
++	};
++
++	pinctrl_wdog: wdoggrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO02__WDOG1_WDOG_B	0x166
++		>;
++	};
++};
++
++&vpu_g1 {
++	status = "okay";
++};
++
++&vpu_g2 {
++	status = "okay";
++};
++
++&vpu_vc8000e {
++	status = "okay";
++};
++
++&vpu_v4l2 {
++	status = "okay";
++};
++
++&gpu_3d {
++	status = "okay";
++};
++
++&gpu_2d {
++	status = "okay";
++};
++
++&ml_vipsi {
++	status = "okay";
++};
++
++&mix_gpu_ml {
++	status = "okay";
++};
++
++#include "imx8mp-android.dtsi"
+diff --git a/arch/arm64/configs/sp2imx8mp_gki.fragment b/arch/arm64/configs/sp2imx8mp_gki.fragment
+new file mode 100644
+index 000000000000..31758d12e102
+--- /dev/null
++++ b/arch/arm64/configs/sp2imx8mp_gki.fragment
+@@ -0,0 +1,162 @@
++CONFIG_ARCH_NXP=y
++CONFIG_ARCH_MXC=y
++CONFIG_SOC_IMX8M=m
++CONFIG_IMX8M_BLK_CTRL=m
++CONFIG_MXC_CLK=m
++CONFIG_CLK_IMX8MP=m
++CONFIG_DEVICE_THERMAL=m
++CONFIG_IMX8MM_THERMAL=m
++CONFIG_IMX8M_PM_DOMAINS=m
++CONFIG_IMX_GPCV2_PM_DOMAINS=m
++CONFIG_PINCTRL_IMX=m
++CONFIG_PINCTRL_IMX8MP=m
++CONFIG_SERIAL_IMX=m
++CONFIG_SERIAL_IMX_CONSOLE=m
++CONFIG_IMX2_WDT=m
++CONFIG_I2C_IMX=m
++CONFIG_I2C_CHARDEV=m
++CONFIG_REGULATOR_PCA9450=m
++CONFIG_PWM_IMX27=m
++CONFIG_BACKLIGHT_PWM=m
++CONFIG_MMC_SDHCI_ESDHC_IMX=m
++CONFIG_PHY_FSL_IMX8MP_LVDS=m
++CONFIG_PHY_SAMSUNG_HDMI_PHY=m
++CONFIG_MXC_GPU_VIV=m
++CONFIG_IMX8MM_LCDIF_CORE=m
++CONFIG_DRM_I2C_ADV7511=m
++CONFIG_DRM_IMX_CDNS_MHDP=m
++CONFIG_DRM_CDNS_HDCP=m
++CONFIG_DRM_IMX8MP_LDB=m
++CONFIG_DRM_FSL_IMX_LVDS_BRIDGE=m
++CONFIG_DRM_ITE_IT6263=m
++CONFIG_DRM_IMX_SEC_DSIM=m
++CONFIG_DRM_DW_HDMI_CEC=m
++CONFIG_DRM_DW_HDMI_GP_AUDIO=m
++CONFIG_DRM_IMX_HDMI=m
++CONFIG_DRM_IMX=m
++CONFIG_DRM_PANEL_RAYDIUM_RM67191=m
++CONFIG_DRM_PANEL_SIMPLE=m
++CONFIG_IMX_LCDIFV3_CORE=m
++CONFIG_PHY_FSL_IMX8MQ_USB=m
++CONFIG_USB_DWC3_IMX8MP=m
++CONFIG_TYPEC_SWITCH_GPIO=m
++
++CONFIG_IMX_SDMA=m
++CONFIG_SND_SOC_IMX_CARD=m
++CONFIG_SND_IMX_SOC=m
++CONFIG_SND_SOC_FSL_ASRC=m
++CONFIG_SND_SOC_FSL_EASRC=m
++CONFIG_SND_SOC_SGTL5000=m
++CONFIG_SND_SOC_WM8962=m
++CONFIG_SND_SOC_FSL_ASOC_CARD=m
++CONFIG_SND_SOC_BT_SCO=m
++CONFIG_SND_SIMPLE_CARD=m
++CONFIG_SND_SOC_FSL_MICFIL=m
++CONFIG_SND_SOC_FSL_AUD2HTX=m
++CONFIG_SND_SOC_IMX_HDMI=m
++CONFIG_IMX_DSP_REMOTEPROC=m
++CONFIG_DMABUF_HEAPS_DSP=m
++
++CONFIG_IMX_MBOX=m
++CONFIG_IMX_LPA_CTRL=m
++CONFIG_I2C_RPBUS=m
++CONFIG_SND_SOC_IMX_RPMSG=m
++CONFIG_SND_SOC_IMX_PCM512X_RPMSG=m
++CONFIG_IMX_REMOTEPROC=m
++CONFIG_SND_SOC_IMX_SGTL5000=m
++CONFIG_SND_SOC_RPMSG_PCM512X=m
++CONFIG_SND_SOC_RPMSG_PCM512X_I2C=m
++CONFIG_SND_SOC_FSL_RPMSG=m
++CONFIG_SND_SOC_TPA6130A2=m
++CONFIG_SND_SOC_SOF_OF=m
++CONFIG_SND_SOC_SOF_TOPLEVEL=y
++CONFIG_SND_SOC_SOF_IMX8M=m
++CONFIG_SND_SOC_SOF_IMX_TOPLEVEL=y
++CONFIG_IMX_DSP=m
++
++CONFIG_RTC_DRV_SNVS=m
++
++CONFIG_TOUCHSCREEN_GOODIX=m
++CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_I2C=m
++CONFIG_KEYBOARD_SNVS_PWRKEY=m
++
++CONFIG_PHY_FSL_IMX8M_PCIE=m
++CONFIG_PCI_IMX6=m
++
++CONFIG_STAGING_MEDIA=y
++CONFIG_VIDEO_OV5640=m
++CONFIG_VIDEO_IMX_CAPTURE=m
++
++CONFIG_CFG80211=m
++CONFIG_MAC80211=m
++
++CONFIG_NET_VENDOR_FREESCALE=y
++CONFIG_ETHERNET=y
++CONFIG_FEC=m
++CONFIG_STMMAC_ETH=m
++CONFIG_DWMAC_IMX8=m
++# CONFIG_PAGE_POOL_STATS is not set
++CONFIG_REALTEK_PHY=m
++
++CONFIG_TRUSTY=m
++CONFIG_TRUSTY_CRASH_IS_PANIC=y
++
++# CONFIG_MXC_HANTRO is not set
++CONFIG_MXC_HANTRO_VC8000E=m
++CONFIG_MXC_HANTRO_845=m
++CONFIG_MXC_HANTRO_V4L2=m
++
++# CONFIG_BATTERY_DUMMY is not set
++
++CONFIG_RESET_IMX7=m
++CONFIG_IMX8M_BUSFREQ=m
++CONFIG_IMX_IRQSTEER=m
++CONFIG_GPIO_MXC=m
++CONFIG_TIMER_IMX_SYS_CTR=m
++
++CONFIG_FPGA=y
++
++CONFIG_NVMEM_IMX_OCOTP=m
++CONFIG_CPUFREQ_DT=m
++CONFIG_ARM_IMX_CPUFREQ_DT=m
++
++# CONFIG_ARM64_BTI_KERNEL is not set
++
++CONFIG_DMABUF_HEAPS_SYSTEM=m
++CONFIG_DMABUF_HEAPS_CMA=m
++CONFIG_DMABUF_IMX=m
++
++# CONFIG_IMX_SEC_ENCLAVE is not set
++# CONFIG_IMX_RPMSG_TTY is not set
++CONFIG_ZRAM=m
++CONFIG_ZSMALLOC=m
++
++# CONFIG_DEBUG_INFO_BTF_MODULES is not set
++
++CONFIG_FSL_IMX8_DDR_PMU=m
++# CONFIG_SOC_IMX9 is not set
++# CONFIG_MODULE_SIG_ALL is not set
++CONFIG_IMX_GKI_FIX=y
++#adlink
++CONFIG_SYSFS=y
++CONFIG_GPIOLIB=y
++CONFIG_GPIO_SYSFS=y
++CONFIG_EXTCON_USB_GPIO=m
++CONFIG_RTC_DRV_PCF85063=y
++CONFIG_PINCTRL_SX150X=y
++CONFIG_MTD=y
++CONFIG_SPI_IMX=y
++CONFIG_SPI_SPIDEV=y
++CONFIG_ARCH_LAYERSCAPE=y
++CONFIG_MTD_SPI_NOR=y
++CONFIG_EEPROM_AT24=y
++CONFIG_CAN_FLEXCAN=y
++CONFIG_CAN_RAW=y
++CONFIG_CAN=y
++CONFIG_CAN_BCM=y
++CONFIG_CAN_GW=y
++CONFIG_DRM_PANEL_LVDS=m
++CONFIG_FW_LOADER=y
++CONFIG_WLAN_VENDOR_MARVELL=y
++CONFIG_PWRSEQ_SIMPLE=y
++CONFIG_INPUT_PWM_BEEPER=y
+diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+index 0222b1ddb310..acb1f0d48cbb 100644
+--- a/drivers/char/tpm/Makefile
++++ b/drivers/char/tpm/Makefile
+@@ -24,6 +24,7 @@ obj-$(CONFIG_TCG_TIS) += tpm_tis.o
+ obj-$(CONFIG_TCG_TIS_SYNQUACER) += tpm_tis_synquacer.o
+ 
+ obj-$(CONFIG_TCG_TIS_SPI) += tpm_tis_spi.o
++obj-$(CONFIG_TCG_TIS_I2C) += tpm_tis_i2c.o
+ tpm_tis_spi-y := tpm_tis_spi_main.o
+ tpm_tis_spi-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
+ 
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index 66b16d26eecc..e691c2c7c793 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -64,6 +64,8 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+ 	int rc;
+ 	ssize_t len = 0;
+ 	u32 count, ordinal;
++	//change ST@2020.10.29
++	unsigned int delay_msec = TPM_TIMEOUT_POLL;
+ 	unsigned long stop;
+ 
+ 	if (bufsiz < TPM_HEADER_SIZE)
+@@ -114,7 +116,10 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+ 			return -ECANCELED;
+ 		}
+ 
+-		tpm_msleep(TPM_TIMEOUT_POLL);
++		//change ST@2020.10.29
++		//tpm_msleep(TPM_TIMEOUT_POLL);
++		tpm_msleep(delay_msec);
++		delay_msec = delay_msec+delay_msec;
+ 		rmb();
+ 	} while (time_before(jiffies, stop));
+ 
+@@ -157,6 +162,7 @@ ssize_t tpm_transmit(struct tpm_chip *chip, u8 *buf, size_t bufsiz)
+ 	u8 save[TPM_HEADER_SIZE + 3*sizeof(u32)];
+ 	unsigned int delay_msec = TPM2_DURATION_SHORT;
+ 	u32 rc = 0;
++	u32 i = TPM_RETRY;
+ 	ssize_t ret;
+ 	const size_t save_size = min(sizeof(save), bufsiz);
+ 	/* the command code is where the return code will be */
+@@ -172,7 +178,14 @@ ssize_t tpm_transmit(struct tpm_chip *chip, u8 *buf, size_t bufsiz)
+ 	for (;;) {
+ 		ret = tpm_try_transmit(chip, buf, bufsiz);
+ 		if (ret < 0)
+-			break;
++			{
++			i--;
++			if (i<=0)
++				break;
++		}
++		else
++		{
++
+ 		rc = be32_to_cpu(header->return_code);
+ 		if (rc != TPM2_RC_RETRY && rc != TPM2_RC_TESTING)
+ 			break;
+@@ -194,6 +207,7 @@ ssize_t tpm_transmit(struct tpm_chip *chip, u8 *buf, size_t bufsiz)
+ 		tpm_msleep(delay_msec);
+ 		delay_msec *= 2;
+ 		memcpy(buf, save, save_size);
++		}
+ 	}
+ 	return ret;
+ }
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index f6aa0dfadb93..c444b3d0b2b9 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -24,12 +24,9 @@
+ #include <linux/wait.h>
+ #include <linux/acpi.h>
+ #include <linux/freezer.h>
+-#include <linux/dmi.h>
+ #include "tpm.h"
+ #include "tpm_tis_core.h"
+ 
+-#define TPM_TIS_MAX_UNHANDLED_IRQS	1000
+-
+ static void tpm_tis_clkrun_enable(struct tpm_chip *chip, bool value);
+ 
+ static bool wait_for_tpm_stat_cond(struct tpm_chip *chip, u8 mask,
+@@ -47,20 +44,6 @@ static bool wait_for_tpm_stat_cond(struct tpm_chip *chip, u8 mask,
+ 	return false;
+ }
+ 
+-static u8 tpm_tis_filter_sts_mask(u8 int_mask, u8 sts_mask)
+-{
+-	if (!(int_mask & TPM_INTF_STS_VALID_INT))
+-		sts_mask &= ~TPM_STS_VALID;
+-
+-	if (!(int_mask & TPM_INTF_DATA_AVAIL_INT))
+-		sts_mask &= ~TPM_STS_DATA_AVAIL;
+-
+-	if (!(int_mask & TPM_INTF_CMD_READY_INT))
+-		sts_mask &= ~TPM_STS_COMMAND_READY;
+-
+-	return sts_mask;
+-}
+-
+ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
+ 		unsigned long timeout, wait_queue_head_t *queue,
+ 		bool check_cancel)
+@@ -70,56 +53,88 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
+ 	long rc;
+ 	u8 status;
+ 	bool canceled = false;
+-	u8 sts_mask;
+-	int ret = 0;
+ 
+ 	/* check current status */
+ 	status = chip->ops->status(chip);
+ 	if ((status & mask) == mask)
+ 		return 0;
+ 
+-	sts_mask = mask & (TPM_STS_VALID | TPM_STS_DATA_AVAIL |
+-			   TPM_STS_COMMAND_READY);
+-	/* check what status changes can be handled by irqs */
+-	sts_mask = tpm_tis_filter_sts_mask(priv->int_mask, sts_mask);
+-
+ 	stop = jiffies + timeout;
+-	/* process status changes with irq support */
+-	if (sts_mask) {
+-		ret = -ETIME;
++
++	if (chip->flags & TPM_CHIP_FLAG_IRQ) {
+ again:
+ 		timeout = stop - jiffies;
+ 		if ((long)timeout <= 0)
+ 			return -ETIME;
+ 		rc = wait_event_interruptible_timeout(*queue,
+-			wait_for_tpm_stat_cond(chip, sts_mask, check_cancel,
++			wait_for_tpm_stat_cond(chip, mask, check_cancel,
+ 					       &canceled),
+ 			timeout);
+ 		if (rc > 0) {
+ 			if (canceled)
+ 				return -ECANCELED;
+-			ret = 0;
++			return 0;
+ 		}
+ 		if (rc == -ERESTARTSYS && freezing(current)) {
+ 			clear_thread_flag(TIF_SIGPENDING);
+ 			goto again;
+ 		}
++	} else {
++		do {
++			usleep_range(priv->timeout_min,
++				     priv->timeout_max);
++			status = chip->ops->status(chip);
++			if ((status & mask) == mask)
++				return 0;
++		} while (time_before(jiffies, stop));
+ 	}
++	return -ETIME;
++}
+ 
+-	if (ret)
+-		return ret;
++static int wait_for_tpm_stat_result (struct tpm_chip *chip, u8 mask ,u8 mask_result
++,unsigned long timeout, wait_queue_head_t *queue,	bool check_cancel)
++{
++	unsigned long stop;
++	long rc;
++	u8 status;
++	bool canceled = false;
++	/* check current status */
++	status = chip->ops->status(chip);
+ 
+-	mask &= ~sts_mask;
+-	if (!mask) /* all done */
+-		return 0;
+-	/* process status changes without irq support */
+-	do {
+-		status = chip->ops->status(chip);
+-		if ((status & mask) == mask)
++	if ((status & mask) == mask_result)
++					return 0;
++
++	stop = jiffies + timeout;
++
++	if (chip->flags & TPM_CHIP_FLAG_IRQ) {
++again:
++		timeout = stop - jiffies;
++		if ((long)timeout <= 0)
++			return -ETIME;
++		rc = wait_event_interruptible_timeout(*queue,
++			wait_for_tpm_stat_cond(chip, mask, check_cancel,
++					       &canceled),
++			timeout);
++		if (rc > 0) {
++			if (canceled)
++				return -ECANCELED;
+ 			return 0;
+-		usleep_range(priv->timeout_min,
+-			     priv->timeout_max);
+-	} while (time_before(jiffies, stop));
++		}
++		if (rc == -ERESTARTSYS && freezing(current)) {
++			clear_thread_flag(TIF_SIGPENDING);
++			goto again;
++		}
++	} else {
++		do {
++			usleep_range(TPM_TIMEOUT_USECS_MIN,
++				     TPM_TIMEOUT_USECS_MAX);
++			status = chip->ops->status(chip);
++
++			if ((status & mask) == mask_result)
++					return 0;
++
++		} while (time_before(jiffies, stop));
++	}
+ 	return -ETIME;
+ }
+ 
+@@ -168,27 +183,16 @@ static bool check_locality(struct tpm_chip *chip, int l)
+ 	return false;
+ }
+ 
+-static int __tpm_tis_relinquish_locality(struct tpm_tis_data *priv, int l)
+-{
+-	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
+-
+-	return 0;
+-}
+-
+-static int tpm_tis_relinquish_locality(struct tpm_chip *chip, int l)
++static int release_locality(struct tpm_chip *chip, int l)
+ {
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+ 
+-	mutex_lock(&priv->locality_count_mutex);
+-	priv->locality_count--;
+-	if (priv->locality_count == 0)
+-		__tpm_tis_relinquish_locality(priv, l);
+-	mutex_unlock(&priv->locality_count_mutex);
++	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
+ 
+ 	return 0;
+ }
+ 
+-static int __tpm_tis_request_locality(struct tpm_chip *chip, int l)
++static int request_locality(struct tpm_chip *chip, int l)
+ {
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+ 	unsigned long stop, timeout;
+@@ -229,20 +233,6 @@ static int __tpm_tis_request_locality(struct tpm_chip *chip, int l)
+ 	return -1;
+ }
+ 
+-static int tpm_tis_request_locality(struct tpm_chip *chip, int l)
+-{
+-	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+-	int ret = 0;
+-
+-	mutex_lock(&priv->locality_count_mutex);
+-	if (priv->locality_count == 0)
+-		ret = __tpm_tis_request_locality(chip, l);
+-	if (!ret)
+-		priv->locality_count++;
+-	mutex_unlock(&priv->locality_count_mutex);
+-	return ret;
+-}
+-
+ static u8 tpm_tis_status(struct tpm_chip *chip)
+ {
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+@@ -278,6 +268,16 @@ static u8 tpm_tis_status(struct tpm_chip *chip)
+ 	return status;
+ }
+ 
++static bool tpm_tis_check_data(struct tpm_chip *chip, const u8 *buf,
++size_t len) {
++	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
++
++	if (priv->phy_ops->check_data)
++		return priv->phy_ops->check_data(priv, buf, len);
++	return true;
++}
++
++
+ static void tpm_tis_ready(struct tpm_chip *chip)
+ {
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+@@ -340,14 +340,20 @@ static int recv_data(struct tpm_chip *chip, u8 *buf, size_t count)
+ 	return size;
+ }
+ 
+-static int tpm_tis_try_recv(struct tpm_chip *chip, u8 *buf, size_t count)
++static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+ {
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+ 	int size = 0;
+-	int status;
++	int status,i;
+ 	u32 expected;
+-	int rc;
++	bool check_data = false;
+ 
++	for (i = 0; i < TPM_RETRY; i++)
++	{
++		if (count < TPM_HEADER_SIZE) {
++			size = -EIO;
++			goto out;
++		}
+ 	size = recv_data(chip, buf, TPM_HEADER_SIZE);
+ 	/* read first 10 bytes, including tag, paramsize, and result */
+ 	if (size < TPM_HEADER_SIZE) {
+@@ -361,13 +367,8 @@ static int tpm_tis_try_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+ 		goto out;
+ 	}
+ 
+-	rc = recv_data(chip, &buf[TPM_HEADER_SIZE],
+-		       expected - TPM_HEADER_SIZE);
+-	if (rc < 0) {
+-		size = rc;
+-		goto out;
+-	}
+-	size += rc;
++	size += recv_data(chip, &buf[TPM_HEADER_SIZE],
++			  expected - TPM_HEADER_SIZE);
+ 	if (size < expected) {
+ 		dev_err(&chip->dev, "Unable to read remainder of result\n");
+ 		size = -ETIME;
+@@ -375,53 +376,31 @@ static int tpm_tis_try_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+ 	}
+ 
+ 	if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+-				&priv->int_queue, false) < 0) {
+-		size = -ETIME;
+-		goto out;
+-	}
+-	status = tpm_tis_status(chip);
+-	if (status & TPM_STS_DATA_AVAIL) {
+-		dev_err(&chip->dev, "Error left over data\n");
+-		size = -EIO;
+-		goto out;
+-	}
+-
+-	rc = tpm_tis_verify_crc(priv, (size_t)size, buf);
+-	if (rc < 0) {
+-		dev_err(&chip->dev, "CRC mismatch for response.\n");
+-		size = rc;
+-		goto out;
+-	}
+-
+-out:
+-	return size;
+-}
+-
+-static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+-{
+-	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+-	unsigned int try;
+-	int rc = 0;
+-
+-	if (count < TPM_HEADER_SIZE)
+-		return -EIO;
++				      &priv->int_queue, false) < 0) {
++			size = -ETIME;
++			goto out;
++		}
+ 
+-	for (try = 0; try < TPM_RETRY; try++) {
+-		rc = tpm_tis_try_recv(chip, buf, count);
++		status = tpm_tis_status(chip);
++		if (status & TPM_STS_DATA_AVAIL) {	/* retry? */
++			dev_err(&chip->dev, "Error left over data\n");
++			size = -EIO;
++			goto out;
++		}
+ 
+-		if (rc == -EIO)
+-			/* Data transfer errors, indicated by EIO, can be
+-			 * recovered by rereading the response.
+-			 */
++		check_data = tpm_tis_check_data(chip, buf, size);
++		if (!check_data)
+ 			tpm_tis_write8(priv, TPM_STS(priv->locality),
+ 				       TPM_STS_RESPONSE_RETRY);
+-		else
+-			break;
++		else break;
+ 	}
+ 
+-	tpm_tis_ready(chip);
++		if (!check_data)
++		 size = -EIO;
+ 
+-	return rc;
++out:
++	tpm_tis_ready(chip);
++	return size;
+ }
+ 
+ /*
+@@ -434,7 +413,7 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+ 	int rc, status, burstcnt;
+ 	size_t count = 0;
+-	bool itpm = test_bit(TPM_TIS_ITPM_WORKAROUND, &priv->flags);
++
+ 
+ 	status = tpm_tis_status(chip);
+ 	if ((status & TPM_STS_COMMAND_READY) == 0) {
+@@ -461,40 +440,26 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 			goto out_err;
+ 
+ 		count += burstcnt;
++        if (wait_for_tpm_stat_result (chip, TPM_STS_VALID | TPM_STS_DATA_EXPECT,TPM_STS_VALID | TPM_STS_DATA_EXPECT, chip->timeout_c,
++				&priv->int_queue, false) < 0) {
++		rc = -ETIME;
++		goto out_err;
++	    }
+ 
+-		if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+-					&priv->int_queue, false) < 0) {
+-			rc = -ETIME;
+-			goto out_err;
+-		}
+-		status = tpm_tis_status(chip);
+-		if (!itpm && (status & TPM_STS_DATA_EXPECT) == 0) {
+-			rc = -EIO;
+-			goto out_err;
+-		}
+ 	}
+ 
+ 	/* write last byte */
+ 	rc = tpm_tis_write8(priv, TPM_DATA_FIFO(priv->locality), buf[count]);
++
+ 	if (rc < 0)
+ 		goto out_err;
+ 
+-	if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+-				&priv->int_queue, false) < 0) {
+-		rc = -ETIME;
+-		goto out_err;
+-	}
+-	status = tpm_tis_status(chip);
+-	if (!itpm && (status & TPM_STS_DATA_EXPECT) != 0) {
+-		rc = -EIO;
+-		goto out_err;
++	if (wait_for_tpm_stat_result(chip, TPM_STS_VALID | TPM_STS_DATA_EXPECT, TPM_STS_VALID , chip->timeout_a,
++					&priv->int_queue, false) < 0) {
++			rc = -ETIME;
++			goto out_err;
+ 	}
+ 
+-	rc = tpm_tis_verify_crc(priv, len, buf);
+-	if (rc < 0) {
+-		dev_err(&chip->dev, "CRC mismatch for command.\n");
+-		goto out_err;
+-	}
+ 
+ 	return 0;
+ 
+@@ -503,29 +468,25 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 	return rc;
+ }
+ 
+-static void __tpm_tis_disable_interrupts(struct tpm_chip *chip)
+-{
+-	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+-	u32 int_mask = 0;
+-
+-	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &int_mask);
+-	int_mask &= ~TPM_GLOBAL_INT_ENABLE;
+-	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), int_mask);
+-
+-	chip->flags &= ~TPM_CHIP_FLAG_IRQ;
+-}
+-
+-static void tpm_tis_disable_interrupts(struct tpm_chip *chip)
++static void disable_interrupts(struct tpm_chip *chip)
+ {
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
++	u32 intmask;
++	int rc;
+ 
+ 	if (priv->irq == 0)
+ 		return;
+ 
+-	__tpm_tis_disable_interrupts(chip);
++	rc = tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
++	if (rc < 0)
++		intmask = 0;
++
++	intmask &= ~TPM_GLOBAL_INT_ENABLE;
++	rc = tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+ 
+ 	devm_free_irq(chip->dev.parent, priv->irq, chip);
+ 	priv->irq = 0;
++	chip->flags &= ~TPM_CHIP_FLAG_IRQ;
+ }
+ 
+ /*
+@@ -536,22 +497,25 @@ static void tpm_tis_disable_interrupts(struct tpm_chip *chip)
+ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+ {
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+-	int rc;
++	int rc,i;
+ 	u32 ordinal;
+ 	unsigned long dur;
+-	unsigned int try;
++	bool data_valid = false;
++
++	//rc = tpm_tis_send_data(chip, buf, len);
++	//if (rc < 0)
++	//	return rc;
+ 
+-	for (try = 0; try < TPM_RETRY; try++) {
++	/* go and do it */
++	for (i = 0; i < TPM_RETRY && !data_valid; i++) {
+ 		rc = tpm_tis_send_data(chip, buf, len);
+-		if (rc >= 0)
+-			/* Data transfer done successfully */
+-			break;
+-		else if (rc != -EIO)
+-			/* Data transfer failed, not recoverable */
++		if (rc < 0)
+ 			return rc;
++		data_valid = tpm_tis_check_data(chip, buf, len);
+ 	}
++	if (!data_valid)
++		return -EIO;
+ 
+-	/* go and do it */
+ 	rc = tpm_tis_write8(priv, TPM_STS(priv->locality), TPM_STS_GO);
+ 	if (rc < 0)
+ 		goto out_err;
+@@ -578,8 +542,7 @@ static int tpm_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
+ 	int rc, irq;
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+ 
+-	if (!(chip->flags & TPM_CHIP_FLAG_IRQ) ||
+-	     test_bit(TPM_TIS_IRQ_TESTED, &priv->flags))
++	if (!(chip->flags & TPM_CHIP_FLAG_IRQ) || priv->irq_tested)
+ 		return tpm_tis_send_main(chip, buf, len);
+ 
+ 	/* Verify receipt of the expected IRQ */
+@@ -589,11 +552,11 @@ static int tpm_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
+ 	rc = tpm_tis_send_main(chip, buf, len);
+ 	priv->irq = irq;
+ 	chip->flags |= TPM_CHIP_FLAG_IRQ;
+-	if (!test_bit(TPM_TIS_IRQ_TESTED, &priv->flags))
++	if (!priv->irq_tested)
+ 		tpm_msleep(1);
+-	if (!test_bit(TPM_TIS_IRQ_TESTED, &priv->flags))
+-		tpm_tis_disable_interrupts(chip);
+-	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
++	if (!priv->irq_tested)
++		disable_interrupts(chip);
++	priv->irq_tested = true;
+ 	return rc;
+ }
+ 
+@@ -736,7 +699,7 @@ static int probe_itpm(struct tpm_chip *chip)
+ 	size_t len = sizeof(cmd_getticks);
+ 	u16 vendor;
+ 
+-	if (test_bit(TPM_TIS_ITPM_WORKAROUND, &priv->flags))
++	if (priv->flags & TPM_TIS_ITPM_WORKAROUND)
+ 		return 0;
+ 
+ 	rc = tpm_tis_read16(priv, TPM_DID_VID(0), &vendor);
+@@ -747,7 +710,7 @@ static int probe_itpm(struct tpm_chip *chip)
+ 	if (vendor != TPM_VID_INTEL)
+ 		return 0;
+ 
+-	if (tpm_tis_request_locality(chip, 0) != 0)
++	if (request_locality(chip, 0) != 0)
+ 		return -EBUSY;
+ 
+ 	rc = tpm_tis_send_data(chip, cmd_getticks, len);
+@@ -756,91 +719,26 @@ static int probe_itpm(struct tpm_chip *chip)
+ 
+ 	tpm_tis_ready(chip);
+ 
+-	set_bit(TPM_TIS_ITPM_WORKAROUND, &priv->flags);
++	priv->flags |= TPM_TIS_ITPM_WORKAROUND;
+ 
+ 	rc = tpm_tis_send_data(chip, cmd_getticks, len);
+ 	if (rc == 0)
+ 		dev_info(&chip->dev, "Detected an iTPM.\n");
+ 	else {
+-		clear_bit(TPM_TIS_ITPM_WORKAROUND, &priv->flags);
++		priv->flags &= ~TPM_TIS_ITPM_WORKAROUND;
+ 		rc = -EFAULT;
+ 	}
+ 
+ out:
+ 	tpm_tis_ready(chip);
+-	tpm_tis_relinquish_locality(chip, priv->locality);
++	release_locality(chip, priv->locality);
+ 
+ 	return rc;
+ }
+ 
+ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
+ {
+-	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+-
+-	if (!test_bit(TPM_TIS_DEFAULT_CANCELLATION, &priv->flags)) {
+-		switch (priv->manufacturer_id) {
+-		case TPM_VID_WINBOND:
+-			return ((status == TPM_STS_VALID) ||
+-				(status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
+-		case TPM_VID_STM:
+-			return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
+-		default:
+-			break;
+-		}
+-	}
+-
+-	return status == TPM_STS_COMMAND_READY;
+-}
+-
+-static irqreturn_t tpm_tis_revert_interrupts(struct tpm_chip *chip)
+-{
+-	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+-	const char *product;
+-	const char *vendor;
+-
+-	dev_warn(&chip->dev, FW_BUG
+-		 "TPM interrupt storm detected, polling instead\n");
+-
+-	vendor = dmi_get_system_info(DMI_SYS_VENDOR);
+-	product = dmi_get_system_info(DMI_PRODUCT_VERSION);
+-
+-	if (vendor && product) {
+-		dev_info(&chip->dev,
+-			"Consider adding the following entry to tpm_tis_dmi_table:\n");
+-		dev_info(&chip->dev, "\tDMI_SYS_VENDOR: %s\n", vendor);
+-		dev_info(&chip->dev, "\tDMI_PRODUCT_VERSION: %s\n", product);
+-	}
+-
+-	if (tpm_tis_request_locality(chip, 0) != 0)
+-		return IRQ_NONE;
+-
+-	__tpm_tis_disable_interrupts(chip);
+-	tpm_tis_relinquish_locality(chip, 0);
+-
+-	schedule_work(&priv->free_irq_work);
+-
+-	return IRQ_HANDLED;
+-}
+-
+-static irqreturn_t tpm_tis_update_unhandled_irqs(struct tpm_chip *chip)
+-{
+-	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+-	irqreturn_t irqret = IRQ_HANDLED;
+-
+-	if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
+-		return IRQ_HANDLED;
+-
+-	if (time_after(jiffies, priv->last_unhandled_irq + HZ/10))
+-		priv->unhandled_irqs = 1;
+-	else
+-		priv->unhandled_irqs++;
+-
+-	priv->last_unhandled_irq = jiffies;
+-
+-	if (priv->unhandled_irqs > TPM_TIS_MAX_UNHANDLED_IRQS)
+-		irqret = tpm_tis_revert_interrupts(chip);
+-
+-	return irqret;
++	return ((status & TPM_STS_COMMAND_READY) == TPM_STS_COMMAND_READY);
+ }
+ 
+ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+@@ -848,63 +746,55 @@ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+ 	struct tpm_chip *chip = dev_id;
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+ 	u32 interrupt;
+-	int rc;
++	int i, rc;
+ 
+ 	rc = tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
+ 	if (rc < 0)
+-		goto err;
++		return IRQ_NONE;
+ 
+ 	if (interrupt == 0)
+-		goto err;
++		return IRQ_NONE;
+ 
+-	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
++	priv->irq_tested = true;
+ 	if (interrupt & TPM_INTF_DATA_AVAIL_INT)
+ 		wake_up_interruptible(&priv->read_queue);
+-
++	if (interrupt & TPM_INTF_LOCALITY_CHANGE_INT)
++		for (i = 0; i < 5; i++)
++			if (check_locality(chip, i))
++				break;
+ 	if (interrupt &
+ 	    (TPM_INTF_LOCALITY_CHANGE_INT | TPM_INTF_STS_VALID_INT |
+ 	     TPM_INTF_CMD_READY_INT))
+ 		wake_up_interruptible(&priv->int_queue);
+ 
+ 	/* Clear interrupts handled with TPM_EOI */
+-	tpm_tis_request_locality(chip, 0);
+ 	rc = tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrupt);
+-	tpm_tis_relinquish_locality(chip, 0);
+ 	if (rc < 0)
+-		goto err;
++		return IRQ_NONE;
+ 
+ 	tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
+ 	return IRQ_HANDLED;
+-
+-err:
+-	return tpm_tis_update_unhandled_irqs(chip);
+ }
+ 
+-static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
++static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
+ {
+ 	const char *desc = "attempting to generate an interrupt";
+ 	u32 cap2;
+ 	cap_t cap;
+ 	int ret;
+ 
+-	chip->flags |= TPM_CHIP_FLAG_IRQ;
++	ret = request_locality(chip, 0);
++	if (ret < 0)
++		return ret;
+ 
+ 	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+ 		ret = tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
+ 	else
+ 		ret = tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc, 0);
+ 
+-	if (ret)
+-		chip->flags &= ~TPM_CHIP_FLAG_IRQ;
+-}
+-
+-static void tpm_tis_free_irq_func(struct work_struct *work)
+-{
+-	struct tpm_tis_data *priv = container_of(work, typeof(*priv), free_irq_work);
+-	struct tpm_chip *chip = priv->chip;
++	release_locality(chip, 0);
+ 
+-	devm_free_irq(chip->dev.parent, priv->irq, chip);
+-	priv->irq = 0;
++	return ret;
+ }
+ 
+ /* Register the IRQ and issue a command that will cause an interrupt. If an
+@@ -919,65 +809,60 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
+ 	int rc;
+ 	u32 int_status;
+ 
+-	rc = devm_request_threaded_irq(chip->dev.parent, irq, NULL,
+-				       tis_int_handler, IRQF_ONESHOT | flags,
+-				       dev_name(&chip->dev), chip);
+-	if (rc) {
++	if (devm_request_irq(chip->dev.parent, irq, tis_int_handler, flags,
++			     dev_name(&chip->dev), chip) != 0) {
+ 		dev_info(&chip->dev, "Unable to request irq: %d for probe\n",
+ 			 irq);
+ 		return -1;
+ 	}
+ 	priv->irq = irq;
+ 
+-	rc = tpm_tis_request_locality(chip, 0);
+-	if (rc < 0)
+-		return rc;
+-
+ 	rc = tpm_tis_read8(priv, TPM_INT_VECTOR(priv->locality),
+ 			   &original_int_vec);
+-	if (rc < 0) {
+-		tpm_tis_relinquish_locality(chip, priv->locality);
++	if (rc < 0)
+ 		return rc;
+-	}
+ 
+ 	rc = tpm_tis_write8(priv, TPM_INT_VECTOR(priv->locality), irq);
+ 	if (rc < 0)
+-		goto restore_irqs;
++		return rc;
+ 
+ 	rc = tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &int_status);
+ 	if (rc < 0)
+-		goto restore_irqs;
++		return rc;
+ 
+ 	/* Clear all existing */
+ 	rc = tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), int_status);
+ 	if (rc < 0)
+-		goto restore_irqs;
++		return rc;
++
+ 	/* Turn on */
+ 	rc = tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality),
+ 			     intmask | TPM_GLOBAL_INT_ENABLE);
+ 	if (rc < 0)
+-		goto restore_irqs;
++		return rc;
+ 
+-	clear_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
++	priv->irq_tested = false;
+ 
+ 	/* Generate an interrupt by having the core call through to
+ 	 * tpm_tis_send
+ 	 */
+-	tpm_tis_gen_interrupt(chip);
++	rc = tpm_tis_gen_interrupt(chip);
++	if (rc < 0)
++		return rc;
+ 
+-restore_irqs:
+ 	/* tpm_tis_send will either confirm the interrupt is working or it
+ 	 * will call disable_irq which undoes all of the above.
+ 	 */
+ 	if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
+-		tpm_tis_write8(priv, original_int_vec,
+-			       TPM_INT_VECTOR(priv->locality));
+-		rc = -1;
+-	}
++		rc = tpm_tis_write8(priv, original_int_vec,
++				TPM_INT_VECTOR(priv->locality));
++		if (rc < 0)
++			return rc;
+ 
+-	tpm_tis_relinquish_locality(chip, priv->locality);
++		return 1;
++	}
+ 
+-	return rc;
++	return 0;
+ }
+ 
+ /* Try to find the IRQ the TPM is using. This is for legacy x86 systems that
+@@ -1020,8 +905,6 @@ void tpm_tis_remove(struct tpm_chip *chip)
+ 		interrupt = 0;
+ 
+ 	tpm_tis_write32(priv, reg, ~TPM_GLOBAL_INT_ENABLE & interrupt);
+-	if (priv->free_irq_work.func)
+-		flush_work(&priv->free_irq_work);
+ 
+ 	tpm_tis_clkrun_enable(chip, false);
+ 
+@@ -1093,8 +976,8 @@ static const struct tpm_class_ops tpm_tis = {
+ 	.req_complete_mask = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
+ 	.req_complete_val = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
+ 	.req_canceled = tpm_tis_req_canceled,
+-	.request_locality = tpm_tis_request_locality,
+-	.relinquish_locality = tpm_tis_relinquish_locality,
++	.request_locality = request_locality,
++	.relinquish_locality = release_locality,
+ 	.clk_enable = tpm_tis_clkrun_enable,
+ };
+ 
+@@ -1125,13 +1008,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 	chip->timeout_b = msecs_to_jiffies(TIS_TIMEOUT_B_MAX);
+ 	chip->timeout_c = msecs_to_jiffies(TIS_TIMEOUT_C_MAX);
+ 	chip->timeout_d = msecs_to_jiffies(TIS_TIMEOUT_D_MAX);
+-	priv->chip = chip;
+ 	priv->timeout_min = TPM_TIMEOUT_USECS_MIN;
+ 	priv->timeout_max = TPM_TIMEOUT_USECS_MAX;
+ 	priv->phy_ops = phy_ops;
+-	priv->locality_count = 0;
+-	mutex_init(&priv->locality_count_mutex);
+-	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
+ 
+ 	dev_set_drvdata(&chip->dev, priv);
+ 
+@@ -1174,50 +1053,18 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 	if (rc < 0)
+ 		goto out_err;
+ 
+-	/* Figure out the capabilities */
+-	rc = tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfcaps);
+-	if (rc < 0)
+-		goto out_err;
+-
+-	dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
+-		intfcaps);
+-	if (intfcaps & TPM_INTF_BURST_COUNT_STATIC)
+-		dev_dbg(dev, "\tBurst Count Static\n");
+-	if (intfcaps & TPM_INTF_CMD_READY_INT) {
+-		intmask |= TPM_INTF_CMD_READY_INT;
+-		dev_dbg(dev, "\tCommand Ready Int Support\n");
+-	}
+-	if (intfcaps & TPM_INTF_INT_EDGE_FALLING)
+-		dev_dbg(dev, "\tInterrupt Edge Falling\n");
+-	if (intfcaps & TPM_INTF_INT_EDGE_RISING)
+-		dev_dbg(dev, "\tInterrupt Edge Rising\n");
+-	if (intfcaps & TPM_INTF_INT_LEVEL_LOW)
+-		dev_dbg(dev, "\tInterrupt Level Low\n");
+-	if (intfcaps & TPM_INTF_INT_LEVEL_HIGH)
+-		dev_dbg(dev, "\tInterrupt Level High\n");
+-	if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT) {
+-		intmask |= TPM_INTF_LOCALITY_CHANGE_INT;
+-		dev_dbg(dev, "\tLocality Change Int Support\n");
+-	}
+-	if (intfcaps & TPM_INTF_STS_VALID_INT) {
+-		intmask |= TPM_INTF_STS_VALID_INT;
+-		dev_dbg(dev, "\tSts Valid Int Support\n");
+-	}
+-	if (intfcaps & TPM_INTF_DATA_AVAIL_INT) {
+-		intmask |= TPM_INTF_DATA_AVAIL_INT;
+-		dev_dbg(dev, "\tData Avail Int Support\n");
+-	}
+-
++	intmask |= TPM_INTF_CMD_READY_INT | TPM_INTF_LOCALITY_CHANGE_INT |
++		   TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
+ 	intmask &= ~TPM_GLOBAL_INT_ENABLE;
+ 
+-	rc = tpm_tis_request_locality(chip, 0);
++	rc = request_locality(chip, 0);
+ 	if (rc < 0) {
+ 		rc = -ENODEV;
+ 		goto out_err;
+ 	}
+ 
+ 	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+-	tpm_tis_relinquish_locality(chip, 0);
++	release_locality(chip, 0);
+ 
+ 	rc = tpm_chip_start(chip);
+ 	if (rc)
+@@ -1241,14 +1088,35 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 		goto out_err;
+ 	}
+ 
++	/* Figure out the capabilities */
++	rc = tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfcaps);
++	if (rc < 0)
++		goto out_err;
++
++	dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
++		intfcaps);
++	if (intfcaps & TPM_INTF_BURST_COUNT_STATIC)
++		dev_dbg(dev, "\tBurst Count Static\n");
++	if (intfcaps & TPM_INTF_CMD_READY_INT)
++		dev_dbg(dev, "\tCommand Ready Int Support\n");
++	if (intfcaps & TPM_INTF_INT_EDGE_FALLING)
++		dev_dbg(dev, "\tInterrupt Edge Falling\n");
++	if (intfcaps & TPM_INTF_INT_EDGE_RISING)
++		dev_dbg(dev, "\tInterrupt Edge Rising\n");
++	if (intfcaps & TPM_INTF_INT_LEVEL_LOW)
++		dev_dbg(dev, "\tInterrupt Level Low\n");
++	if (intfcaps & TPM_INTF_INT_LEVEL_HIGH)
++		dev_dbg(dev, "\tInterrupt Level High\n");
++	if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
++		dev_dbg(dev, "\tLocality Change Int Support\n");
++	if (intfcaps & TPM_INTF_STS_VALID_INT)
++		dev_dbg(dev, "\tSts Valid Int Support\n");
++	if (intfcaps & TPM_INTF_DATA_AVAIL_INT)
++		dev_dbg(dev, "\tData Avail Int Support\n");
++
+ 	/* INTERRUPT Setup */
+ 	init_waitqueue_head(&priv->read_queue);
+ 	init_waitqueue_head(&priv->int_queue);
+-
+-	rc = tpm_chip_bootstrap(chip);
+-	if (rc)
+-		goto out_err;
+-
+ 	if (irq != -1) {
+ 		/*
+ 		 * Before doing irq testing issue a command to the TPM in polling mode
+@@ -1256,13 +1124,13 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 		 * proper timeouts for the driver.
+ 		 */
+ 
+-		rc = tpm_tis_request_locality(chip, 0);
++		rc = request_locality(chip, 0);
+ 		if (rc < 0)
+ 			goto out_err;
+ 
+ 		rc = tpm_get_timeouts(chip);
+ 
+-		tpm_tis_relinquish_locality(chip, 0);
++		release_locality(chip, 0);
+ 
+ 		if (rc) {
+ 			dev_err(dev, "Could not get TPM timeouts and durations\n");
+@@ -1270,23 +1138,17 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 			goto out_err;
+ 		}
+ 
+-		if (irq)
++		if (irq) {
+ 			tpm_tis_probe_irq_single(chip, intmask, IRQF_SHARED,
+ 						 irq);
+-		else
+-			tpm_tis_probe_irq(chip, intmask);
+-
+-		if (chip->flags & TPM_CHIP_FLAG_IRQ) {
+-			priv->int_mask = intmask;
+-		} else {
+-			dev_err(&chip->dev, FW_BUG
++			if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
++				dev_err(&chip->dev, FW_BUG
+ 					"TPM interrupt not working, polling instead\n");
+ 
+-			rc = tpm_tis_request_locality(chip, 0);
+-			if (rc < 0)
+-				goto out_err;
+-			tpm_tis_disable_interrupts(chip);
+-			tpm_tis_relinquish_locality(chip, 0);
++				disable_interrupts(chip);
++			}
++		} else {
++			tpm_tis_probe_irq(chip, intmask);
+ 		}
+ 	}
+ 
+@@ -1315,20 +1177,31 @@ static void tpm_tis_reenable_interrupts(struct tpm_chip *chip)
+ 	u32 intmask;
+ 	int rc;
+ 
+-	/*
+-	 * Re-enable interrupts that device may have lost or BIOS/firmware may
+-	 * have disabled.
++	if (chip->ops->clk_enable != NULL)
++		chip->ops->clk_enable(chip, true);
++
++	/* reenable interrupts that device may have lost or
++	 * BIOS/firmware may have disabled
+ 	 */
+ 	rc = tpm_tis_write8(priv, TPM_INT_VECTOR(priv->locality), priv->irq);
+-	if (rc < 0) {
+-		dev_err(&chip->dev, "Setting IRQ failed.\n");
+-		return;
+-	}
++	if (rc < 0)
++		goto out;
+ 
+-	intmask = priv->int_mask | TPM_GLOBAL_INT_ENABLE;
+-	rc = tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
++	rc = tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+ 	if (rc < 0)
+-		dev_err(&chip->dev, "Enabling interrupts failed.\n");
++		goto out;
++
++	intmask |= TPM_INTF_CMD_READY_INT
++	    | TPM_INTF_LOCALITY_CHANGE_INT | TPM_INTF_DATA_AVAIL_INT
++	    | TPM_INTF_STS_VALID_INT | TPM_GLOBAL_INT_ENABLE;
++
++	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
++
++out:
++	if (chip->ops->clk_enable != NULL)
++		chip->ops->clk_enable(chip, false);
++
++	return;
+ }
+ 
+ int tpm_tis_resume(struct device *dev)
+@@ -1336,25 +1209,26 @@ int tpm_tis_resume(struct device *dev)
+ 	struct tpm_chip *chip = dev_get_drvdata(dev);
+ 	int ret;
+ 
+-	ret = tpm_chip_start(chip);
+-	if (ret)
+-		return ret;
+-
+ 	if (chip->flags & TPM_CHIP_FLAG_IRQ)
+ 		tpm_tis_reenable_interrupts(chip);
+ 
++	ret = tpm_pm_resume(dev);
++	if (ret)
++		return ret;
++
+ 	/*
+ 	 * TPM 1.2 requires self-test on resume. This function actually returns
+ 	 * an error code but for unknown reason it isn't handled.
+ 	 */
+-	if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
+-		tpm1_do_selftest(chip);
++	if (!(chip->flags & TPM_CHIP_FLAG_TPM2)) {
++		ret = request_locality(chip, 0);
++		if (ret < 0)
++			return ret;
+ 
+-	tpm_chip_stop(chip);
++		tpm1_do_selftest(chip);
+ 
+-	ret = tpm_pm_resume(dev);
+-	if (ret)
+-		return ret;
++		release_locality(chip, 0);
++	}
+ 
+ 	return 0;
+ }
+diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+index 13e99cf65efe..bb7343a453a2 100644
+--- a/drivers/char/tpm/tpm_tis_core.h
++++ b/drivers/char/tpm/tpm_tis_core.h
+@@ -85,23 +85,15 @@ enum tis_defaults {
+ #define ILB_REMAP_SIZE			0x100
+ 
+ enum tpm_tis_flags {
+-	TPM_TIS_ITPM_WORKAROUND		= 0,
+-	TPM_TIS_INVALID_STATUS		= 1,
+-	TPM_TIS_DEFAULT_CANCELLATION	= 2,
+-	TPM_TIS_IRQ_TESTED		= 3,
++	TPM_TIS_ITPM_WORKAROUND		= BIT(0),
++	TPM_TIS_INVALID_STATUS		= BIT(1),
+ };
+ 
+ struct tpm_tis_data {
+-	struct tpm_chip *chip;
+ 	u16 manufacturer_id;
+-	struct mutex locality_count_mutex;
+-	unsigned int locality_count;
+ 	int locality;
+ 	int irq;
+-	struct work_struct free_irq_work;
+-	unsigned long last_unhandled_irq;
+-	unsigned int unhandled_irqs;
+-	unsigned int int_mask;
++	bool irq_tested;
+ 	unsigned long flags;
+ 	void __iomem *ilb_base_addr;
+ 	u16 clkrun_enabled;
+@@ -113,37 +105,26 @@ struct tpm_tis_data {
+ 	unsigned int timeout_max; /* usecs */
+ };
+ 
+-/*
+- * IO modes to indicate how many bytes should be read/written at once in the
+- * tpm_tis_phy_ops read_bytes/write_bytes calls. Use TPM_TIS_PHYS_8 to
+- * receive/transmit byte-wise, TPM_TIS_PHYS_16 for two bytes etc.
+- */
+-enum tpm_tis_io_mode {
+-	TPM_TIS_PHYS_8,
+-	TPM_TIS_PHYS_16,
+-	TPM_TIS_PHYS_32,
+-};
+-
+ struct tpm_tis_phy_ops {
+-	/* data is passed in little endian */
+ 	int (*read_bytes)(struct tpm_tis_data *data, u32 addr, u16 len,
+-			  u8 *result, enum tpm_tis_io_mode mode);
++			  u8 *result);
+ 	int (*write_bytes)(struct tpm_tis_data *data, u32 addr, u16 len,
+-			   const u8 *value, enum tpm_tis_io_mode mode);
+-	int (*verify_crc)(struct tpm_tis_data *data, size_t len,
+-			  const u8 *value);
++			   const u8 *value);
++	int (*read16)(struct tpm_tis_data *data, u32 addr, u16 *result);
++	int (*read32)(struct tpm_tis_data *data, u32 addr, u32 *result);
++	int (*write32)(struct tpm_tis_data *data, u32 addr, u32 src);
++    bool (*check_data)(struct tpm_tis_data *data, const u8 *buf, size_t len);
+ };
+ 
+ static inline int tpm_tis_read_bytes(struct tpm_tis_data *data, u32 addr,
+ 				     u16 len, u8 *result)
+ {
+-	return data->phy_ops->read_bytes(data, addr, len, result,
+-					 TPM_TIS_PHYS_8);
++	return data->phy_ops->read_bytes(data, addr, len, result);
+ }
+ 
+ static inline int tpm_tis_read8(struct tpm_tis_data *data, u32 addr, u8 *result)
+ {
+-	return data->phy_ops->read_bytes(data, addr, 1, result, TPM_TIS_PHYS_8);
++	return data->phy_ops->read_bytes(data, addr, 1, result);
+ }
+ 
+ static inline int tpm_tis_read16(struct tpm_tis_data *data, u32 addr,
+@@ -152,8 +133,11 @@ static inline int tpm_tis_read16(struct tpm_tis_data *data, u32 addr,
+ 	__le16 result_le;
+ 	int rc;
+ 
++	if (data->phy_ops->read16)
++		return data->phy_ops->read16(data, addr, result);
++
+ 	rc = data->phy_ops->read_bytes(data, addr, sizeof(u16),
+-				       (u8 *)&result_le, TPM_TIS_PHYS_16);
++				       (u8 *)&result_le);
+ 	if (!rc)
+ 		*result = le16_to_cpu(result_le);
+ 
+@@ -166,8 +150,11 @@ static inline int tpm_tis_read32(struct tpm_tis_data *data, u32 addr,
+ 	__le32 result_le;
+ 	int rc;
+ 
++	if (data->phy_ops->read32)
++		return data->phy_ops->read32(data, addr, result);
++
+ 	rc = data->phy_ops->read_bytes(data, addr, sizeof(u32),
+-				       (u8 *)&result_le, TPM_TIS_PHYS_32);
++				       (u8 *)&result_le);
+ 	if (!rc)
+ 		*result = le32_to_cpu(result_le);
+ 
+@@ -177,14 +164,13 @@ static inline int tpm_tis_read32(struct tpm_tis_data *data, u32 addr,
+ static inline int tpm_tis_write_bytes(struct tpm_tis_data *data, u32 addr,
+ 				      u16 len, const u8 *value)
+ {
+-	return data->phy_ops->write_bytes(data, addr, len, value,
+-					  TPM_TIS_PHYS_8);
++	return data->phy_ops->write_bytes(data, addr, len, value);
++
+ }
+ 
+ static inline int tpm_tis_write8(struct tpm_tis_data *data, u32 addr, u8 value)
+ {
+-	return data->phy_ops->write_bytes(data, addr, 1, &value,
+-					  TPM_TIS_PHYS_8);
++	return data->phy_ops->write_bytes(data, addr, 1, &value);
+ }
+ 
+ static inline int tpm_tis_write32(struct tpm_tis_data *data, u32 addr,
+@@ -193,18 +179,14 @@ static inline int tpm_tis_write32(struct tpm_tis_data *data, u32 addr,
+ 	__le32 value_le;
+ 	int rc;
+ 
++	if (data->phy_ops->write32)
++		return data->phy_ops->write32(data, addr, value);
++
+ 	value_le = cpu_to_le32(value);
+-	rc =  data->phy_ops->write_bytes(data, addr, sizeof(u32),
+-					 (u8 *)&value_le, TPM_TIS_PHYS_32);
+-	return rc;
+-}
++	rc = data->phy_ops->write_bytes(data, addr, sizeof(u32),
++					(u8 *)&value_le);
+ 
+-static inline int tpm_tis_verify_crc(struct tpm_tis_data *data, size_t len,
+-				     const u8 *value)
+-{
+-	if (!data->phy_ops->verify_crc)
+-		return 0;
+-	return data->phy_ops->verify_crc(data, len, value);
++	return rc;
+ }
+ 
+ static inline bool is_bsw(void)
+diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+index ba803088432f..91b45cfeef1d 100644
+--- a/drivers/char/tpm/tpm_tis_i2c.c
++++ b/drivers/char/tpm/tpm_tis_i2c.c
+@@ -1,411 +1,287 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * Copyright (c) 2014-2021 Nuvoton Technology corporation
+- * Copyright (C) 2019-2022 Infineon Technologies AG
++ * Copyright (c) 2014-2019 Nuvoton Technology corporation
++ * Copyright (c) 2020, STMICROELECTRONICS International, NV All rights reserved.
+  *
+- * This device driver implements the TPM interface as defined in the TCG PC
+- * Client Platform TPM Profile (PTP) Specification for TPM 2.0 v1.04
+- * Revision 14.
++ * TPM TIS I2C
+  *
+- * It is based on the tpm_tis_spi device driver.
++ * TPM TIS I2C Device Driver Interface for devices that implement the TPM I2C
++ * Interface defined by TCG PC Client Platform TPM Profile (PTP) Specification
++ * Revision 01.03 v22 at www.trustedcomputinggroup.org
+  */
+ 
+-#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/moduleparam.h>
++#include <linux/slab.h>
++#include <linux/interrupt.h>
++#include <linux/wait.h>
++#include <linux/acpi.h>
++#include <linux/freezer.h>
+ #include <linux/crc-ccitt.h>
++
++#include <linux/module.h>
++#include <linux/i2c.h>
++#include <linux/gpio.h>
++#include <linux/of_irq.h>
++#include <linux/of_gpio.h>
++#include <linux/tpm.h>
++#include "tpm.h"
+ #include "tpm_tis_core.h"
+ 
+-/* TPM registers */
+-#define TPM_I2C_LOC_SEL 0x00
+-#define TPM_I2C_ACCESS 0x04
+-#define TPM_I2C_INTERFACE_CAPABILITY 0x30
+-#define TPM_I2C_DEVICE_ADDRESS 0x38
+-#define TPM_I2C_DATA_CSUM_ENABLE 0x40
+-#define TPM_DATA_CSUM 0x44
+-#define TPM_I2C_DID_VID 0x48
+-#define TPM_I2C_RID 0x4C
+-
+-/* TIS-compatible register address to avoid clash with TPM_ACCESS (0x00) */
+-#define TPM_LOC_SEL 0x0FFF
+-
+-/* Mask to extract the I2C register from TIS register addresses */
+-#define TPM_TIS_REGISTER_MASK 0x0FFF
+-
+-/* Default Guard Time of 250µs until interface capability register is read */
+-#define GUARD_TIME_DEFAULT_MIN 250
+-#define GUARD_TIME_DEFAULT_MAX 300
+-
+-/* Guard Time of 250µs after I2C slave NACK */
+-#define GUARD_TIME_ERR_MIN 250
+-#define GUARD_TIME_ERR_MAX 300
+-
+-/* Guard Time bit masks; SR is repeated start, RW is read then write, etc. */
+-#define TPM_GUARD_TIME_SR_MASK 0x40000000
+-#define TPM_GUARD_TIME_RR_MASK 0x00100000
+-#define TPM_GUARD_TIME_RW_MASK 0x00080000
+-#define TPM_GUARD_TIME_WR_MASK 0x00040000
+-#define TPM_GUARD_TIME_WW_MASK 0x00020000
+-#define TPM_GUARD_TIME_MIN_MASK 0x0001FE00
+-#define TPM_GUARD_TIME_MIN_SHIFT 9
+-
+-/* Masks with bits that must be read zero */
+-#define TPM_ACCESS_READ_ZERO 0x48
+-#define TPM_INT_ENABLE_ZERO 0x7FFFFF60
+-#define TPM_STS_READ_ZERO 0x23
+-#define TPM_INTF_CAPABILITY_ZERO 0x0FFFF000
+-#define TPM_I2C_INTERFACE_CAPABILITY_ZERO 0x80000000
++#define TPM_LOC_SEL                    0x04
++#define TPM_I2C_INTERFACE_CAPABILITY   0x30
++#define TPM_I2C_DEVICE_ADDRESS         0x38
++#define TPM_DATA_CSUM_ENABLE           0x40
++#define TPM_DATA_CSUM                  0x44
++#define TPM_I2C_DID_VID                0x48
++#define TPM_I2C_RID                    0x4C
+ 
+ struct tpm_tis_i2c_phy {
+ 	struct tpm_tis_data priv;
+ 	struct i2c_client *i2c_client;
+-	bool guard_time_read;
+-	bool guard_time_write;
+-	u16 guard_time_min;
+-	u16 guard_time_max;
+-	u8 *io_buf;
++	bool data_csum;
++	u8 *iobuf;
+ };
+ 
+-static inline struct tpm_tis_i2c_phy *
+-to_tpm_tis_i2c_phy(struct tpm_tis_data *data)
+-{
+-	return container_of(data, struct tpm_tis_i2c_phy, priv);
+-}
++static inline struct tpm_tis_i2c_phy *to_tpm_tis_i2c_phy(struct
++tpm_tis_data *data) {
++	return container_of(data, struct tpm_tis_i2c_phy, priv); }
+ 
+-/*
+- * tpm_tis_core uses the register addresses as defined in Table 19 "Allocation
+- * of Register Space for FIFO TPM Access" of the TCG PC Client PTP
+- * Specification. In order for this code to work together with tpm_tis_core,
+- * those addresses need to mapped to the registers defined for I2C TPMs in
+- * Table 51 "I2C-TPM Register Overview".
+- *
+- * For most addresses this can be done by simply stripping off the locality
+- * information from the address. A few addresses need to be mapped explicitly,
+- * since the corresponding I2C registers have been moved around. TPM_LOC_SEL is
+- * only defined for I2C TPMs and is also mapped explicitly here to distinguish
+- * it from TPM_ACCESS(0).
+- *
+- * Locality information is ignored, since this driver assumes exclusive access
+- * to the TPM and always uses locality 0.
+- */
+-static u8 tpm_tis_i2c_address_to_register(u32 addr)
+-{
+-	addr &= TPM_TIS_REGISTER_MASK;
++static u8 address_to_register(u32 addr) {
++	addr &= 0xFFF;
+ 
+ 	switch (addr) {
++		// adapt register addresses that have changed compared to
++		// older TIS versions
+ 	case TPM_ACCESS(0):
+-		return TPM_I2C_ACCESS;
++		return 0x04;
+ 	case TPM_LOC_SEL:
+-		return TPM_I2C_LOC_SEL;
++		return 0x00;
+ 	case TPM_DID_VID(0):
+-		return TPM_I2C_DID_VID;
++		return 0x48;
+ 	case TPM_RID(0):
+-		return TPM_I2C_RID;
++		return 0x4C;
+ 	default:
+ 		return addr;
+ 	}
+ }
+ 
+-static int tpm_tis_i2c_retry_transfer_until_ack(struct tpm_tis_data *data,
+-						struct i2c_msg *msg)
++static int tpm_tis_i2c_read_bytes(struct tpm_tis_data *data, u32 addr,
++				  u16 len, u8 *result)
+ {
+ 	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
+-	bool guard_time;
++	int ret = 0;
+ 	int i = 0;
+-	int ret;
+-
+-	if (msg->flags & I2C_M_RD)
+-		guard_time = phy->guard_time_read;
+-	else
+-		guard_time = phy->guard_time_write;
+-
+-	do {
+-		ret = i2c_transfer(phy->i2c_client->adapter, msg, 1);
+-		if (ret < 0)
+-			usleep_range(GUARD_TIME_ERR_MIN, GUARD_TIME_ERR_MAX);
+-		else if (guard_time)
+-			usleep_range(phy->guard_time_min, phy->guard_time_max);
+-		/* retry on TPM NACK */
+-	} while (ret < 0 && i++ < TPM_RETRY);
+-
+-	return ret;
+-}
+-
+-/* Check that bits which must be read zero are not set */
+-static int tpm_tis_i2c_sanity_check_read(u8 reg, u16 len, u8 *buf)
+-{
+-	u32 zero_mask;
+-	u32 value;
+-
+-	switch (len) {
+-	case sizeof(u8):
+-		value = buf[0];
+-		break;
+-	case sizeof(u16):
+-		value = le16_to_cpup((__le16 *)buf);
+-		break;
+-	case sizeof(u32):
+-		value = le32_to_cpup((__le32 *)buf);
+-		break;
+-	default:
+-		/* unknown length, skip check */
+-		return 0;
+-	}
++	u8 reg = address_to_register(addr);
++	struct i2c_msg msgs[] = {
++		{
++			.addr = phy->i2c_client->addr,
++			.len = sizeof(reg),
++			.buf = &reg,
++		},
++		{
++			.addr = phy->i2c_client->addr,
++			.len = len,
++			.buf = result,
++			.flags = I2C_M_RD,
++		},
++	};
++
++    do
++    {
++	ret = i2c_transfer(phy->i2c_client->adapter, msgs, ARRAY_SIZE(msgs));
++	usleep_range(250, 300); // wait default GUARD_TIME of 250µs
++
++	} while(ret < 0 && i++ < TPM_RETRY );
++
++	if (ret < 0)
++		return ret;
+ 
+-	switch (reg) {
+-	case TPM_I2C_ACCESS:
+-		zero_mask = TPM_ACCESS_READ_ZERO;
+-		break;
+-	case TPM_INT_ENABLE(0) & TPM_TIS_REGISTER_MASK:
+-		zero_mask = TPM_INT_ENABLE_ZERO;
+-		break;
+-	case TPM_STS(0) & TPM_TIS_REGISTER_MASK:
+-		zero_mask = TPM_STS_READ_ZERO;
+-		break;
+-	case TPM_INTF_CAPS(0) & TPM_TIS_REGISTER_MASK:
+-		zero_mask = TPM_INTF_CAPABILITY_ZERO;
+-		break;
+-	case TPM_I2C_INTERFACE_CAPABILITY:
+-		zero_mask = TPM_I2C_INTERFACE_CAPABILITY_ZERO;
+-		break;
+-	default:
+-		/* unknown register, skip check */
+-		return 0;
+-	}
+ 
+-	if (unlikely((value & zero_mask) != 0x00)) {
+-		pr_debug("TPM I2C read of register 0x%02x failed sanity check: 0x%x\n", reg, value);
+-		return -EIO;
+-	}
+ 
+ 	return 0;
+ }
+ 
+-static int tpm_tis_i2c_read_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
+-				  u8 *result, enum tpm_tis_io_mode io_mode)
++static int tpm_tis_i2c_write_bytes(struct tpm_tis_data *data, u32 addr,
++				   u16 len, const u8 *value)
+ {
+ 	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
+-	struct i2c_msg msg = { .addr = phy->i2c_client->addr };
+-	u8 reg = tpm_tis_i2c_address_to_register(addr);
+-	int i;
+-	int ret;
+-
+-	for (i = 0; i < TPM_RETRY; i++) {
+-		u16 read = 0;
+-
+-		while (read < len) {
+-			/* write register */
+-			msg.len = sizeof(reg);
+-			msg.buf = &reg;
+-			msg.flags = 0;
+-			ret = tpm_tis_i2c_retry_transfer_until_ack(data, &msg);
+-			if (ret < 0)
+-				return ret;
+-
+-			/* read data */
+-			msg.buf = result + read;
+-			msg.len = len - read;
+-			msg.flags = I2C_M_RD;
+-			if (msg.len > I2C_SMBUS_BLOCK_MAX)
+-				msg.len = I2C_SMBUS_BLOCK_MAX;
+-			ret = tpm_tis_i2c_retry_transfer_until_ack(data, &msg);
+-			if (ret < 0)
+-				return ret;
+-			read += msg.len;
+-		}
++	int ret = 0;
++	int i = 0;
+ 
+-		ret = tpm_tis_i2c_sanity_check_read(reg, len, result);
+-		if (ret == 0)
+-			return 0;
++	if (phy->iobuf) {
++		if (len > TPM_BUFSIZE - 1)
++			return -EIO;
+ 
+-		usleep_range(GUARD_TIME_ERR_MIN, GUARD_TIME_ERR_MAX);
+-	}
++		phy->iobuf[0] = address_to_register(addr);
++		memcpy(phy->iobuf + 1, value, len);
+ 
+-	return ret;
+-}
++		{
++			struct i2c_msg msgs[] = {
++				{
++					.addr = phy->i2c_client->addr,
++					.len = len + 1,
++					.buf = phy->iobuf,
++				},
++			};
+ 
+-static int tpm_tis_i2c_write_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
+-				   const u8 *value,
+-				   enum tpm_tis_io_mode io_mode)
+-{
+-	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
+-	struct i2c_msg msg = { .addr = phy->i2c_client->addr };
+-	u8 reg = tpm_tis_i2c_address_to_register(addr);
+-	int ret;
+-	u16 wrote = 0;
+-
+-	if (len > TPM_BUFSIZE - 1)
+-		return -EIO;
+-
+-	phy->io_buf[0] = reg;
+-	msg.buf = phy->io_buf;
+-	while (wrote < len) {
+-		/* write register and data in one go */
+-		msg.len = sizeof(reg) + len - wrote;
+-		if (msg.len > I2C_SMBUS_BLOCK_MAX)
+-			msg.len = I2C_SMBUS_BLOCK_MAX;
+-
+-		memcpy(phy->io_buf + sizeof(reg), value + wrote,
+-		       msg.len - sizeof(reg));
+-
+-		ret = tpm_tis_i2c_retry_transfer_until_ack(data, &msg);
+-		if (ret < 0)
+-			return ret;
+-		wrote += msg.len - sizeof(reg);
++            do{
++			ret = i2c_transfer(phy->i2c_client->adapter, msgs,
++					   ARRAY_SIZE(msgs));
++			usleep_range(250, 300); // wait default GUARD_TIME of 250µs
++
++			} while(ret < 0 && i++ < TPM_RETRY );
++		}
++	} else {
++		u8 reg = address_to_register(addr);
++
++		struct i2c_msg msgs[] = {
++			{
++				.addr = phy->i2c_client->addr,
++				.len = sizeof(reg),
++				.buf = &reg,
++			},
++			{
++				.addr = phy->i2c_client->addr,
++				.len = len,
++				.buf = (u8 *)value,
++				.flags = I2C_M_NOSTART,
++			},
++		};
++
++		do{
++		ret = i2c_transfer(phy->i2c_client->adapter, msgs, ARRAY_SIZE(msgs));
++	   usleep_range(250, 300); // wait default GUARD_TIME of 250µs
++
++		} while(ret < 0 && i++ < TPM_RETRY );
+ 	}
+ 
++	if (ret < 0)
++		return ret;
++
+ 	return 0;
+ }
+ 
+-static int tpm_tis_i2c_verify_crc(struct tpm_tis_data *data, size_t len,
+-				  const u8 *value)
++static bool tpm_tis_i2c_check_data(struct tpm_tis_data *data,
++				   const u8 *buf, size_t len)
+ {
+-	u16 crc_tpm, crc_host;
++	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
++	u16 crc, crc_tpm;
+ 	int rc;
+ 
+-	rc = tpm_tis_read16(data, TPM_DATA_CSUM, &crc_tpm);
+-	if (rc < 0)
+-		return rc;
++	if (phy->data_csum) {
++		crc = crc_ccitt(0x0000, buf, len);
++		rc = tpm_tis_read16(data, TPM_DATA_CSUM, &crc_tpm);
++		if (rc < 0)
++			return false;
+ 
+-	/* reflect crc result, regardless of host endianness */
+-	crc_host = swab16(crc_ccitt(0, value, len));
+-	if (crc_tpm != crc_host)
+-		return -EIO;
++		crc_tpm = be16_to_cpu(crc_tpm);
++		return crc == crc_tpm;
++	}
+ 
+-	return 0;
++	return true;
+ }
+ 
+-/*
+- * Guard Time:
+- * After each I2C operation, the TPM might require the master to wait.
+- * The time period is vendor-specific and must be read from the
+- * TPM_I2C_INTERFACE_CAPABILITY register.
+- *
+- * Before the Guard Time is read (or after the TPM failed to send an I2C NACK),
+- * a Guard Time of 250µs applies.
+- *
+- * Various flags in the same register indicate if a guard time is needed:
+- *  - SR: <I2C read with repeated start> <guard time> <I2C read>
+- *  - RR: <I2C read> <guard time> <I2C read>
+- *  - RW: <I2C read> <guard time> <I2C write>
+- *  - WR: <I2C write> <guard time> <I2C read>
+- *  - WW: <I2C write> <guard time> <I2C write>
+- *
+- * See TCG PC Client PTP Specification v1.04, 8.1.10 GUARD_TIME
+- */
+-static int tpm_tis_i2c_init_guard_time(struct tpm_tis_i2c_phy *phy, bool default_guard_time)
+-{
+-	u32 i2c_caps;
+-	int ret;
++static SIMPLE_DEV_PM_OPS(tpm_tis_pm, tpm_pm_suspend, tpm_tis_resume);
+ 
+-	phy->guard_time_read = true;
+-	phy->guard_time_write = true;
+-	phy->guard_time_min = GUARD_TIME_DEFAULT_MIN;
+-	phy->guard_time_max = GUARD_TIME_DEFAULT_MAX;
++static int csum_state_store(struct tpm_tis_data *data, u8 new_state) {
++	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
++	u8 cur_state=0;
++	int rc;
+ 
+-	if (default_guard_time)	return 0;
++	rc = tpm_tis_i2c_write_bytes(&phy->priv, TPM_DATA_CSUM_ENABLE,
++				     1, &new_state);
++	if (rc < 0)
++		return rc;
+ 
+-	ret = tpm_tis_i2c_read_bytes(&phy->priv, TPM_I2C_INTERFACE_CAPABILITY,
+-				     sizeof(i2c_caps), (u8 *)&i2c_caps,
+-				     TPM_TIS_PHYS_32);
+-	if (ret)
+-		return ret;
++	rc = tpm_tis_i2c_read_bytes(&phy->priv, TPM_DATA_CSUM_ENABLE,
++				    1, &cur_state);
++	if (rc < 0)
++		return rc;
+ 
+-	phy->guard_time_read = (i2c_caps & TPM_GUARD_TIME_RR_MASK) ||
+-			       (i2c_caps & TPM_GUARD_TIME_RW_MASK);
+-	phy->guard_time_write = (i2c_caps & TPM_GUARD_TIME_WR_MASK) ||
+-				(i2c_caps & TPM_GUARD_TIME_WW_MASK);
+-	phy->guard_time_min = (i2c_caps & TPM_GUARD_TIME_MIN_MASK) >>
+-			      TPM_GUARD_TIME_MIN_SHIFT;
+-	/* guard_time_max = guard_time_min * 1.2 */
+-	phy->guard_time_max = phy->guard_time_min + phy->guard_time_min / 5;
++	if (new_state == cur_state)
++		phy->data_csum = (bool)new_state;
+ 
+-	return 0;
++	return rc;
+ }
+ 
+-static SIMPLE_DEV_PM_OPS(tpm_tis_pm, tpm_pm_suspend, tpm_tis_resume);
+-
+ static const struct tpm_tis_phy_ops tpm_i2c_phy_ops = {
+ 	.read_bytes = tpm_tis_i2c_read_bytes,
+ 	.write_bytes = tpm_tis_i2c_write_bytes,
+-	.verify_crc = tpm_tis_i2c_verify_crc,
++	.check_data = tpm_tis_i2c_check_data,
+ };
+ 
+-static int tpm_tis_i2c_probe(struct i2c_client *dev)
+-{
+-	struct device *bdev = &dev->dev;
++static int tpm_tis_i2c_probe(struct i2c_client *dev,
++			     const struct i2c_device_id *id) {
+ 	struct tpm_tis_i2c_phy *phy;
+-	const u8 crc_enable = 1;
+-	const u8 locality = 0;
+-	bool default_guard_time = false;
+-	int ret;
++	int rc;
++	const u8 loc_init = 0;
+ 
+ 	phy = devm_kzalloc(&dev->dev, sizeof(struct tpm_tis_i2c_phy),
+ 			   GFP_KERNEL);
+ 	if (!phy)
+ 		return -ENOMEM;
+ 
+-	phy->io_buf = devm_kzalloc(&dev->dev, TPM_BUFSIZE, GFP_KERNEL);
+-	if (!phy->io_buf)
+-		return -ENOMEM;
+-
+-	set_bit(TPM_TIS_DEFAULT_CANCELLATION, &phy->priv.flags);
+ 	phy->i2c_client = dev;
+ 
+-	default_guard_time = of_property_read_bool(bdev->of_node, "default-guard-time");
+-	if (default_guard_time)
+-		pr_info("tpm: use default guard time\n");
+-	/* must precede all communication with the tpm */
+-	ret = tpm_tis_i2c_init_guard_time(phy, default_guard_time);
+-	if (ret)
+-		return ret;
++	if (!i2c_check_functionality(dev->adapter, I2C_FUNC_NOSTART)) {
++		phy->iobuf = devm_kmalloc(&dev->dev, TPM_BUFSIZE, GFP_KERNEL);
++		if (!phy->iobuf)
++			return -ENOMEM;
++	}
+ 
+-	ret = tpm_tis_i2c_write_bytes(&phy->priv, TPM_LOC_SEL, sizeof(locality),
+-				      &locality, TPM_TIS_PHYS_8);
+-	if (ret)
+-		return ret;
++	rc = tpm_tis_i2c_write_bytes(&phy->priv, TPM_LOC_SEL, 1, &loc_init);
++	if (rc < 0)
++		return rc;
+ 
+-	ret = tpm_tis_i2c_write_bytes(&phy->priv, TPM_I2C_DATA_CSUM_ENABLE,
+-				      sizeof(crc_enable), &crc_enable,
+-				      TPM_TIS_PHYS_8);
+-	if (ret)
+-		return ret;
++
++	rc = csum_state_store(&phy->priv, 0x01);
++	if (rc < 0)
++		return rc;
+ 
+ 	return tpm_tis_core_init(&dev->dev, &phy->priv, -1, &tpm_i2c_phy_ops,
+-				 NULL);
++					NULL);
+ }
+ 
+-static void tpm_tis_i2c_remove(struct i2c_client *client)
+-{
++static int tpm_tis_i2c_remove(struct i2c_client *client) {
+ 	struct tpm_chip *chip = i2c_get_clientdata(client);
+-
+ 	tpm_chip_unregister(chip);
+ 	tpm_tis_remove(chip);
++	return 0;
+ }
+ 
+ static const struct i2c_device_id tpm_tis_i2c_id[] = {
+-	{ "tpm_tis_i2c", 0 },
++	{"tpm_tis_i2c", 0},
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
+ 
+-#ifdef CONFIG_OF
+ static const struct of_device_id of_tis_i2c_match[] = {
+-	{ .compatible = "infineon,slb9673", },
+-	{ .compatible = "st,st33htpm-i2c", },
++	{ .compatible = "st,st33htpm-i2c", "tcg,tpm-tis-i2c", },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, of_tis_i2c_match);
+-#endif
++
++static const struct acpi_device_id acpi_tis_i2c_match[] = {
++	{"SMO0768", 0},
++	{}
++};
++MODULE_DEVICE_TABLE(acpi, acpi_tis_i2c_match);
+ 
+ static struct i2c_driver tpm_tis_i2c_driver = {
+ 	.driver = {
++		.owner = THIS_MODULE,
+ 		.name = "tpm_tis_i2c",
+ 		.pm = &tpm_tis_pm,
+ 		.of_match_table = of_match_ptr(of_tis_i2c_match),
++		.acpi_match_table = ACPI_PTR(acpi_tis_i2c_match),
+ 	},
+ 	.probe = tpm_tis_i2c_probe,
+ 	.remove = tpm_tis_i2c_remove,
+ 	.id_table = tpm_tis_i2c_id,
+ };
++
+ module_i2c_driver(tpm_tis_i2c_driver);
+ 
+ MODULE_DESCRIPTION("TPM Driver for native I2C access");
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index ab74bb3b024e..e36a4b3b9832 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -4970,11 +4970,11 @@ MODULE_DEVICE_TABLE(of, dsi_of_match);
+ static int panel_simple_dsi_probe(struct mipi_dsi_device *dsi)
+ {
+ 	const struct panel_desc_dsi *desc;
+-	const struct of_device_id *id;
++//	const struct of_device_id *id;
+ 	struct device_node *np;
+-	u32 dsi_flags;
+-	u32 dsi_format;
+-	u32 dsi_lanes;
++	u32 dsi_flags = 0;
++	u32 dsi_format = 0;
++	u32 dsi_lanes = 0;
+ 	int err;
+ 
+ 	np = dsi->dev.of_node;
+diff --git a/sound/soc/codecs/sgtl5000.c b/sound/soc/codecs/sgtl5000.c
+index f0ced5eb4dad..cfb0989ae73d 100644
+--- a/sound/soc/codecs/sgtl5000.c
++++ b/sound/soc/codecs/sgtl5000.c
+@@ -41,20 +41,20 @@
+ /* default value of sgtl5000 registers */
+ static const struct reg_default sgtl5000_reg_defaults[] = {
+ 	{ SGTL5000_CHIP_DIG_POWER,		0x0000 },
+-	{ SGTL5000_CHIP_I2S_CTRL,		0x0010 },
++	{ SGTL5000_CHIP_I2S_CTRL,		0x001b },
+ 	{ SGTL5000_CHIP_SSS_CTRL,		0x0010 },
+ 	{ SGTL5000_CHIP_ADCDAC_CTRL,		0x020c },
+ 	{ SGTL5000_CHIP_DAC_VOL,		0x3c3c },
+ 	{ SGTL5000_CHIP_PAD_STRENGTH,		0x015f },
+-	{ SGTL5000_CHIP_ANA_ADC_CTRL,		0x0000 },
++	{ SGTL5000_CHIP_ANA_ADC_CTRL,		0x00bb },
+ 	{ SGTL5000_CHIP_ANA_HP_CTRL,		0x1818 },
+-	{ SGTL5000_CHIP_ANA_CTRL,		0x0111 },
++	{ SGTL5000_CHIP_ANA_CTRL,		0x0022 },
+ 	{ SGTL5000_CHIP_REF_CTRL,		0x0000 },
+ 	{ SGTL5000_CHIP_MIC_CTRL,		0x0000 },
+ 	{ SGTL5000_CHIP_LINE_OUT_CTRL,		0x0000 },
+-	{ SGTL5000_CHIP_LINE_OUT_VOL,		0x0404 },
+-	{ SGTL5000_CHIP_PLL_CTRL,		0x5000 },
+-	{ SGTL5000_CHIP_CLK_TOP_CTRL,		0x0000 },
++	{ SGTL5000_CHIP_LINE_OUT_VOL,		0x1f1f },
++	{ SGTL5000_CHIP_PLL_CTRL,		0xa3d7 },
++	{ SGTL5000_CHIP_CLK_TOP_CTRL,		0x0008 },
+ 	{ SGTL5000_CHIP_ANA_STATUS,		0x0000 },
+ 	{ SGTL5000_CHIP_SHORT_CTRL,		0x0000 },
+ 	{ SGTL5000_CHIP_ANA_TEST2,		0x0000 },
+-- 
+2.25.1
+
