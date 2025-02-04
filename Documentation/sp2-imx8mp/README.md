@@ -6,22 +6,25 @@
 2. Software Details
 3. Package structure
 4. Flashing the image and booting
-   4.1. SD boot
-   4.2. eMMC boot
+   4.1.   SD boot
+   4.2.   eMMC boot
 5. Peripheral testing
-   5.1. USB type A ports
-   5.2. Micro USB (Device mode)
-   5.3. HDMI
-   5.4. UART2 - Console
-   5.5. UART3 - RS485
-   5.6. UART4 - RS232
-   5.7. SPI on expansion connector
-   5.8. CAN interface
-   5.9. RTC
-   5.10. Wifi/BT
-   5.11. ETHERNET
-   5.12. LVDS display
-   5.13  Audio SGT5000
+   5.1.   USB type A ports
+   5.2.   Micro USB (Device mode)
+   5.3.   HDMI
+   5.4.   UART2 - Console
+   5.5.   UART3 - RS485
+   5.6.   UART4 - RS232
+   5.7.   GPIO on Expansion Connector
+   5.8.   SPI on Expansion Connector
+   5.9.   CAN interface
+   5.10.  RTC
+   5.11.  Wifi/BT
+   5.12.  ETHERNET
+   5.13.  LVDS display
+   5.14.  Audio SGT5000
+   5.15.  Buzzer
+   5.16.  TPM
 ```
 ## 1 Hardware Details
 
@@ -179,11 +182,11 @@ Pin connection:
 
 * By defualt its set to rs232 ;Please use uart-script.sh for changing them 
 
- 		for rs232 -uart-script.sh rs232
+​		- for rs232 -uart-script.sh rs232
 
-​		 for rs485 -> uart-mode.sh rs485 
+​		- for rs485 -> uart-mode.sh rs485 
 
-​		 for rs422 -> uart-mode.sh rs422
+​		- for rs422 -> uart-mode.sh rs422
 
 - Connect USB to RS232 compatible  cable to CN10 connector(DB9-COM).
 
@@ -218,10 +221,34 @@ Pin connection:
 
   Type some data and press enter in Minicom. 
   The data will be received in adb shell.
-  
-  
 
-### 5.7 SPI on expansion connector
+### 5.7 GPIO on Expansion Connector
+
+GPIO on expansion connector (CN22) can be accessed using following commands:
+
+```
+$ cd /sys/class/gpio/
+$ echo GPIO_NUM > export
+$ cd gpio<GPIO_NUM>
+$ echo out > direction ("out" is to enable pin as ouput, "in" for input)
+$ echo 1 > value       ("1" to drive high, "0" to drive low)
+```
+
+The GPIO_NUM mentioned above are mapped to following pin numbers:
+
+| Pin on expansion | Kernel Gpio number |
+| ---------------- | ------------------ |
+| DI0              | 512                |
+| DI1              | 513                |
+| DI2              | 514                |
+| DI3              | 515                |
+| DO0              | 516                |
+| DO1              | 517                |
+| DO2              | 518                |
+| DO3              | 519                |
+
+### 5.8 SPI on expansion connector
+
 Follow below procedure to perform loop-back test:
 
 #### SPI1 Loopback test
@@ -232,7 +259,7 @@ Follow below procedure to perform loop-back test:
 $ spidevtest -D /dev/spidev1.0 -p "12345" -N -v
 ```
 
-### 5.8 CAN interface (CN1602)
+### 5.9 CAN interface (CN1602)
 
 * For CAN testing, two boards with CAN support are needed 
 
@@ -248,8 +275,8 @@ Sender should execute below commands:
 
 2. Configure the CAN0 ports as ( on the Second board)
    ```shell
-   $ ip link set can1 type can bitrate 500000
-   $ ip link set can1 up 
+   $ ip link set can0 type can bitrate 500000
+   $ ip link set can0 up 
    ```
 
 3. Dump CAN data on can0: ( on First board start listening )
@@ -259,13 +286,13 @@ Sender should execute below commands:
 
 4. Send data over can1: ( from Second board transmit data)
    ```shell
-   $ cansend can1 01a#11223344AABBCCDD 
+   $ cansend can0 01a#11223344AABBCCDD 
    ```
 
     Now, data sent from First board will be dumped back on Second board.
 
 
-### 5.9 RTC
+### 5.10 RTC
 
 * While connected to network android will update date/time from network service. 
 * Using Android UI Go -> Setting > System> Date & time -> Region
@@ -274,18 +301,18 @@ Sender should execute below commands:
 * Now power off the target for some time 
 * Power on and check the time,Time would be updated
 
-### 5.10 Wifi/BT 
+### 5.11 Wifi/BT 
 
 WiFi/BT supported in Android and functionalities can be realised by using Android Settings.
 
-### 5.11 Ethernet
+### 5.12 Ethernet
 
 * Android supports both Ethernet
 * Open Settings -> Network & internet -> Internet -> Ethernet to view details of ETH0/ETH1 port
 * Ethernet configuration can be obtained by running ```ifconfig``` command from adb shell
 
 
-### 5.12. LVDS display
+### 5.13 LVDS display
 
 * Android will support  LVDS  7 10 23 inch panel based on EERPOM setting . Use yocto image to update the EEPROM using below command.
 
@@ -295,10 +322,43 @@ $ sudo msgpacker.py set -b 1 -a 0x54 -k disp -v X
 
 X - take value -> 7 - 7inch LVDS display ; 10 - 7inch LVDS display  ; 23 - 7inch LVDS display
 
-### 5.13 SGTL5000 Audio codec
+* Note: Android 14  doesn't support dual display (LVDS & HDMI simultaneously).
+
+### 5.14 SGTL5000 Audio codec
 
 * Connect Headphone audio and mic 3.5mm jack Using Sound recorder application to validate the audio interface.
 * Connect Speaker ,  Setting - > Sound & Vibration -> change media volume and Sound recorder application to validate the audio 
 * Android  support HDMI Speaker Headphone one at time, Take priority as below
   HDMI > Headphones > Speaker
+
+### 5.15 Buzzer
+
+* Find the pwm-beeper input from getevent command 
+  example :
+  #getevent                                                    
+  add device 1: /dev/input/event3
+    name:     "ILITEK       ILITEK-TOUCH"
+  add device 2: /dev/input/event1
+    name:     "pwm-beeper"
+  add device 3: /dev/input/event0
+
+  "pwm-beeper" is linked to  /dev/input/event1
+
+```shell
+$ getevent
+```
+
+* Use beep utils  for validating Buzzer  -> beep </dev/input/eventX> [freq] [duration]
+
+```shell
+$ beep /dev/input/event1 2000 3
+```
+
+### 5.16 TPM 
+
+* Using eltt2   we can validate TPM
+
+```shell
+$ eltt2 -gv
+```
 
