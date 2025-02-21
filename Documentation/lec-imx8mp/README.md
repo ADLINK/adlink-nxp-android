@@ -211,6 +211,14 @@ To play the wav file on HDMI, execute the command below:
 ```
 $ tinyplay <wav file> -D 0
 ```
+***NOTE:***
+* HDMI audio device has higher priority over other audio devices.
+When HDMI display is connected, android will use HDMI as playback device.
+
+* To make WM8960 as system playback device, disconnect HDMI and use LVDS/MIPI panel as primary display device.
+Steps for flashing android image with LVDS/MIPI enabled are mentioned in section 5.13 and 5.14
+
+* WM8960 can always be tested irrespective of connected display from adb shell using tinyplay command mentioned above.
 
 ### 5.7 GPIO on Expansion Connector
 
