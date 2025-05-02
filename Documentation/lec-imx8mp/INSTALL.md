@@ -68,7 +68,7 @@ $ curl https://storage.googleapis.com/git-repo-downloads/repo > ${HOME}/bin/repo
 $ chmod a+x ${HOME}/bin/repo
 $ export PATH=${PATH}:${HOME}/bin
 $ cd ${HOME}
-$ git clone https://github.com/ADLINK/imx8mp_android.git -b Android-14
+$ git clone https://github.com/ADLINK/imx8mp_android.git -b Android-15
 $ tar xzvf imx-android-15.0.0_1.0.0.tar.gz
 $ source ${HOME}/imx-android-15.0.0_1.0.0/imx_android_setup.sh
 ```
