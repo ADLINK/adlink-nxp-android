@@ -24,6 +24,8 @@ You can follow the same steps to build your own customized BSP based on your int
 - Patches for LEC-IMX8MP will be found [here](https://github.com/ADLINK/imx8mp_android/tree/Android-14/patches/imx-android-14.0.0_2.2.0/android_build/lec-imx8mp).
 - Patches for SP2-IMX8MP will be found [here](https://github.com/ADLINK/imx8mp_android/tree/Android-14/patches/imx-android-14.0.0_2.2.0/android_build/sp2-imx8mp).
 - The patches that we created and have are based on the NXP Android SDK
+> [!Note]
+> Kernel version 5.15 onwards, Wi-Fi/BT interfaces are SDIO/UART.
 
 # 4. Software Documentation
 
