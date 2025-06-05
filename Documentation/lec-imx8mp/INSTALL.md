@@ -79,12 +79,14 @@ $ source ${HOME}/imx-android-15.0.0_1.0.0/imx_android_setup.sh
 ```
 $ cd ${HOME}/android_build/device/nxp
 $ git am ${HOME}/imx8mp_android/patches/imx-android-15.0.0_1.0.0/android_build/lec-imx8mp/device/nxp/0001-lec-imx8mp-Add-device-support.patch
+$ git am ${HOME}/imx8mp_android/patches/imx-android-15.0.0_1.0.0/android_build/lec-imx8mp/device/nxp/0002-SDCard_automount_tlv320_support.patch
 ```
 
 ### 2. Kernel
 ```
 $ cd ${HOME}/android_build/vendor/nxp-opensource/kernel_imx
 $ git am ${HOME}/imx8mp_android/patches/imx-android-15.0.0_1.0.0/android_build/lec-imx8mp/vendor/nxp-opensource/kernel_imx/0001-lec-imx8mp-Add-initial-board-support.patch
+$ git am ${HOME}/imx8mp_android/patches/imx-android-15.0.0_1.0.0/android_build/lec-imx8mp/vendor/nxp-opensource/kernel_imx/0002-tlv320_codec_support.patch
 ```
 
 ### 3. U-boot
