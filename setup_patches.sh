@@ -88,16 +88,24 @@ clear_previous_patch () {
 }
 
 apply_patch_file () {
+	WORKDIR=$(pwd)
 	for pf in $PATCHFILES; do
 		# crop the directory where patch is applying
 		TARGET_FILE=${pf#*android_build/}
 		TARGET_DIR=$(dirname $TARGET_FILE)
 		# apply patch
 		if [ -d $TARGET_DIR ]; then
-			echo "[PATCH] Apply $pf to $TARGET_DIR..."
-			patch -p1 -t -d $TARGET_DIR < $pf
+			if [ "$TARGET_DIR" = "external" ]; then
+				echo "[PATCH] Apply $pf to $TARGET_DIR..."
+				patch -p1 -t -d $TARGET_DIR < $pf
+			else
+				cd $WORKDIR/$TARGET_DIR
+				echo "[PATCH] Apply $WORKDIR/$pf to $TARGET_DIR..."
+				git apply -v -3 --ignore-whitespace $WORKDIR/$pf
+				cd -
+			fi
 		else
-			echo "No sub-directory: $TARGET_DIR found, cannot patch $pf"
+			echo "No sub-directory: $TARGET_DIR found, cannot patch $WORKDIR/$pf"
 		fi
 	done
 }
