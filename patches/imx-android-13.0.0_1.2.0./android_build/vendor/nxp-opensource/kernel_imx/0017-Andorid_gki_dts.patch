@@ -1,8 +1,18 @@
-commit f40609a4ee333ff1ff8bf182260ff94c9d0e6345
-Author: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
-Date:   Tue Apr 9 19:09:34 2024 +0530
+From 90a5c837bb666e6150a7466ce1c9500bc156581e Mon Sep 17 00:00:00 2001
+From: jenkins <jenkins@adlinktech.com>
+Date: Tue, 10 Jun 2025 05:53:28 +0000
+Subject: [PATCH 17/22] Andorid_gki_dts
 
-    Andorid_gki_dts
+Signed-off-by: jenkins <jenkins@adlinktech.com>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |    2 +-
+ .../boot/dts/freescale/imx8mp-android.dtsi    |    4 +-
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi     |   27 +-
+ arch/arm64/boot/dts/freescale/sp2-imx8mp.dts  | 1304 +++++++++++++++++
+ arch/arm64/configs/sp2imx8mp_gki.fragment     |  165 +++
+ 5 files changed, 1483 insertions(+), 19 deletions(-)
+ create mode 100755 arch/arm64/boot/dts/freescale/sp2-imx8mp.dts
+ create mode 100644 arch/arm64/configs/sp2imx8mp_gki.fragment
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
 index 7ceb94c96943..1c08ab63f53f 100644
@@ -1619,3 +1629,6 @@ index 000000000000..f6e78004d3a7
 +CONFIG_DRM_PANEL_LVDS=y
 +CONFIG_DRM_IMX8MP_LDB=y
 +
+-- 
+2.25.1
+

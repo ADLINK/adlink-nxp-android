@@ -1,7 +1,7 @@
-From d1f39dcfbcb111d36a13e3f9687c52c923017606 Mon Sep 17 00:00:00 2001
+From 3bed5f93a13693104b321f9e1f4602ccc6fce820 Mon Sep 17 00:00:00 2001
 From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
 Date: Mon, 5 Sep 2022 13:58:53 +0200
-Subject: [PATCH 08/16] sp2-imx8mp: patch: snd: fsl-sai: enable transmitter
+Subject: [PATCH 07/22] sp2-imx8mp: patch: snd: fsl-sai: enable transmitter
  when providing mclk
 
 nxp response to

@@ -1,7 +1,7 @@
-From 39f34d57c96b965dee13703e8529fee126542744 Mon Sep 17 00:00:00 2001
+From 101c6aa1b720037ad9fc93f041c3880dcf0d0079 Mon Sep 17 00:00:00 2001
 From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
 Date: Mon, 5 Sep 2022 13:59:02 +0200
-Subject: [PATCH 09/16] sp2-imx8mp: patch: snd: sgtl5000: enable mclk only when
+Subject: [PATCH 08/22] sp2-imx8mp: patch: snd: sgtl5000: enable mclk only when
  needed
 
 related to https://git.data-modul.com/i.mx8mplus-std/bsp/-/issues/33

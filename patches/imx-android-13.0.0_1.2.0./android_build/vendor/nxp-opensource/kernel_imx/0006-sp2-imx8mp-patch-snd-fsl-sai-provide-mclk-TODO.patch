@@ -1,7 +1,7 @@
-From 2115c19b6f061bf3fbc87e8f079242b35f417d58 Mon Sep 17 00:00:00 2001
+From ccad70fdae8114a4abbcb4341619a7a4f3ad750e Mon Sep 17 00:00:00 2001
 From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
 Date: Sun, 24 Jul 2022 16:00:40 +0200
-Subject: [PATCH 07/16] sp2-imx8mp: patch: snd: fsl-sai: provide mclk (TODO)
+Subject: [PATCH 06/22] sp2-imx8mp: patch: snd: fsl-sai: provide mclk (TODO)
 
 Signed-off-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
 ---

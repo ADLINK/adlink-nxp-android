@@ -1,7 +1,7 @@
-From d00114dab564c18b2a6a0b1bc12e9dab20d0948c Mon Sep 17 00:00:00 2001
+From 281da850f4ceae148160d9cc91834cf5ce61bc26 Mon Sep 17 00:00:00 2001
 From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
 Date: Mon, 7 Nov 2022 19:40:13 +0100
-Subject: [PATCH 10/16] sp2-imx8mp: patch: snd: sgtl5000: fixup! enable mclk
+Subject: [PATCH 09/22] sp2-imx8mp: patch: snd: sgtl5000: fixup! enable mclk
  only when needed
 
 ---

@@ -1,8 +1,12 @@
-commit 427f998693f0a441f71a1e5eb024242741c8b827
-Author: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
-Date:   Sun Apr 7 20:45:45 2024 +0530
+From c8fc95e17933707401e637ac0c798774e412fa06 Mon Sep 17 00:00:00 2001
+From: jenkins <jenkins@adlinktech.com>
+Date: Tue, 10 Jun 2025 07:33:10 +0000
+Subject: [PATCH 16/22] panel fix
 
-    0017-panel_fix
+Signed-off-by: jenkins <jenkins@adlinktech.com>
+---
+ drivers/gpu/drm/panel/panel-simple.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
 index ce73d74e1e47..5d6c37ccd492 100644
@@ -21,3 +25,6 @@ index ce73d74e1e47..5d6c37ccd492 100644
  	int err;
  
  	np = dsi->dev.of_node;
+-- 
+2.25.1
+

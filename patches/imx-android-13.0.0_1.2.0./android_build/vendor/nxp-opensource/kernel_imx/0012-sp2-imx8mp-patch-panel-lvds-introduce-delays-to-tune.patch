@@ -1,7 +1,7 @@
-From d8f582a31b57074d3285661132153def8297f6b6 Mon Sep 17 00:00:00 2001
+From d67f841c7c3ff067d5a96df728c722c6e009dd35 Mon Sep 17 00:00:00 2001
 From: "po.cheng" <po.cheng@adlinktech.com>
 Date: Tue, 28 Nov 2023 17:02:42 +0800
-Subject: [PATCH 13/16] sp2-imx8mp: patch: panel-lvds: introduce delays to tune
+Subject: [PATCH 12/22] sp2-imx8mp: patch: panel-lvds: introduce delays to tune
  lvds panel timing
 
 Signed-off-by: po.cheng <po.cheng@adlinktech.com>

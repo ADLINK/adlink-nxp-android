@@ -1,7 +1,7 @@
-From 11f8a94bc8067bee53841c7e4ad480309c004e01 Mon Sep 17 00:00:00 2001
+From 2a90905d224f5cda3792745ac41eb75cef79436d Mon Sep 17 00:00:00 2001
 From: Po Cheng <po.cheng@adlinktech.com>
 Date: Thu, 19 Oct 2023 21:01:12 +0800
-Subject: [PATCH 06/16] sp2-imx8mp: patch: panel-simple: move ampire am1024600d
+Subject: [PATCH 05/22] sp2-imx8mp: patch: panel-simple: move ampire am1024600d
  (hannstar,hsd070ifw1) to panel-simple for better power sequence
 
 Signed-off-by: po.cheng <po.cheng@adlinktech.com>

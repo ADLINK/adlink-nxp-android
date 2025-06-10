@@ -1,7 +1,7 @@
-From 34a804b634a6e01c3ab46d8d21a92cd983bd8604 Mon Sep 17 00:00:00 2001
+From 5421b3cd1e46e49eb1ea502bb940faa0efa13359 Mon Sep 17 00:00:00 2001
 From: "po.cheng" <po.cheng@adlinktech.com>
 Date: Wed, 18 Oct 2023 09:35:12 +0800
-Subject: [PATCH 03/16] sp2-imx8mp: patch: pcie_phy: modify nxp pcie phy to
+Subject: [PATCH 02/22] sp2-imx8mp: patch: pcie_phy: modify nxp pcie phy to
  tune signal strength for adlink
 
 Signed-off-by: po.cheng <po.cheng@adlinktech.com>
@@ -10,7 +10,7 @@ Signed-off-by: po.cheng <po.cheng@adlinktech.com>
  1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/phy/freescale/phy-fsl-imx8-pcie.c b/drivers/phy/freescale/phy-fsl-imx8-pcie.c
-index 00fb8a7f0246..86bba635562f 100644
+index b37930ef8dac..dbf18917f3cd 100644
 --- a/drivers/phy/freescale/phy-fsl-imx8-pcie.c
 +++ b/drivers/phy/freescale/phy-fsl-imx8-pcie.c
 @@ -142,7 +142,7 @@ static int imx8_pcie_phy_cal(struct phy *phy)
@@ -32,7 +32,7 @@ index 00fb8a7f0246..86bba635562f 100644
  	}
  
  	writel(PLL_ANA_LPF_R_SEL_FINE_0_4,
-@@ -219,6 +222,10 @@ static int __init imx8_pcie_phy_fine_tune(char *str)
+@@ -220,6 +223,10 @@ static int __init imx8_pcie_phy_fine_tune(char *str)
  		pr_info("i.MX PCIe PHY is fine tuned in EP/RC SYS.\n");
  		imx8_pcie_phy_tuned = 1;
  	}

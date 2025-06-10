@@ -1,7 +1,7 @@
-From f5252ff4433d738b6b2505b3821517fa677d6075 Mon Sep 17 00:00:00 2001
+From e9f465b2f8f2d5093d4a87c967a8007d4eb24a39 Mon Sep 17 00:00:00 2001
 From: "po.cheng" <po.cheng@adlinktech.com>
 Date: Tue, 12 Dec 2023 12:08:42 +0800
-Subject: [PATCH 16/16] sp2-imx8mp: patch: ili9881c mipi-dsi panel, add support
+Subject: [PATCH 15/22] sp2-imx8mp: patch: ili9881c mipi-dsi panel, add support
  to override mode_flags from device tree
 
 Signed-off-by: po.cheng <po.cheng@adlinktech.com>
@@ -11,10 +11,10 @@ Signed-off-by: po.cheng <po.cheng@adlinktech.com>
  2 files changed, 241 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/gpu/drm/bridge/sec-dsim.c b/drivers/gpu/drm/bridge/sec-dsim.c
-index 1eb34e755509..afca1dc1ee84 100644
+index d817931a57da..9c4aad564640 100644
 --- a/drivers/gpu/drm/bridge/sec-dsim.c
 +++ b/drivers/gpu/drm/bridge/sec-dsim.c
-@@ -1365,6 +1365,9 @@ sec_mipi_dsim_bridge_atomic_enable(struct drm_bridge *bridge,
+@@ -1366,6 +1366,9 @@ sec_mipi_dsim_bridge_atomic_enable(struct drm_bridge *bridge,
  	/* initialize FIFO pointers */
  	sec_mipi_dsim_init_fifo_pointers(dsim);
  
@@ -24,7 +24,7 @@ index 1eb34e755509..afca1dc1ee84 100644
  	/* prepare panel if exists */
  	if (dsim->panel) {
  		ret = drm_panel_prepare(dsim->panel);
-@@ -1374,9 +1377,6 @@ sec_mipi_dsim_bridge_atomic_enable(struct drm_bridge *bridge,
+@@ -1375,9 +1378,6 @@ sec_mipi_dsim_bridge_atomic_enable(struct drm_bridge *bridge,
  		}
  	}
  

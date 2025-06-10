@@ -1,7 +1,7 @@
-From 7c11ef6843e1fe7ea7542584a0a7f64e73141968 Mon Sep 17 00:00:00 2001
+From d6f96242e8e4fba54a67e14cf73ef770203dc5ef Mon Sep 17 00:00:00 2001
 From: shivaadlink <shivashankar.t@adlinktech.com>
 Date: Tue, 27 Aug 2024 19:41:53 +0530
-Subject: [PATCH] Adding-TPM-PWM-Kernel-Support
+Subject: [PATCH 20/22] Adding-TPM-PWM-Kernel-Support
 
 Signed-off-by: shivaadlink <shivashankar.t@adlinktech.com>
 ---
@@ -333,7 +333,7 @@ index 5813d61f3e26..065adaed8159 100755
  	pinctrl_usbhub_spkamp: usbhubspkampgrp {
  		fsl,pins = <
 diff --git a/arch/arm64/configs/sp2imx8mp_gki.fragment b/arch/arm64/configs/sp2imx8mp_gki.fragment
-index 0657bc5240fd..4fc071b5c135 100644
+index cd095ad6251d..c9b0fed0c367 100644
 --- a/arch/arm64/configs/sp2imx8mp_gki.fragment
 +++ b/arch/arm64/configs/sp2imx8mp_gki.fragment
 @@ -102,7 +102,6 @@ CONFIG_MXC_HANTRO_VC8000E=m
@@ -344,7 +344,7 @@ index 0657bc5240fd..4fc071b5c135 100644
  
  CONFIG_RESET_IMX7=m
  CONFIG_IMX8M_BUSFREQ=m
-@@ -163,3 +162,7 @@ CONFIG_DRM_PANEL_LVDS=m
+@@ -164,3 +163,7 @@ CONFIG_DRM_PANEL_LVDS=m
  CONFIG_FW_LOADER=y
  CONFIG_WLAN_VENDOR_MARVELL=y
  CONFIG_PWRSEQ_SIMPLE=y
@@ -1064,5 +1064,5 @@ index 000000000000..91b45cfeef1d
 +MODULE_DESCRIPTION("TPM Driver for native I2C access");
 +MODULE_LICENSE("GPL");
 -- 
-2.45.2
+2.25.1
 

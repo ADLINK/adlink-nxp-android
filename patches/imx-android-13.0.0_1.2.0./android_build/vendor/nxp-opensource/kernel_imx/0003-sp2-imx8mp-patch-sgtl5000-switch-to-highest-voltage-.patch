@@ -1,7 +1,7 @@
-From a3fb32b84f91b0e13945f67b7db37703d53a3f73 Mon Sep 17 00:00:00 2001
+From 81717b7b1ab31f9c03280c93e3ec08971d57204c Mon Sep 17 00:00:00 2001
 From: "po.cheng" <po.cheng@adlinktech.com>
 Date: Tue, 24 Oct 2023 11:14:57 +0800
-Subject: [PATCH 04/16] sp2-imx8mp: patch: sgtl5000: switch to highest voltage
+Subject: [PATCH 03/22] sp2-imx8mp: patch: sgtl5000: switch to highest voltage
  for vddio:1v8 [ref:
  https://community.nxp.com/t5/Other-NXP-Products/SGTL5000-with-1-8V-VDDIO-and-3-3V-VDDA/m-p/1156477#M9422]
 

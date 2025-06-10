@@ -1,7 +1,7 @@
-From 14bf05d81dd8615b79c989997970275783cef09d Mon Sep 17 00:00:00 2001
+From c4e8d9f9e9dcfbe8763cd661293f930c35866c69 Mon Sep 17 00:00:00 2001
 From: "po.cheng" <po.cheng@adlinktech.com>
 Date: Fri, 24 Nov 2023 10:47:54 +0800
-Subject: [PATCH 11/16] sp2-imx8mp: patch: panel-simple: parse additional
+Subject: [PATCH 10/22] sp2-imx8mp: patch: panel-simple: parse additional
  delays to fine tune panel timing
 
 Signed-off-by: po.cheng <po.cheng@adlinktech.com>

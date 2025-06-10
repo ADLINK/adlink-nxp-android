@@ -1,7 +1,7 @@
-From 99d00d376844f713dba2df2d92d62703a812000b Mon Sep 17 00:00:00 2001
+From 94270db2049be803b4fab28e29e5158da9bc22ce Mon Sep 17 00:00:00 2001
 From: "po.cheng" <po.cheng@adlinktech.com>
 Date: Mon, 27 Nov 2023 16:59:22 +0800
-Subject: [PATCH 12/16] sp2-imx8mp: patch: pwm-backlight: add
+Subject: [PATCH 11/22] sp2-imx8mp: patch: pwm-backlight: add
  pre-pwm-on-delay-ms and pwm-on-delay-ms to delay pwm and enable
 
 Signed-off-by: po.cheng <po.cheng@adlinktech.com>

@@ -1,8 +1,12 @@
-commit a66792fce5ef250acb42787102e107a64116b996
-Author: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
-Date:   Tue Apr 30 10:32:46 2024 +0530
+From 17d6ff3e807079ef1c1368fa1ec9d1a5f99729f3 Mon Sep 17 00:00:00 2001
+From: jenkins <jenkins@adlinktech.com>
+Date: Tue, 10 Jun 2025 07:36:02 +0000
+Subject: [PATCH 18/22] LVDS touch
 
-    LVDS_touch
+Signed-off-by: jenkins <jenkins@adlinktech.com>
+---
+ arch/arm64/configs/sp2imx8mp_gki.fragment | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
 diff --git a/arch/arm64/configs/sp2imx8mp_gki.fragment b/arch/arm64/configs/sp2imx8mp_gki.fragment
 index f6e78004d3a7..d0f648bd2844 100644
@@ -26,3 +30,6 @@ index f6e78004d3a7..d0f648bd2844 100644
 -CONFIG_DRM_IMX8MP_LDB=y
 -
 +CONFIG_DRM_PANEL_LVDS=m
+-- 
+2.25.1
+

@@ -1,7 +1,7 @@
-From a711db3da58a25bc6dabaae37b523d4d543fb340 Mon Sep 17 00:00:00 2001
+From 89c377a2bedf4528b8a9eadfdc864d127f02d6eb Mon Sep 17 00:00:00 2001
 From: "po.cheng" <po.cheng@adlinktech.com>
 Date: Fri, 1 Dec 2023 11:27:52 +0800
-Subject: [PATCH 14/16] sp2-imx8mp: patch: pwm-bl and panel-lvds: move power
+Subject: [PATCH 13/22] sp2-imx8mp: patch: pwm-bl and panel-lvds: move power
  off at pwm-bl to panel-lvds for timing, due to hardware design limitation on
  sp2imx8mp
 

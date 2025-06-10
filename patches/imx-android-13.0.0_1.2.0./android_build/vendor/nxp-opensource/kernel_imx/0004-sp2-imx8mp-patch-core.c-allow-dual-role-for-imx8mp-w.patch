@@ -1,7 +1,7 @@
-From 0e16f71cc4f9620cc6295d14aa41d09d1cf4ba56 Mon Sep 17 00:00:00 2001
+From 68032e58afc99692d731b72b02965c1d74fe0800 Mon Sep 17 00:00:00 2001
 From: "po.cheng" <po.cheng@adlinktech.com>
 Date: Thu, 23 Nov 2023 14:25:11 +0800
-Subject: [PATCH 05/16] sp2-imx8mp: patch: core.c: allow dual role for imx8mp
+Subject: [PATCH 04/22] sp2-imx8mp: patch: core.c: allow dual role for imx8mp
  with revision DWC3_REVISION_330B, i.e. 0x5533330b
 
 Signed-off-by: po.cheng <po.cheng@adlinktech.com>
@@ -11,7 +11,7 @@ Signed-off-by: po.cheng <po.cheng@adlinktech.com>
  2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 691fd8ab72c5..f3b8a85c2efe 100644
+index d9829ebbb44e..382114b7093d 100644
 --- a/drivers/usb/dwc3/core.c
 +++ b/drivers/usb/dwc3/core.c
 @@ -88,7 +88,8 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
@@ -25,10 +25,10 @@ index 691fd8ab72c5..f3b8a85c2efe 100644
  
  	if (mode != dwc->dr_mode) {
 diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 15391e5fef83..c9a144239f81 100644
+index 883b71df1177..14e94719c976 100644
 --- a/drivers/usb/dwc3/core.h
 +++ b/drivers/usb/dwc3/core.h
-@@ -1229,6 +1229,7 @@ struct dwc3 {
+@@ -1242,6 +1242,7 @@ struct dwc3 {
  #define DWC3_REVISION_300A	0x5533300a
  #define DWC3_REVISION_310A	0x5533310a
  #define DWC3_REVISION_330A	0x5533330a

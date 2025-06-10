@@ -1,7 +1,7 @@
-From 3754727b0d74355beb13f18840b8604ab9be063d Mon Sep 17 00:00:00 2001
+From f1b69c14036a9d167076c45ef2305fec7e6fd3ca Mon Sep 17 00:00:00 2001
 From: Po Cheng <po.cheng@technexion.com>
 Date: Mon, 19 Oct 2020 11:42:07 +0800
-Subject: [PATCH 02/16] sp2-imx8mp: patch: drm: panel: enhancement to take
+Subject: [PATCH 01/22] sp2-imx8mp: patch: drm: panel: enhancement to take
  additional settings from device tree for panel-simple
 
 - parse additional device tree settings for panel desc override
