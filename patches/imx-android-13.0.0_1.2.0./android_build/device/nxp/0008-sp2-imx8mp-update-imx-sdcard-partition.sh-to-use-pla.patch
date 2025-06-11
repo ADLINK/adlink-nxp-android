@@ -1,10 +1,13 @@
-From 7439794cd793a680b305832d967348fec51cb001 Mon Sep 17 00:00:00 2001
+From 8cb1c529eb153b5a152f96221b6b47827758fe9c Mon Sep 17 00:00:00 2001
 From: Santhana Kumar A <santhanakumar@adlinktech.com>
 Date: Tue, 17 Dec 2024 14:20:35 +0530
-Subject: [PATCH 1/2] sp2-imx8mp: update imx-sdcard-partition.sh to use
+Subject: [PATCH 8/9] sp2-imx8mp: update imx-sdcard-partition.sh to use
  platform tools from Android SDK
 
 Signed-off-by: Santhana Kumar A <santhanakumar@adlinktech.com>
+---
+ common/tools/imx-sdcard-partition.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/common/tools/imx-sdcard-partition.sh b/common/tools/imx-sdcard-partition.sh
 index ddac2149..bfa30fcc 100755
@@ -26,5 +29,5 @@ index ddac2149..bfa30fcc 100755
              rm /tmp/TemporaryFile_${randome_part}
          fi
 -- 
-2.47.0
+2.25.1
 

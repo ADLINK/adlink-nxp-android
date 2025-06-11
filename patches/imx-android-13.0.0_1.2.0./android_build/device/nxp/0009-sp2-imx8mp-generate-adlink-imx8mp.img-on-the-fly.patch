@@ -1,12 +1,17 @@
-From 830724929455a99e06f3744c513cc82173fea770 Mon Sep 17 00:00:00 2001
+From 6ca1b63f8435418549145d9fb529dec66da997ff Mon Sep 17 00:00:00 2001
 From: Santhana Kumar A <santhanakumar@adlinktech.com>
 Date: Tue, 17 Dec 2024 14:50:54 +0530
-Subject: [PATCH] sp2-imx8mp: generate adlink-imx8mp.img on the fly
+Subject: [PATCH 9/9] sp2-imx8mp: generate adlink-imx8mp.img on the fly
 
 * support creating adlink-imx8mp.img at build time
 * remove pre-built adlink-imx8mp.img from imx8m/sp2_imx8mp
 
 Signed-off-by: Santhana Kumar A <santhanakumar@adlinktech.com>
+---
+ common/build/kernel.mk             |   3 ++-
+ imx8m/sp2_imx8mp/adlink-imx8mp.img | Bin 33554432 -> 0 bytes
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+ delete mode 100644 imx8m/sp2_imx8mp/adlink-imx8mp.img
 
 diff --git a/common/build/kernel.mk b/common/build/kernel.mk
 index 3e2d4227..fa9fcf90 100644
@@ -2853,5 +2858,5 @@ zV8DO@0|pEjFkrxd0RsjM7%*VKfB^#r3>YwAz<>b*1`HT5V8DO@0|pEjFkrxd0RsjM
 r7%*VKfB^#r3>YwAz<>b*1`HT5V8DO@0|pEjFkrxd0RsjM7&rp~K^;!W
 
 -- 
-2.47.0
+2.25.1
 

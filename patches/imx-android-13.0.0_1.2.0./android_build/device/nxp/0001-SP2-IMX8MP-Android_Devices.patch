@@ -1,8 +1,13 @@
-commit 52ac31a1a6f961b882563acf3b2632dfd7603946
-Author: shivaadlink <shivashankar.thiruchitrambalam@adlinktech.com>
-Date:   Wed Feb 21 16:50:02 2024 +0530
+From cf646680196e5f97f6706088e1eb1800014c157f Mon Sep 17 00:00:00 2001
+From: jenkins <jenkins@adlinktech.com>
+Date: Wed, 11 Jun 2025 01:05:30 +0000
+Subject: [PATCH 1/9] SP2-IMX8MP Android_Devices
 
-    0001-SP2-IMX8MP-Android_Devices
+Signed-off-by: jenkins <jenkins@adlinktech.com>
+---
+ common/tools/imx-make.sh | 2 ++
+ imx8m/AndroidProducts.mk | 7 +++++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
 index 535c5b8f..e17fff7e 100755
@@ -38,3 +43,6 @@ index 8a386e65..e5203457 100644
 +  evk_8mp-userdebug \
 +  sp2_imx8mp-user \
 +  sp2_imx8mp-userdebug
+-- 
+2.25.1
+

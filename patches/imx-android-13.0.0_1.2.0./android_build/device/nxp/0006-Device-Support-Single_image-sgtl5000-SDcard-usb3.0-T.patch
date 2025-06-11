@@ -1,7 +1,7 @@
-From e781353560466ae6a56c661ff3df05174c6e41c6 Mon Sep 17 00:00:00 2001
+From 00d4cc0d475d36ade567537c1765938c729f8057 Mon Sep 17 00:00:00 2001
 From: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
 Date: Mon, 10 Jun 2024 12:24:17 +0530
-Subject: [PATCH] 
+Subject: [PATCH 6/9] 
  Device-Support-Single_image-sgtl5000-SDcard-usb3.0-TPM-Battery
 
 Signed-off-by: adlinkshiva <shivashankar.t@adlinktech.com>
@@ -267,5 +267,5 @@ index 00000000..ed3deb60
 +	esac;
 +exit 0
 -- 
-2.45.2
+2.25.1
 

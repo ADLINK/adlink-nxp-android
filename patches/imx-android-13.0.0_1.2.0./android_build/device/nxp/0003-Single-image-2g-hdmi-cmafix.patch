@@ -1,8 +1,13 @@
-commit 4b97818e1603722308879c410e96dc21d829d98e
-Author: shivaadlink <shivashankar.thiruchitrambalam@adlinktech.com>
-Date:   Thu Mar 21 10:55:02 2024 +0530
+From f6327a0bce81d4ce290c4280fb5a8d98b4ce7695 Mon Sep 17 00:00:00 2001
+From: jenkins <jenkins@adlinktech.com>
+Date: Wed, 11 Jun 2025 01:08:06 +0000
+Subject: [PATCH 3/9] Single image 2g hdmi cmafix
 
-    0003-Single_image_2g_hdmi_cmafix
+Signed-off-by: jenkins <jenkins@adlinktech.com>
+---
+ imx8m/sp2_imx8mp/BoardConfig.mk            |  6 +++---
+ imx8m/sp2_imx8mp/UbootKernelBoardConfig.mk | 14 +++++++-------
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/imx8m/sp2_imx8mp/BoardConfig.mk b/imx8m/sp2_imx8mp/BoardConfig.mk
 index 92ba9b28..549e965e 100644
@@ -57,3 +62,6 @@ index 0c5d81f4..94f5821f 100644
  
  ifeq ($(IMX8MP_USES_GKI),true)
  TARGET_KERNEL_DEFCONFIG := gki_defconfig
+-- 
+2.25.1
+

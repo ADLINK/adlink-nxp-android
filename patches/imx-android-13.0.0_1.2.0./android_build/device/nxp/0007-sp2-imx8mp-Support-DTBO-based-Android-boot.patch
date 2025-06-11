@@ -1,9 +1,39 @@
-From 2d10060c5b1e127228f5437f7ccfb4dfc385dea4 Mon Sep 17 00:00:00 2001
+From 6ea28cfb4f68c3e506b156a7da1f99d3887eb60e Mon Sep 17 00:00:00 2001
 From: Santhana Kumar A <santhanakumar@adlinktech.com>
 Date: Tue, 3 Dec 2024 15:18:51 +0530
-Subject: [PATCH] sp2-imx8mp: Support DTBO based Android boot
+Subject: [PATCH 7/9] sp2-imx8mp: Support DTBO based Android boot
 
 Signed-off-by: Santhana Kumar A <santhanakumar@adlinktech.com>
+---
+ common/build/kernel.mk                        |   3 +
+ ...ons-13GB-ab-dual-bootloader-no-product.bpt |   6 ++
+ ...ice-partitions-13GB-ab-dual-bootloader.bpt |   6 ++
+ ...rtitions-13GB-ab-dual-bootloader_super.bpt |   6 ++
+ .../device-partitions-13GB-ab-no-product.bpt  |   6 ++
+ .../device-partitions-13GB-ab-no-vb_super.bpt |   6 ++
+ .../partition/device-partitions-13GB-ab.bpt   |   6 ++
+ .../device-partitions-13GB-ab_super.bpt       |   6 ++
+ common/partition/device-partitions-14GB.bpt   |   6 ++
+ ...ons-28GB-ab-dual-bootloader-no-product.bpt |   6 ++
+ ...ice-partitions-28GB-ab-dual-bootloader.bpt |   6 ++
+ ...rtitions-28GB-ab-dual-bootloader_super.bpt |   6 ++
+ .../device-partitions-28GB-ab-no-product.bpt  |   6 ++
+ .../device-partitions-28GB-ab-no-vb_super.bpt |   6 ++
+ .../partition/device-partitions-28GB-ab.bpt   |   6 ++
+ .../device-partitions-28GB-ab_super.bpt       |   6 ++
+ common/partition/device-partitions-28GB.bpt   |   6 ++
+ ...artitions-7GB-ab-dual-bootloader_super.bpt |   6 ++
+ .../device-partitions-7GB-ab_super.bpt        |   6 ++
+ common/partition/device-partitions-7GB.bpt    |   6 ++
+ common/tools/imx-sdcard-partition.sh          |   2 +
+ common/tools/uuu_imx_android_flash.sh         |  10 +-
+ imx8m/sp2_imx8mp/BoardConfig.mk               |   4 -
+ imx8m/sp2_imx8mp/UbootKernelBoardConfig.mk    |  15 ++-
+ imx8m/sp2_imx8mp/adlink-imx8mp.img            | Bin 0 -> 33554432 bytes
+ imx8m/sp2_imx8mp/overlay.script               | 102 ++++++++++++++++++
+ 26 files changed, 243 insertions(+), 7 deletions(-)
+ create mode 100644 imx8m/sp2_imx8mp/adlink-imx8mp.img
+ create mode 100644 imx8m/sp2_imx8mp/overlay.script
 
 diff --git a/common/build/kernel.mk b/common/build/kernel.mk
 index 67881d0e..3e2d4227 100644
@@ -3397,5 +3427,5 @@ index 00000000..5c809d99
 +fi;
 +
 -- 
-2.47.0
+2.25.1
 

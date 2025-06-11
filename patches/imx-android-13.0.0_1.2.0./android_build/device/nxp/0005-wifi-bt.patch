@@ -1,8 +1,12 @@
-commit 0ee87d14b87af94ea97380e56017aa7e2f5eb3b7
-Author: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
-Date:   Tue Apr 30 12:47:04 2024 +0530
+From d2264d13cc0099ed19189c01c3725126bf721edc Mon Sep 17 00:00:00 2001
+From: jenkins <jenkins@adlinktech.com>
+Date: Wed, 11 Jun 2025 01:10:53 +0000
+Subject: [PATCH 5/9] wifi bt
 
-    wifi_BT
+Signed-off-by: jenkins <jenkins@adlinktech.com>
+---
+ imx8m/sp2_imx8mp/sp2_imx8mp.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/imx8m/sp2_imx8mp/sp2_imx8mp.mk b/imx8m/sp2_imx8mp/sp2_imx8mp.mk
 index 56b00416..9b942cdd 100644
@@ -18,3 +22,6 @@ index 56b00416..9b942cdd 100644
      vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf
  
  # Wifi regulatory
+-- 
+2.25.1
+

@@ -1,8 +1,12 @@
-commit 9faa92927bee2935427a522ed1c773dd5edaba29
-Author: adlinkshiva <shivashankar.thiruchitrambalam@adlinktech.com>
-Date:   Tue Apr 30 10:31:49 2024 +0530
+From e7e227f31777149eb76af7deeb21cf15c157a87e Mon Sep 17 00:00:00 2001
+From: jenkins <jenkins@adlinktech.com>
+Date: Wed, 11 Jun 2025 01:09:37 +0000
+Subject: [PATCH 4/9] touch support
 
-    touch support
+Signed-off-by: jenkins <jenkins@adlinktech.com>
+---
+ imx8m/sp2_imx8mp/SharedBoardConfig.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/imx8m/sp2_imx8mp/SharedBoardConfig.mk b/imx8m/sp2_imx8mp/SharedBoardConfig.mk
 index d77912bc..9deb6df9 100644
@@ -28,3 +32,6 @@ index d77912bc..9deb6df9 100644
  else
  BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
      $(KERNEL_OUT)/drivers/input/touchscreen/goodix.ko \
+-- 
+2.25.1
+
