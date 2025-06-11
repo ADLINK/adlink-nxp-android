@@ -1,39 +1,39 @@
-From eb516353d1d00adf0e5674a5c7fb1a94a9e6fc75 Mon Sep 17 00:00:00 2001
-From: shivaadlink <shivashankar.thiruchitrambalam@adlinktech.com>
-Date: Tue, 30 Jul 2024 19:13:28 +0530
-Subject: [PATCH] Adding-eltt2-serial-tester
+From e6c99c0362aabea6b2f08c438bcc297b5678b67b Mon Sep 17 00:00:00 2001
+From: jenkins <jenkins@adlinktech.com>
+Date: Wed, 11 Jun 2025 01:35:13 +0000
+Subject: [PATCH 2/2] [PATCH] Adding eltt2 serial-tester
 
-Signed-off-by: shivaadlink <shivashankar.thiruchitrambalam@adlinktech.com>
+Signed-off-by: jenkins <jenkins@adlinktech.com>
 ---
- eltt2/Android.bp                  |   57 +
- eltt2/LICENSE                     |  241 ++++
- eltt2/Makefile                    |   13 +
- eltt2/src/License.txt             |   27 +
- eltt2/src/README.md               |  230 ++++
- eltt2/src/README.txt              |  362 ++++++
- eltt2/src/eltt2.c                 | 1742 +++++++++++++++++++++++++++++
- eltt2/src/eltt2.h                 |  634 +++++++++++
- serial-tester/Android.bp          |   57 +
- serial-tester/LICENSE             |  241 ++++
- serial-tester/src/serial-tester.c |  987 ++++++++++++++++
+ android_build/external/eltt2/Android.bp       |   57 +
+ android_build/external/eltt2/LICENSE          |  241 +++
+ android_build/external/eltt2/Makefile         |   13 +
+ android_build/external/eltt2/src/License.txt  |   27 +
+ android_build/external/eltt2/src/README.md    |  230 +++
+ android_build/external/eltt2/src/README.txt   |  362 ++++
+ android_build/external/eltt2/src/eltt2.c      | 1742 +++++++++++++++++
+ android_build/external/eltt2/src/eltt2.h      |  634 ++++++
+ .../external/serial-tester/Android.bp         |   57 +
+ android_build/external/serial-tester/LICENSE  |  241 +++
+ .../serial-tester/src/serial-tester.c         |  987 ++++++++++
  11 files changed, 4591 insertions(+)
- create mode 100644 eltt2/Android.bp
- create mode 100644 eltt2/LICENSE
- create mode 100644 eltt2/Makefile
- create mode 100644 eltt2/src/License.txt
- create mode 100644 eltt2/src/README.md
- create mode 100644 eltt2/src/README.txt
- create mode 100644 eltt2/src/eltt2.c
- create mode 100644 eltt2/src/eltt2.h
- create mode 100644 serial-tester/Android.bp
- create mode 100644 serial-tester/LICENSE
- create mode 100644 serial-tester/src/serial-tester.c
+ create mode 100644 android_build/external/eltt2/Android.bp
+ create mode 100644 android_build/external/eltt2/LICENSE
+ create mode 100644 android_build/external/eltt2/Makefile
+ create mode 100644 android_build/external/eltt2/src/License.txt
+ create mode 100644 android_build/external/eltt2/src/README.md
+ create mode 100644 android_build/external/eltt2/src/README.txt
+ create mode 100644 android_build/external/eltt2/src/eltt2.c
+ create mode 100644 android_build/external/eltt2/src/eltt2.h
+ create mode 100644 android_build/external/serial-tester/Android.bp
+ create mode 100644 android_build/external/serial-tester/LICENSE
+ create mode 100644 android_build/external/serial-tester/src/serial-tester.c
 
-diff --git a/eltt2/Android.bp b/eltt2/Android.bp
+diff --git a/android_build/external/eltt2/Android.bp b/android_build/external/eltt2/Android.bp
 new file mode 100644
 index 0000000..163191a
 --- /dev/null
-+++ b/eltt2/Android.bp
++++ b/android_build/external/eltt2/Android.bp
 @@ -0,0 +1,57 @@
 +// Copyright (C) 2019 The Android Open Source Project
 +//
@@ -92,11 +92,11 @@ index 0000000..163191a
 +        "-Wno-unused-parameter",
 +    ],
 +}
-diff --git a/eltt2/LICENSE b/eltt2/LICENSE
+diff --git a/android_build/external/eltt2/LICENSE b/android_build/external/eltt2/LICENSE
 new file mode 100644
 index 0000000..b9ef026
 --- /dev/null
-+++ b/eltt2/LICENSE
++++ b/android_build/external/eltt2/LICENSE
 @@ -0,0 +1,241 @@
 +"iperf, Copyright (c) 2014-2020, The Regents of the University of California,
 +through Lawrence Berkeley National Laboratory (subject to receipt of any
@@ -339,11 +339,11 @@ index 0000000..b9ef026
 +// I, Mathias Panzenböck, place this file hereby into the public domain. Use it at your own risk for whatever you like.
 +
 +=====
-diff --git a/eltt2/Makefile b/eltt2/Makefile
+diff --git a/android_build/external/eltt2/Makefile b/android_build/external/eltt2/Makefile
 new file mode 100644
 index 0000000..995311f
 --- /dev/null
-+++ b/eltt2/Makefile
++++ b/android_build/external/eltt2/Makefile
 @@ -0,0 +1,13 @@
 +# Makefile for Embedded Linux TPM Toolbox 2 (ELTT2)
 +# Copyright (c) Infineon Technologies AG
@@ -358,11 +358,11 @@ index 0000000..995311f
 +
 +clean:
 +	rm -rf eltt2
-diff --git a/eltt2/src/License.txt b/eltt2/src/License.txt
+diff --git a/android_build/external/eltt2/src/License.txt b/android_build/external/eltt2/src/License.txt
 new file mode 100644
 index 0000000..e577cd6
 --- /dev/null
-+++ b/eltt2/src/License.txt
++++ b/android_build/external/eltt2/src/License.txt
 @@ -0,0 +1,27 @@
 +Copyright (c) 2014, Infineon Technologies AG
 +All rights reserved.
@@ -392,11 +392,11 @@ index 0000000..e577cd6
 +(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 +SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \ No newline at end of file
-diff --git a/eltt2/src/README.md b/eltt2/src/README.md
+diff --git a/android_build/external/eltt2/src/README.md b/android_build/external/eltt2/src/README.md
 new file mode 100644
 index 0000000..32d87d3
 --- /dev/null
-+++ b/eltt2/src/README.md
++++ b/android_build/external/eltt2/src/README.md
 @@ -0,0 +1,230 @@
 +# ELTT2 - Infineon Embedded Linux TPM Toolbox 2 for TPM 2.0
 + 
@@ -628,11 +628,11 @@ index 0000000..32d87d3
 +- With the application permissions you cannot modify every PCR. For more
 +  details, please refer to the description for the different PCR commands
 +  in this file.
-diff --git a/eltt2/src/README.txt b/eltt2/src/README.txt
+diff --git a/android_build/external/eltt2/src/README.txt b/android_build/external/eltt2/src/README.txt
 new file mode 100644
 index 0000000..9643321
 --- /dev/null
-+++ b/eltt2/src/README.txt
++++ b/android_build/external/eltt2/src/README.txt
 @@ -0,0 +1,362 @@
 +--------------------------------------------------------------------------------
 +        Infineon Embedded Linux TPM Toolbox 2 (ELTT2) for TPM 2.0 v1.1
@@ -996,11 +996,11 @@ index 0000000..9643321
 +    - With the application permissions you cannot modify every PCR. For more
 +      details, please refer to the description for the different PCR commands
 +      in this file.
-diff --git a/eltt2/src/eltt2.c b/eltt2/src/eltt2.c
+diff --git a/android_build/external/eltt2/src/eltt2.c b/android_build/external/eltt2/src/eltt2.c
 new file mode 100644
 index 0000000..644fc55
 --- /dev/null
-+++ b/eltt2/src/eltt2.c
++++ b/android_build/external/eltt2/src/eltt2.c
 @@ -0,0 +1,1742 @@
 +/**
 +  * @brief	Embedded Linux TPM Toolbox 2 (ELTT2)
@@ -2744,11 +2744,11 @@ index 0000000..644fc55
 +
 +	return ret_val;
 +}
-diff --git a/eltt2/src/eltt2.h b/eltt2/src/eltt2.h
+diff --git a/android_build/external/eltt2/src/eltt2.h b/android_build/external/eltt2/src/eltt2.h
 new file mode 100644
 index 0000000..12d7a79
 --- /dev/null
-+++ b/eltt2/src/eltt2.h
++++ b/android_build/external/eltt2/src/eltt2.h
 @@ -0,0 +1,634 @@
 +#ifndef _ELTT2_H_
 +#define _ELTT2_H_
@@ -3384,11 +3384,11 @@ index 0000000..12d7a79
 +};
 +
 +#endif /* _ELTT2_H_ */
-diff --git a/serial-tester/Android.bp b/serial-tester/Android.bp
+diff --git a/android_build/external/serial-tester/Android.bp b/android_build/external/serial-tester/Android.bp
 new file mode 100644
 index 0000000..c82f369
 --- /dev/null
-+++ b/serial-tester/Android.bp
++++ b/android_build/external/serial-tester/Android.bp
 @@ -0,0 +1,57 @@
 +// Copyright (C) 2019 The Android Open Source Project
 +//
@@ -3447,11 +3447,11 @@ index 0000000..c82f369
 +        "-Wno-unused-parameter",
 +    ],
 +}
-diff --git a/serial-tester/LICENSE b/serial-tester/LICENSE
+diff --git a/android_build/external/serial-tester/LICENSE b/android_build/external/serial-tester/LICENSE
 new file mode 100644
 index 0000000..b9ef026
 --- /dev/null
-+++ b/serial-tester/LICENSE
++++ b/android_build/external/serial-tester/LICENSE
 @@ -0,0 +1,241 @@
 +"iperf, Copyright (c) 2014-2020, The Regents of the University of California,
 +through Lawrence Berkeley National Laboratory (subject to receipt of any
@@ -3694,11 +3694,11 @@ index 0000000..b9ef026
 +// I, Mathias Panzenböck, place this file hereby into the public domain. Use it at your own risk for whatever you like.
 +
 +=====
-diff --git a/serial-tester/src/serial-tester.c b/serial-tester/src/serial-tester.c
+diff --git a/android_build/external/serial-tester/src/serial-tester.c b/android_build/external/serial-tester/src/serial-tester.c
 new file mode 100644
 index 0000000..d8f66c1
 --- /dev/null
-+++ b/serial-tester/src/serial-tester.c
++++ b/android_build/external/serial-tester/src/serial-tester.c
 @@ -0,0 +1,987 @@
 +// SPDX-License-Identifier: MIT
 +
@@ -4688,5 +4688,5 @@ index 0000000..d8f66c1
 +	return compute_error_count();
 +}
 -- 
-2.45.2
+2.25.1
 

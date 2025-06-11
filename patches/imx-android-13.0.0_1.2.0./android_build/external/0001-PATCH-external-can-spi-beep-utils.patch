@@ -1,187 +1,187 @@
-From 397400b202b117e263a408596bef8e2a4bde69c5 Mon Sep 17 00:00:00 2001
-From: shivaadlink <shivashankar.thiruchitrambalam@adlinktech.com>
-Date: Tue, 16 Jul 2024 17:31:54 +0530
-Subject: [PATCH] external_can_spi_beep_utils
+From 7a3c062fedea381bf19812dc268e7b4502049896 Mon Sep 17 00:00:00 2001
+From: jenkins <jenkins@adlinktech.com>
+Date: Wed, 11 Jun 2025 01:34:14 +0000
+Subject: [PATCH 1/2] [PATCH] external can spi beep utils
 
-Signed-off-by: shivaadlink <shivashankar.thiruchitrambalam@adlinktech.com>
+Signed-off-by: jenkins <jenkins@adlinktech.com>
 ---
- beep/Android.bp                               |   57 +
- beep/LICENSE                                  |  241 +++
- beep/src/beep.c                               |   51 +
- canutils/.travis.yml                          |  164 ++
- canutils/Android.bp                           |   95 +
- canutils/CMakeLists.txt                       |  102 +
- canutils/GNUmakefile.am                       |  122 ++
- canutils/LICENSE                              |  241 +++
- canutils/LICENSES/BSD-3-Clause                |   27 +
- canutils/LICENSES/GPL-2.0-only.txt            |  340 +++
- canutils/LICENSES/Linux-syscall-note.txt      |   12 +
- canutils/Makefile                             |  146 ++
- canutils/README.md                            |   77 +
- canutils/asc2log.c                            |  542 +++++
- canutils/autogen.sh                           |   22 +
- canutils/bcmserver.c                          |  365 ++++
- canutils/can-calc-bit-timing.c                | 1902 +++++++++++++++++
- canutils/can-j1939-install-kernel-module.md   |  180 ++
- canutils/can-j1939-kickstart.md               |  197 ++
- canutils/can-j1939.md                         |   98 +
- canutils/canbusload.c                         |  432 ++++
- canutils/candump.c                            |  875 ++++++++
- canutils/canfdtest.c                          |  577 +++++
- canutils/canframelen.c                        |  283 +++
- canutils/canframelen.h                        |   85 +
- canutils/cangen.c                             |  582 +++++
- canutils/cangw.c                              | 1029 +++++++++
- canutils/canlogserver.c                       |  441 ++++
- canutils/canplayer.c                          |  556 +++++
- canutils/cansend.c                            |  173 ++
- canutils/cansequence.c                        |  367 ++++
- canutils/cansniffer.c                         |  966 +++++++++
- canutils/cmake/make_uninstall.cmake           |   19 +
+ android_build/external/beep/Android.bp        |   57 +
+ android_build/external/beep/LICENSE           |  241 +++
+ android_build/external/beep/src/beep.c        |   51 +
+ android_build/external/canutils/.travis.yml   |  164 ++
+ android_build/external/canutils/Android.bp    |   95 +
+ .../external/canutils/CMakeLists.txt          |  102 +
+ .../external/canutils/GNUmakefile.am          |  122 ++
+ android_build/external/canutils/LICENSE       |  241 +++
+ .../external/canutils/LICENSES/BSD-3-Clause   |   27 +
+ .../canutils/LICENSES/GPL-2.0-only.txt        |  340 +++
+ .../canutils/LICENSES/Linux-syscall-note.txt  |   12 +
+ android_build/external/canutils/Makefile      |  146 ++
+ android_build/external/canutils/README.md     |   77 +
+ android_build/external/canutils/asc2log.c     |  542 +++++
+ android_build/external/canutils/autogen.sh    |   22 +
+ android_build/external/canutils/bcmserver.c   |  365 ++++
+ .../external/canutils/can-calc-bit-timing.c   | 1902 +++++++++++++++++
+ .../can-j1939-install-kernel-module.md        |  180 ++
+ .../external/canutils/can-j1939-kickstart.md  |  197 ++
+ android_build/external/canutils/can-j1939.md  |   98 +
+ android_build/external/canutils/canbusload.c  |  432 ++++
+ android_build/external/canutils/candump.c     |  875 ++++++++
+ android_build/external/canutils/canfdtest.c   |  577 +++++
+ android_build/external/canutils/canframelen.c |  283 +++
+ android_build/external/canutils/canframelen.h |   85 +
+ android_build/external/canutils/cangen.c      |  582 +++++
+ android_build/external/canutils/cangw.c       | 1029 +++++++++
+ .../external/canutils/canlogserver.c          |  441 ++++
+ android_build/external/canutils/canplayer.c   |  556 +++++
+ android_build/external/canutils/cansend.c     |  173 ++
+ android_build/external/canutils/cansequence.c |  367 ++++
+ android_build/external/canutils/cansniffer.c  |  966 +++++++++
+ .../canutils/cmake/make_uninstall.cmake       |   19 +
  .../m4/.secret-world-domination-project       |    0
- canutils/configure.ac                         |  120 ++
- canutils/include/linux/can.h                  |  247 +++
- canutils/include/linux/can/bcm.h              |  105 +
- canutils/include/linux/can/error.h            |  125 ++
- canutils/include/linux/can/gw.h               |  222 ++
- canutils/include/linux/can/isotp.h            |  182 ++
- canutils/include/linux/can/j1939.h            |  108 +
- canutils/include/linux/can/netlink.h          |  145 ++
- canutils/include/linux/can/raw.h              |   67 +
- canutils/include/linux/can/vxcan.h            |   13 +
- canutils/include/linux/errqueue.h             |   54 +
- canutils/include/linux/kernel.h               |   96 +
- canutils/include/linux/net_tstamp.h           |  162 ++
- canutils/include/linux/netlink.h              |  252 +++
- canutils/isotpdump.c                          |  515 +++++
- canutils/isotpperf.c                          |  422 ++++
- canutils/isotprecv.c                          |  259 +++
- canutils/isotpsend.c                          |  323 +++
- canutils/isotpserver.c                        |  441 ++++
- canutils/isotpsniffer.c                       |  402 ++++
- canutils/isotptun.c                           |  407 ++++
- canutils/j1939acd.c                           |  652 ++++++
- canutils/j1939cat.c                           |  790 +++++++
- canutils/j1939spy.c                           |  304 +++
- canutils/j1939sr.c                            |  221 ++
- canutils/lib.c                                |  687 ++++++
- canutils/lib.h                                |  224 ++
- canutils/libj1939.c                           |  196 ++
- canutils/libj1939.h                           |   35 +
- canutils/log2asc.c                            |  327 +++
- canutils/log2long.c                           |   83 +
- canutils/mcp251xfd/99-devcoredump.rules       |    1 +
- canutils/mcp251xfd/devcoredump                |   11 +
- canutils/mcp251xfd/mcp251xfd-dev-coredump.c   |  257 +++
- canutils/mcp251xfd/mcp251xfd-dump-userspace.h |   61 +
- canutils/mcp251xfd/mcp251xfd-dump.c           |  882 ++++++++
- canutils/mcp251xfd/mcp251xfd-dump.h           |   45 +
- canutils/mcp251xfd/mcp251xfd-main.c           |   97 +
- canutils/mcp251xfd/mcp251xfd-regmap.c         |   81 +
- canutils/mcp251xfd/mcp251xfd.h                |  389 ++++
- canutils/page.theme                           |   20 +
- canutils/slcan_attach.c                       |  272 +++
- canutils/slcand.c                             |  452 ++++
- canutils/slcanpty.c                           |  558 +++++
- canutils/style.css                            |   68 +
- canutils/terminal.h                           |   95 +
- canutils/testj1939.c                          |  315 +++
- spidevtest/Android.bp                         |   57 +
- spidevtest/LICENSE                            |  241 +++
- spidevtest/spdev_refer                        |   19 +
- spidevtest/src/spidev_test.c                  |  495 +++++
+ android_build/external/canutils/configure.ac  |  120 ++
+ .../external/canutils/include/linux/can.h     |  247 +++
+ .../external/canutils/include/linux/can/bcm.h |  105 +
+ .../canutils/include/linux/can/error.h        |  125 ++
+ .../external/canutils/include/linux/can/gw.h  |  222 ++
+ .../canutils/include/linux/can/isotp.h        |  182 ++
+ .../canutils/include/linux/can/j1939.h        |  108 +
+ .../canutils/include/linux/can/netlink.h      |  145 ++
+ .../external/canutils/include/linux/can/raw.h |   67 +
+ .../canutils/include/linux/can/vxcan.h        |   13 +
+ .../canutils/include/linux/errqueue.h         |   54 +
+ .../external/canutils/include/linux/kernel.h  |   96 +
+ .../canutils/include/linux/net_tstamp.h       |  162 ++
+ .../external/canutils/include/linux/netlink.h |  252 +++
+ android_build/external/canutils/isotpdump.c   |  515 +++++
+ android_build/external/canutils/isotpperf.c   |  422 ++++
+ android_build/external/canutils/isotprecv.c   |  259 +++
+ android_build/external/canutils/isotpsend.c   |  323 +++
+ android_build/external/canutils/isotpserver.c |  441 ++++
+ .../external/canutils/isotpsniffer.c          |  402 ++++
+ android_build/external/canutils/isotptun.c    |  407 ++++
+ android_build/external/canutils/j1939acd.c    |  652 ++++++
+ android_build/external/canutils/j1939cat.c    |  790 +++++++
+ android_build/external/canutils/j1939spy.c    |  304 +++
+ android_build/external/canutils/j1939sr.c     |  221 ++
+ android_build/external/canutils/lib.c         |  687 ++++++
+ android_build/external/canutils/lib.h         |  224 ++
+ android_build/external/canutils/libj1939.c    |  196 ++
+ android_build/external/canutils/libj1939.h    |   35 +
+ android_build/external/canutils/log2asc.c     |  327 +++
+ android_build/external/canutils/log2long.c    |   83 +
+ .../canutils/mcp251xfd/99-devcoredump.rules   |    1 +
+ .../external/canutils/mcp251xfd/devcoredump   |   11 +
+ .../mcp251xfd/mcp251xfd-dev-coredump.c        |  257 +++
+ .../mcp251xfd/mcp251xfd-dump-userspace.h      |   61 +
+ .../canutils/mcp251xfd/mcp251xfd-dump.c       |  882 ++++++++
+ .../canutils/mcp251xfd/mcp251xfd-dump.h       |   45 +
+ .../canutils/mcp251xfd/mcp251xfd-main.c       |   97 +
+ .../canutils/mcp251xfd/mcp251xfd-regmap.c     |   81 +
+ .../external/canutils/mcp251xfd/mcp251xfd.h   |  389 ++++
+ android_build/external/canutils/page.theme    |   20 +
+ .../external/canutils/slcan_attach.c          |  272 +++
+ android_build/external/canutils/slcand.c      |  452 ++++
+ android_build/external/canutils/slcanpty.c    |  558 +++++
+ android_build/external/canutils/style.css     |   68 +
+ android_build/external/canutils/terminal.h    |   95 +
+ android_build/external/canutils/testj1939.c   |  315 +++
+ android_build/external/spidevtest/Android.bp  |   57 +
+ android_build/external/spidevtest/LICENSE     |  241 +++
+ android_build/external/spidevtest/spdev_refer |   19 +
+ .../external/spidevtest/src/spidev_test.c     |  495 +++++
  85 files changed, 23968 insertions(+)
- create mode 100644 beep/Android.bp
- create mode 100644 beep/LICENSE
- create mode 100644 beep/src/beep.c
- create mode 100644 canutils/.travis.yml
- create mode 100644 canutils/Android.bp
- create mode 100644 canutils/CMakeLists.txt
- create mode 100644 canutils/GNUmakefile.am
- create mode 100644 canutils/LICENSE
- create mode 100644 canutils/LICENSES/BSD-3-Clause
- create mode 100644 canutils/LICENSES/GPL-2.0-only.txt
- create mode 100644 canutils/LICENSES/Linux-syscall-note.txt
- create mode 100644 canutils/Makefile
- create mode 100644 canutils/README.md
- create mode 100644 canutils/asc2log.c
- create mode 100755 canutils/autogen.sh
- create mode 100644 canutils/bcmserver.c
- create mode 100644 canutils/can-calc-bit-timing.c
- create mode 100644 canutils/can-j1939-install-kernel-module.md
- create mode 100644 canutils/can-j1939-kickstart.md
- create mode 100644 canutils/can-j1939.md
- create mode 100644 canutils/canbusload.c
- create mode 100644 canutils/candump.c
- create mode 100644 canutils/canfdtest.c
- create mode 100644 canutils/canframelen.c
- create mode 100644 canutils/canframelen.h
- create mode 100644 canutils/cangen.c
- create mode 100644 canutils/cangw.c
- create mode 100644 canutils/canlogserver.c
- create mode 100644 canutils/canplayer.c
- create mode 100644 canutils/cansend.c
- create mode 100644 canutils/cansequence.c
- create mode 100644 canutils/cansniffer.c
- create mode 100644 canutils/cmake/make_uninstall.cmake
- create mode 100644 canutils/config/m4/.secret-world-domination-project
- create mode 100644 canutils/configure.ac
- create mode 100644 canutils/include/linux/can.h
- create mode 100644 canutils/include/linux/can/bcm.h
- create mode 100644 canutils/include/linux/can/error.h
- create mode 100644 canutils/include/linux/can/gw.h
- create mode 100644 canutils/include/linux/can/isotp.h
- create mode 100644 canutils/include/linux/can/j1939.h
- create mode 100644 canutils/include/linux/can/netlink.h
- create mode 100644 canutils/include/linux/can/raw.h
- create mode 100644 canutils/include/linux/can/vxcan.h
- create mode 100644 canutils/include/linux/errqueue.h
- create mode 100644 canutils/include/linux/kernel.h
- create mode 100644 canutils/include/linux/net_tstamp.h
- create mode 100644 canutils/include/linux/netlink.h
- create mode 100644 canutils/isotpdump.c
- create mode 100644 canutils/isotpperf.c
- create mode 100644 canutils/isotprecv.c
- create mode 100644 canutils/isotpsend.c
- create mode 100644 canutils/isotpserver.c
- create mode 100644 canutils/isotpsniffer.c
- create mode 100644 canutils/isotptun.c
- create mode 100644 canutils/j1939acd.c
- create mode 100644 canutils/j1939cat.c
- create mode 100644 canutils/j1939spy.c
- create mode 100644 canutils/j1939sr.c
- create mode 100644 canutils/lib.c
- create mode 100644 canutils/lib.h
- create mode 100644 canutils/libj1939.c
- create mode 100644 canutils/libj1939.h
- create mode 100644 canutils/log2asc.c
- create mode 100644 canutils/log2long.c
- create mode 100644 canutils/mcp251xfd/99-devcoredump.rules
- create mode 100644 canutils/mcp251xfd/devcoredump
- create mode 100644 canutils/mcp251xfd/mcp251xfd-dev-coredump.c
- create mode 100644 canutils/mcp251xfd/mcp251xfd-dump-userspace.h
- create mode 100644 canutils/mcp251xfd/mcp251xfd-dump.c
- create mode 100644 canutils/mcp251xfd/mcp251xfd-dump.h
- create mode 100644 canutils/mcp251xfd/mcp251xfd-main.c
- create mode 100644 canutils/mcp251xfd/mcp251xfd-regmap.c
- create mode 100644 canutils/mcp251xfd/mcp251xfd.h
- create mode 100644 canutils/page.theme
- create mode 100644 canutils/slcan_attach.c
- create mode 100644 canutils/slcand.c
- create mode 100644 canutils/slcanpty.c
- create mode 100644 canutils/style.css
- create mode 100644 canutils/terminal.h
- create mode 100644 canutils/testj1939.c
- create mode 100644 spidevtest/Android.bp
- create mode 100644 spidevtest/LICENSE
- create mode 100644 spidevtest/spdev_refer
- create mode 100644 spidevtest/src/spidev_test.c
+ create mode 100644 android_build/external/beep/Android.bp
+ create mode 100644 android_build/external/beep/LICENSE
+ create mode 100644 android_build/external/beep/src/beep.c
+ create mode 100644 android_build/external/canutils/.travis.yml
+ create mode 100644 android_build/external/canutils/Android.bp
+ create mode 100644 android_build/external/canutils/CMakeLists.txt
+ create mode 100644 android_build/external/canutils/GNUmakefile.am
+ create mode 100644 android_build/external/canutils/LICENSE
+ create mode 100644 android_build/external/canutils/LICENSES/BSD-3-Clause
+ create mode 100644 android_build/external/canutils/LICENSES/GPL-2.0-only.txt
+ create mode 100644 android_build/external/canutils/LICENSES/Linux-syscall-note.txt
+ create mode 100644 android_build/external/canutils/Makefile
+ create mode 100644 android_build/external/canutils/README.md
+ create mode 100644 android_build/external/canutils/asc2log.c
+ create mode 100755 android_build/external/canutils/autogen.sh
+ create mode 100644 android_build/external/canutils/bcmserver.c
+ create mode 100644 android_build/external/canutils/can-calc-bit-timing.c
+ create mode 100644 android_build/external/canutils/can-j1939-install-kernel-module.md
+ create mode 100644 android_build/external/canutils/can-j1939-kickstart.md
+ create mode 100644 android_build/external/canutils/can-j1939.md
+ create mode 100644 android_build/external/canutils/canbusload.c
+ create mode 100644 android_build/external/canutils/candump.c
+ create mode 100644 android_build/external/canutils/canfdtest.c
+ create mode 100644 android_build/external/canutils/canframelen.c
+ create mode 100644 android_build/external/canutils/canframelen.h
+ create mode 100644 android_build/external/canutils/cangen.c
+ create mode 100644 android_build/external/canutils/cangw.c
+ create mode 100644 android_build/external/canutils/canlogserver.c
+ create mode 100644 android_build/external/canutils/canplayer.c
+ create mode 100644 android_build/external/canutils/cansend.c
+ create mode 100644 android_build/external/canutils/cansequence.c
+ create mode 100644 android_build/external/canutils/cansniffer.c
+ create mode 100644 android_build/external/canutils/cmake/make_uninstall.cmake
+ create mode 100644 android_build/external/canutils/config/m4/.secret-world-domination-project
+ create mode 100644 android_build/external/canutils/configure.ac
+ create mode 100644 android_build/external/canutils/include/linux/can.h
+ create mode 100644 android_build/external/canutils/include/linux/can/bcm.h
+ create mode 100644 android_build/external/canutils/include/linux/can/error.h
+ create mode 100644 android_build/external/canutils/include/linux/can/gw.h
+ create mode 100644 android_build/external/canutils/include/linux/can/isotp.h
+ create mode 100644 android_build/external/canutils/include/linux/can/j1939.h
+ create mode 100644 android_build/external/canutils/include/linux/can/netlink.h
+ create mode 100644 android_build/external/canutils/include/linux/can/raw.h
+ create mode 100644 android_build/external/canutils/include/linux/can/vxcan.h
+ create mode 100644 android_build/external/canutils/include/linux/errqueue.h
+ create mode 100644 android_build/external/canutils/include/linux/kernel.h
+ create mode 100644 android_build/external/canutils/include/linux/net_tstamp.h
+ create mode 100644 android_build/external/canutils/include/linux/netlink.h
+ create mode 100644 android_build/external/canutils/isotpdump.c
+ create mode 100644 android_build/external/canutils/isotpperf.c
+ create mode 100644 android_build/external/canutils/isotprecv.c
+ create mode 100644 android_build/external/canutils/isotpsend.c
+ create mode 100644 android_build/external/canutils/isotpserver.c
+ create mode 100644 android_build/external/canutils/isotpsniffer.c
+ create mode 100644 android_build/external/canutils/isotptun.c
+ create mode 100644 android_build/external/canutils/j1939acd.c
+ create mode 100644 android_build/external/canutils/j1939cat.c
+ create mode 100644 android_build/external/canutils/j1939spy.c
+ create mode 100644 android_build/external/canutils/j1939sr.c
+ create mode 100644 android_build/external/canutils/lib.c
+ create mode 100644 android_build/external/canutils/lib.h
+ create mode 100644 android_build/external/canutils/libj1939.c
+ create mode 100644 android_build/external/canutils/libj1939.h
+ create mode 100644 android_build/external/canutils/log2asc.c
+ create mode 100644 android_build/external/canutils/log2long.c
+ create mode 100644 android_build/external/canutils/mcp251xfd/99-devcoredump.rules
+ create mode 100644 android_build/external/canutils/mcp251xfd/devcoredump
+ create mode 100644 android_build/external/canutils/mcp251xfd/mcp251xfd-dev-coredump.c
+ create mode 100644 android_build/external/canutils/mcp251xfd/mcp251xfd-dump-userspace.h
+ create mode 100644 android_build/external/canutils/mcp251xfd/mcp251xfd-dump.c
+ create mode 100644 android_build/external/canutils/mcp251xfd/mcp251xfd-dump.h
+ create mode 100644 android_build/external/canutils/mcp251xfd/mcp251xfd-main.c
+ create mode 100644 android_build/external/canutils/mcp251xfd/mcp251xfd-regmap.c
+ create mode 100644 android_build/external/canutils/mcp251xfd/mcp251xfd.h
+ create mode 100644 android_build/external/canutils/page.theme
+ create mode 100644 android_build/external/canutils/slcan_attach.c
+ create mode 100644 android_build/external/canutils/slcand.c
+ create mode 100644 android_build/external/canutils/slcanpty.c
+ create mode 100644 android_build/external/canutils/style.css
+ create mode 100644 android_build/external/canutils/terminal.h
+ create mode 100644 android_build/external/canutils/testj1939.c
+ create mode 100644 android_build/external/spidevtest/Android.bp
+ create mode 100644 android_build/external/spidevtest/LICENSE
+ create mode 100644 android_build/external/spidevtest/spdev_refer
+ create mode 100644 android_build/external/spidevtest/src/spidev_test.c
 
-diff --git a/beep/Android.bp b/beep/Android.bp
+diff --git a/android_build/external/beep/Android.bp b/android_build/external/beep/Android.bp
 new file mode 100644
 index 0000000..de0df09
 --- /dev/null
-+++ b/beep/Android.bp
++++ b/android_build/external/beep/Android.bp
 @@ -0,0 +1,57 @@
 +// Copyright (C) 2019 The Android Open Source Project
 +//
@@ -240,11 +240,11 @@ index 0000000..de0df09
 +        "-Wno-unused-parameter",
 +    ],
 +}
-diff --git a/beep/LICENSE b/beep/LICENSE
+diff --git a/android_build/external/beep/LICENSE b/android_build/external/beep/LICENSE
 new file mode 100644
 index 0000000..b9ef026
 --- /dev/null
-+++ b/beep/LICENSE
++++ b/android_build/external/beep/LICENSE
 @@ -0,0 +1,241 @@
 +"iperf, Copyright (c) 2014-2020, The Regents of the University of California,
 +through Lawrence Berkeley National Laboratory (subject to receipt of any
@@ -487,11 +487,11 @@ index 0000000..b9ef026
 +// I, Mathias Panzenböck, place this file hereby into the public domain. Use it at your own risk for whatever you like.
 +
 +=====
-diff --git a/beep/src/beep.c b/beep/src/beep.c
+diff --git a/android_build/external/beep/src/beep.c b/android_build/external/beep/src/beep.c
 new file mode 100644
 index 0000000..7f6d073
 --- /dev/null
-+++ b/beep/src/beep.c
++++ b/android_build/external/beep/src/beep.c
 @@ -0,0 +1,51 @@
 +#include<stdint.h>
 +#include<string.h>
@@ -544,11 +544,11 @@ index 0000000..7f6d073
 +	return ret;
 +}
 +
-diff --git a/canutils/.travis.yml b/canutils/.travis.yml
+diff --git a/android_build/external/canutils/.travis.yml b/android_build/external/canutils/.travis.yml
 new file mode 100644
 index 0000000..5c5e11e
 --- /dev/null
-+++ b/canutils/.travis.yml
++++ b/android_build/external/canutils/.travis.yml
 @@ -0,0 +1,164 @@
 +language: c
 +
@@ -714,11 +714,11 @@ index 0000000..5c5e11e
 +            - ninja-build
 +        sources:
 +            - ubuntu-toolchain-r-test
-diff --git a/canutils/Android.bp b/canutils/Android.bp
+diff --git a/android_build/external/canutils/Android.bp b/android_build/external/canutils/Android.bp
 new file mode 100644
 index 0000000..5bc90ff
 --- /dev/null
-+++ b/canutils/Android.bp
++++ b/android_build/external/canutils/Android.bp
 @@ -0,0 +1,95 @@
 +// Copyright (C) 2019 The Android Open Source Project
 +//
@@ -815,11 +815,11 @@ index 0000000..5bc90ff
 +        "libcan",
 +    ],
 +}
-diff --git a/canutils/CMakeLists.txt b/canutils/CMakeLists.txt
+diff --git a/android_build/external/canutils/CMakeLists.txt b/android_build/external/canutils/CMakeLists.txt
 new file mode 100644
 index 0000000..fea4171
 --- /dev/null
-+++ b/canutils/CMakeLists.txt
++++ b/android_build/external/canutils/CMakeLists.txt
 @@ -0,0 +1,102 @@
 +cmake_minimum_required(VERSION 3.3)
 +
@@ -923,11 +923,11 @@ index 0000000..fea4171
 +
 +
 +ADD_CUSTOM_TARGET(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_SOURCE_DIR}/cmake/make_uninstall.cmake")
-diff --git a/canutils/GNUmakefile.am b/canutils/GNUmakefile.am
+diff --git a/android_build/external/canutils/GNUmakefile.am b/android_build/external/canutils/GNUmakefile.am
 new file mode 100644
 index 0000000..02c37ab
 --- /dev/null
-+++ b/canutils/GNUmakefile.am
++++ b/android_build/external/canutils/GNUmakefile.am
 @@ -0,0 +1,122 @@
 +ACLOCAL_AMFLAGS = -I config/m4
 +
@@ -1051,11 +1051,11 @@ index 0000000..02c37ab
 +maintainer-clean-local:
 +	-chmod -R a+rw $(distdir)
 +	-rm -fr $(distdir)
-diff --git a/canutils/LICENSE b/canutils/LICENSE
+diff --git a/android_build/external/canutils/LICENSE b/android_build/external/canutils/LICENSE
 new file mode 100644
 index 0000000..b9ef026
 --- /dev/null
-+++ b/canutils/LICENSE
++++ b/android_build/external/canutils/LICENSE
 @@ -0,0 +1,241 @@
 +"iperf, Copyright (c) 2014-2020, The Regents of the University of California,
 +through Lawrence Berkeley National Laboratory (subject to receipt of any
@@ -1298,11 +1298,11 @@ index 0000000..b9ef026
 +// I, Mathias Panzenböck, place this file hereby into the public domain. Use it at your own risk for whatever you like.
 +
 +=====
-diff --git a/canutils/LICENSES/BSD-3-Clause b/canutils/LICENSES/BSD-3-Clause
+diff --git a/android_build/external/canutils/LICENSES/BSD-3-Clause b/android_build/external/canutils/LICENSES/BSD-3-Clause
 new file mode 100644
 index 0000000..5858df5
 --- /dev/null
-+++ b/canutils/LICENSES/BSD-3-Clause
++++ b/android_build/external/canutils/LICENSES/BSD-3-Clause
 @@ -0,0 +1,27 @@
 +Copyright (c) <year> <owner> . All rights reserved.
 +
@@ -1331,11 +1331,11 @@ index 0000000..5858df5
 +CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 +ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 +POSSIBILITY OF SUCH DAMAGE.
-diff --git a/canutils/LICENSES/GPL-2.0-only.txt b/canutils/LICENSES/GPL-2.0-only.txt
+diff --git a/android_build/external/canutils/LICENSES/GPL-2.0-only.txt b/android_build/external/canutils/LICENSES/GPL-2.0-only.txt
 new file mode 100644
 index 0000000..8f6e782
 --- /dev/null
-+++ b/canutils/LICENSES/GPL-2.0-only.txt
++++ b/android_build/external/canutils/LICENSES/GPL-2.0-only.txt
 @@ -0,0 +1,340 @@
 +		    GNU GENERAL PUBLIC LICENSE
 +		       Version 2, June 1991
@@ -1677,11 +1677,11 @@ index 0000000..8f6e782
 +consider it more useful to permit linking proprietary applications with the
 +library.  If this is what you want to do, use the GNU Library General
 +Public License instead of this License.
-diff --git a/canutils/LICENSES/Linux-syscall-note.txt b/canutils/LICENSES/Linux-syscall-note.txt
+diff --git a/android_build/external/canutils/LICENSES/Linux-syscall-note.txt b/android_build/external/canutils/LICENSES/Linux-syscall-note.txt
 new file mode 100644
 index 0000000..3d7ab24
 --- /dev/null
-+++ b/canutils/LICENSES/Linux-syscall-note.txt
++++ b/android_build/external/canutils/LICENSES/Linux-syscall-note.txt
 @@ -0,0 +1,12 @@
 + NOTE! This copyright does *not* cover user programs that use kernel
 + services by normal system calls - this is merely considered normal use
@@ -1695,11 +1695,11 @@ index 0000000..3d7ab24
 + v2.2 or v3.x or whatever), unless explicitly otherwise stated.
 +
 +			Linus Torvalds
-diff --git a/canutils/Makefile b/canutils/Makefile
+diff --git a/android_build/external/canutils/Makefile b/android_build/external/canutils/Makefile
 new file mode 100644
 index 0000000..fb52643
 --- /dev/null
-+++ b/canutils/Makefile
++++ b/android_build/external/canutils/Makefile
 @@ -0,0 +1,146 @@
 +#
 +#  Copyright (c) 2002-2005 Volkswagen Group Electronic Research
@@ -1847,11 +1847,11 @@ index 0000000..fb52643
 +
 +mcp251xfd-dump:	mcp251xfd/mcp251xfd-dev-coredump.o mcp251xfd/mcp251xfd-dump.o mcp251xfd/mcp251xfd-main.o mcp251xfd/mcp251xfd-regmap.o
 +	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
-diff --git a/canutils/README.md b/canutils/README.md
+diff --git a/android_build/external/canutils/README.md b/android_build/external/canutils/README.md
 new file mode 100644
 index 0000000..c01100b
 --- /dev/null
-+++ b/canutils/README.md
++++ b/android_build/external/canutils/README.md
 @@ -0,0 +1,77 @@
 +<p align="center">
 +<img src="https://github.com/linux-can/can-logos/raw/master/png/SocketCAN-logo-60dpi.png" alt="SocketCAN logo"/>
@@ -1930,11 +1930,11 @@ index 0000000..c01100b
 +*   [SocketCAN Documentation (Linux Kernel)](https://www.kernel.org/doc/Documentation/networking/can.txt)
 +*   [Elinux.org CAN Bus Page](http://elinux.org/CAN_Bus)
 +*   [Debian Package Description](https://packages.debian.org/sid/can-utils)
-diff --git a/canutils/asc2log.c b/canutils/asc2log.c
+diff --git a/android_build/external/canutils/asc2log.c b/android_build/external/canutils/asc2log.c
 new file mode 100644
 index 0000000..788482c
 --- /dev/null
-+++ b/canutils/asc2log.c
++++ b/android_build/external/canutils/asc2log.c
 @@ -0,0 +1,542 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -2478,11 +2478,11 @@ index 0000000..788482c
 +	fclose(infile);
 +	return 0;
 +}
-diff --git a/canutils/autogen.sh b/canutils/autogen.sh
+diff --git a/android_build/external/canutils/autogen.sh b/android_build/external/canutils/autogen.sh
 new file mode 100755
 index 0000000..6d1c20a
 --- /dev/null
-+++ b/canutils/autogen.sh
++++ b/android_build/external/canutils/autogen.sh
 @@ -0,0 +1,22 @@
 +#!/bin/bash
 +
@@ -2506,11 +2506,11 @@ index 0000000..6d1c20a
 +autoreconf --force --install -Wall || exit $?
 +
 +banner "Finished"
-diff --git a/canutils/bcmserver.c b/canutils/bcmserver.c
+diff --git a/android_build/external/canutils/bcmserver.c b/android_build/external/canutils/bcmserver.c
 new file mode 100644
 index 0000000..7241c78
 --- /dev/null
-+++ b/canutils/bcmserver.c
++++ b/android_build/external/canutils/bcmserver.c
 @@ -0,0 +1,365 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -2877,11 +2877,11 @@ index 0000000..7241c78
 +
 +	return 0;
 +}
-diff --git a/canutils/can-calc-bit-timing.c b/canutils/can-calc-bit-timing.c
+diff --git a/android_build/external/canutils/can-calc-bit-timing.c b/android_build/external/canutils/can-calc-bit-timing.c
 new file mode 100644
 index 0000000..dc2a62c
 --- /dev/null
-+++ b/canutils/can-calc-bit-timing.c
++++ b/android_build/external/canutils/can-calc-bit-timing.c
 @@ -0,0 +1,1902 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/* can-calc-bit-timing.c: Calculate CAN bit timing parameters
@@ -4785,11 +4785,11 @@ index 0000000..dc2a62c
 +
 +	exit(EXIT_SUCCESS);
 +}
-diff --git a/canutils/can-j1939-install-kernel-module.md b/canutils/can-j1939-install-kernel-module.md
+diff --git a/android_build/external/canutils/can-j1939-install-kernel-module.md b/android_build/external/canutils/can-j1939-install-kernel-module.md
 new file mode 100644
 index 0000000..f4e3a47
 --- /dev/null
-+++ b/canutils/can-j1939-install-kernel-module.md
++++ b/android_build/external/canutils/can-j1939-install-kernel-module.md
 @@ -0,0 +1,180 @@
 +# can-j1939 kernel module installation #
 +
@@ -4971,11 +4971,11 @@ index 0000000..f4e3a47
 +```
 +
 +That is the minimum for compiling some **J1939** C code, but you might want to upgrade other header files as well. That's up to you. Enjoy!
-diff --git a/canutils/can-j1939-kickstart.md b/canutils/can-j1939-kickstart.md
+diff --git a/android_build/external/canutils/can-j1939-kickstart.md b/android_build/external/canutils/can-j1939-kickstart.md
 new file mode 100644
 index 0000000..721656a
 --- /dev/null
-+++ b/canutils/can-j1939-kickstart.md
++++ b/android_build/external/canutils/can-j1939-kickstart.md
 @@ -0,0 +1,197 @@
 +# Kickstart guide to can-j1939 on linux
 +
@@ -5174,11 +5174,11 @@ index 0000000..721656a
 +### advanced filtering
 +
 +## dynamic addressing
-diff --git a/canutils/can-j1939.md b/canutils/can-j1939.md
+diff --git a/android_build/external/canutils/can-j1939.md b/android_build/external/canutils/can-j1939.md
 new file mode 100644
 index 0000000..4b97085
 --- /dev/null
-+++ b/canutils/can-j1939.md
++++ b/android_build/external/canutils/can-j1939.md
 @@ -0,0 +1,98 @@
 +# CAN-J1939 on linux
 +
@@ -5278,11 +5278,11 @@ index 0000000..4b97085
 +
 +  * When providing address information,
 +    *name* != 0 indicates dynamic addressing
-diff --git a/canutils/canbusload.c b/canutils/canbusload.c
+diff --git a/android_build/external/canutils/canbusload.c b/android_build/external/canutils/canbusload.c
 new file mode 100644
 index 0000000..2b837b8
 --- /dev/null
-+++ b/canutils/canbusload.c
++++ b/android_build/external/canutils/canbusload.c
 @@ -0,0 +1,432 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -5716,11 +5716,11 @@ index 0000000..2b837b8
 +
 +	return 0;
 +}
-diff --git a/canutils/candump.c b/canutils/candump.c
+diff --git a/android_build/external/canutils/candump.c b/android_build/external/canutils/candump.c
 new file mode 100644
 index 0000000..6fe30bb
 --- /dev/null
-+++ b/canutils/candump.c
++++ b/android_build/external/canutils/candump.c
 @@ -0,0 +1,875 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -6597,11 +6597,11 @@ index 0000000..6fe30bb
 +
 +	return 0;
 +}
-diff --git a/canutils/canfdtest.c b/canutils/canfdtest.c
+diff --git a/android_build/external/canutils/canfdtest.c b/android_build/external/canutils/canfdtest.c
 new file mode 100644
 index 0000000..704524f
 --- /dev/null
-+++ b/canutils/canfdtest.c
++++ b/android_build/external/canutils/canfdtest.c
 @@ -0,0 +1,577 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -7180,11 +7180,11 @@ index 0000000..704524f
 +
 +	return err;
 +}
-diff --git a/canutils/canframelen.c b/canutils/canframelen.c
+diff --git a/android_build/external/canutils/canframelen.c b/android_build/external/canutils/canframelen.c
 new file mode 100644
 index 0000000..e0ca1f5
 --- /dev/null
-+++ b/canutils/canframelen.c
++++ b/android_build/external/canutils/canframelen.c
 @@ -0,0 +1,283 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -7469,11 +7469,11 @@ index 0000000..e0ca1f5
 +	}
 +	return 0; /* Unknown mode */
 +}
-diff --git a/canutils/canframelen.h b/canutils/canframelen.h
+diff --git a/android_build/external/canutils/canframelen.h b/android_build/external/canutils/canframelen.h
 new file mode 100644
 index 0000000..47739b2
 --- /dev/null
-+++ b/canutils/canframelen.h
++++ b/android_build/external/canutils/canframelen.h
 @@ -0,0 +1,85 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -7560,11 +7560,11 @@ index 0000000..47739b2
 +unsigned can_frame_dbitrate_length(struct canfd_frame *frame, enum cfl_mode mode, int mtu);
 +
 +#endif
-diff --git a/canutils/cangen.c b/canutils/cangen.c
+diff --git a/android_build/external/canutils/cangen.c b/android_build/external/canutils/cangen.c
 new file mode 100644
 index 0000000..2327064
 --- /dev/null
-+++ b/canutils/cangen.c
++++ b/android_build/external/canutils/cangen.c
 @@ -0,0 +1,582 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -8148,11 +8148,11 @@ index 0000000..2327064
 +
 +	return 0;
 +}
-diff --git a/canutils/cangw.c b/canutils/cangw.c
+diff --git a/android_build/external/canutils/cangw.c b/android_build/external/canutils/cangw.c
 new file mode 100644
 index 0000000..022b786
 --- /dev/null
-+++ b/canutils/cangw.c
++++ b/android_build/external/canutils/cangw.c
 @@ -0,0 +1,1029 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -9183,11 +9183,11 @@ index 0000000..022b786
 +
 +	return err;
 +}
-diff --git a/canutils/canlogserver.c b/canutils/canlogserver.c
+diff --git a/android_build/external/canutils/canlogserver.c b/android_build/external/canutils/canlogserver.c
 new file mode 100644
 index 0000000..45e29e3
 --- /dev/null
-+++ b/canutils/canlogserver.c
++++ b/android_build/external/canutils/canlogserver.c
 @@ -0,0 +1,441 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -9630,11 +9630,11 @@ index 0000000..45e29e3
 +	close(accsocket);
 +	return 0;
 +}
-diff --git a/canutils/canplayer.c b/canutils/canplayer.c
+diff --git a/android_build/external/canutils/canplayer.c b/android_build/external/canutils/canplayer.c
 new file mode 100644
 index 0000000..29d41ac
 --- /dev/null
-+++ b/canutils/canplayer.c
++++ b/android_build/external/canutils/canplayer.c
 @@ -0,0 +1,556 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -10192,11 +10192,11 @@ index 0000000..29d41ac
 +
 +	return 0;
 +}
-diff --git a/canutils/cansend.c b/canutils/cansend.c
+diff --git a/android_build/external/canutils/cansend.c b/android_build/external/canutils/cansend.c
 new file mode 100644
 index 0000000..7bfb6c8
 --- /dev/null
-+++ b/canutils/cansend.c
++++ b/android_build/external/canutils/cansend.c
 @@ -0,0 +1,173 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -10371,11 +10371,11 @@ index 0000000..7bfb6c8
 +
 +	return 0;
 +}
-diff --git a/canutils/cansequence.c b/canutils/cansequence.c
+diff --git a/android_build/external/canutils/cansequence.c b/android_build/external/canutils/cansequence.c
 new file mode 100644
 index 0000000..78cf5a5
 --- /dev/null
-+++ b/canutils/cansequence.c
++++ b/android_build/external/canutils/cansequence.c
 @@ -0,0 +1,367 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +// Copyright (c) 2007, 2008, 2009, 2010, 2014, 2015, 2019 Pengutronix,
@@ -10744,11 +10744,11 @@ index 0000000..78cf5a5
 +
 +	exit(EXIT_SUCCESS);
 +}
-diff --git a/canutils/cansniffer.c b/canutils/cansniffer.c
+diff --git a/android_build/external/canutils/cansniffer.c b/android_build/external/canutils/cansniffer.c
 new file mode 100644
 index 0000000..5aa5e7a
 --- /dev/null
-+++ b/canutils/cansniffer.c
++++ b/android_build/external/canutils/cansniffer.c
 @@ -0,0 +1,966 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -11716,11 +11716,11 @@ index 0000000..5aa5e7a
 +
 +	return -1; /* No match */
 +}
-diff --git a/canutils/cmake/make_uninstall.cmake b/canutils/cmake/make_uninstall.cmake
+diff --git a/android_build/external/canutils/cmake/make_uninstall.cmake b/android_build/external/canutils/cmake/make_uninstall.cmake
 new file mode 100644
 index 0000000..358168d
 --- /dev/null
-+++ b/canutils/cmake/make_uninstall.cmake
++++ b/android_build/external/canutils/cmake/make_uninstall.cmake
 @@ -0,0 +1,19 @@
 +
 +if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt")
@@ -11741,14 +11741,14 @@ index 0000000..358168d
 +        message(STATUS "File ${file} does not exist.")
 +    endif()
 +endforeach()
-diff --git a/canutils/config/m4/.secret-world-domination-project b/canutils/config/m4/.secret-world-domination-project
+diff --git a/android_build/external/canutils/config/m4/.secret-world-domination-project b/android_build/external/canutils/config/m4/.secret-world-domination-project
 new file mode 100644
 index 0000000..e69de29
-diff --git a/canutils/configure.ac b/canutils/configure.ac
+diff --git a/android_build/external/canutils/configure.ac b/android_build/external/canutils/configure.ac
 new file mode 100644
 index 0000000..f44a5e2
 --- /dev/null
-+++ b/canutils/configure.ac
++++ b/android_build/external/canutils/configure.ac
 @@ -0,0 +1,120 @@
 +# -*- Autoconf -*-
 +# Process this file with autoconf to produce a configure script.
@@ -11870,11 +11870,11 @@ index 0000000..f44a5e2
 +	GNUmakefile
 +	])
 +AC_OUTPUT
-diff --git a/canutils/include/linux/can.h b/canutils/include/linux/can.h
+diff --git a/android_build/external/canutils/include/linux/can.h b/android_build/external/canutils/include/linux/can.h
 new file mode 100644
 index 0000000..4ed1af9
 --- /dev/null
-+++ b/canutils/include/linux/can.h
++++ b/android_build/external/canutils/include/linux/can.h
 @@ -0,0 +1,247 @@
 +/* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) */
 +/*
@@ -12123,11 +12123,11 @@ index 0000000..4ed1af9
 +#define CAN_RAW_FILTER_MAX 512 /* maximum number of can_filter set via setsockopt() */
 +
 +#endif /* !_UAPI_CAN_H */
-diff --git a/canutils/include/linux/can/bcm.h b/canutils/include/linux/can/bcm.h
+diff --git a/android_build/external/canutils/include/linux/can/bcm.h b/android_build/external/canutils/include/linux/can/bcm.h
 new file mode 100644
 index 0000000..dd2b925
 --- /dev/null
-+++ b/canutils/include/linux/can/bcm.h
++++ b/android_build/external/canutils/include/linux/can/bcm.h
 @@ -0,0 +1,105 @@
 +/* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) */
 +/*
@@ -12234,11 +12234,11 @@ index 0000000..dd2b925
 +#define CAN_FD_FRAME        0x0800
 +
 +#endif /* !_UAPI_CAN_BCM_H */
-diff --git a/canutils/include/linux/can/error.h b/canutils/include/linux/can/error.h
+diff --git a/android_build/external/canutils/include/linux/can/error.h b/android_build/external/canutils/include/linux/can/error.h
 new file mode 100644
 index 0000000..3463328
 --- /dev/null
-+++ b/canutils/include/linux/can/error.h
++++ b/android_build/external/canutils/include/linux/can/error.h
 @@ -0,0 +1,125 @@
 +/* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) */
 +/*
@@ -12365,11 +12365,11 @@ index 0000000..3463328
 +/* controller specific additional information / data[5..7] */
 +
 +#endif /* _UAPI_CAN_ERROR_H */
-diff --git a/canutils/include/linux/can/gw.h b/canutils/include/linux/can/gw.h
+diff --git a/android_build/external/canutils/include/linux/can/gw.h b/android_build/external/canutils/include/linux/can/gw.h
 new file mode 100644
 index 0000000..e4f0957
 --- /dev/null
-+++ b/canutils/include/linux/can/gw.h
++++ b/android_build/external/canutils/include/linux/can/gw.h
 @@ -0,0 +1,222 @@
 +/* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) */
 +/*
@@ -12593,11 +12593,11 @@ index 0000000..e4f0957
 + */
 +
 +#endif /* !_UAPI_CAN_GW_H */
-diff --git a/canutils/include/linux/can/isotp.h b/canutils/include/linux/can/isotp.h
+diff --git a/android_build/external/canutils/include/linux/can/isotp.h b/android_build/external/canutils/include/linux/can/isotp.h
 new file mode 100644
 index 0000000..439c982
 --- /dev/null
-+++ b/canutils/include/linux/can/isotp.h
++++ b/android_build/external/canutils/include/linux/can/isotp.h
 @@ -0,0 +1,182 @@
 +/* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) */
 +/*
@@ -12781,11 +12781,11 @@ index 0000000..439c982
 +#define CAN_ISOTP_FRAME_TXTIME_ZERO	0xFFFFFFFF
 +
 +#endif /* !_UAPI_CAN_ISOTP_H */
-diff --git a/canutils/include/linux/can/j1939.h b/canutils/include/linux/can/j1939.h
+diff --git a/android_build/external/canutils/include/linux/can/j1939.h b/android_build/external/canutils/include/linux/can/j1939.h
 new file mode 100644
 index 0000000..3893646
 --- /dev/null
-+++ b/canutils/include/linux/can/j1939.h
++++ b/android_build/external/canutils/include/linux/can/j1939.h
 @@ -0,0 +1,108 @@
 +/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
 +/*
@@ -12895,11 +12895,11 @@ index 0000000..3893646
 +#define J1939_FILTER_MAX 512 /* maximum number of j1939_filter set via setsockopt() */
 +
 +#endif /* !_UAPI_CAN_J1939_H_ */
-diff --git a/canutils/include/linux/can/netlink.h b/canutils/include/linux/can/netlink.h
+diff --git a/android_build/external/canutils/include/linux/can/netlink.h b/android_build/external/canutils/include/linux/can/netlink.h
 new file mode 100644
 index 0000000..f730d44
 --- /dev/null
-+++ b/canutils/include/linux/can/netlink.h
++++ b/android_build/external/canutils/include/linux/can/netlink.h
 @@ -0,0 +1,145 @@
 +/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
 +/*
@@ -13046,11 +13046,11 @@ index 0000000..f730d44
 +#define CAN_TERMINATION_DISABLED 0
 +
 +#endif /* !_UAPI_CAN_NETLINK_H */
-diff --git a/canutils/include/linux/can/raw.h b/canutils/include/linux/can/raw.h
+diff --git a/android_build/external/canutils/include/linux/can/raw.h b/android_build/external/canutils/include/linux/can/raw.h
 new file mode 100644
 index 0000000..3386aa8
 --- /dev/null
-+++ b/canutils/include/linux/can/raw.h
++++ b/android_build/external/canutils/include/linux/can/raw.h
 @@ -0,0 +1,67 @@
 +/* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) */
 +/*
@@ -13119,11 +13119,11 @@ index 0000000..3386aa8
 +};
 +
 +#endif /* !_UAPI_CAN_RAW_H */
-diff --git a/canutils/include/linux/can/vxcan.h b/canutils/include/linux/can/vxcan.h
+diff --git a/android_build/external/canutils/include/linux/can/vxcan.h b/android_build/external/canutils/include/linux/can/vxcan.h
 new file mode 100644
 index 0000000..4fa9d87
 --- /dev/null
-+++ b/canutils/include/linux/can/vxcan.h
++++ b/android_build/external/canutils/include/linux/can/vxcan.h
 @@ -0,0 +1,13 @@
 +/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
 +#ifndef _UAPI_CAN_VXCAN_H
@@ -13138,11 +13138,11 @@ index 0000000..4fa9d87
 +};
 +
 +#endif
-diff --git a/canutils/include/linux/errqueue.h b/canutils/include/linux/errqueue.h
+diff --git a/android_build/external/canutils/include/linux/errqueue.h b/android_build/external/canutils/include/linux/errqueue.h
 new file mode 100644
 index 0000000..e3fecef
 --- /dev/null
-+++ b/canutils/include/linux/errqueue.h
++++ b/android_build/external/canutils/include/linux/errqueue.h
 @@ -0,0 +1,54 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +#ifndef _UAPI_LINUX_ERRQUEUE_H
@@ -13198,11 +13198,11 @@ index 0000000..e3fecef
 +};
 +
 +#endif /* _UAPI_LINUX_ERRQUEUE_H */
-diff --git a/canutils/include/linux/kernel.h b/canutils/include/linux/kernel.h
+diff --git a/android_build/external/canutils/include/linux/kernel.h b/android_build/external/canutils/include/linux/kernel.h
 new file mode 100644
 index 0000000..b7cbdb3
 --- /dev/null
-+++ b/canutils/include/linux/kernel.h
++++ b/android_build/external/canutils/include/linux/kernel.h
 @@ -0,0 +1,96 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +
@@ -13300,11 +13300,11 @@ index 0000000..b7cbdb3
 +}
 +
 +#endif /* _LINUX_KERNEL_H */
-diff --git a/canutils/include/linux/net_tstamp.h b/canutils/include/linux/net_tstamp.h
+diff --git a/android_build/external/canutils/include/linux/net_tstamp.h b/android_build/external/canutils/include/linux/net_tstamp.h
 new file mode 100644
 index 0000000..e5b3972
 --- /dev/null
-+++ b/canutils/include/linux/net_tstamp.h
++++ b/android_build/external/canutils/include/linux/net_tstamp.h
 @@ -0,0 +1,162 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +/*
@@ -13468,11 +13468,11 @@ index 0000000..e5b3972
 +};
 +
 +#endif /* _NET_TIMESTAMPING_H */
-diff --git a/canutils/include/linux/netlink.h b/canutils/include/linux/netlink.h
+diff --git a/android_build/external/canutils/include/linux/netlink.h b/android_build/external/canutils/include/linux/netlink.h
 new file mode 100644
 index 0000000..1c2a016
 --- /dev/null
-+++ b/canutils/include/linux/netlink.h
++++ b/android_build/external/canutils/include/linux/netlink.h
 @@ -0,0 +1,252 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +#ifndef _UAPI__LINUX_NETLINK_H
@@ -13726,11 +13726,11 @@ index 0000000..1c2a016
 +};
 +
 +#endif /* _UAPI__LINUX_NETLINK_H */
-diff --git a/canutils/isotpdump.c b/canutils/isotpdump.c
+diff --git a/android_build/external/canutils/isotpdump.c b/android_build/external/canutils/isotpdump.c
 new file mode 100644
 index 0000000..833f96b
 --- /dev/null
-+++ b/canutils/isotpdump.c
++++ b/android_build/external/canutils/isotpdump.c
 @@ -0,0 +1,515 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -14247,11 +14247,11 @@ index 0000000..833f96b
 +
 +	return 0;
 +}
-diff --git a/canutils/isotpperf.c b/canutils/isotpperf.c
+diff --git a/android_build/external/canutils/isotpperf.c b/android_build/external/canutils/isotpperf.c
 new file mode 100644
 index 0000000..154d5cd
 --- /dev/null
-+++ b/canutils/isotpperf.c
++++ b/android_build/external/canutils/isotpperf.c
 @@ -0,0 +1,422 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -14675,11 +14675,11 @@ index 0000000..154d5cd
 +
 +	return ret;
 +}
-diff --git a/canutils/isotprecv.c b/canutils/isotprecv.c
+diff --git a/android_build/external/canutils/isotprecv.c b/android_build/external/canutils/isotprecv.c
 new file mode 100644
 index 0000000..d6f401b
 --- /dev/null
-+++ b/canutils/isotprecv.c
++++ b/android_build/external/canutils/isotprecv.c
 @@ -0,0 +1,259 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -14940,11 +14940,11 @@ index 0000000..d6f401b
 +
 +    return 0;
 +}
-diff --git a/canutils/isotpsend.c b/canutils/isotpsend.c
+diff --git a/android_build/external/canutils/isotpsend.c b/android_build/external/canutils/isotpsend.c
 new file mode 100644
 index 0000000..03367d1
 --- /dev/null
-+++ b/canutils/isotpsend.c
++++ b/android_build/external/canutils/isotpsend.c
 @@ -0,0 +1,323 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -15269,11 +15269,11 @@ index 0000000..03367d1
 +
 +    return 0;
 +}
-diff --git a/canutils/isotpserver.c b/canutils/isotpserver.c
+diff --git a/android_build/external/canutils/isotpserver.c b/android_build/external/canutils/isotpserver.c
 new file mode 100644
 index 0000000..8299db3
 --- /dev/null
-+++ b/canutils/isotpserver.c
++++ b/android_build/external/canutils/isotpserver.c
 @@ -0,0 +1,441 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -15716,11 +15716,11 @@ index 0000000..8299db3
 +
 +	return 0;
 +}
-diff --git a/canutils/isotpsniffer.c b/canutils/isotpsniffer.c
+diff --git a/android_build/external/canutils/isotpsniffer.c b/android_build/external/canutils/isotpsniffer.c
 new file mode 100644
 index 0000000..358b456
 --- /dev/null
-+++ b/canutils/isotpsniffer.c
++++ b/android_build/external/canutils/isotpsniffer.c
 @@ -0,0 +1,402 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -16124,11 +16124,11 @@ index 0000000..358b456
 +
 +	return r;
 +}
-diff --git a/canutils/isotptun.c b/canutils/isotptun.c
+diff --git a/android_build/external/canutils/isotptun.c b/android_build/external/canutils/isotptun.c
 new file mode 100644
 index 0000000..19bf898
 --- /dev/null
-+++ b/canutils/isotptun.c
++++ b/android_build/external/canutils/isotptun.c
 @@ -0,0 +1,407 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -16537,11 +16537,11 @@ index 0000000..19bf898
 +	close(t);
 +	return EXIT_SUCCESS;
 +}
-diff --git a/canutils/j1939acd.c b/canutils/j1939acd.c
+diff --git a/android_build/external/canutils/j1939acd.c b/android_build/external/canutils/j1939acd.c
 new file mode 100644
 index 0000000..79b07dc
 --- /dev/null
-+++ b/canutils/j1939acd.c
++++ b/android_build/external/canutils/j1939acd.c
 @@ -0,0 +1,652 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -17195,11 +17195,11 @@ index 0000000..79b07dc
 +	save_cache();
 +	return 0;
 +}
-diff --git a/canutils/j1939cat.c b/canutils/j1939cat.c
+diff --git a/android_build/external/canutils/j1939cat.c b/android_build/external/canutils/j1939cat.c
 new file mode 100644
 index 0000000..34a8c03
 --- /dev/null
-+++ b/canutils/j1939cat.c
++++ b/android_build/external/canutils/j1939cat.c
 @@ -0,0 +1,790 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -17991,11 +17991,11 @@ index 0000000..34a8c03
 +
 +	return ret;
 +}
-diff --git a/canutils/j1939spy.c b/canutils/j1939spy.c
+diff --git a/android_build/external/canutils/j1939spy.c b/android_build/external/canutils/j1939spy.c
 new file mode 100644
 index 0000000..4acbbc0
 --- /dev/null
-+++ b/canutils/j1939spy.c
++++ b/android_build/external/canutils/j1939spy.c
 @@ -0,0 +1,304 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -18301,11 +18301,11 @@ index 0000000..4acbbc0
 +	free(buf);
 +	return 0;
 +}
-diff --git a/canutils/j1939sr.c b/canutils/j1939sr.c
+diff --git a/android_build/external/canutils/j1939sr.c b/android_build/external/canutils/j1939sr.c
 new file mode 100644
 index 0000000..3b42669
 --- /dev/null
-+++ b/canutils/j1939sr.c
++++ b/android_build/external/canutils/j1939sr.c
 @@ -0,0 +1,221 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -18528,11 +18528,11 @@ index 0000000..3b42669
 +	free(buf);
 +	return 0;
 +}
-diff --git a/canutils/lib.c b/canutils/lib.c
+diff --git a/android_build/external/canutils/lib.c b/android_build/external/canutils/lib.c
 new file mode 100644
 index 0000000..3c1a0d9
 --- /dev/null
-+++ b/canutils/lib.c
++++ b/android_build/external/canutils/lib.c
 @@ -0,0 +1,687 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -19221,11 +19221,11 @@ index 0000000..3c1a0d9
 +			      cf->data[6], cf->data[7]);
 +	}
 +}
-diff --git a/canutils/lib.h b/canutils/lib.h
+diff --git a/android_build/external/canutils/lib.h b/android_build/external/canutils/lib.h
 new file mode 100644
 index 0000000..a4d3ce5
 --- /dev/null
-+++ b/canutils/lib.h
++++ b/android_build/external/canutils/lib.h
 @@ -0,0 +1,224 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -19451,11 +19451,11 @@ index 0000000..a4d3ce5
 + */
 +
 +#endif
-diff --git a/canutils/libj1939.c b/canutils/libj1939.c
+diff --git a/android_build/external/canutils/libj1939.c b/android_build/external/canutils/libj1939.c
 new file mode 100644
 index 0000000..306e2cc
 --- /dev/null
-+++ b/canutils/libj1939.c
++++ b/android_build/external/canutils/libj1939.c
 @@ -0,0 +1,196 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -19653,11 +19653,11 @@ index 0000000..306e2cc
 +
 +	return buf;
 +}
-diff --git a/canutils/libj1939.h b/canutils/libj1939.h
+diff --git a/android_build/external/canutils/libj1939.h b/android_build/external/canutils/libj1939.h
 new file mode 100644
 index 0000000..b6832cf
 --- /dev/null
-+++ b/canutils/libj1939.h
++++ b/android_build/external/canutils/libj1939.h
 @@ -0,0 +1,35 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -19694,11 +19694,11 @@ index 0000000..b6832cf
 +#endif
 +
 +#endif
-diff --git a/canutils/log2asc.c b/canutils/log2asc.c
+diff --git a/android_build/external/canutils/log2asc.c b/android_build/external/canutils/log2asc.c
 new file mode 100644
 index 0000000..b6f749d
 --- /dev/null
-+++ b/canutils/log2asc.c
++++ b/android_build/external/canutils/log2asc.c
 @@ -0,0 +1,327 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -20027,11 +20027,11 @@ index 0000000..b6f749d
 +
 +	return 0;
 +}
-diff --git a/canutils/log2long.c b/canutils/log2long.c
+diff --git a/android_build/external/canutils/log2long.c b/android_build/external/canutils/log2long.c
 new file mode 100644
 index 0000000..25814e2
 --- /dev/null
-+++ b/canutils/log2long.c
++++ b/android_build/external/canutils/log2long.c
 @@ -0,0 +1,83 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -20116,18 +20116,18 @@ index 0000000..25814e2
 +
 +	return 0;
 +}
-diff --git a/canutils/mcp251xfd/99-devcoredump.rules b/canutils/mcp251xfd/99-devcoredump.rules
+diff --git a/android_build/external/canutils/mcp251xfd/99-devcoredump.rules b/android_build/external/canutils/mcp251xfd/99-devcoredump.rules
 new file mode 100644
 index 0000000..01bb6ce
 --- /dev/null
-+++ b/canutils/mcp251xfd/99-devcoredump.rules
++++ b/android_build/external/canutils/mcp251xfd/99-devcoredump.rules
 @@ -0,0 +1 @@
 +ACTION=="add", SUBSYSTEM=="devcoredump", RUN+="/usr/sbin/devcoredump"
-diff --git a/canutils/mcp251xfd/devcoredump b/canutils/mcp251xfd/devcoredump
+diff --git a/android_build/external/canutils/mcp251xfd/devcoredump b/android_build/external/canutils/mcp251xfd/devcoredump
 new file mode 100644
 index 0000000..edf829e
 --- /dev/null
-+++ b/canutils/mcp251xfd/devcoredump
++++ b/android_build/external/canutils/mcp251xfd/devcoredump
 @@ -0,0 +1,11 @@
 +#!/bin/bash
 +
@@ -20140,11 +20140,11 @@ index 0000000..edf829e
 +echo 1 > /sys/${DEVPATH}/data
 +
 +echo "devcoredump ${DEVPATH}" | logger
-diff --git a/canutils/mcp251xfd/mcp251xfd-dev-coredump.c b/canutils/mcp251xfd/mcp251xfd-dev-coredump.c
+diff --git a/android_build/external/canutils/mcp251xfd/mcp251xfd-dev-coredump.c b/android_build/external/canutils/mcp251xfd/mcp251xfd-dev-coredump.c
 new file mode 100644
 index 0000000..5874d24
 --- /dev/null
-+++ b/canutils/mcp251xfd/mcp251xfd-dev-coredump.c
++++ b/android_build/external/canutils/mcp251xfd/mcp251xfd-dev-coredump.c
 @@ -0,0 +1,257 @@
 +// SPDX-License-Identifier: GPL-2.0
 +//
@@ -20403,11 +20403,11 @@ index 0000000..5874d24
 +	close(fd);
 +	return err;
 +}
-diff --git a/canutils/mcp251xfd/mcp251xfd-dump-userspace.h b/canutils/mcp251xfd/mcp251xfd-dump-userspace.h
+diff --git a/android_build/external/canutils/mcp251xfd/mcp251xfd-dump-userspace.h b/android_build/external/canutils/mcp251xfd/mcp251xfd-dump-userspace.h
 new file mode 100644
 index 0000000..890821e
 --- /dev/null
-+++ b/canutils/mcp251xfd/mcp251xfd-dump-userspace.h
++++ b/android_build/external/canutils/mcp251xfd/mcp251xfd-dump-userspace.h
 @@ -0,0 +1,61 @@
 +/* SPDX-License-Identifier: GPL-2.0
 + *
@@ -20470,11 +20470,11 @@ index 0000000..890821e
 +			  const char *file_path);
 +
 +#endif
-diff --git a/canutils/mcp251xfd/mcp251xfd-dump.c b/canutils/mcp251xfd/mcp251xfd-dump.c
+diff --git a/android_build/external/canutils/mcp251xfd/mcp251xfd-dump.c b/android_build/external/canutils/mcp251xfd/mcp251xfd-dump.c
 new file mode 100644
 index 0000000..e84e580
 --- /dev/null
-+++ b/canutils/mcp251xfd/mcp251xfd-dump.c
++++ b/android_build/external/canutils/mcp251xfd/mcp251xfd-dump.c
 @@ -0,0 +1,882 @@
 +// SPDX-License-Identifier: GPL-2.0
 +//
@@ -21358,11 +21358,11 @@ index 0000000..e84e580
 +	mcp251xfd_dump_regs(priv, &regs, &regs_mcp251xfd);
 +	mcp251xfd_dump_ram(priv, &regs, &ram);
 +}
-diff --git a/canutils/mcp251xfd/mcp251xfd-dump.h b/canutils/mcp251xfd/mcp251xfd-dump.h
+diff --git a/android_build/external/canutils/mcp251xfd/mcp251xfd-dump.h b/android_build/external/canutils/mcp251xfd/mcp251xfd-dump.h
 new file mode 100644
 index 0000000..e7560b0
 --- /dev/null
-+++ b/canutils/mcp251xfd/mcp251xfd-dump.h
++++ b/android_build/external/canutils/mcp251xfd/mcp251xfd-dump.h
 @@ -0,0 +1,45 @@
 +/* SPDX-License-Identifier: GPL-2.0
 + *
@@ -21409,11 +21409,11 @@ index 0000000..e7560b0
 +};
 +
 +#endif
-diff --git a/canutils/mcp251xfd/mcp251xfd-main.c b/canutils/mcp251xfd/mcp251xfd-main.c
+diff --git a/android_build/external/canutils/mcp251xfd/mcp251xfd-main.c b/android_build/external/canutils/mcp251xfd/mcp251xfd-main.c
 new file mode 100644
 index 0000000..4acd548
 --- /dev/null
-+++ b/canutils/mcp251xfd/mcp251xfd-main.c
++++ b/android_build/external/canutils/mcp251xfd/mcp251xfd-main.c
 @@ -0,0 +1,97 @@
 +// SPDX-License-Identifier: GPL-2.0
 +//
@@ -21512,11 +21512,11 @@ index 0000000..4acd548
 +
 +	exit(EXIT_SUCCESS);
 +}
-diff --git a/canutils/mcp251xfd/mcp251xfd-regmap.c b/canutils/mcp251xfd/mcp251xfd-regmap.c
+diff --git a/android_build/external/canutils/mcp251xfd/mcp251xfd-regmap.c b/android_build/external/canutils/mcp251xfd/mcp251xfd-regmap.c
 new file mode 100644
 index 0000000..61105f0
 --- /dev/null
-+++ b/canutils/mcp251xfd/mcp251xfd-regmap.c
++++ b/android_build/external/canutils/mcp251xfd/mcp251xfd-regmap.c
 @@ -0,0 +1,81 @@
 +// SPDX-License-Identifier: GPL-2.0
 +//
@@ -21599,11 +21599,11 @@ index 0000000..61105f0
 +
 +	return err;
 +}
-diff --git a/canutils/mcp251xfd/mcp251xfd.h b/canutils/mcp251xfd/mcp251xfd.h
+diff --git a/android_build/external/canutils/mcp251xfd/mcp251xfd.h b/android_build/external/canutils/mcp251xfd/mcp251xfd.h
 new file mode 100644
 index 0000000..42b9621
 --- /dev/null
-+++ b/canutils/mcp251xfd/mcp251xfd.h
++++ b/android_build/external/canutils/mcp251xfd/mcp251xfd.h
 @@ -0,0 +1,389 @@
 +/* SPDX-License-Identifier: GPL-2.0
 + *
@@ -21994,11 +21994,11 @@ index 0000000..42b9621
 +};
 +
 +#endif
-diff --git a/canutils/page.theme b/canutils/page.theme
+diff --git a/android_build/external/canutils/page.theme b/android_build/external/canutils/page.theme
 new file mode 100644
 index 0000000..949c79e
 --- /dev/null
-+++ b/canutils/page.theme
++++ b/android_build/external/canutils/page.theme
 @@ -0,0 +1,20 @@
 +<!DOCTYPE html>
 +<html>
@@ -22020,11 +22020,11 @@ index 0000000..949c79e
 +</div>
 +</body>
 +</html>
-diff --git a/canutils/slcan_attach.c b/canutils/slcan_attach.c
+diff --git a/android_build/external/canutils/slcan_attach.c b/android_build/external/canutils/slcan_attach.c
 new file mode 100644
 index 0000000..df0dc98
 --- /dev/null
-+++ b/canutils/slcan_attach.c
++++ b/android_build/external/canutils/slcan_attach.c
 @@ -0,0 +1,272 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -22298,11 +22298,11 @@ index 0000000..df0dc98
 +
 +	return 0;
 +}
-diff --git a/canutils/slcand.c b/canutils/slcand.c
+diff --git a/android_build/external/canutils/slcand.c b/android_build/external/canutils/slcand.c
 new file mode 100644
 index 0000000..cb3d7a4
 --- /dev/null
-+++ b/canutils/slcand.c
++++ b/android_build/external/canutils/slcand.c
 @@ -0,0 +1,452 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -22756,11 +22756,11 @@ index 0000000..cb3d7a4
 +	closelog();
 +	return exit_code;
 +}
-diff --git a/canutils/slcanpty.c b/canutils/slcanpty.c
+diff --git a/android_build/external/canutils/slcanpty.c b/android_build/external/canutils/slcanpty.c
 new file mode 100644
 index 0000000..f0a2de6
 --- /dev/null
-+++ b/canutils/slcanpty.c
++++ b/android_build/external/canutils/slcanpty.c
 @@ -0,0 +1,558 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -23320,11 +23320,11 @@ index 0000000..f0a2de6
 +
 +	return 0;
 +}
-diff --git a/canutils/style.css b/canutils/style.css
+diff --git a/android_build/external/canutils/style.css b/android_build/external/canutils/style.css
 new file mode 100644
 index 0000000..6be67d2
 --- /dev/null
-+++ b/canutils/style.css
++++ b/android_build/external/canutils/style.css
 @@ -0,0 +1,68 @@
 +* {
 +    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
@@ -23394,11 +23394,11 @@ index 0000000..6be67d2
 +    font-size: 13px;
 +    line-height: 18px;
 +}
-diff --git a/canutils/terminal.h b/canutils/terminal.h
+diff --git a/android_build/external/canutils/terminal.h b/android_build/external/canutils/terminal.h
 new file mode 100644
 index 0000000..198b48e
 --- /dev/null
-+++ b/canutils/terminal.h
++++ b/android_build/external/canutils/terminal.h
 @@ -0,0 +1,95 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
 +/*
@@ -23495,11 +23495,11 @@ index 0000000..198b48e
 +#define CLR_SCREEN  "\33[2J"
 +
 +#endif /* TERMINAL_H */
-diff --git a/canutils/testj1939.c b/canutils/testj1939.c
+diff --git a/android_build/external/canutils/testj1939.c b/android_build/external/canutils/testj1939.c
 new file mode 100644
 index 0000000..f15ba10
 --- /dev/null
-+++ b/canutils/testj1939.c
++++ b/android_build/external/canutils/testj1939.c
 @@ -0,0 +1,315 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -23816,11 +23816,11 @@ index 0000000..f15ba10
 +			sleep(1);
 +	return 0;
 +}
-diff --git a/spidevtest/Android.bp b/spidevtest/Android.bp
+diff --git a/android_build/external/spidevtest/Android.bp b/android_build/external/spidevtest/Android.bp
 new file mode 100644
 index 0000000..9f3f1fc
 --- /dev/null
-+++ b/spidevtest/Android.bp
++++ b/android_build/external/spidevtest/Android.bp
 @@ -0,0 +1,57 @@
 +// Copyright (C) 2019 The Android Open Source Project
 +//
@@ -23879,11 +23879,11 @@ index 0000000..9f3f1fc
 +        "-Wno-unused-parameter",
 +    ],
 +}
-diff --git a/spidevtest/LICENSE b/spidevtest/LICENSE
+diff --git a/android_build/external/spidevtest/LICENSE b/android_build/external/spidevtest/LICENSE
 new file mode 100644
 index 0000000..b9ef026
 --- /dev/null
-+++ b/spidevtest/LICENSE
++++ b/android_build/external/spidevtest/LICENSE
 @@ -0,0 +1,241 @@
 +"iperf, Copyright (c) 2014-2020, The Regents of the University of California,
 +through Lawrence Berkeley National Laboratory (subject to receipt of any
@@ -24126,11 +24126,11 @@ index 0000000..b9ef026
 +// I, Mathias Panzenböck, place this file hereby into the public domain. Use it at your own risk for whatever you like.
 +
 +=====
-diff --git a/spidevtest/spdev_refer b/spidevtest/spdev_refer
+diff --git a/android_build/external/spidevtest/spdev_refer b/android_build/external/spidevtest/spdev_refer
 new file mode 100644
 index 0000000..217ea4f
 --- /dev/null
-+++ b/spidevtest/spdev_refer
++++ b/android_build/external/spidevtest/spdev_refer
 @@ -0,0 +1,19 @@
 +LOCAL_PATH := $(call my-dir)
 +
@@ -24151,11 +24151,11 @@ index 0000000..217ea4f
 +LOCAL_VENDOR_MODULE := true
 +
 +include $(BUILD_EXECUTABLE)
-diff --git a/spidevtest/src/spidev_test.c b/spidevtest/src/spidev_test.c
+diff --git a/android_build/external/spidevtest/src/spidev_test.c b/android_build/external/spidevtest/src/spidev_test.c
 new file mode 100644
 index 0000000..4fa28bc
 --- /dev/null
-+++ b/spidevtest/src/spidev_test.c
++++ b/android_build/external/spidevtest/src/spidev_test.c
 @@ -0,0 +1,495 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -24653,5 +24653,5 @@ index 0000000..4fa28bc
 +	return ret;
 +}
 -- 
-2.45.2
+2.25.1
 
