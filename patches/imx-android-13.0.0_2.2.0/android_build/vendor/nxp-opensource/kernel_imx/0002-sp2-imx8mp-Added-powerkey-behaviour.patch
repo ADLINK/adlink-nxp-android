@@ -1,0 +1,82 @@
+From f91183bc765805f8e8f123428bce7b091160e0f5 Mon Sep 17 00:00:00 2001
+From: shiva-adlink <shivashankar.t@adlinktech.com>
+Date: Wed, 2 Jul 2025 16:01:39 +0530
+Subject: [PATCH 2/2] sp2-imx8mp: Added-powerkey-behaviour
+
+Signed-off-by: shiva-adlink <shivashankar.t@adlinktech.com>
+---
+ drivers/input/keyboard/snvs_pwrkey.c | 42 ++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+
+diff --git a/drivers/input/keyboard/snvs_pwrkey.c b/drivers/input/keyboard/snvs_pwrkey.c
+index 0e60b8cb0c37..c47a69278d23 100644
+--- a/drivers/input/keyboard/snvs_pwrkey.c
++++ b/drivers/input/keyboard/snvs_pwrkey.c
+@@ -66,8 +66,39 @@ struct pwrkey_drv_data {
+ 	struct input_dev *input;
+ 	bool  emulate_press;
+ 	struct device *trusty_dev;
++	struct timer_list timer_1s;
++	bool press_1s_detected;
++	struct timer_list timer_10s_shutdown;
+ };
+ 
++static void timer_1s_event(struct timer_list *t){
++	struct pwrkey_drv_data *pdata = from_timer(pdata, t, timer_1s);
++	pr_info("button was pressed for 1second!\n");
++	// not pressed for 1s previously
++	if(!(pdata->press_1s_detected)){
++		pdata->press_1s_detected = true;
++		//start 10s timer to shutdown
++		pr_info("starting 10sec timer\n");
++		mod_timer(&pdata->timer_10s_shutdown, jiffies + msecs_to_jiffies(9250)	);
++	}
++	//is already timer and reached here
++	else{
++		pdata->press_1s_detected = false;
++		//delete 10s timer to shutdown
++		pr_info("10sec timer has been reset by power button\n");
++		del_timer_sync(&pdata->timer_10s_shutdown);
++
++	}
++}
++
++static void timer_10s_shutdown_event(struct timer_list* t){
++	struct pwrkey_drv_data *pdata = from_timer(pdata, t, timer_10s_shutdown);
++	pr_info("10s has elapsed!..shutdown system\n");
++	//shutdown logic
++	regmap_update_bits(pdata->snvs, SNVS_LPCR_REG, BIT(5), BIT(5));
++	regmap_update_bits(pdata->snvs, SNVS_LPCR_REG, BIT(6), BIT(6));
++}
++
+ static void imx_imx_snvs_check_for_events(struct timer_list *t)
+ {
+ 	struct pwrkey_drv_data *pdata = from_timer(pdata, t, check_timer);
+@@ -101,6 +132,15 @@ static void imx_imx_snvs_check_for_events(struct timer_list *t)
+ 		input_event(input, EV_KEY, pdata->keycode, state);
+ 		input_sync(input);
+ 		pm_relax(pdata->input->dev.parent);
++		if(state){
++			//button is pressed
++			mod_timer(&pdata->timer_1s, jiffies + msecs_to_jiffies(850));
++		}
++		if(!state){
++			//button is released
++			//stop 1s timer....
++			del_timer_sync(&pdata->timer_1s);
++		}
+ 	}
+ 
+ 	/* repeat check if pressed long */
+@@ -287,6 +327,8 @@ static int imx_snvs_pwrkey_probe(struct platform_device *pdev)
+ 		regmap_write(pdata->snvs, SNVS_LPSR_REG, SNVS_LPSR_SPO);
+ 
+ 	timer_setup(&pdata->check_timer, imx_imx_snvs_check_for_events, 0);
++	timer_setup(&pdata->timer_1s,timer_1s_event,0);
++	timer_setup(&pdata->timer_10s_shutdown,timer_10s_shutdown_event,0);
+ 
+ 	input = devm_input_allocate_device(&pdev->dev);
+ 	if (!input) {
+-- 
+2.34.1
+
