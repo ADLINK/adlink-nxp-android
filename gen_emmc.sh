@@ -1,13 +1,23 @@
-#!/bin/bash
+#!/bin/bash -x
 
 IMG_NAME="android_emmc_disk_SP2SM.img"
 PARTITION_TABLE="partition-table-28GB.img"
 LOOP_DEV=""
+# NOTE: 1 sector is 4096 bytes
+SIZE=${1:-7650000s}
 
 function create_loop_device_file {
-    echo "Creating $IMG_NAME..."
-    truncate -s 29G "$IMG_NAME"
-
+    # if parsed in parameter ends with S or s for sectors
+    case "$SIZE" in
+    *s)
+        echo "Creating $IMG_NAME with ${SIZE%%s} sectors..."
+        truncate -o -s ${SIZE%%s} "$IMG_NAME"
+        ;;
+    *)
+        echo "Creating $IMG_NAME with $SIZE..."
+        truncate -s $SIZE "$IMG_NAME"
+        ;;
+    esac
     echo "Attaching loop device..."
     LOOP_DEV=$(sudo losetup --show -fP "$IMG_NAME")
     echo "Loop device: $LOOP_DEV"
