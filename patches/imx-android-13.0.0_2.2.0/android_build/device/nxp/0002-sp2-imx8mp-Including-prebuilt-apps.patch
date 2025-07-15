@@ -1,0 +1,29 @@
+From 5ecbd556f46646aa00db011afd031b8f61529c13 Mon Sep 17 00:00:00 2001
+From: shiva-adlink <shivashankar.t@adlinktech.com>
+Date: Tue, 15 Jul 2025 14:55:21 +0530
+Subject: [PATCH 2/2] sp2-imx8mp: Including prebuilt apps
+
+Signed-off-by: shiva-adlink <shivashankar.t@adlinktech.com>
+---
+ imx8m/sp2_imx8mp/sp2_imx8mp.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/imx8m/sp2_imx8mp/sp2_imx8mp.mk b/imx8m/sp2_imx8mp/sp2_imx8mp.mk
+index 3b6b732f..ea8c1bfd 100644
+--- a/imx8m/sp2_imx8mp/sp2_imx8mp.mk
++++ b/imx8m/sp2_imx8mp/sp2_imx8mp.mk
+@@ -660,7 +660,10 @@ PRODUCT_PACKAGES += \
+      cansend \
+      spidevtest \
+      eltt2 \
+-     beep
++     beep \
++     centaurus \
++     chlcd \
++     service-release
+ 
+ # make sure /vendor/etc/configs/isp/ is created
+     PRODUCT_PACKAGES += hollow
+-- 
+2.49.0
+

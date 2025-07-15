@@ -81,7 +81,7 @@ export CLANG_PATH=/opt/prebuilt-android-clang
   $ chmod a+x ${HOME}/bin/repo
   $ export PATH=${PATH}:${HOME}/bin
   $ cd ${HOME}
-  $ git clone --branch SP2IMX8MP-93-P1500 https://github.com/ADLINK/imx8mp_android.git
+  $ git clone --branch SP2IMX8MP-91-A1033-21 https://github.com/ADLINK/imx8mp_android.git
   $ tar -zxvf imx-android-13.0.0_2.2.0.tar.gz
   $ source ${HOME}/imx-android-13.0.0_2.2.0/imx_android_setup.sh
 
@@ -93,6 +93,8 @@ export CLANG_PATH=/opt/prebuilt-android-clang
 cd ${HOME}/android_build/device/nxp/
 
 git am ${HOME}/imx8mp_android/patches/imx-android-13.0.0_2.2.0/android_build/device/nxp/0001-sp2-imx8mp-device-changes.patch
+
+git am ${HOME}/imx8mp_android/patches/imx-android-13.0.0_2.2.0/android_build/device/nxp/0002-sp2-imx8mp-Including-prebuilt-apps.patch
 ```
 
 ### 2. Kernel
@@ -146,6 +148,21 @@ cd ${HOME}/android_build/frameworks/base
 
 git am ${HOME}/imx8mp_android/patches/imx-android-13.0.0_2.2.0/android_build/frameworks/base/0001-sp2-imx8mp-Remove-battery-icon.patch
 ```
+
+### 8.Prebuild Apps
+
+```Shell
+cd android_build/vendor/nxp/
+
+mkdir prebuilt_apps
+
+cd prebuilt_apps
+
+git apply ${HOME}/imx8mp_android/patches/imx-android-13.0.0_2.2.0/android_build/vendor/nxp/prebuilt_apps/0001-sp2-imx8mp-adding-ANDROID.mk-for-prebuilt-apk.patch
+
+```
+Note: If the prebuilt APKs are updated, the updated versions need to be placed in the respective folders within the prebuildapps directory
+
 
 ## To Compile the Android 13 BSP
 
