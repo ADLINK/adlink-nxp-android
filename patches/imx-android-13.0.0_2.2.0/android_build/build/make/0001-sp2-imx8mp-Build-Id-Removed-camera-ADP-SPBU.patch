@@ -1,4 +1,4 @@
-From ca1e20fa8c1d29cc458dbcc240e58fbfc298105a Mon Sep 17 00:00:00 2001
+From 0654eb1506123da3a180cf53bfc4eee0642742e3 Mon Sep 17 00:00:00 2001
 From: shiva-adlink <shivashankar.t@adlinktech.com>
 Date: Tue, 24 Jun 2025 11:31:36 +0530
 Subject: [PATCH] sp2-imx8mp: Build-Id--Removed-camera-ADP-SPBU
@@ -19,7 +19,7 @@ index bbe084138a..fa3fb5857e 100644
  # capitalized by convention.
  
 -BUILD_ID=TQ3A.230805.001.A2
-+BUILD_ID=1.3.12-ADP-SPBU
++BUILD_ID=1.3.13-ADP-SPBU
 diff --git a/target/product/handheld_product.mk b/target/product/handheld_product.mk
 index 2199c570a0..7742e4c8a3 100644
 --- a/target/product/handheld_product.mk
