@@ -1,0 +1,3521 @@
+From edefa6b1ce082e3156510575c2febf80ecb05314 Mon Sep 17 00:00:00 2001
+From: veeraadlink <veera.h@adlinktech.com>
+Date: Wed, 22 Oct 2025 13:11:58 +0530
+Subject: [PATCH] lec-imx95-add-device-support
+
+---
+ common/audio-json/tlv320_config.json          |  27 +
+ imx9/AndroidProducts.mk                       |   7 +-
+ imx9/lec_imx95/AndroidBoard.mk                |  10 +
+ imx9/lec_imx95/AndroidUboot.sh                | 135 ++++
+ imx9/lec_imx95/BoardConfig.mk                 | 167 +++++
+ imx9/lec_imx95/SharedBoardConfig.mk           | 221 +++++++
+ imx9/lec_imx95/UbootKernelBoardConfig.mk      |  24 +
+ imx9/lec_imx95/app_whitelist.xml              |  36 ++
+ imx9/lec_imx95/audio_effects.xml              |  26 +
+ imx9/lec_imx95/audio_policy_configuration.xml | 119 ++++
+ imx9/lec_imx95/bluetooth/bdroid_buildcfg.h    |  34 +
+ .../lec_imx95/camera_config_imx95-ap1302.json |  29 +
+ .../camera_config_imx95-os08a20.json          |  33 +
+ .../camera_config_imx95-ov13855.json          |  36 ++
+ .../lec_imx95/camera_config_imx95-ov5640.json |  36 ++
+ imx9/lec_imx95/compatibility_matrix.xml       |   6 +
+ imx9/lec_imx95/device_framework_matrix.xml    |  26 +
+ imx9/lec_imx95/display_settings.xml           |  11 +
+ imx9/lec_imx95/early.init.cfg                 |   2 +
+ imx9/lec_imx95/external_camera_config.xml     |  31 +
+ imx9/lec_imx95/fstab.nxp                      |  20 +
+ imx9/lec_imx95/init.imx95.rc                  |  58 ++
+ imx9/lec_imx95/init.rc                        | 280 ++++++++
+ imx9/lec_imx95/init.recovery.nxp.rc           |   8 +
+ imx9/lec_imx95/init.usb.rc                    |  53 ++
+ imx9/lec_imx95/input-port-associations.xml    |  17 +
+ imx9/lec_imx95/lec_imx95.mk                   | 603 ++++++++++++++++++
+ imx9/lec_imx95/manifest.xml                   |  50 ++
+ .../base/core/res/res/values/config.xml       | 202 ++++++
+ .../base/core/res/res/xml/power_profile.xml   |  27 +
+ .../SettingsProvider/res/values/defaults.xml  |  26 +
+ .../apps/Settings/res/values/bools.xml        |  19 +
+ .../apps/Settings/res/values/config.xml       |  22 +
+ .../Tethering/res/values/overlay_config.xml   |   6 +
+ .../res/values/config.xml                     |   3 +
+ .../NetworkStack/res/values/config.xml        |   4 +
+ imx9/lec_imx95/powerhint_imx95.json           | 220 +++++++
+ imx9/lec_imx95/product.prop                   |  16 +
+ imx9/lec_imx95/required_hardware.xml          |  36 ++
+ .../seccomp/mediacodec-seccomp.policy         |   1 +
+ .../seccomp/mediaextractor-seccomp.policy     |   5 +
+ imx9/lec_imx95/sepolicy/app.te                |   1 +
+ imx9/lec_imx95/sepolicy/bootanim.te           |   1 +
+ imx9/lec_imx95/sepolicy/cameraserver.te       |   1 +
+ imx9/lec_imx95/sepolicy/crash_dump.te         |   1 +
+ imx9/lec_imx95/sepolicy/device.te             |   2 +
+ imx9/lec_imx95/sepolicy/file.te               |   2 +
+ imx9/lec_imx95/sepolicy/file_contexts         |  51 ++
+ imx9/lec_imx95/sepolicy/genfs_contexts        |  23 +
+ imx9/lec_imx95/sepolicy/hal_camera_default.te |   4 +
+ .../hal_graphics_allocator_default.te         |   3 +
+ imx9/lec_imx95/sepolicy/init.te               |   1 +
+ imx9/lec_imx95/sepolicy/mediacodec.te         |   2 +
+ imx9/lec_imx95/sepolicy/mediaserver.te        |   1 +
+ imx9/lec_imx95/sepolicy/platform_app.te       |   1 +
+ imx9/lec_imx95/sepolicy/priv_app.te           |   1 +
+ imx9/lec_imx95/sepolicy/property.te           |   1 +
+ imx9/lec_imx95/sepolicy/property_contexts     |   3 +
+ imx9/lec_imx95/sepolicy/service_contexts      |   1 +
+ imx9/lec_imx95/sepolicy/shell.te              |   1 +
+ imx9/lec_imx95/sepolicy/surfaceflinger.te     |   1 +
+ imx9/lec_imx95/sepolicy/system_app.te         |   1 +
+ imx9/lec_imx95/sepolicy/system_server.te      |   1 +
+ imx9/lec_imx95/sepolicy/untrusted_app.te      |   1 +
+ imx9/lec_imx95/sepolicy/untrusted_app_27.te   |   1 +
+ imx9/lec_imx95/sepolicy/untrusted_app_30.te   |   1 +
+ imx9/lec_imx95/thermal_info_config_imx95.json |  56 ++
+ imx9/lec_imx95/ueventd.nxp.rc                 |  41 ++
+ ...dio_policy_configuration-direct-output.xml |  56 ++
+ 69 files changed, 2950 insertions(+), 2 deletions(-)
+ create mode 100644 common/audio-json/tlv320_config.json
+ create mode 100644 imx9/lec_imx95/AndroidBoard.mk
+ create mode 100644 imx9/lec_imx95/AndroidUboot.sh
+ create mode 100644 imx9/lec_imx95/BoardConfig.mk
+ create mode 100644 imx9/lec_imx95/SharedBoardConfig.mk
+ create mode 100644 imx9/lec_imx95/UbootKernelBoardConfig.mk
+ create mode 100644 imx9/lec_imx95/app_whitelist.xml
+ create mode 100644 imx9/lec_imx95/audio_effects.xml
+ create mode 100644 imx9/lec_imx95/audio_policy_configuration.xml
+ create mode 100644 imx9/lec_imx95/bluetooth/bdroid_buildcfg.h
+ create mode 100644 imx9/lec_imx95/camera_config_imx95-ap1302.json
+ create mode 100644 imx9/lec_imx95/camera_config_imx95-os08a20.json
+ create mode 100644 imx9/lec_imx95/camera_config_imx95-ov13855.json
+ create mode 100644 imx9/lec_imx95/camera_config_imx95-ov5640.json
+ create mode 100644 imx9/lec_imx95/compatibility_matrix.xml
+ create mode 100644 imx9/lec_imx95/device_framework_matrix.xml
+ create mode 100644 imx9/lec_imx95/display_settings.xml
+ create mode 100644 imx9/lec_imx95/early.init.cfg
+ create mode 100644 imx9/lec_imx95/external_camera_config.xml
+ create mode 100644 imx9/lec_imx95/fstab.nxp
+ create mode 100644 imx9/lec_imx95/init.imx95.rc
+ create mode 100644 imx9/lec_imx95/init.rc
+ create mode 100644 imx9/lec_imx95/init.recovery.nxp.rc
+ create mode 100644 imx9/lec_imx95/init.usb.rc
+ create mode 100644 imx9/lec_imx95/input-port-associations.xml
+ create mode 100644 imx9/lec_imx95/lec_imx95.mk
+ create mode 100644 imx9/lec_imx95/manifest.xml
+ create mode 100644 imx9/lec_imx95/overlay/frameworks/base/core/res/res/values/config.xml
+ create mode 100644 imx9/lec_imx95/overlay/frameworks/base/core/res/res/xml/power_profile.xml
+ create mode 100644 imx9/lec_imx95/overlay/frameworks/base/packages/SettingsProvider/res/values/defaults.xml
+ create mode 100644 imx9/lec_imx95/overlay/packages/apps/Settings/res/values/bools.xml
+ create mode 100644 imx9/lec_imx95/overlay/packages/apps/Settings/res/values/config.xml
+ create mode 100644 imx9/lec_imx95/overlay/packages/modules/Connectivity/Tethering/res/values/overlay_config.xml
+ create mode 100644 imx9/lec_imx95/overlay/packages/modules/Connectivity/service/ServiceConnectivityResources/res/values/config.xml
+ create mode 100644 imx9/lec_imx95/overlay/packages/modules/NetworkStack/res/values/config.xml
+ create mode 100644 imx9/lec_imx95/powerhint_imx95.json
+ create mode 100644 imx9/lec_imx95/product.prop
+ create mode 100644 imx9/lec_imx95/required_hardware.xml
+ create mode 100644 imx9/lec_imx95/seccomp/mediacodec-seccomp.policy
+ create mode 100644 imx9/lec_imx95/seccomp/mediaextractor-seccomp.policy
+ create mode 100644 imx9/lec_imx95/sepolicy/app.te
+ create mode 100644 imx9/lec_imx95/sepolicy/bootanim.te
+ create mode 100644 imx9/lec_imx95/sepolicy/cameraserver.te
+ create mode 100644 imx9/lec_imx95/sepolicy/crash_dump.te
+ create mode 100644 imx9/lec_imx95/sepolicy/device.te
+ create mode 100644 imx9/lec_imx95/sepolicy/file.te
+ create mode 100644 imx9/lec_imx95/sepolicy/file_contexts
+ create mode 100644 imx9/lec_imx95/sepolicy/genfs_contexts
+ create mode 100644 imx9/lec_imx95/sepolicy/hal_camera_default.te
+ create mode 100644 imx9/lec_imx95/sepolicy/hal_graphics_allocator_default.te
+ create mode 100644 imx9/lec_imx95/sepolicy/init.te
+ create mode 100644 imx9/lec_imx95/sepolicy/mediacodec.te
+ create mode 100644 imx9/lec_imx95/sepolicy/mediaserver.te
+ create mode 100644 imx9/lec_imx95/sepolicy/platform_app.te
+ create mode 100644 imx9/lec_imx95/sepolicy/priv_app.te
+ create mode 100644 imx9/lec_imx95/sepolicy/property.te
+ create mode 100644 imx9/lec_imx95/sepolicy/property_contexts
+ create mode 100644 imx9/lec_imx95/sepolicy/service_contexts
+ create mode 100644 imx9/lec_imx95/sepolicy/shell.te
+ create mode 100644 imx9/lec_imx95/sepolicy/surfaceflinger.te
+ create mode 100644 imx9/lec_imx95/sepolicy/system_app.te
+ create mode 100644 imx9/lec_imx95/sepolicy/system_server.te
+ create mode 100644 imx9/lec_imx95/sepolicy/untrusted_app.te
+ create mode 100644 imx9/lec_imx95/sepolicy/untrusted_app_27.te
+ create mode 100644 imx9/lec_imx95/sepolicy/untrusted_app_30.te
+ create mode 100644 imx9/lec_imx95/thermal_info_config_imx95.json
+ create mode 100644 imx9/lec_imx95/ueventd.nxp.rc
+ create mode 100644 imx9/lec_imx95/usb_audio_policy_configuration-direct-output.xml
+
+diff --git a/common/audio-json/tlv320_config.json b/common/audio-json/tlv320_config.json
+new file mode 100644
+index 00000000..131a5124
+--- /dev/null
++++ b/common/audio-json/tlv320_config.json
+@@ -0,0 +1,27 @@
++{
++  "driver_name": "tlv320aic3x",
++  "bus_name": "bus1_system_sound_out",
++  "supported_out_devices": ["speaker", "wired_headphone", "wired_headset", "bus", "line"],
++  "supported_in_devices": ["builtin_mic", "wired_headset"],
++  "support_lpa": 1,
++  "support_compress": 1,
++
++  "init_ctl": [
++    {"name": "Left Output Mixer PCM Playback Switch", "type": "int", "val": 1},
++    {"name": "Right Output Mixer PCM Playback Switch", "type": "int", "val": 1},
++    {"name": "PCM Playback Volume", "type": "int", "val": 230},
++    {"name": "HP DAC Playback Volume", "type": "int", "val": 100},
++    {"name": "HP Playback Volume", "type": "int", "val": 120}
++  ],
++
++  "builtin_mic_ctl": [
++    {"name": "ALC Function", "type": "int", "val": 3},
++    {"name": "Left Input Mixer Boost Switch", "type": "int", "val": 1},
++    {"name": "ADC PCM Capture Volume", "type": "int", "val": 230},
++    {"name": "Capture Volume", "type": "int", "val": 60}
++  ],
++
++  "out_volume_ctl": [
++    "Playback Volume"
++  ]
++}
+diff --git a/imx9/AndroidProducts.mk b/imx9/AndroidProducts.mk
+index a4bf34ed..9667deab 100644
+--- a/imx9/AndroidProducts.mk
++++ b/imx9/AndroidProducts.mk
+@@ -28,10 +28,13 @@
+ 
+ PRODUCT_MAKEFILES := \
+   $(LOCAL_DIR)/evk_93/evk_93.mk \
+-  $(LOCAL_DIR)/evk_95/evk_95.mk
++  $(LOCAL_DIR)/evk_95/evk_95.mk \
++  $(LOCAL_DIR)/lec_imx95/lec_imx95.mk
+ 
+ COMMON_LUNCH_CHOICES := \
+   evk_93-nxp_stable-user \
+   evk_93-nxp_stable-userdebug \
+   evk_95-nxp_stable-user \
+-  evk_95-nxp_stable-userdebug
++  evk_95-nxp_stable-userdebug \
++  lec_imx95-nxp_stable-user \
++  lec_imx95-nxp_stable-userdebug
+diff --git a/imx9/lec_imx95/AndroidBoard.mk b/imx9/lec_imx95/AndroidBoard.mk
+new file mode 100644
+index 00000000..e658dbd0
+--- /dev/null
++++ b/imx9/lec_imx95/AndroidBoard.mk
+@@ -0,0 +1,10 @@
++LOCAL_PATH := $(call my-dir)
++
++include $(CONFIG_REPO_PATH)/common/build/dtbo.mk
++include $(CONFIG_REPO_PATH)/common/build/imx-recovery.mk
++include $(CONFIG_REPO_PATH)/common/build/gpt.mk
++include $(FSL_PROPRIETARY_PATH)/fsl-proprietary/media-profile/media-profile.mk
++-include $(IMX_MEDIA_CODEC_XML_PATH)/mediacodec-profile/mediacodec-profile.mk
++
++BOARD_PACK_RADIOIMAGES += bootloader.img
++INSTALLED_RADIOIMAGE_TARGET  += $(PRODUCT_OUT)/bootloader.img
+diff --git a/imx9/lec_imx95/AndroidUboot.sh b/imx9/lec_imx95/AndroidUboot.sh
+new file mode 100644
+index 00000000..0cd06fe3
+--- /dev/null
++++ b/imx9/lec_imx95/AndroidUboot.sh
+@@ -0,0 +1,135 @@
++#!/bin/bash
++
++# hardcode this one again in this shell script
++CONFIG_REPO_PATH=device/nxp
++
++# import other paths in the file "common/imx_path/ImxPathConfig.mk" of this
++# repository
++
++while read -r line
++do
++	if [ "$(echo ${line} | grep "=")" != "" ]; then
++		env_arg=`echo ${line} | cut -d "=" -f1`
++		env_arg=${env_arg%:}
++		env_arg=`eval echo ${env_arg}`
++
++		env_arg_value=`echo ${line} | cut -d "=" -f2`
++		env_arg_value=`eval echo ${env_arg_value}`
++
++		eval ${env_arg}=${env_arg_value}
++	fi
++done < ${CONFIG_REPO_PATH}/common/imx_path/ImxPathConfig.mk
++
++if [ "${AARCH64_GCC_CROSS_COMPILE}" != "" ]; then
++	ATF_CROSS_COMPILE=`eval echo ${AARCH64_GCC_CROSS_COMPILE}`
++else
++	echo ERROR: \*\*\* env AARCH64_GCC_CROSS_COMPILE is not set
++	exit 1
++fi
++
++if [ "${AARCH32_GCC_CROSS_COMPILE}" != "" ]; then
++	SM_OEI_CROSS_COMPILE=`eval echo ${AARCH32_GCC_CROSS_COMPILE}`
++else
++	echo ERROR: \*\*\* env AARCH32_GCC_CROSS_COMPILE is not set
++	exit 1
++fi
++
++MKIMAGE_SOC=iMX95
++BOARD_MKIMAGE_PATH=${IMX_MKIMAGE_PATH}/imx-mkimage/${MKIMAGE_SOC}
++BOARD_SM_PATH=${IMX_PATH}/imx-sm
++BOARD_OEI_PATH=${IMX_PATH}/imx-oei
++
++build_pre_image()
++{
++	echo Building imx-sm ...
++	make -C ${BOARD_SM_PATH} really-clean
++	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" cfg config=mx95evk 1>/dev/null || exit 1
++	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=mx95evk 1>/dev/null || exit 1
++	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" cfg config=mx95alt 1>/dev/null || exit 1
++	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=mx95alt 1>/dev/null || exit 1
++	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" cfg config=mx95evk-android 1>/dev/null || exit 1
++	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=mx95evk-android 1>/dev/null || exit 1
++	echo Building imx-oei ...
++	make -C ${BOARD_OEI_PATH} really-clean
++	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95lp5 oei=ddr DEBUG=1 1>/dev/null || exit 1
++	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95lp5 oei=dat DEBUG=1 1>/dev/null || exit 1
++	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95lp5 oei=tcm DEBUG=1 1>/dev/null || exit 1
++	#make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95lp4x-15 oei=ddr DEBUG=1 1>/dev/null || exit 1
++	#build only lp5 variant
++}
++
++build_imx_uboot()
++{
++	echo Building i.MX U-Boot with firmware
++	if echo "$2" | grep -q "15x15" ; then
++		cp ${BOARD_OEI_PATH}/build/mx95lp4x-15/ddr/oei-m33-ddr.bin ${BOARD_MKIMAGE_PATH}/oei-m33-ddr.bin
++	else
++		cp ${BOARD_OEI_PATH}/build/mx95lp5/ddr/oei-m33-ddr.bin ${BOARD_MKIMAGE_PATH}/oei-m33-ddr.bin
++		echo Using lp5 ddr timings
++	fi
++	cp ${BOARD_OEI_PATH}/build/mx95lp5/tcm/oei-m33-tcm.bin ${BOARD_MKIMAGE_PATH}
++	cp ${BOARD_OEI_PATH}/build/mx95lp5/dat/oei-m33-dat.bin ${BOARD_MKIMAGE_PATH}
++
++	if [ `echo $2 | cut -d '-' -f2` = "trusty" ]; then
++		cp ${BOARD_SM_PATH}/build/mx95evk-android/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
++	elif [ `echo $2 | cut -d '-' -f2` = "rpmsg" ]; then
++		cp ${BOARD_SM_PATH}/build/mx95alt/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
++	else
++		cp ${BOARD_SM_PATH}/build/mx95evk/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
++	fi
++
++	if echo "$2" | grep -q "15x15" ; then
++		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx95/imx95_15x15_mcu_demo.img ${BOARD_MKIMAGE_PATH}/m7_image.bin
++	elif echo "$2" | grep -q "verdin" ; then
++		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx95/imx95_verdin_mcu_demo.img ${BOARD_MKIMAGE_PATH}/m7_image.bin
++	else
++		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx95/imx95_19x19_mcu_demo.img ${BOARD_MKIMAGE_PATH}/m7_image.bin
++	fi
++
++	cp ${FSL_PROPRIETARY_PATH}/ele/mx95a0-ahab-container.img ${BOARD_MKIMAGE_PATH}/mx95a0-ahab-container.img
++	cp ${UBOOT_OUT}/u-boot.$1 ${BOARD_MKIMAGE_PATH}
++	cp ${UBOOT_OUT}/spl/u-boot-spl.bin ${BOARD_MKIMAGE_PATH}
++	cp ${UBOOT_OUT}/tools/mkimage ${BOARD_MKIMAGE_PATH}/mkimage_uboot
++	cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/ddr/synopsys/lpddr4x_imem_* ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX95/
++	cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/ddr/synopsys/lpddr4x_dmem_* ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX95/
++	cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/ddr/synopsys/lpddr5_imem_* ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX95/
++	cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/ddr/synopsys/lpddr5_dmem_* ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX95/
++
++	# build ATF based on whether tee is involved
++	make -C ${IMX_PATH}/arm-trusted-firmware/ PLAT=`echo $2 | cut -d '-' -f1` clean
++	if [ `echo $2 | cut -d '-' -f2` = "trusty" ] && [ `echo $2 | rev | cut -d '-' -f1` != "uuu" ]; then
++		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/tee-imx95.bin ${BOARD_MKIMAGE_PATH}/tee.bin
++		make -C ${IMX_PATH}/arm-trusted-firmware/ CROSS_COMPILE="${ATF_CROSS_COMPILE}" PLAT=`echo $2 | cut -d '-' -f1` bl31 -B SPD=trusty 1>/dev/null || exit 1
++	else
++		if [ -f ${BOARD_MKIMAGE_PATH}/tee.bin ] ; then
++			rm -rf ${BOARD_MKIMAGE_PATH}/tee.bin
++		fi
++		make -C ${IMX_PATH}/arm-trusted-firmware/ CROSS_COMPILE="${ATF_CROSS_COMPILE}" PLAT=`echo $2 | cut -d '-' -f1` bl31 -B 1>/dev/null || exit 1
++	fi
++
++	cp ${IMX_PATH}/arm-trusted-firmware/build/`echo $2 | cut -d '-' -f1`/release/bl31.bin ${BOARD_MKIMAGE_PATH}/bl31.bin
++
++	make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ clean
++	# in imx-mkimage/Makefile, MKIMG is assigned with a value of "$(PWD)/mkimage_imx8", the value of PWD is set by shell to current
++	# directory. Directly execute "make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ ..." command in this script, PWD is the top dir of Android
++	# codebase, so mkimage_imx8 will be generated under Android codebase top dir.
++	pwd_backup=${PWD}
++	PWD=${PWD}/${IMX_MKIMAGE_PATH}/imx-mkimage/
++	if echo "$2" | grep -q "15x15" ; then
++		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_all LPDDR_TYPE=lpddr4x OEI=YES || exit 1
++	elif [ `echo $2 | cut -d '-' -f2` = "rpmsg" ]; then
++		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_a55 MSEL=1 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
++	else
++		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_all LPDDR_TYPE=lpddr5 OEI=YES || exit 1
++	fi
++
++	PWD=${pwd_backup}
++
++	if [ `echo $2 | rev | cut -d '-' -f1 | rev` != "dual" ]; then
++		cp ${BOARD_MKIMAGE_PATH}/flash.bin ${UBOOT_COLLECTION}/u-boot-$2.imx
++	else
++		cp ${BOARD_MKIMAGE_PATH}/boot-spl-container.img ${UBOOT_COLLECTION}/spl-$2.bin
++		cp ${BOARD_MKIMAGE_PATH}/u-boot-atf-container.img ${UBOOT_COLLECTION}/bootloader-$2.img
++	fi
++
++}
+diff --git a/imx9/lec_imx95/BoardConfig.mk b/imx9/lec_imx95/BoardConfig.mk
+new file mode 100644
+index 00000000..5472c858
+--- /dev/null
++++ b/imx9/lec_imx95/BoardConfig.mk
+@@ -0,0 +1,167 @@
++# -------@block_infrastructure-------
++#
++# Product-specific compile-time definitions.
++#
++
++include $(CONFIG_REPO_PATH)/imx9/BoardConfigCommon.mk
++
++# -------@block_common_config-------
++#
++# SoC-specific compile-time definitions.
++#
++
++BOARD_SOC_TYPE := IMX95
++BOARD_HAVE_VPU := true
++BOARD_VPU_TYPE := wave6
++HAVE_FSL_IMX_GPU2D := false
++HAVE_FSL_IMX_GPU3D := true
++HAVE_FSL_IMX_PXP := false
++TARGET_USES_HWC2 := true
++TARGET_HAVE_VULKAN := true
++CFG_SECURE_IOCTRL_REGS := true
++ENABLE_SEC_DMABUF_HEAP := true
++MEDIA_PIPELINE := NEOISP
++
++SOONG_CONFIG_IMXPLUGIN += \
++                        BOARD_VPU_TYPE \
++                        CFG_SECURE_IOCTRL_REGS \
++                        ENABLE_SEC_DMABUF_HEAP \
++                        MEDIA_PIPELINE
++
++SOONG_CONFIG_IMXPLUGIN_BOARD_SOC_TYPE = IMX95
++SOONG_CONFIG_IMXPLUGIN_HAVE_FSL_IMX_GPU3D = true
++SOONG_CONFIG_IMXPLUGIN_BOARD_HAVE_VPU = true
++SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_TYPE = wave6
++SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_ONLY = false
++SOONG_CONFIG_IMXPLUGIN_PREBUILT_FSL_IMX_CODEC = true
++SOONG_CONFIG_IMXPLUGIN_CFG_SECURE_IOCTRL_REGS = true
++SOONG_CONFIG_IMXPLUGIN_ENABLE_SEC_DMABUF_HEAP = true
++SOONG_CONFIG_IMXPLUGIN_MEDIA_PIPELINE = NEOISP
++
++BOARD_GPU_DRIVERS := mali
++
++# -------@block_storage-------
++
++TARGET_USERIMAGES_USE_EXT4 := true
++
++# use sparse image.
++TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false
++
++# Support gpt
++ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
++  BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab_super.bpt
++  ADDITION_BPT_PARTITION = partition-table-13GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab_super.bpt \
++                           partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader_super.bpt \
++                           partition-table-13GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader_super.bpt
++else
++  ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
++    BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-no-product.bpt
++    ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-no-product.bpt \
++                             partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader-no-product.bpt \
++                             partition-table-28GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader-no-product.bpt
++  else
++    BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab.bpt
++    ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab.bpt \
++                             partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader.bpt \
++                             partition-table-28GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader.bpt
++  endif
++endif
++
++BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx95.img
++
++BOARD_USES_METADATA_PARTITION := true
++BOARD_ROOT_EXTRA_FOLDERS += metadata
++
++ifneq ($(BUILD_ENCRYPTED_BOOT),true)
++  AB_OTA_PARTITIONS += bootloader
++endif
++
++# -------@block_security-------
++ENABLE_CFI=true
++
++BOARD_AVB_ENABLE := true
++BOARD_AVB_ALGORITHM := SHA256_RSA4096
++# The testkey_rsa4096.pem is copied from external/avb/test/data/testkey_rsa4096.pem
++BOARD_AVB_KEY_PATH := $(CONFIG_REPO_PATH)/common/security/testkey_rsa4096.pem
++
++BOARD_AVB_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
++BOARD_AVB_BOOT_ALGORITHM := SHA256_RSA4096
++BOARD_AVB_BOOT_ROLLBACK_INDEX_LOCATION := 2
++
++# Enable chained vbmeta for init_boot images
++BOARD_AVB_INIT_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
++BOARD_AVB_INIT_BOOT_ALGORITHM := SHA256_RSA4096
++BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION := 3
++
++# Use sha256 hashtree
++BOARD_AVB_SYSTEM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
++BOARD_AVB_SYSTEM_EXT_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
++BOARD_AVB_PRODUCT_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
++BOARD_AVB_VENDOR_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
++BOARD_AVB_VENDOR_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
++BOARD_AVB_SYSTEM_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
++
++# -------@block_treble-------
++# Vendor Interface manifest and compatibility
++DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest.xml
++
++DEVICE_MATRIX_FILE := $(IMX_DEVICE_PATH)/compatibility_matrix.xml
++DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(IMX_DEVICE_PATH)/device_framework_matrix.xml
++
++# -------@block_wifi-------
++# NXP 8997 WIFI
++BOARD_WLAN_DEVICE            := nxp
++WPA_SUPPLICANT_VERSION       := VER_0_8_X
++BOARD_WPA_SUPPLICANT_DRIVER  := NL80211
++BOARD_HOSTAPD_DRIVER         := NL80211
++BOARD_HOSTAPD_PRIVATE_LIB               := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
++BOARD_WPA_SUPPLICANT_PRIVATE_LIB        := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
++
++WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
++# -------@block_bluetooth-------
++# NXP 8997 BT
++BOARD_HAVE_BLUETOOTH_NXP := true
++BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
++
++# -------@block_kernel_bootimg-------
++BOARD_KERNEL_BASE := 0x90400000
++
++CMASIZE=992M
++# NXP default config
++BOARD_KERNEL_CMDLINE := init=/init firmware_class.path=/vendor/firmware loop.max_part=7 bootconfig
++BOARD_BOOTCONFIG += androidboot.console=ttyLP0 androidboot.hardware=nxp
++
++# memory config
++BOARD_KERNEL_CMDLINE += transparent_hugepage=never
++BOARD_KERNEL_CMDLINE += cma=$(CMASIZE)@0xBF0M-0xFF0M
++
++# display config
++BOARD_BOOTCONFIG += androidboot.lcd_density=240 androidboot.dpu_composition=1
++
++# wifi config
++BOARD_BOOTCONFIG += androidboot.wificountrycode=CN
++BOARD_KERNEL_CMDLINE +=  moal.mod_para=wifi_mod_para.conf
++
++# Add KVM support
++BOARD_BOOTCONFIG += androidboot.hypervisor.vm.supported=true
++
++ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
++BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1
++endif
++
++TARGET_BOARD_DTS_CONFIG := imx95:lec-imx95-lt9611.dtb
++# Support LVDS panel
++TARGET_BOARD_DTS_CONFIG += imx95-lvds-panel:lec-imx95-g156hat02.dtb
++# Support auoB101 MIPI panel
++TARGET_BOARD_DTS_CONFIG += imx95-mipi-panel:lec-imx95-g080uan02.dtb
++TARGET_BOARD_DTS_CONFIG += imx95-ov5640:lec-imx95-ov5640.dtb
++TARGET_BOARD_DTS_CONFIG += imx95-ov13855:lec-imx95-ov13855.dtb
++TARGET_BOARD_DTS_CONFIG += imx95-ov13855-lvds:lec-imx95-ov13855-lvds.dtb
++TARGET_BOARD_DTS_CONFIG += imx95-cameras-lvds:lec-imx95-cameras-lvds.dtb
++
++ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
++
++# -------@block_sepolicy-------
++BOARD_SEPOLICY_DIRS := \
++       $(CONFIG_REPO_PATH)/imx9/sepolicy \
++       $(IMX_DEVICE_PATH)/sepolicy
+diff --git a/imx9/lec_imx95/SharedBoardConfig.mk b/imx9/lec_imx95/SharedBoardConfig.mk
+new file mode 100644
+index 00000000..2d091c61
+--- /dev/null
++++ b/imx9/lec_imx95/SharedBoardConfig.mk
+@@ -0,0 +1,221 @@
++# -------@block_kernel_bootimg-------
++KERNEL_NAME := Image.lz4
++TARGET_KERNEL_ARCH := arm64
++LOADABLE_KERNEL_MODULE ?= true
++
++
++#    $(KERNEL_OUT)/drivers/gpu/drm/bridge/lontium-lt9611.ko  \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/lontium-lt9611uxc.ko \
++
++ifeq ($(LOADABLE_KERNEL_MODULE),true)
++BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
++    $(KERNEL_OUT)/drivers/hwmon/hwmon.ko \
++    $(KERNEL_OUT)/drivers/hwmon/scmi-hwmon.ko \
++    $(KERNEL_OUT)/drivers/firmware/arm_scmi/imx-sm-bbm.ko \
++    $(KERNEL_OUT)/drivers/firmware/arm_scmi/imx-sm-misc.ko \
++    $(KERNEL_OUT)/drivers/firmware/arm_scmi/scmi_pm_domain.ko \
++    $(KERNEL_OUT)/drivers/firmware/arm_scmi/scmi_power_control.ko \
++    $(KERNEL_OUT)/drivers/iommu/arm/arm-smmu-v3/arm_smmu_v3.ko \
++    $(KERNEL_OUT)/drivers/clk/clk-scmi.ko \
++    $(KERNEL_OUT)/drivers/clk/imx/mxc-clk.ko \
++    $(KERNEL_OUT)/drivers/clk/imx/imx95-blk-ctrl.ko \
++    $(KERNEL_OUT)/drivers/clocksource/timer-imx-sysctr.ko \
++    $(KERNEL_OUT)/drivers/mailbox/imx-mailbox.ko \
++    $(KERNEL_OUT)/drivers/rpmsg/rpmsg_ns.ko \
++    $(KERNEL_OUT)/drivers/rpmsg/virtio_rpmsg_bus.ko \
++    $(KERNEL_OUT)/drivers/remoteproc/imx_rproc.ko \
++    $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx.ko \
++    $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx-scmi.ko \
++    $(KERNEL_OUT)/drivers/dma/fsl-edma-v3.ko \
++    $(KERNEL_OUT)/drivers/tty/serial/fsl_lpuart.ko \
++    $(KERNEL_OUT)/drivers/trusty/trusty-core.ko \
++    $(KERNEL_OUT)/drivers/trusty/trusty-log.ko \
++    $(KERNEL_OUT)/drivers/trusty/trusty-ipc.ko \
++    $(KERNEL_OUT)/drivers/trusty/trusty-virtio.ko \
++    $(KERNEL_OUT)/drivers/i2c/busses/i2c-imx-lpi2c.ko \
++    $(KERNEL_OUT)/drivers/i2c/i2c-dev.ko \
++    $(KERNEL_OUT)/drivers/i2c/busses/i2c-rpmsg-imx.ko \
++    $(KERNEL_OUT)/drivers/i2c/i2c-mux.ko \
++    $(KERNEL_OUT)/drivers/irqchip/irq-imx-irqsteer.ko \
++    $(KERNEL_OUT)/drivers/firmware/imx/sm-bbm.ko \
++    $(KERNEL_OUT)/drivers/firmware/imx/sm-misc.ko \
++    $(KERNEL_OUT)/drivers/video/backlight/led_bl.ko \
++    $(KERNEL_OUT)/drivers/video/backlight/pwm_bl.ko \
++    $(KERNEL_OUT)/drivers/cpufreq/cpufreq-dt.ko \
++    $(KERNEL_OUT)/drivers/dma-buf/heaps/system_heap.ko \
++    $(KERNEL_OUT)/drivers/dma-buf/heaps/dsp_heap.ko \
++    $(KERNEL_OUT)/drivers/dma-buf/heaps/cma_heap.ko \
++    $(KERNEL_OUT)/drivers/dma-buf/dma-buf-imx.ko \
++    $(KERNEL_OUT)/drivers/watchdog/imx7ulp_wdt.ko \
++    $(KERNEL_OUT)/drivers/firmware/imx/sec_enclave.ko \
++    $(KERNEL_OUT)/drivers/mmc/host/cqhci.ko \
++    $(KERNEL_OUT)/drivers/soc/imx/busfreq-imx8mq.ko \
++    $(KERNEL_OUT)/drivers/mmc/host/sdhci-esdhc-imx.ko \
++    $(KERNEL_OUT)/drivers/nvmem/nvmem-imx-ocotp.ko \
++    $(KERNEL_OUT)/drivers/nvmem/nvmem-imx-ocotp-fsb-s400.ko \
++    $(KERNEL_OUT)/drivers/mmc/core/pwrseq_simple.ko \
++    $(KERNEL_OUT)/drivers/pwm/pwm-imx-tpm.ko \
++    $(KERNEL_OUT)/drivers/soc/imx/soc-imx9.ko \
++    $(KERNEL_OUT)/drivers/gpio/gpio-adp5585.ko \
++    $(KERNEL_OUT)/drivers/gpio/gpio-pca953x.ko \
++    $(KERNEL_OUT)/drivers/gpio/gpio-vf610.ko \
++    $(KERNEL_OUT)/drivers/mfd/maxim_serdes.ko \
++    $(KERNEL_OUT)/drivers/mfd/max96752-core.ko \
++    $(KERNEL_OUT)/drivers/mfd/max96752-i2c.ko \
++    $(KERNEL_OUT)/drivers/mfd/adp5585.ko \
++    $(KERNEL_OUT)/drivers/mfd/max96789-core.ko \
++    $(KERNEL_OUT)/drivers/mfd/max96789-i2c.ko \
++    $(KERNEL_OUT)/drivers/power/supply/dummy_battery.ko \
++    $(KERNEL_OUT)/drivers/pwm/pwm-adp5585.ko \
++    $(KERNEL_OUT)/drivers/phy/freescale/phy-fsl-imx8mq-usb.ko \
++    $(KERNEL_OUT)/drivers/input/touchscreen/focaltech_ts.ko \
++    $(KERNEL_OUT)/drivers/input/touchscreen/ilitek_ts_i2c.ko \
++    $(KERNEL_OUT)/drivers/input/touchscreen/exc3000.ko \
++    $(KERNEL_OUT)/drivers/usb/chipidea/usbmisc_imx.ko \
++    $(KERNEL_OUT)/drivers/usb/common/ulpi.ko \
++    $(KERNEL_OUT)/drivers/usb/chipidea/ci_hdrc_imx.ko \
++    $(KERNEL_OUT)/drivers/usb/chipidea/ci_hdrc.ko \
++    $(KERNEL_OUT)/drivers/usb/phy/phy-generic.ko \
++    $(KERNEL_OUT)/drivers/usb/dwc3/dwc3-imx8mp.ko \
++    $(KERNEL_OUT)/drivers/usb/typec/mux/gpio-switch.ko \
++    $(KERNEL_OUT)/drivers/mux/mux-core.ko \
++    $(KERNEL_OUT)/drivers/mux/mux-mmio.ko \
++    $(KERNEL_OUT)/drivers/phy/freescale/phy-fsl-imx9-dphy-rx.ko \
++    $(KERNEL_OUT)/drivers/phy/freescale/phy-fsl-imx8mp-lvds.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/drm_dma_helper.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/it6161.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/nwl-dsi.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/lontium-lt8912b.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/max96752-lvds.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/display-connector.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/adv7511/adv7511.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/fsl-imx-ldb.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/max96789-dsi.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/it6263.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/ti-sn65dsi83.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx-ldb-helper.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-ldb.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-mipi-dsi.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-pixel-link.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-pixel-interleaver.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/mxsfb/imx-lcdif.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-raydium-rm67191.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-nxp-rm67162.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-simple.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-raydium-rm692c9.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-rocktech-hx8394f.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-lvds.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/imx/dpu95/imx95-dpu-drm.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/imx/display-imx-rpmsg.ko \
++    $(KERNEL_OUT)/drivers/media/platform/nxp/imx8-isi/imx8-isi.ko \
++    $(KERNEL_OUT)/drivers/media/platform/nxp/imx-csi-formatter.ko \
++    $(KERNEL_OUT)/drivers/media/platform/nxp/dwc-mipi-csi2.ko
++
++
++BOARD_VENDOR_KERNEL_MODULES += \
++    $(KERNEL_OUT)/drivers/media/i2c/ov13855.ko \
++    $(KERNEL_OUT)/drivers/media/i2c/ov5640.ko \
++    $(KERNEL_OUT)/drivers/media/i2c/ap130x.ko \
++    $(KERNEL_OUT)/mm/zsmalloc.ko \
++    $(KERNEL_OUT)/drivers/block/zram/zram.ko \
++    $(KERNEL_OUT)/net/rfkill/rfkill.ko \
++    $(KERNEL_OUT)/net/wireless/cfg80211.ko \
++    $(KERNEL_OUT)/lib/crypto/libarc4.ko \
++    $(KERNEL_OUT)/net/mac80211/mac80211.ko \
++    $(KERNEL_OUT)/drivers/perf/fsl_imx9_ddr_perf.ko \
++    $(KERNEL_OUT)/drivers/iio/adc/imx93_adc.ko \
++    $(KERNEL_OUT)/drivers/reset/gpio-reset.ko \
++    $(KERNEL_OUT)/drivers/power/reset/imx-sm-reset.ko \
++    $(KERNEL_OUT)/drivers/pci/controller/dwc/pci-imx6.ko \
++    $(KERNEL_OUT)/drivers/spi/spidev.ko \
++    $(KERNEL_OUT)/drivers/spi/spi-bitbang.ko \
++    $(KERNEL_OUT)/drivers/spi/spi-nxp-fspi.ko \
++    $(KERNEL_OUT)/drivers/spi/spi-fsl-lpspi.ko \
++    $(KERNEL_OUT)/drivers/mtd/mtd.ko \
++    $(KERNEL_OUT)/drivers/mtd/spi-nor/spi-nor.ko \
++    $(KERNEL_OUT)/drivers/leds/leds-gpio.ko \
++    $(KERNEL_OUT)/drivers/leds/leds-pca995x.ko \
++    $(KERNEL_OUT)/drivers/leds/leds-pca963x.ko \
++    $(KERNEL_OUT)/drivers/mxc/vpu/wave6/wave6-vpu-ctrl.ko \
++    $(KERNEL_OUT)/drivers/mxc/vpu/wave6/wave6.ko \
++    $(KERNEL_OUT)/drivers/gpu/drm/bridge/adlink-lt9611.ko  \
++    $(KERNEL_OUT)/drivers/media/i2c/ox05b1s/ox05b1s_mipi.ko \
++    $(KERNEL_OUT)/drivers/media/v4l2-core/v4l2-jpeg.ko \
++    $(KERNEL_OUT)/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-encdec.ko \
++    $(KERNEL_OUT)/drivers/media/platform/nxp/neoisp/neoisp.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-dma.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-rpmsg.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-utils.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-micfil.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-mqs.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-asrc.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-sai.ko \
++    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-bt-sco.ko \
++    $(KERNEL_OUT)/sound/soc/generic/snd-soc-simple-card-utils.ko \
++    $(KERNEL_OUT)/sound/soc/generic/snd-soc-simple-card.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-card.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-audmux.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-rpmsg.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-asoc-card.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/imx-audio-rpmsg.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-rpmsg.ko \
++    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-ak4458.ko \
++    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-ak5558.ko \
++    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8962.ko \
++    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8904.ko \
++    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-cs42xx8.ko \
++    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-cs42xx8-i2c.ko \
++    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-tlv320aic3x.ko \
++    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-tlv320aic3x-i2c.ko \
++    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-tlv320aic3x.ko \
++    $(KERNEL_OUT)/drivers/net/phy/aquantia.ko \
++    $(KERNEL_OUT)/drivers/pps/pps_core.ko \
++    $(KERNEL_OUT)/drivers/ptp/ptp.ko \
++    $(KERNEL_OUT)/drivers/net/ethernet/freescale/enetc/fsl-ntmp.ko \
++    $(KERNEL_OUT)/drivers/net/ethernet/freescale/enetc/fsl-netc-prb-ierb.ko \
++    $(KERNEL_OUT)/drivers/ptp/ptp_netc.ko \
++    $(KERNEL_OUT)/drivers/ptp/ptp-qoriq.ko \
++    $(KERNEL_OUT)/drivers/net/ethernet/freescale/enetc/fsl-enetc-ptp.ko \
++    $(KERNEL_OUT)/drivers/net/pcs/pcs-lynx.ko \
++    $(KERNEL_OUT)/drivers/net/pcs/pcs_xpcs.ko \
++    $(KERNEL_OUT)/lib/dim/dimlib.ko \
++    $(KERNEL_OUT)/drivers/net/ethernet/freescale/enetc/fsl-enetc-mdio.ko \
++    $(KERNEL_OUT)/drivers/net/ethernet/freescale/enetc/fsl-enetc-core.ko \
++    $(KERNEL_OUT)/lib/crc-itu-t.ko \
++    $(KERNEL_OUT)/drivers/net/ethernet/freescale/enetc/fsl-enetc-vf.ko \
++    $(KERNEL_OUT)/drivers/net/ethernet/freescale/enetc/fsl-enetc4.ko \
++    $(KERNEL_OUT)/net/can/can-gw.ko \
++    $(KERNEL_OUT)/net/can/can-raw.ko \
++    $(KERNEL_OUT)/net/can/can-bcm.ko \
++    $(KERNEL_OUT)/drivers/net/can/dev/can-dev.ko \
++    $(KERNEL_OUT)/drivers/net/can/flexcan/flexcan.ko \
++    $(KERNEL_OUT)/drivers/bluetooth/btnxpuart.ko \
++    $(KERNEL_OUT)/drivers/net/phy/realtek.ko
++endif
++
++#NXP 8997 wifi driver module
++BOARD_VENDOR_KERNEL_MODULES += \
++    $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/mlan.ko \
++    $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/moal.ko
++
++#ARM GPU driver module
++BOARD_VENDOR_KERNEL_MODULES += \
++    $(KERNEL_OUT)/drivers/gpu/arm/midgard/mali_kbase.ko
++
++#neutron driver module
++BOARD_VENDOR_KERNEL_MODULES += \
++    $(KERNEL_OUT)/drivers/remoteproc/imx_neutron_rproc.ko \
++    $(KERNEL_OUT)/drivers/staging/neutron/neutron.ko
++
++# -------@block_memory-------
++#Enable this to config 1GB ddr on evk_95
++LOW_MEMORY := false
++
++# -------@block_security-------
++#Enable this to include trusty support
++PRODUCT_IMX_TRUSTY := true
++
++# -------@block_storage-------
++# the bootloader image used in dual-bootloader OTA
++BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-trusty-dual.img
+diff --git a/imx9/lec_imx95/UbootKernelBoardConfig.mk b/imx9/lec_imx95/UbootKernelBoardConfig.mk
+new file mode 100644
+index 00000000..40dc304d
+--- /dev/null
++++ b/imx9/lec_imx95/UbootKernelBoardConfig.mk
+@@ -0,0 +1,24 @@
++# from BoardConfig.mk
++TARGET_BOOTLOADER_POSTFIX := bin
++UBOOT_POST_PROCESS := true
++
++# u-boot target
++TARGET_BOOTLOADER_CONFIG := imx95:lec_imx95_19x19_android_defconfig
++TARGET_BOOTLOADER_CONFIG += imx95-dual:lec_imx95_19x19_android_dual_defconfig
++TARGET_BOOTLOADER_CONFIG += imx95-uuu:lec_imx95_19x19_android_uuu_defconfig
++TARGET_BOOTLOADER_CONFIG += imx95-trusty-dual:lec_imx95_19x19_android_trusty_dual_defconfig
++TARGET_BOOTLOADER_CONFIG += imx95-trusty:lec_imx95_19x19_android_trusty_defconfig
++
++TARGET_KERNEL_DEFCONFIG := gki_defconfig
++ifeq ($(LOADABLE_KERNEL_MODULE),true)
++TARGET_KERNEL_GKI_DEFCONF:= lec_imx95_gki.fragment
++else
++TARGET_KERNEL_GKI_DEFCONF:= imx_v8_android_defconfig
++endif
++
++# absolute path is used, not the same as relative path used in AOSP make
++TARGET_DEVICE_DIR := $(patsubst %/, %, $(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
++
++# define bootloader rollback index
++BOOTLOADER_RBINDEX ?= 0
++
+diff --git a/imx9/lec_imx95/app_whitelist.xml b/imx9/lec_imx95/app_whitelist.xml
+new file mode 100644
+index 00000000..0084b334
+--- /dev/null
++++ b/imx9/lec_imx95/app_whitelist.xml
+@@ -0,0 +1,36 @@
++<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
++
++<!--
++/* Copyright (c) 2017, The Linux Foundation. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are
++ * met:
++ *     * Redistributions of source code must retain the above copyright
++ *       notice, this list of conditions and the following disclaimer.
++ *     * Redistributions in binary form must reproduce the above
++ *       copyright notice, this list of conditions and the following
++ *       disclaimer in the documentation and/or other materials provided
++ *       with the distribution.
++ *     * Neither the name of The Linux Foundation nor the names of its
++ *       contributors may be used to endorse or promote products derived
++ *       from this software without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
++ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
++ * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
++ * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
++ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
++ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
++ * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++-->
++
++<config>
++    <!-- deskclock need to freely run in the background -->
++    <allow-in-power-save package="com.android.deskclock" />
++</config>
+diff --git a/imx9/lec_imx95/audio_effects.xml b/imx9/lec_imx95/audio_effects.xml
+new file mode 100644
+index 00000000..a1c1fc2a
+--- /dev/null
++++ b/imx9/lec_imx95/audio_effects.xml
+@@ -0,0 +1,26 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<audio_effects_conf version="2.0" xmlns="http://schemas.android.com/audio/audio_effects_conf/v2_0">
++    <libraries>
++        <library name="bundle" path="libbundlewrapper.so"/>
++        <library name="reverb" path="libreverbwrapper.so"/>
++        <library name="visualizer" path="libvisualizer.so"/>
++        <library name="downmix" path="libdownmix.so"/>
++        <library name="loudness_enhancer" path="libldnhncr.so"/>
++        <library name="dynamics_processing" path="libdynproc.so"/>
++    </libraries>
++
++    <effects>
++        <effect name="bassboost" library="bundle" uuid="8631f300-72e2-11df-b57e-0002a5d5c51b"/>
++        <effect name="virtualizer" library="bundle" uuid="1d4033c0-8557-11df-9f2d-0002a5d5c51b"/>
++        <effect name="equalizer" library="bundle" uuid="ce772f20-847d-11df-bb17-0002a5d5c51b"/>
++        <effect name="volume" library="bundle" uuid="119341a0-8469-11df-81f9-0002a5d5c51b"/>
++        <effect name="reverb_env_aux" library="reverb" uuid="4a387fc0-8ab3-11df-8bad-0002a5d5c51b"/>
++        <effect name="reverb_env_ins" library="reverb" uuid="c7a511a0-a3bb-11df-860e-0002a5d5c51b"/>
++        <effect name="reverb_pre_aux" library="reverb" uuid="f29a1400-a3bb-11df-8ddc-0002a5d5c51b"/>
++        <effect name="reverb_pre_ins" library="reverb" uuid="172cdf00-a3bc-11df-a72f-0002a5d5c51b"/>
++        <effect name="visualizer" library="visualizer" uuid="d069d9e0-8329-11df-9168-0002a5d5c51b"/>
++        <effect name="downmix" library="downmix" uuid="93f04452-e4fe-41cc-91f9-e475b6d1d69f"/>
++        <effect name="loudness_enhancer" library="loudness_enhancer" uuid="fa415329-2034-4bea-b5dc-5b381c8d1e2c"/>
++        <effect name="dynamics_processing" library="dynamics_processing" uuid="e0e6539b-1781-7261-676f-6d7573696340"/>
++    </effects>
++</audio_effects_conf>
+diff --git a/imx9/lec_imx95/audio_policy_configuration.xml b/imx9/lec_imx95/audio_policy_configuration.xml
+new file mode 100644
+index 00000000..44353ae9
+--- /dev/null
++++ b/imx9/lec_imx95/audio_policy_configuration.xml
+@@ -0,0 +1,119 @@
++<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
++<!-- Copyright (C) 2017 The Android Open Source Project
++     Copyright 2024 NXP
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++
++<audioPolicyConfiguration version="7.0" xmlns:xi="http://www.w3.org/2001/XInclude">
++    <globalConfiguration speaker_drc_enabled="true"/>
++
++    <modules>
++        <module name="primary" halVersion="2.0">
++            <attachedDevices>
++                <item>Speaker</item>
++                <item>Built-In Mic</item>
++            </attachedDevices>
++            <defaultOutputDevice>Speaker</defaultOutputDevice>
++            <mixPorts>
++                <mixPort name="primary output" role="source" flags="AUDIO_OUTPUT_FLAG_PRIMARY">
++                    <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
++                             samplingRates="48000" channelMasks="AUDIO_CHANNEL_OUT_STEREO"/>
++                </mixPort>
++                <mixPort name="direct output" role="source" flags="AUDIO_OUTPUT_FLAG_DIRECT">
++                    <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
++                             samplingRates="48000 96000 192000" channelMasks="AUDIO_CHANNEL_OUT_QUAD AUDIO_CHANNEL_OUT_5POINT1 AUDIO_CHANNEL_OUT_7POINT1"/>
++                </mixPort>
++                <mixPort name="lpa output" role="source" flags="AUDIO_OUTPUT_FLAG_DIRECT AUDIO_OUTPUT_FLAG_HW_AV_SYNC">
++                    <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
++                             samplingRates="48000" channelMasks="AUDIO_CHANNEL_OUT_STEREO"/>
++                </mixPort>
++                <mixPort name="bt sco output" role="source">
++                    <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
++                             samplingRates="16000" channelMasks="AUDIO_CHANNEL_OUT_STEREO"/>
++                </mixPort>
++
++                <mixPort name="primary input" role="sink">
++                    <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
++                             samplingRates="8000 11025 16000 22050 32000 44100 48000"
++                             channelMasks="AUDIO_CHANNEL_IN_STEREO"/>
++                </mixPort>
++                <mixPort name="bt sco input" role="sink">
++                    <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
++                             samplingRates="16000" channelMasks="AUDIO_CHANNEL_IN_STEREO"/>
++                </mixPort>
++            </mixPorts>
++            <devicePorts>
++                <devicePort tagName="Speaker" type="AUDIO_DEVICE_OUT_SPEAKER" role="sink" >
++                </devicePort>
++                <devicePort tagName="Wired Headphones" type="AUDIO_DEVICE_OUT_WIRED_HEADPHONE" role="sink">
++                </devicePort>
++                <devicePort tagName="Wired Headset" type="AUDIO_DEVICE_OUT_WIRED_HEADSET" role="sink">
++                </devicePort>
++                <devicePort tagName="Line-Out" type="AUDIO_DEVICE_OUT_LINE" role="sink">
++                </devicePort>
++                <devicePort tagName="BT SCO Headset" type="AUDIO_DEVICE_OUT_BLUETOOTH_SCO_HEADSET" role="sink">
++                </devicePort>
++                <devicePort tagName="BT SCO CarKit" type="AUDIO_DEVICE_OUT_BLUETOOTH_SCO_CARKIT" role="sink">
++                </devicePort>
++                <devicePort tagName="BT SCO" type="AUDIO_DEVICE_OUT_BLUETOOTH_SCO" role="sink">
++                </devicePort>
++                <devicePort tagName="Built-In Mic" type="AUDIO_DEVICE_IN_BUILTIN_MIC" role="source">
++                </devicePort>
++                <devicePort tagName="Wired Headset Mic" type="AUDIO_DEVICE_IN_WIRED_HEADSET" role="source">
++                </devicePort>
++                <devicePort tagName="BT SCO Headset Mic" type="AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET" role="source">
++                </devicePort>
++            </devicePorts>
++            <routes>
++                <route type="mix" sink="Speaker"
++                       sources="direct output,primary output"/>
++                <route type="mix" sink="Wired Headphones"
++                       sources="primary output"/>
++                <route type="mix" sink="Wired Headset"
++                       sources="primary output"/>
++                <route type="mix" sink="Line-Out"
++                       sources="lpa output,primary output"/>
++                <route type="mix" sink="BT SCO Headset"
++                       sources="bt sco output"/>
++                <route type="mix" sink="BT SCO CarKit"
++                       sources="bt sco output"/>
++                <route type="mix" sink="BT SCO"
++                       sources="bt sco output"/>
++
++                <route type="mix" sink="primary input"
++                       sources="Wired Headset Mic,Built-In Mic"/>
++                <route type="mix" sink="bt sco input"
++                       sources="BT SCO Headset Mic"/>
++            </routes>
++        </module>
++
++        <!-- A2dp Input Audio HAL -->
++        <xi:include href="a2dp_in_audio_policy_configuration_7_0.xml"/>
++
++        <!-- Usb Audio HAL -->
++        <xi:include href="usb_audio_policy_configuration.xml"/>
++
++        <!-- Remote Submix Audio HAL -->
++        <xi:include href="r_submix_audio_policy_configuration.xml"/>
++
++        <!-- Bluetooth Audio HAL -->
++        <xi:include href="bluetooth_audio_policy_configuration_7_0.xml"/>
++
++    </modules>
++
++    <!-- Volume section -->
++    <xi:include href="audio_policy_volumes.xml"/>
++    <xi:include href="default_volume_tables.xml"/>
++
++</audioPolicyConfiguration>
+diff --git a/imx9/lec_imx95/bluetooth/bdroid_buildcfg.h b/imx9/lec_imx95/bluetooth/bdroid_buildcfg.h
+new file mode 100644
+index 00000000..21dd41e2
+--- /dev/null
++++ b/imx9/lec_imx95/bluetooth/bdroid_buildcfg.h
+@@ -0,0 +1,34 @@
++/*
++ * Copyright (C) 2012 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++/* Copyright (C) 2015-2016 Freescale Semiconductor, Inc. */
++/* Copyright 2017-2018 NXP */
++
++#ifndef _BDROID_BUILDCFG_H
++#define _BDROID_BUILDCFG_H
++
++#define BTM_DEF_LOCAL_NAME "iMX9"
++
++// Disables Interleave scan
++#define BTA_HOST_INTERLEAVE_SEARCH  FALSE
++// skips conn update at conn completion
++#define BTA_BLE_SKIP_CONN_UPD  TRUE
++// Disables read remote device feature
++#define BTA_SKIP_BLE_READ_REMOTE_FEAT TRUE
++
++//Enable A2DPSink AVRCPController
++#define BTA_AV_SINK_INCLUDED TRUE
++#endif
+diff --git a/imx9/lec_imx95/camera_config_imx95-ap1302.json b/imx9/lec_imx95/camera_config_imx95-ap1302.json
+new file mode 100644
+index 00000000..dc40be33
+--- /dev/null
++++ b/imx9/lec_imx95/camera_config_imx95-ap1302.json
+@@ -0,0 +1,29 @@
++{
++  "__readme": [
++    "Basic Camera HAL v3 configuration."
++  ],
++
++  "hal_version": "3",
++  "cam_blit_copy": "DPU",
++  "cam_blit_csc": "DPU",
++
++  "camera_metadata": [
++    {
++      "camera_type": "back",
++      "camera_name": "ap1302",
++      "orientation": "0",
++      "mplane": "1",
++      "buffer_type": "dma",
++      "ActiveArrayWidth": "1280",
++      "ActiveArrayHeight": "800",
++      "PixelArrayWidth": "1280",
++      "PixelArrayHeight": "800",
++      "PhysicalWidth": "3.84",
++      "PhysicalHeight": "2.4",
++      "FocalLength": "3.29",
++      "MaxJpegSize": "4000000",
++      "MinFrameDuration": "16666666",
++      "MaxFrameDuration": "300000000"
++    }
++  ]
++}
+diff --git a/imx9/lec_imx95/camera_config_imx95-os08a20.json b/imx9/lec_imx95/camera_config_imx95-os08a20.json
+new file mode 100644
+index 00000000..23512bab
+--- /dev/null
++++ b/imx9/lec_imx95/camera_config_imx95-os08a20.json
+@@ -0,0 +1,33 @@
++{
++  "__readme": [
++    "Basic Camera HAL v3 configuration."
++  ],
++
++  "hal_version": "3",
++  "cam_blit_copy": "DPU",
++  "cam_blit_csc": "DPU",
++
++  "camera_metadata": [
++    {
++      "camera_type": "back",
++      "camera_name": "os08a20",
++      "orientation": "0",
++      "mplane": "1",
++      "buffer_type": "dma",
++      "ActiveArrayWidth": "3840",
++      "ActiveArrayHeight": "2160",
++      "PixelArrayWidth": "3840",
++      "PixelArrayHeight": "2160",
++      "PhysicalWidth": "8.064",
++      "PhysicalHeight": "4.536",
++      "FocalLength": "8.0",
++      "MaxJpegSize": "12582912",
++      "MinFrameDuration": "33333333",
++      "MaxFrameDuration": "300000000",
++      "exposure_ns_min": "116000",
++      "exposure_ns_max": "33216000",
++      "PreviewBuffers": 5,
++      "LibcameraBuffers": 5
++    }
++  ]
++}
+diff --git a/imx9/lec_imx95/camera_config_imx95-ov13855.json b/imx9/lec_imx95/camera_config_imx95-ov13855.json
+new file mode 100644
+index 00000000..acfeaf9d
+--- /dev/null
++++ b/imx9/lec_imx95/camera_config_imx95-ov13855.json
+@@ -0,0 +1,36 @@
++{
++  "__readme": [
++    "Basic Camera HAL v3 configuration."
++  ],
++
++  "hal_version": "3",
++  "cam_blit_copy": "DPU",
++  "cam_blit_csc": "DPU",
++
++  "camera_metadata": [
++    {
++      "camera_type": "back",
++      "camera_name": "ov13855",
++      "orientation": "0",
++      "mplane": "1",
++      "buffer_type": "dma",
++      "ActiveArrayWidth": "4096",
++      "ActiveArrayHeight": "3136",
++      "PixelArrayWidth": "4096",
++      "PixelArrayHeight": "3136",
++      "PhysicalWidth": "5.918",
++      "PhysicalHeight": "4.95",
++      "FocalLength": "3.37",
++      "MaxJpegSize": "8388608",
++      "MinFrameDuration": "33333333",
++      "MaxFrameDuration": "300000000",
++      "OmitFrame": [
++          {
++              "width": "2112",
++              "height": "1568",
++              "omit_num": "1"
++          }
++      ]
++    }
++  ]
++}
+diff --git a/imx9/lec_imx95/camera_config_imx95-ov5640.json b/imx9/lec_imx95/camera_config_imx95-ov5640.json
+new file mode 100644
+index 00000000..1cc06c94
+--- /dev/null
++++ b/imx9/lec_imx95/camera_config_imx95-ov5640.json
+@@ -0,0 +1,36 @@
++{
++  "__readme": [
++    "Basic Camera HAL v3 configuration."
++  ],
++
++  "hal_version": "3",
++  "cam_blit_copy": "DPU",
++  "cam_blit_csc": "DPU",
++
++  "camera_metadata": [
++    {
++      "camera_type": "back",
++      "camera_name": "ov5640",
++      "orientation": "0",
++      "mplane": "1",
++      "buffer_type": "dma",
++      "ActiveArrayWidth": "2592",
++      "ActiveArrayHeight": "1944",
++      "PixelArrayWidth": "2592",
++      "PixelArrayHeight": "1944",
++      "PhysicalWidth": "3.6288",
++      "PhysicalHeight": "2.7216",
++      "FocalLength": "3.37",
++      "MaxJpegSize": "8388608",
++      "MinFrameDuration": "33333333",
++      "MaxFrameDuration": "300000000",
++      "OmitFrame": [
++          {
++              "width": "2592",
++              "height": "1944",
++              "omit_num": "1"
++          }
++      ]
++    }
++  ]
++}
+diff --git a/imx9/lec_imx95/compatibility_matrix.xml b/imx9/lec_imx95/compatibility_matrix.xml
+new file mode 100644
+index 00000000..de8d9c31
+--- /dev/null
++++ b/imx9/lec_imx95/compatibility_matrix.xml
+@@ -0,0 +1,6 @@
++<compatibility-matrix version="1.0" type="device">
++    <hal format="native" optional="false">
++        <name>netutils-wrapper</name>
++        <version>1.0</version>
++    </hal>
++</compatibility-matrix>
+diff --git a/imx9/lec_imx95/device_framework_matrix.xml b/imx9/lec_imx95/device_framework_matrix.xml
+new file mode 100644
+index 00000000..038700ed
+--- /dev/null
++++ b/imx9/lec_imx95/device_framework_matrix.xml
+@@ -0,0 +1,26 @@
++<compatibility-matrix version="1.0" type="framework">
++    <hal format="aidl" optional="true">
++        <name>nxp.hardware.secureime</name>
++        <version>1</version>
++        <interface>
++            <name>ISecureIME</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="aidl" optional="true">
++        <name>nxp.hardware.ele</name>
++        <version>1</version>
++        <interface>
++            <name>ISecureEnclave</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="aidl" optional="true">
++        <name>nxp.hardware.imx_dek_extractor</name>
++        <version>1</version>
++        <interface>
++            <name>IDek_Extractor</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++</compatibility-matrix>
+diff --git a/imx9/lec_imx95/display_settings.xml b/imx9/lec_imx95/display_settings.xml
+new file mode 100644
+index 00000000..861d1d0c
+--- /dev/null
++++ b/imx9/lec_imx95/display_settings.xml
+@@ -0,0 +1,11 @@
++<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
++<display-settings>
++<!-- Use physical port number instead of local id -->
++<config identifier="1" />
++
++<!-- Display settings for 2nd Home -->
++<display name="port:1"
++    shouldShowSystemDecors="true"
++    shouldShowIme="true" />
++
++</display-settings>
+diff --git a/imx9/lec_imx95/early.init.cfg b/imx9/lec_imx95/early.init.cfg
+new file mode 100644
+index 00000000..9dd16032
+--- /dev/null
++++ b/imx9/lec_imx95/early.init.cfg
+@@ -0,0 +1,2 @@
++# support insmod xx.ko; setprop xx xx; modeprobe
++modprobe
+diff --git a/imx9/lec_imx95/external_camera_config.xml b/imx9/lec_imx95/external_camera_config.xml
+new file mode 100644
+index 00000000..81fe3e88
+--- /dev/null
++++ b/imx9/lec_imx95/external_camera_config.xml
+@@ -0,0 +1,31 @@
++<ExternalCamera>
++    <Provider>
++        <ignore>
++            <!-- Internal video devices to be ignored by external camera HAL -->
++            <!-- No leading/trailing spaces -->
++            <!-- <id>0</id>  -->
++        </ignore>
++    </Provider>
++    <!-- See ExternalCameraUtils.cpp for default values of Device configurations below -->
++    <Device>
++        <!-- Max JPEG buffer size in bytes-->
++        <MaxJpegBufferSize bytes="3145728"/>
++        <!-- Size of v4l2 buffer queue when streaming >= 30fps -->
++        <!-- Larger value: more request can be cached pipeline (less janky)  -->
++        <!-- Smaller value: use less memory -->
++        <NumVideoBuffers count="4"/>
++        <!-- Size of v4l2 buffer queue when streaming < 30fps -->
++        <NumStillBuffers count="2"/>
++
++        <!-- List of maximum fps for various output sizes -->
++        <!-- Any image size smaller than the size listed in Limit row will report
++            fps (as minimum frame duration) up to the fpsBound value. -->
++        <FpsList>
++            <!-- width/height must be increasing, fpsBound must be decreasing-->
++            <Limit width="640" height="480" fpsBound="60.0"/>
++            <Limit width="1280" height="720" fpsBound="30.0"/>
++            <Limit width="1920" height="1080" fpsBound="30.0"/>
++            <!-- image size larger than the last entry will not be supported-->
++        </FpsList>
++    </Device>
++</ExternalCamera>
+diff --git a/imx9/lec_imx95/fstab.nxp b/imx9/lec_imx95/fstab.nxp
+new file mode 100644
+index 00000000..d9a04f66
+--- /dev/null
++++ b/imx9/lec_imx95/fstab.nxp
+@@ -0,0 +1,20 @@
++# Android fstab file.
++#<src>                                                  <mnt_point>         <type>    <mnt_flags and options>                       <fs_mgr_flags>
++# The filesystem that contains the filesystem checker binary (typically /system) cannot
++# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
++
++/devices/platform/soc/4c200000.usb/*        auto auto defaults voldmanaged=usb:auto
++/dev/block/by-name/userdata    /data        f2fs    nodev,noatime,nosuid,inlinecrypt,reserve_root=32768 latemount,wait,check,quota,formattable,fileencryption=aes-256-xts,fscompress,keydirectory=/metadata/vold/metadata_encryption,checkpoint=fs
++/dev/block/by-name/metadata    /metadata    f2fs    noatime,nosuid,nodev,discard,sync,fsync_mode=nobarrier                           wait,formattable,first_stage_mount,check
++/dev/block/by-name/misc        /misc        emmc    defaults                                                                         defaults
++/dev/block/zram0 none swap defaults zramsize=629145600
++
++/devices/platform/soc@0/30800000.bus/30b50000.mmc/mmc_host/* auto auto defaults voldmanaged=sdcard1:auto,encryptable=userdata
++
++system                         /system       erofs ro                                                              wait,slotselect,avb,avb_keys=/avb,logical,first_stage_mount
++system                         /system       ext4  noatime,errors=panic,ro,barrier=1,inode_readahead_blks=8        wait,slotselect,avb,avb_keys=/avb,logical,first_stage_mount
++system_dlkm                    /system_dlkm  erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
++system_ext                     /system_ext   erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
++vendor                         /vendor       erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
++vendor_dlkm                    /vendor_dlkm  erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
++product                        /product      erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
+diff --git a/imx9/lec_imx95/init.imx95.rc b/imx9/lec_imx95/init.imx95.rc
+new file mode 100644
+index 00000000..9ef9ea40
+--- /dev/null
++++ b/imx9/lec_imx95/init.imx95.rc
+@@ -0,0 +1,58 @@
++on early-boot
++
++    # Set OpenGLES version
++    setprop ro.opengles.version 196610
++
++    # Hwui RenderPipelineType default is skiagl, change to use skiavk
++    setprop debug.hwui.renderer skiavk
++
++    # Threaded RenderEngine with SkiaVK Backend
++    setprop debug.renderengine.backend skiavkthreaded
++
++    # change for FSL specific service
++    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
++    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
++    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
++    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
++    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
++    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
++    chown root system /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
++    chmod 0440 /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
++    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
++    chown root system /sys/devices/system/cpu/cpu2/online
++    chmod 0664 /sys/devices/system/cpu/cpu2/online
++    chown root system /sys/devices/system/cpu/cpu3/online
++    chmod 0664 /sys/devices/system/cpu/cpu3/online
++
++on property:sys.boot_completed=1
++    # Set default CPU frequency governor
++    # configure governor settings for little cluster
++    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "schedutil"
++    # The rate-limit tunable in the schedutil governor applies to transitions to both lower and higher frequencies
++    # Set up and down limit to 200us/200us
++    write /sys/devices/system/cpu/cpufreq/schedutil/rate_limit_us 200
++    write /proc/sys/kernel/sched_util_clamp_min_rt_default 512
++    write /sys/devices/platform/soc@0/30c00000.bus/30e20000.audio-blk-ctrl/power/control auto
++    write /sys/devices/platform/soc@0/32c00000.bus/32ec0000.media-blk-ctrl/power/control auto
++    write /sys/devices/platform/soc@0/30c00000.bus/32fc0000.hdmi-blk-ctrl/power/control auto
++    write /sys/clk_ctrl/enable_clk_disable_unused 1
++    chown mediacodec mediacodec /sys/class/remoteproc/remoteproc0/state
++    chmod 0660 /sys/class/remoteproc/remoteproc0/state
++    chown mediacodec mediacodec /sys/class/remoteproc/remoteproc0/name
++    chmod 0660 /sys/class/remoteproc/remoteproc0/name
++
++on property:sys.boot_completed=1
++    # update cpuset now that processors are up
++    write /dev/cpuset/foreground/cpus 0-5
++
++    # top-app gets all cpus
++    write /dev/cpuset/top-app/cpus 0-5
++
++    #background contains a small subset (generally one little core)
++    write /dev/cpuset/background/cpus 0
++
++    # add system-background cpuset, a new cpuset for system services
++    # that should not run on larger cores
++    # system-background is for system tasks that should only run on
++    # little cores, not on bigs to be used only by init
++    write /dev/cpuset/system-background/cpus 0-4
+diff --git a/imx9/lec_imx95/init.rc b/imx9/lec_imx95/init.rc
+new file mode 100644
+index 00000000..5d0c9e50
+--- /dev/null
++++ b/imx9/lec_imx95/init.rc
+@@ -0,0 +1,280 @@
++import /vendor/etc/init/hw/init.${ro.hardware}.usb.rc
++import /vendor/etc/init/hw/init.${ro.hardware}.${ro.boot.soc_type}.rc
++
++on early-init
++    # mount the debugfs
++    mount debugfs none /sys/kernel/debug/ mode=0755
++
++on early-init
++    start early_init_sh
++    # Set the host name which used in console
++    export HOSTNAME evk_95
++
++    # Due keymaster start very early so set prop here
++    # Also gatekeeper share same role for keymaster
++    setprop ro.hardware.keystore ${ro.boot.keystore}
++    setprop ro.hardware.gatekeeper ${ro.boot.keystore}
++    setprop vendor.storageproxyd ${ro.boot.keystore}
++
++    # Use ro.boot.lcd_density to override ro.sf.lcd_density
++    setprop ro.sf.lcd_density ${ro.boot.lcd_density}
++
++# Skip charger_not_need trigger for charger mode
++on early-init && property:ro.boot.mode=charger
++    setprop vendor.skip.charger_not_need 1
++
++on init && property:vendor.skip.charger_not_need=0
++    start watchdogd
++
++    # disable cursor blink for fbcon, if no splash screen support
++    write /sys/class/graphics/fbcon/cursor_blink 0
++
++    # deattch the fbcon as hdmi hotplug conflict with fbcon
++    write /sys/class/vtconsole/vtcon1/bind 0
++
++    chown system system /dev/cpuctl/top-app/cpu.uclamp.min
++    chmod 664 /dev/cpuctl/top-app/cpu.uclamp.min
++    chown system system /dev/cpuctl/top-app/cpu.uclamp.latency_sensitive
++    chmod 664 /dev/cpuctl/top-app/cpu.uclamp.latency_sensitive
++    chown system system /dev/cpuctl/foreground/cpu.uclamp.min
++    chmod 664 /dev/cpuctl/foreground/cpu.uclamp.min
++    chown system system /dev/cpuctl/foreground/cpu.uclamp.latency_sensitive
++    chmod 664 /dev/cpuctl/foreground/cpu.uclamp.latency_sensitive
++    chown system system /dev/cpuctl/rt/cpu.uclamp.min
++    chmod 664 /dev/cpuctl/rt/cpu.uclamp.min
++    chown system system /dev/cpuctl/rt/cpu.uclamp.latency_sensitive
++    chmod 664 /dev/cpuctl/rt/cpu.uclamp.latency_sensitive
++    chown system system /dev/cpuctl/background/cpu.uclamp.max
++    chmod 664 /dev/cpuctl/background/cpu.uclamp.max
++
++    # set default uclamp value for foreground/top-app/rt/background (only affects EAS)
++    write /dev/cpuctl/foreground/cpu.uclamp.min 20
++    write /dev/cpuctl/foreground/cpu.uclamp.latency_sensitive 1
++    write /dev/cpuctl/top-app/cpu.uclamp.min 50
++    write /dev/cpuctl/top-app/cpu.uclamp.latency_sensitive 1
++    write /dev/cpuctl/rt/cpu.uclamp.min 60
++    write /dev/cpuctl/rt/cpu.uclamp.latency_sensitive 1
++    write /dev/cpuctl/background/cpu.uclamp.max 50
++
++service vpu_firmware_load /vendor/bin/firmware_loader /vendor/firmware/wave633c_codec_fw.bin.signed
++    user root
++    group root system
++    disabled
++    oneshot
++
++# setenv append_bootargs androidboot.powersave.uclamp=true
++on init && property:vendor.skip.charger_not_need=0 && property:ro.boot.powersave.uclamp=true
++    write /dev/cpuctl/foreground/cpu.uclamp.min 0
++    write /dev/cpuctl/foreground/cpu.uclamp.latency_sensitive 0
++    write /dev/cpuctl/top-app/cpu.uclamp.min 0
++    write /dev/cpuctl/top-app/cpu.uclamp.latency_sensitive 0
++    write /dev/cpuctl/rt/cpu.uclamp.min 0
++    write /dev/cpuctl/rt/cpu.uclamp.latency_sensitive 0
++
++on late-fs && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
++    start storageproxyd
++    start vendor.confirmationui_default
++    start securedpu_daemon
++
++on late-fs && property:vendor.skip.charger_not_need=0
++    # Start keymaster/gatekeeper/oemlock service
++    start vendor.gatekeeper-${ro.boot.keystore}
++    start vendor.keymint-${ro.boot.keystore}
++    start vendor.oemlock-1-0-${ro.boot.keystore}
++    setprop vendor.powerhal.init 1
++
++    # Wait for keymaster
++    exec_start wait_for_keymaster
++
++    mount_all /vendor/etc/fstab.nxp --late
++    start vpu_firmware_load
++
++on early-boot && property:vendor.skip.charger_not_need=0
++    # For evk_95, when swap used about 400M, upgrade the level.
++    setprop ro.lmk.upgrade_pressure 93
++    setprop ro.lmk.downgrade_pressure 99
++    setprop ro.lmk.critical_upgrade true
++
++    setprop vendor.hwc.stretch.filter  1
++
++    # Default g2d [dpu|pxp|viv] lib to be used
++    setprop vendor.imx.default-g2d dpu
++
++    # fsl omx graphic manager media framework property
++    setprop vendor.rw.VIDEO_RENDER_NAME video_render.surface
++    setprop vendor.media.fsl_codec.flag 7
++    setprop media.c2.hal.selection aidl
++
++    setprop camera.disable_zsl_mode 1
++
++   # Tweak the mmc device read ahead buffer size
++    write /sys/block/mmcblk1/queue/read_ahead_kb 2048
++    write /sys/block/mmcblk2/queue/read_ahead_kb 2048
++
++    # Prepare for wifi
++    setprop wifi.interface wlan0
++    setprop wifi.direct.interface p2p0
++    setprop wifi.concurrent.interface wlan1
++
++    # Set tracefs permission to 755
++    chmod 0755 /sys/kernel/debug/tracing
++
++    # Set sw_sync group to graphics and set permission to 664
++    chown root graphics /sys/kernel/debug/sync/sw_sync
++    chmod 0664 /sys/kernel/debug/sync/sw_sync
++
++    # Set light sensor sysfs path and light sensor threshold lux value
++    setprop ro.hardware.lightsensor "/sys/class/i2c-dev/i2c-0/device/0-0044/"
++    setprop vendor.ro.lightsensor.threshold  20
++
++    # Allow DSD file(duration larger than 10s) can play
++    setprop audio.offload.min.duration.secs 10
++
++    # Enlarge limition of audio buffer allocation
++    setprop ro.af.client_heap_size_kbyte 32768
++
++    start vendor.wifi_hal_legacy
++
++service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
++    -O/data/vendor/wifi/wpa/sockets -puse_p2p_group_interface=1 \
++    -g@android:wpa_wlan0
++    interface aidl android.hardware.wifi.supplicant.ISupplicant/default
++    class main
++    socket wpa_wlan0 dgram 660 wifi wifi
++    disabled
++    oneshot
++
++# Set watchdog timer to 30 seconds and pet it every 10 seconds to get a 20 second margin
++service watchdogd /system/bin/watchdogd 10 20
++    class core
++    seclabel u:r:watchdogd:s0
++
++# bugreport is triggered by holding down volume down, volume up and power
++service bugreport /system/bin/dumpstate -d -p -z
++    class main
++    disabled
++    oneshot
++    keycodes 114 115 116
++
++
++on boot && property:vendor.skip.charger_not_need=0
++    start audioserver
++    start mediadrm
++    start media
++    start drm
++
++on fs && property:vendor.skip.charger_not_need=0
++# mount ext4 partitions
++    mount_all /vendor/etc/fstab.nxp --early
++
++    # Adjust parameters for dm-verity device
++    write /sys/block/dm-0/queue/read_ahead_kb 4096
++
++    # Update dm-verity state and set partition.*.verified properties
++    verity_update_state
++
++on post-fs && property:vendor.skip.charger_not_need=0
++    # Set netd memlock rlimit to 8MB
++    setrlimit 8 8388608 8388608
++
++    # Turn on swap
++    swapon_all /vendor/etc/fstab.nxp
++
++    # Swap in only 1 page at a time
++    write /proc/sys/vm/page-cluster 0
++
++    # Grant permission for fetching available_pages info of statsd
++    chown system system /proc/pagetypeinfo
++    chmod 0440 /proc/pagetypeinfo
++
++on post-fs-data && property:vendor.skip.charger_not_need=0
++    setprop vold.post_fs_data_done 1
++
++    # tmp dir for opencl Compiler
++    setprop vendor.TMPDIR /data/vendor/.opencl-cache
++    mkdir /data/vendor/.opencl-cache 0771 system camera
++    # HWC data
++    mkdir /data/vendor/hwc 0771 system graphics
++
++on zygote-start && property:vendor.skip.charger_not_need=0
++    # Create the directories used by the Wireless subsystem
++    mkdir /data/vendor/wifi 0771 wifi wifi
++    mkdir /data/vendor/wifi/wifi_dumps 0770 wifi wifi
++    mkdir /data/vendor/wifi/wpa 0770 wifi wifi
++    mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
++
++service early_init_sh /vendor/bin/init.insmod.sh /vendor/etc/early.init.cfg vendor.all.early_init.ready
++    class main
++    user root
++    group root system
++    disabled
++    oneshot
++
++on post-fs-data && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
++    # create temp node for secure storage proxy
++    mkdir /data/vendor/ss 0700 system system
++    restart storageproxyd
++
++service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/mmcblk0rpmb -d /dev/trusty-ipc-dev0
++   group system
++
++service securedpu_daemon /vendor/bin/secure_dpu
++   group system
++
++on property:ro.boot.vendor.sysrq=1 && property:vendor.skip.charger_not_need=0
++    write /proc/sys/kernel/sysrq 1
++
++# setenv append_bootargs androidboot.usb.debugging=1
++on property:ro.boot.usb.debugging=1
++    setprop persist.sys.usb.config adb
++
++# setenv append_bootargs androidboot.powersave.usb=true
++on property:ro.boot.powersave.usb=true
++    # enable platform/32f10100.usb runtime_pm
++    write /sys/devices/platform/soc@0/32f10100.usb/38100000.usb/power/control auto
++
++    #enable platform/32f10108.usb runtime_pm
++    write /sys/devices/platform/soc@0/32f10108.usb/38200000.usb/power/control auto
++    write /sys/devices/platform/soc@0/32f10108.usb/38200000.usb/xhci-hcd.0.auto/power/control auto
++    write /sys/devices/platform/soc@0/32f10108.usb/38200000.usb/xhci-hcd.1.auto/power/control auto
++    write /sys/devices/platform/soc@0/32f10108.usb/38200000.usb/xhci-hcd.2.auto/power/control auto
++
++# setenv append_bootargs androidboot.lpa.enable=1
++on property:ro.boot.lpa.enable=1
++    setprop vendor.audio.lpa.hold_second 20
++    setprop vendor.audio.lpa.period_ms 500
++    setprop vendor.audio.lpa.enable 1
++
++# setenv append_bootargs androidboot.powersave.lpa=true
++on property:ro.boot.lpa.enable=1 && property:ro.boot.powersave.lpa=true
++    write /sys/lpa_ctrl/lpa 1
++
++service confirmationui_ta_load /vendor/bin/trusty_apploader /vendor/firmware/tee/confirmationui.app
++    user root
++    group root system
++    disabled
++    oneshot
++
++on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
++    start confirmationui_ta_load
++
++service imx_dek_extractor /vendor/bin/hw/imx_dek_extractor
++    user system
++    group system
++    disabled
++    oneshot
++
++on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
++    start imx_dek_extractor
++
++on property:ro.boot.camera.layout=ov13855
++    setprop ro.media.xml_variant.profiles _95-ov13855
++
++on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
++    # create node for secure enclave
++    mkdir /data/vendor/ele 0700 system system
++    start nvmd
++    start vendor.secure-enclave
++
++on property:sys.boot_completed=1
++    start vendor.secretkeeper.${ro.boot.keystore}
+diff --git a/imx9/lec_imx95/init.recovery.nxp.rc b/imx9/lec_imx95/init.recovery.nxp.rc
+new file mode 100644
+index 00000000..f17867ce
+--- /dev/null
++++ b/imx9/lec_imx95/init.recovery.nxp.rc
+@@ -0,0 +1,8 @@
++on init
++    # disable cursor blink for fbcon, if no splash screen support
++    write /sys/class/graphics/fbcon/cursor_blink 0
++
++    setprop sys.usb.configfs 1
++
++on post-fs-data
++    setprop sys.usb.controller "4c100000.usb"
+diff --git a/imx9/lec_imx95/init.usb.rc b/imx9/lec_imx95/init.usb.rc
+new file mode 100644
+index 00000000..8c219939
+--- /dev/null
++++ b/imx9/lec_imx95/init.usb.rc
+@@ -0,0 +1,53 @@
++#
++# Copyright (C) 2016 The Android Open-Source Project
++# Copyright 2018 NXP
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#      http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++
++on early-boot
++    mount configfs none /config
++    mkdir /config/usb_gadget/g1 0770
++    mkdir /config/usb_gadget/g1/strings/0x409 0770
++    write /config/usb_gadget/g1/bcdUSB 0x0200
++    write /config/usb_gadget/g1/idVendor 0x18d1
++    write /config/usb_gadget/g1/bcdDevice 0x0440
++    write /config/usb_gadget/g1/strings/0x409/serialnumber ${ro.serialno}
++    write /config/usb_gadget/g1/strings/0x409/manufacturer ${ro.product.manufacturer}
++    write /config/usb_gadget/g1/strings/0x409/product ${ro.product.model}
++    mkdir /config/usb_gadget/g1/functions/mass_storage.0
++    mkdir /config/usb_gadget/g1/functions/accessory.gs2
++    mkdir /config/usb_gadget/g1/functions/audio_source.gs3
++    mkdir /config/usb_gadget/g1/functions/rndis.gs4
++    mkdir /config/usb_gadget/g1/functions/midi.gs5
++    mkdir /config/usb_gadget/g1/functions/ncm.gs6
++    mkdir /config/usb_gadget/g1/functions/ffs.adb
++    mkdir /config/usb_gadget/g1/functions/ffs.mtp
++    mkdir /config/usb_gadget/g1/functions/ffs.ptp
++    mkdir /config/usb_gadget/g1/configs/b.1 0770
++    mkdir /config/usb_gadget/g1/configs/b.1/strings/0x409 0770
++    write /config/usb_gadget/g1/os_desc/b_vendor_code 0x1
++    write /config/usb_gadget/g1/os_desc/qw_sign "MSFT100"
++    mkdir /dev/usb-ffs 0775 shell shell
++    mkdir /dev/usb-ffs/adb 0770 shell shell
++    mount functionfs adb /dev/usb-ffs/adb rmode=0770,fmode=0660,uid=2000,gid=2000
++    mkdir /dev/usb-ffs/mtp 0770 mtp mtp
++    mkdir /dev/usb-ffs/ptp 0770 mtp mtp
++    mount functionfs mtp /dev/usb-ffs/mtp rmode=0770,fmode=0660,uid=1024,gid=1024,no_disconnect=1
++    mount functionfs ptp /dev/usb-ffs/ptp rmode=0770,fmode=0660,uid=1024,gid=1024,no_disconnect=1
++    setprop sys.usb.mtp.device_type 3
++    setprop vendor.usb.config 4c100000.usb
++    write /sys/module/libcomposite/parameters/disable_l1_for_hs "y"
++    symlink /config/usb_gadget/g1/configs/b.1 /config/usb_gadget/g1/os_desc/b.1
++
++on boot
++    setprop sys.usb.configfs 2
+diff --git a/imx9/lec_imx95/input-port-associations.xml b/imx9/lec_imx95/input-port-associations.xml
+new file mode 100644
+index 00000000..a5b4697f
+--- /dev/null
++++ b/imx9/lec_imx95/input-port-associations.xml
+@@ -0,0 +1,17 @@
++<!-- Use below commands to get display port number:
++# dumpsys SurfaceFlinger - -display-id
++Display 4692921138614785 (HWC display 1): port=1 pnpId=DEL displayName="DELL S2740L"
++Display 4693505326422272 (HWC display 0): port=0 pnpId=DEL displayName="DELL P2314T"
++
++Use below commands to get touch input location:
++# getevent -i | grep location
++location: "usb-xhci-hcd.0.auto-1.1.4/input0"
++location: "usb-xhci-hcd.0.auto-1.2.4/input0"
++
++Then bind the display port and input location with below table. This table need
++to modify according to actual connection.
++One display can link with multi-input.
++-->
++<ports>
++	<port display="1" input="usb-xhci-hcd.1.auto-1.2.4/input0" />
++</ports>
+diff --git a/imx9/lec_imx95/lec_imx95.mk b/imx9/lec_imx95/lec_imx95.mk
+new file mode 100644
+index 00000000..a033f859
+--- /dev/null
++++ b/imx9/lec_imx95/lec_imx95.mk
+@@ -0,0 +1,603 @@
++# -------@block_infrastructure-------
++CONFIG_REPO_PATH := device/nxp
++CURRENT_FILE_PATH :=  $(lastword $(MAKEFILE_LIST))
++IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
++
++PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := true
++#Enable this to choose 32 bit user space build
++IMX_BUILD_32BIT_ROOTFS ?= false
++
++# configs shared between uboot, kernel and Android rootfs
++include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
++
++-include $(CONFIG_REPO_PATH)/common/imx_path/ImxPathConfig.mk
++include $(CONFIG_REPO_PATH)/imx9/ProductConfigCommon.mk
++
++# -------@block_common_config-------
++# Overrides
++PRODUCT_NAME := lec_imx95
++PRODUCT_DEVICE := lec_imx95
++PRODUCT_MODEL := LEC_IMX95
++
++TARGET_BOOTLOADER_BOARD_NAME := LEC
++
++PRODUCT_CHARACTERISTICS := tablet
++
++DEVICE_PACKAGE_OVERLAYS := $(IMX_DEVICE_PATH)/overlay
++
++PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
++
++PRODUCT_VENDOR_PROPERTIES += ro.soc.manufacturer=nxp
++PRODUCT_VENDOR_PROPERTIES += ro.soc.model=IMX95
++PRODUCT_VENDOR_PROPERTIES += ro.crypto.metadata_init_delete_all_keys.enabled=true
++
++PRODUCT_MAX_PAGE_SIZE_SUPPORTED := 16384
++PRODUCT_NO_BIONIC_PAGE_SIZE_MACRO := true
++# -------@block_treble-------
++PRODUCT_FULL_TREBLE_OVERRIDE := true
++
++# -------@block_power-------
++PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/power
++PRODUCT_SOONG_NAMESPACES += hardware/google/pixel
++
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/powerhint_imx95.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/powerhint_imx95.json
++
++# Do not skip charger_not_need trigger by default
++PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
++    vendor.skip.charger_not_need=0
++
++
++PRODUCT_PACKAGES += \
++    android.hardware.power-service.imx
++
++TARGET_VENDOR_PROP := $(LOCAL_PATH)/product.prop
++
++# Thermal HAL
++PRODUCT_PACKAGES += \
++    android.hardware.thermal-service.imx
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/thermal_info_config_imx95.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx95.json
++
++
++# -------@block_app-------
++
++# Set permission for GMS packages
++PRODUCT_COPY_FILES += \
++	  $(CONFIG_REPO_PATH)/imx9/permissions/privapp-permissions-imx.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp.permissions-imx.xml
++
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/app_whitelist.xml:system/etc/sysconfig/app_whitelist.xml
++
++# -------@block_kernel_bootimg-------
++
++# Enable this to support vendor boot and boot header v3, this would be a MUST for GKI
++TARGET_USE_VENDOR_BOOT ?= true
++
++# Allow LZ4 compression
++BOARD_RAMDISK_USE_LZ4 := true
++
++ifeq ($(LOADABLE_KERNEL_MODULE),true)
++  BOARD_USES_GENERIC_KERNEL_IMAGE := true
++  $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
++endif
++
++# We load the fstab from device tree so this is not needed, but since no kernel modules are installed to vendor
++# boot ramdisk so far, we need this step to generate the vendor-ramdisk folder or build process would fail. This
++# can be deleted once we figure out what kernel modules should be put into the vendor boot ramdisk.
++ifeq ($(TARGET_USE_VENDOR_BOOT),true)
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/fstab.nxp:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.nxp
++endif
++
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/early.init.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/early.init.cfg \
++    $(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/sdma/sdma-imx7d.bin:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/imx/sdma/sdma-imx7d.bin \
++    $(CONFIG_REPO_PATH)/common/init/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
++    $(IMX_DEVICE_PATH)/ueventd.nxp.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc
++
++
++# -------@block_storage-------
++# support metadata checksum during first stage mount
++ifeq ($(TARGET_USE_VENDOR_BOOT),true)
++PRODUCT_PACKAGES += \
++    linker.vendor_ramdisk \
++    resizefs.vendor_ramdisk \
++    tune2fs.vendor_ramdisk
++endif
++
++#Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
++TARGET_USE_DYNAMIC_PARTITIONS ?= true
++
++ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
++  ifeq ($(TARGET_USE_VENDOR_BOOT),true)
++    $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression_with_xor.mk)
++  else
++    $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
++  endif
++  PRODUCT_USE_DYNAMIC_PARTITIONS := true
++  BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
++  BOARD_SUPER_IMAGE_IN_UPDATE_PACKAGE := true
++endif
++
++#Enable this to disable product partition build.
++IMX_NO_PRODUCT_PARTITION := false
++
++$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
++
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/fstab.nxp:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.nxp
++
++TARGET_RECOVERY_FSTAB = $(IMX_DEVICE_PATH)/fstab.nxp
++
++ifneq ($(filter TRUE true 1,$(IMX_OTA_POSTINSTALL)),)
++  PRODUCT_PACKAGES += imx_ota_postinstall
++
++  AB_OTA_POSTINSTALL_CONFIG += \
++    RUN_POSTINSTALL_vendor=true \
++    POSTINSTALL_PATH_vendor=bin/imx_ota_postinstall \
++    FILESYSTEM_TYPE_vendor=erofs \
++    POSTINSTALL_OPTIONAL_vendor=false
++
++  PRODUCT_COPY_FILES += \
++    $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/spl-imx95-trusty-dual.bin:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader0.img
++  ifeq ($(BUILD_ENCRYPTED_BOOT),true)
++    PRODUCT_COPY_FILES += \
++      $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/bootloader-imx95-trusty-dual.img:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader_ab.img
++  endif
++endif
++
++
++# fastboot_imx_flashall scripts, imx-sdcard-partition script uuu_imx_android_flash scripts
++PRODUCT_COPY_FILES += \
++    $(CONFIG_REPO_PATH)/common/tools/fastboot_imx_flashall.bat:fastboot_imx_flashall.bat \
++    $(CONFIG_REPO_PATH)/common/tools/fastboot_imx_flashall.sh:fastboot_imx_flashall.sh \
++    $(CONFIG_REPO_PATH)/common/tools/imx-sdcard-partition.sh:imx-sdcard-partition.sh \
++    $(CONFIG_REPO_PATH)/common/tools/uuu_imx_android_flash.bat:uuu_imx_android_flash.bat \
++    $(CONFIG_REPO_PATH)/common/tools/uuu_imx_android_flash.sh:uuu_imx_android_flash.sh
++
++# -------@block_security-------
++
++# Include keystore attestation keys and certificates.
++ifeq ($(PRODUCT_IMX_TRUSTY),true)
++-include $(IMX_SECURITY_PATH)/attestation/imx_attestation.mk
++endif
++
++ifeq ($(PRODUCT_IMX_TRUSTY),true)
++PRODUCT_COPY_FILES += \
++    $(CONFIG_REPO_PATH)/common/security/rpmb_key_test.bin:rpmb_key_test.bin \
++    $(CONFIG_REPO_PATH)/common/security/testkey_public_rsa4096.bin:testkey_public_rsa4096.bin
++endif
++
++# Keymaster HAL
++ifeq ($(PRODUCT_IMX_TRUSTY),true)
++PRODUCT_PACKAGES += \
++    android.hardware.security.keymint-service.rust.trusty
++endif
++
++PRODUCT_PACKAGES += \
++    android.hardware.security.keymint-service-imx
++
++# adlink specific packages
++PRODUCT_PACKAGES += \
++    adlink_pwm \
++    spidevtest \
++    cansend \
++    candump
++
++# Confirmation UI
++ifeq ($(PRODUCT_IMX_TRUSTY),true)
++PRODUCT_PACKAGES += \
++    android.hardware.confirmationui-service.trusty \
++    secure_dpu
++endif
++
++# new gatekeeper HAL
++PRODUCT_PACKAGES += \
++    android.hardware.gatekeeper-service-imx
++
++# Add oem unlocking option in settings.
++PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
++
++ifeq ($(PRODUCT_IMX_TRUSTY),true)
++#Oemlock HAL support
++PRODUCT_PACKAGES += \
++    android.hardware.oemlock-service.imx \
++    android.hardware.oemlock-service-software.imx
++endif
++
++# Add Trusty OS backed gatekeeper and secure storage proxy
++ifeq ($(PRODUCT_IMX_TRUSTY),true)
++PRODUCT_PACKAGES += \
++    android.hardware.gatekeeper-service.trusty \
++    storageproxyd \
++    imx_dek_extractor \
++    imx_dek_inserter
++endif
++
++# Secretkeeper HAL
++PRODUCT_PACKAGES += \
++    com.android.hardware.security.secretkeeper
++
++ifeq ($(PRODUCT_IMX_TRUSTY),true)
++PRODUCT_PACKAGES += \
++    android.hardware.security.secretkeeper.trusty
++endif
++
++# Specify rollback index for boot and vbmeta partitions
++ifneq ($(AVB_RBINDEX),)
++BOARD_AVB_ROLLBACK_INDEX := $(AVB_RBINDEX)
++else
++BOARD_AVB_ROLLBACK_INDEX := 0
++endif
++
++ifneq ($(AVB_BOOT_RBINDEX),)
++BOARD_AVB_BOOT_ROLLBACK_INDEX := $(AVB_BOOT_RBINDEX)
++else
++BOARD_AVB_BOOT_ROLLBACK_INDEX := 0
++endif
++
++ifneq ($(AVB_INIT_BOOT_RBINDEX),)
++BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX := $(AVB_INIT_BOOT_RBINDEX)
++else
++BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX := 0
++endif
++
++# Secure enclave
++PRODUCT_PACKAGES += \
++    nvmd \
++    nxp.hardware.secure-enclave \
++    SecureEnclaveDemo
++
++$(call  inherit-product-if-exists, vendor/nxp-private/security/nxp_security.mk)
++
++# Resume on Reboot support
++PRODUCT_PACKAGES += \
++    android.hardware.rebootescrow-service.default
++
++PRODUCT_PROPERTY_OVERRIDES += \
++    ro.rebootescrow.device=/dev/block/pmem0
++
++#DRM Widevine 1.4 L1 support
++PRODUCT_PACKAGES += \
++    android.hardware.drm-service.clearkey \
++    libwvdrmcryptoplugin \
++    liboemcrypto \
++    firmware_loader
++
++TARGET_BUILD_WIDEVINE :=
++TARGET_BUILD_WIDEVINE_USE_PREBUILT := true
++
++$(call inherit-product-if-exists, vendor/nxp-private/widevine/nxp_widevine_tee_95.mk)
++$(call inherit-product-if-exists, vendor/nxp-private/widevine/apex/device.mk)
++
++# -------@block_audio-------
++
++# Audio card json
++PRODUCT_COPY_FILES += \
++    $(CONFIG_REPO_PATH)/common/audio-json/tlv320_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/tlv320_config.json \
++    $(CONFIG_REPO_PATH)/common/audio-json/cs42448_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/cs42448_config.json \
++    $(CONFIG_REPO_PATH)/common/audio-json/cs42888_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/cs42888_config.json \
++    $(CONFIG_REPO_PATH)/common/audio-json/wm8904_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8904_config.json \
++    $(CONFIG_REPO_PATH)/common/audio-json/wm8962_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8962_config.json \
++    $(CONFIG_REPO_PATH)/common/audio-json/micfil_s32_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/micfil_s32_config.json \
++    $(CONFIG_REPO_PATH)/common/audio-json/btsco_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/btsco_config.json \
++    $(CONFIG_REPO_PATH)/common/audio-json/mqs_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/mqs_config.json \
++    $(CONFIG_REPO_PATH)/common/audio-json/readme.txt:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/readme.txt
++
++# LPA demo
++PRODUCT_COPY_FILES += \
++    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/mcu-sdk/imx95/imx95_19x19_mcu_demo_lpa.img:imx95_mcu_demo.img
++
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
++    $(IMX_DEVICE_PATH)/usb_audio_policy_configuration-direct-output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration-direct-output.xml
++
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml
++
++# -------@block_camera-------
++
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/camera_config_imx95-ov13855.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95.json \
++    $(IMX_DEVICE_PATH)/camera_config_imx95-ap1302.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95-ap1302.json \
++    $(IMX_DEVICE_PATH)/camera_config_imx95-ov5640.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95-ov5640.json \
++    $(IMX_DEVICE_PATH)/camera_config_imx95-os08a20.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95-ov13855.json \
++    $(IMX_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
++
++PRODUCT_PACKAGES += \
++    media_profiles_95-ap1302.xml
++
++PRODUCT_PACKAGES += \
++    ap130x_ar0144_single_fw.bin
++
++PREBUILT_LIBCAMERA := false
++PRODUCT_PACKAGES += \
++    libcamera-base \
++    libcamera \
++    libcamera_ipa_sign \
++    libyaml \
++    libnxp_ipa_cam_helper \
++    ipa_nxp_neo \
++    config.yaml \
++    os08a20.yaml \
++    nxpneo_ipa_proxy
++
++PRODUCT_SOONG_NAMESPACES += hardware/google/camera
++PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
++
++
++# -------@block_display-------
++
++PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
++
++# -----some limiataion of overlay/g2d in hwcomposer3 --------
++SOONG_CONFIG_NAMESPACES += nxp_hwc
++SOONG_CONFIG_nxp_hwc += overlay_ip
++SOONG_CONFIG_nxp_hwc_overlay_ip := DPU
++
++PRODUCT_PACKAGES += \
++        android.hardware.graphics.composer3-service.imx \
++        libg2d-dpu
++
++# define frame buffer count
++PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
++    ro.surface_flinger.max_frame_buffer_acquired_buffers=3
++
++# set game default frame rate override
++PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
++    ro.surface_flinger.game_default_frame_rate_override=60
++
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml
++
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml
++
++# Display Device Config
++PRODUCT_COPY_FILES += \
++    device/nxp/imx9/displayconfig/display_port_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/displayconfig/display_port_1.xml
++
++# -------@block_gpu-------
++# include wsialloc gralloc device config
++-include $(IMX_WSI_ALLOC_PATH)/android/gralloc.device.mk
++
++PRODUCT_PACKAGES += \
++    mali_csffw.bin \
++    gpu.xml \
++    arm.graphics-V5-ndk \
++    arm.mali.platform-V2-ndk \
++    libarm_egl_properties_sysprop \
++    libarm_gralloc_properties_sysprop \
++    libarm_mali_config_sysprops \
++    libgpudataproducer \
++    libGLES_mali \
++    libOpenCL \
++    vulkan.mali
++
++
++PRODUCT_PACKAGES += \
++        android.hardware.graphics.allocator-service \
++        android.hardware.graphics.allocator-V2-arm \
++        mapper.arm
++
++PRODUCT_VENDOR_PROPERTIES += \
++    ro.hardware.egl = mali \
++    ro.hardware.vulkan = mali
++
++PRODUCT_VENDOR_PROPERTIES += \
++    graphics.gpu.profiler.support=true
++
++# -------@block_wifi-------
++
++PRODUCT_COPY_FILES += \
++    $(CONFIG_REPO_PATH)/common/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
++    $(CONFIG_REPO_PATH)/common/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
++
++# WiFi HAL
++PRODUCT_PACKAGES += \
++    android.hardware.wifi-service \
++    wificond
++
++# WiFi RRO
++PRODUCT_PACKAGES += \
++    WifiOverlay
++
++# nxp 8997 wifi and bluetooth combo Firmware
++#PRODUCT_COPY_FILES += \
++    vendor/nxp/imx-firmware/nxp/FwImage_IW416_SD/sduartiw416_combo.bin:vendor/firmware/sduartiw416_combo.bin \
++    vendor/nxp/imx-firmware/nxp/FwImage_9098_PCIE/pcieuart9098_combo_v1.bin:vendor/firmware/pcieuart9098_combo_v1.bin \
++    vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:vendor/firmware/sduart_nw61x_v1.bin.se \
++    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf
++
++# nxp 8997 wifi and bluetooth combo Firmware
++PRODUCT_COPY_FILES += \
++    vendor/nxp/imx-firmware/nxp/FwImage_8997_SD/sdiouart8997_combo_v4.bin:vendor/firmware/sdiouart8997_combo_v4.bin \
++    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf \
++    hardware/nxp/libbt/conf/nxp/lec_imx8mp/bt_uart.conf:vendor/etc/bluetooth/bt_vendor.conf
++
++# Wifi regulatory
++PRODUCT_COPY_FILES += \
++    external/wireless-regdb/regulatory.db:$(TARGET_COPY_OUT_VENDOR)/firmware/regulatory.db \
++    external/wireless-regdb/regulatory.db.p7s:$(TARGET_COPY_OUT_VENDOR)/firmware/regulatory.db.p7s
++
++# -------@block_bluetooth-------
++
++# Bluetooth HAL
++PRODUCT_PACKAGES += \
++    android.hardware.bluetooth \
++    android.hardware.bluetooth-service.default.nxp
++
++#nxp 8997 Bluetooth vendor config
++PRODUCT_PACKAGES += \
++    bt_vendor.conf
++
++# Bluetooth LE Audio
++PRODUCT_PRODUCT_PROPERTIES += \
++    ro.bluetooth.leaudio_offload.supported=false \
++    persist.bluetooth.leaudio_offload.disabled=false \
++    ro.bluetooth.leaudio_switcher.supported=true
++
++# -------@block_usb-------
++
++# Usb HAL
++PRODUCT_PACKAGES += \
++    android.hardware.usb-service.imx \
++    android.hardware.usb.gadget-service.imx
++
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/init.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.usb.rc
++
++PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
++    sys.usb.mtp.batchcancel=1
++
++# -------@block_multimedia_codec-------
++
++# Vendor seccomp policy files for media components:
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/seccomp/mediacodec-seccomp.policy:vendor/etc/seccomp_policy/mediacodec.policy \
++    $(IMX_DEVICE_PATH)/seccomp/mediaextractor-seccomp.policy:vendor/etc/seccomp_policy/mediaextractor.policy
++
++
++# imx c2 codec binary
++PRODUCT_PACKAGES += \
++    lib_imx_c2_videodec_common \
++    lib_imx_c2_videodec \
++    lib_imx_c2_videoenc_common \
++    lib_imx_c2_videoenc \
++    lib_imx_c2_v4l2_dev \
++    lib_imx_c2_v4l2_dec \
++    lib_imx_c2_v4l2_enc \
++    c2_component_register \
++    c2_component_register_ms \
++    c2_component_register_ra
++
++PRODUCT_PACKAGES += \
++    DirectAudioPlayer
++
++ifeq ($(PREBUILT_FSL_IMX_CODEC),true)
++ifneq ($(IMX_BUILD_32BIT_ROOTFS),true)
++INSTALL_64BIT_LIBRARY := true
++endif
++endif
++
++# -------@block_vpu-------
++# VPU files
++PRODUCT_COPY_FILES += \
++    $(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/vpu/wave633c_codec_fw.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/wave633c_codec_fw.bin \
++    $(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/vpu/wave633c_codec_fw.bin.signed:$(TARGET_COPY_OUT_VENDOR)/firmware/wave633c_codec_fw.bin.signed \
++
++# -------@block_memory-------
++
++# Include Android Go config for low memory device.
++ifeq ($(LOW_MEMORY),true)
++$(call inherit-product, build/target/product/go_defaults.mk)
++endif
++
++# -------@block_neural_network-------
++
++# Neural Network HAL and lib
++PRODUCT_PACKAGES += \
++    libNeutronConverter \
++    libNeutronDriver \
++    NeutronFirmware.elf \
++    NeutronKernels.bin \
++    android.hardware.neuralnetworks-shell-service-imx
++
++# Tensorflow lite camera demo
++PRODUCT_PACKAGES += \
++                    tflitecamerademo
++
++# -------@block_miscellaneous-------
++
++# Copy device related config and binary to board
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/init.imx95.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx95.rc \
++    $(IMX_DEVICE_PATH)/init.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.rc
++
++ifeq ($(TARGET_USE_VENDOR_BOOT),true)
++  PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/init.recovery.nxp.rc:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/init.recovery.nxp.rc
++else
++  PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/init.recovery.nxp.rc:root/init.recovery.nxp.rc
++endif
++
++PRODUCT_COPY_FILES += \
++    $(IMX_DEVICE_PATH)/required_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/required_hardware.xml
++
++# ONLY devices that meet the CDD's requirements may declare these features
++
++PRODUCT_COPY_FILES += \
++    frameworks/native/data/etc/android.hardware.camera.front.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.front.xml \
++    frameworks/native/data/etc/android.hardware.camera.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.xml
++
++PERMISSION_EXTCAM ?= true
++ifeq ($(PERMISSION_EXTCAM),true)
++PRODUCT_COPY_FILES += \
++    frameworks/native/data/etc/android.hardware.camera.external.xml:vendor/etc/permissions/android.hardware.camera.external.xml
++endif
++
++PRODUCT_COPY_FILES += \
++    frameworks/native/data/etc/android.hardware.audio.output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.output.xml \
++    frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml \
++    frameworks/native/data/etc/android.hardware.ethernet.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.ethernet.xml \
++    frameworks/native/data/etc/android.hardware.screen.landscape.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.screen.landscape.xml \
++    frameworks/native/data/etc/android.hardware.screen.portrait.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.screen.portrait.xml \
++    frameworks/native/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml \
++    frameworks/native/data/etc/android.hardware.touchscreen.multitouch.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.xml \
++    frameworks/native/data/etc/android.hardware.touchscreen.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.xml \
++    frameworks/native/data/etc/android.hardware.usb.accessory.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.accessory.xml \
++    frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml \
++    frameworks/native/data/etc/android.hardware.vulkan.level-1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level.xml \
++    frameworks/native/data/etc/android.hardware.vulkan.version-1_3.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version.xml \
++    frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute.xml \
++    frameworks/native/data/etc/android.software.vulkan.deqp.level-2024-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
++    frameworks/native/data/etc/android.software.opengles.deqp.level-2024-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml \
++    frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml \
++    frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
++    frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
++    frameworks/native/data/etc/android.hardware.wifi.passpoint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.passpoint.xml \
++    frameworks/native/data/etc/android.software.app_widgets.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.app_widgets.xml \
++    frameworks/native/data/etc/android.software.backup.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.backup.xml \
++    frameworks/native/data/etc/android.software.device_admin.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.device_admin.xml \
++    frameworks/native/data/etc/android.software.managed_users.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.managed_users.xml \
++    frameworks/native/data/etc/android.software.midi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.midi.xml \
++    frameworks/native/data/etc/android.software.print.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.print.xml \
++    frameworks/native/data/etc/android.software.sip.voip.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.sip.voip.xml \
++    frameworks/native/data/etc/android.software.verified_boot.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.verified_boot.xml \
++    frameworks/native/data/etc/android.software.voice_recognizers.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.voice_recognizers.xml \
++    frameworks/native/data/etc/android.software.activities_on_secondary_displays.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.activities_on_secondary_displays.xml \
++    frameworks/native/data/etc/android.software.picture_in_picture.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.picture_in_picture.xml \
++    frameworks/native/data/etc/android.software.credentials.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.credentials.xml
++
++# trusty loadable apps
++PRODUCT_COPY_FILES += \
++    vendor/nxp/fsl-proprietary/uboot-firmware/imx95/confirmationui-imx95.app:/vendor/firmware/tee/confirmationui.app
++
++# Keymint configuration
++PRODUCT_COPY_FILES += \
++    frameworks/native/data/etc/android.software.device_id_attestation.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.device_id_attestation.xml
++
++# Included GMS package
++ifeq ($(filter TRUE true 1,$(IMX_BUILD_32BIT_ROOTFS) $(IMX_BUILD_32BIT_64BIT_ROOTFS)),)
++$(call inherit-product-if-exists, vendor/partner_gms/products/gms_64bit_only.mk)
++else
++$(call inherit-product-if-exists, vendor/partner_gms/products/gms.mk)
++endif
++PRODUCT_SOONG_NAMESPACES += vendor/partner_gms
++
++PRODUCT_PACKAGES += \
++    privapp_whitelist_com.android.emergency
++
++ifeq ($(PRODUCT_IMX_TRUSTY),true)
++PRODUCT_COPY_FILES += \
++    $(CONFIG_REPO_PATH)/common/security/firmware_encrypt_key.bin:firmware_test_keys/firmware_encrypt_key.bin  \
++    $(CONFIG_REPO_PATH)/common/security/firmware_public_key.der:firmware_test_keys/firmware_public_key.der
++endif
++
++# Add Virtualization support
++$(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)
++
++# Add imx private apps
++$(call inherit-product-if-exists, vendor/nxp-private/imx-apps/imx-private-app.mk)
+diff --git a/imx9/lec_imx95/manifest.xml b/imx9/lec_imx95/manifest.xml
+new file mode 100644
+index 00000000..92fde967
+--- /dev/null
++++ b/imx9/lec_imx95/manifest.xml
+@@ -0,0 +1,50 @@
++<manifest version="1.0" type="device" target-level="202404">
++    <hal format="aidl">
++        <name>android.hardware.gatekeeper</name>
++        <version>1</version>
++        <interface>
++            <name>IGatekeeper</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="aidl">
++        <name>android.hardware.media.c2</name>
++        <version>1</version>
++        <fqname>IComponentStore/default</fqname>
++    </hal>
++    <hal format="aidl">
++        <name>android.hardware.camera.provider</name>
++        <version>1</version>
++        <interface>
++            <name>ICameraProvider</name>
++            <instance>external/0</instance>
++        </interface>
++    </hal>
++    <hal format="aidl">
++       <name>android.hardware.security.keymint</name>
++       <version>3</version>
++       <fqname>IKeyMintDevice/default</fqname>
++    </hal>
++    <hal format="aidl">
++       <name>android.hardware.security.keymint</name>
++       <version>3</version>
++       <fqname>IRemotelyProvisionedComponent/default</fqname>
++    </hal>
++    <hal format="aidl">
++       <name>android.hardware.security.secureclock</name>
++       <fqname>ISecureClock/default</fqname>
++    </hal>
++    <hal format="aidl">
++       <name>android.hardware.security.sharedsecret</name>
++       <fqname>ISharedSecret/default</fqname>
++    </hal>
++    <hal format="aidl">
++       <name>android.hardware.oemlock</name>
++       <fqname>IOemLock/default</fqname>
++    </hal>
++    <hal format="aidl">
++       <name>android.hardware.security.secretkeeper</name>
++       <version>1</version>
++       <fqname>ISecretkeeper/default</fqname>
++    </hal>
++</manifest>
+diff --git a/imx9/lec_imx95/overlay/frameworks/base/core/res/res/values/config.xml b/imx9/lec_imx95/overlay/frameworks/base/core/res/res/values/config.xml
+new file mode 100644
+index 00000000..298d50cc
+--- /dev/null
++++ b/imx9/lec_imx95/overlay/frameworks/base/core/res/res/values/config.xml
+@@ -0,0 +1,202 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++/*
++** Copyright 2011, The Android Open Source Project
++**
++** Licensed under the Apache License, Version 2.0 (the "License");
++** you may not use this file except in compliance with the License.
++** You may obtain a copy of the License at
++**
++**     http://www.apache.org/licenses/LICENSE-2.0
++**
++** Unless required by applicable law or agreed to in writing, software
++** distributed under the License is distributed on an "AS IS" BASIS,
++** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++** See the License for the specific language governing permissions and
++** limitations under the License.
++*/
++-->
++
++<!-- These resources are around just to allow their values to be customized
++     for different hardware and product builds. -->
++<resources>
++
++    <!--For Android we support eth0 now -->
++    <string translatable="false" name="config_ethernet_iface_regex">eth0</string>
++
++    <!-- List of regexpressions describing the interface (if any) that represent tetherable
++         USB interfaces.  If the device doesn't want to support tething over USB this should
++         be empty.  An example would be "usb.*" -->
++     <string-array translatable="false" name="config_tether_usb_regexs">
++       <item>usb0</item>
++     </string-array>
++
++    <!-- List of regexpressions describing the interface (if any) that represent tetherable
++         Wifi interfaces.  If the device doesn't want to support tethering over Wifi this
++         should be empty.  An example would be "softap.*" -->
++    <string-array translatable="false" name="config_tether_wifi_regexs">
++      <item>"wlan0"</item>
++    </string-array>
++
++    <!-- List of regexpressions describing the interface (if any) that represent tetherable
++         bluetooth interfaces.  If the device doesn't want to support tethering over bluetooth this
++         should be empty. -->
++    <string-array translatable="false" name="config_tether_bluetooth_regexs">
++        <item>"bt-pan"</item>
++        </string-array>
++
++    <!-- Array of ConnectivityManager.TYPE_xxxx values allowable for tethering -->
++    <!-- Common options are [1, 4] for TYPE_WIFI and TYPE_MOBILE_DUN or
++    <!== [0,1,5,7,9] for TYPE_MOBILE, TYPE_WIFI, TYPE_MOBILE_HIPRI, TYPE_BLUETOOTH and TYPE_ETHERNET -->
++    <integer-array translatable="false" name="config_tether_upstream_types">
++        <item>0</item>
++        <item>1</item>
++        <item>5</item>
++        <item>9</item>
++    </integer-array>
++
++    <!-- Flag indicating whether we should enable the automatic brightness in Settings.
++         config_hardware_automatic_brightness_available is not set, so we will use software implementation -->
++    <bool name="config_automatic_brightness_available">true</bool>
++
++    <!-- An Array of "[ConnectivityManager connectionType],
++                      [# simultaneous connection types]"  -->
++    <string-array translatable="false" name="radioAttributes">
++        <item>"1,1"</item>
++        <item>"9,1"</item>
++    </string-array>
++
++    <!-- An Array of "[Connection name],[ConnectivityManager.TYPE_xxxx],
++         [associated radio-type],[priority],[restoral-timer(ms)],[dependencyMet]  -->
++    <!-- the 5th element "resore-time" indicates the number of milliseconds to delay
++         before automatically restore the default connection.  Set -1 if the connection
++         does not require auto-restore. -->
++    <!-- the 6th element indicates boot-time dependency-met value. -->
++    <string-array translatable="false" name="networkAttributes">
++        <item>"wifi,1,1,1,-1,true"</item>
++        <item>"bluetooth,7,7,2,-1,true"</item>
++        <item>"ethernet,9,9,2,-1,true"</item>
++    </string-array>
++
++    <!-- Array of light sensor LUX values to define our levels for auto backlight brightness support.
++         The N entries of this array define N + 1 zones as follows:
++
++         Zone 0:        0 <= LUX < array[0]
++         Zone 1:        array[0] <= LUX < array[1]
++         ...
++         Zone N:        array[N - 1] <= LUX < array[N]
++         Zone N + 1:    array[N] <= LUX < infinity
++
++         Must be overridden in platform specific overlays -->
++    <integer-array name="config_autoBrightnessLevels">
++        <item>5</item>
++        <item>15</item>
++        <item>50</item>
++        <item>100</item>
++        <item>200</item>
++        <item>400</item>
++        <item>1000</item>
++        <item>2000</item>
++        <item>3000</item>
++        <item>5000</item>
++        <item>10000</item>
++        <item>30000</item>
++    </integer-array>
++
++    <!-- Array of output values for LCD backlight corresponding to the LUX values
++         in the config_autoBrightnessLevels array.  This array should have size one greater
++         than the size of the config_autoBrightnessLevels array.
++         This must be overridden in platform specific overlays -->
++    <integer-array name="config_autoBrightnessLcdBacklightValues">
++        <item>5</item>    <!-- 0-5 -->
++        <item>20</item>   <!-- 5-15 -->
++        <item>30</item>   <!-- 15-50 -->
++        <item>40</item>   <!-- 50-100 -->
++        <item>50</item>   <!-- 100-200 -->
++        <item>60</item>   <!-- 200-400 -->
++        <item>70</item>   <!-- 400-1000 -->
++        <item>80</item>   <!-- 1000-2000 -->
++        <item>130</item>  <!-- 2000-3000 -->
++        <item>180</item>  <!-- 3000-5000 -->
++        <item>255</item>  <!-- 5000-10000 -->
++        <item>255</item>  <!-- 10000-30000 -->
++        <item>255</item>  <!-- 30000+ -->
++    </integer-array>
++
++    <!-- Array of output values for button backlight corresponding to the LUX values
++         in the config_autoBrightnessLevels array.  This array should have size one greater
++         than the size of the config_autoBrightnessLevels array.
++         This must be overridden in platform specific overlays -->
++    <integer-array name="config_autoBrightnessButtonBacklightValues">
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++    </integer-array>
++
++    <!-- Array of output values for keyboard backlight corresponding to the LUX values
++         in the config_autoBrightnessLevels array.  This array should have size one greater
++         than the size of the config_autoBrightnessLevels array.
++         This must be overridden in platform specific overlays -->
++    <integer-array name="config_autoBrightnessKeyboardBacklightValues">
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++        <item>0</item>
++    </integer-array>
++
++    <integer name="config_screenBrightnessDim">5</integer>
++
++    <!--  Maximum number of supported users -->
++    <integer name="config_multiuserMaximumUsers">8</integer>
++    <!--  Whether Multiuser UI should be shown -->
++    <bool name="config_enableMultiUserUI">true</bool>
++
++    <!-- Whether a software navigation bar should be shown. NOTE: in the future this may be
++         autodetected from the Configuration. -->
++    <bool name="config_showNavigationBar">true</bool>
++
++    <!-- This device is not "voice capable"; it's data-only. -->
++    <bool name="config_voice_capable">false</bool>
++
++    <!-- Flag indicating whether the current device allows data.
++        If true, this means that the device supports data connectivity through
++        the telephony network.
++        This can be overridden to false for devices that support voice and/or sms . -->
++    <bool name="config_mobile_data_capable">false</bool>
++
++    <!-- Boolean indicating whether system support sustained performance mode. -->
++    <bool name="config_sustainedPerformanceModeSupported">true</bool>
++
++    <!-- If the system has the input method for each display - enable per-display focus. -->
++    <bool name="config_perDisplayFocusEnabled">true</bool>
++
++    <!-- show global actions menu when long press power button -->
++    <integer name="config_longPressOnPowerBehavior">1</integer>
++</resources>
+diff --git a/imx9/lec_imx95/overlay/frameworks/base/core/res/res/xml/power_profile.xml b/imx9/lec_imx95/overlay/frameworks/base/core/res/res/xml/power_profile.xml
+new file mode 100644
+index 00000000..2104fe62
+--- /dev/null
++++ b/imx9/lec_imx95/overlay/frameworks/base/core/res/res/xml/power_profile.xml
+@@ -0,0 +1,27 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++**
++** Copyright 2009, The Android Open Source Project
++*  Copyright (C) 2016 Freescale Semiconductor, Inc.
++**
++** Licensed under the Apache License, Version 2.0 (the "License")
++** you may not use this file except in compliance with the License.
++** You may obtain a copy of the License at
++**
++**     http://www.apache.org/licenses/LICENSE-2.0
++**
++** Unless required by applicable law or agreed to in writing, software
++** distributed under the License is distributed on an "AS IS" BASIS,
++** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++** See the License for the specific language governing permissions and
++** limitations under the License.
++*/
++-->
++
++<device name="Android">
++  <array name="cpu.active">
++      <value>0.1</value>
++  </array>
++  <!-- This is the battery capacity in mAh -->
++  <item name="battery.capacity">4800</item>
++</device>
+diff --git a/imx9/lec_imx95/overlay/frameworks/base/packages/SettingsProvider/res/values/defaults.xml b/imx9/lec_imx95/overlay/frameworks/base/packages/SettingsProvider/res/values/defaults.xml
+new file mode 100644
+index 00000000..eab179a3
+--- /dev/null
++++ b/imx9/lec_imx95/overlay/frameworks/base/packages/SettingsProvider/res/values/defaults.xml
+@@ -0,0 +1,26 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++/**
++ * Copyright (c) 2009, The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *     http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++-->
++<resources>
++    <!-- Default for Settings.Secure.USER_SETUP_COMPLETE -->
++    <bool name="def_user_setup_complete">true</bool>
++    <bool name="def_bluetooth_on">false</bool>
++    <bool name="def_stay_on_while_plugged_in">true</bool>
++    <string name="enabled_input_methods" translatable="false">com.android.inputmethod.latin/.LatinIME</string>
++    <string name="default_input_method" translatable="false">com.android.inputmethod.latin/.LatinIME</string>
++</resources>
+diff --git a/imx9/lec_imx95/overlay/packages/apps/Settings/res/values/bools.xml b/imx9/lec_imx95/overlay/packages/apps/Settings/res/values/bools.xml
+new file mode 100644
+index 00000000..e9f565d3
+--- /dev/null
++++ b/imx9/lec_imx95/overlay/packages/apps/Settings/res/values/bools.xml
+@@ -0,0 +1,19 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!-- Copyright (C) 2009 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++  
++          http://www.apache.org/licenses/LICENSE-2.0
++  
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++
++<resources>
++    <bool name="config_additional_system_update_setting_enable">true</bool>
++</resources>
+diff --git a/imx9/lec_imx95/overlay/packages/apps/Settings/res/values/config.xml b/imx9/lec_imx95/overlay/packages/apps/Settings/res/values/config.xml
+new file mode 100644
+index 00000000..dbf188dc
+--- /dev/null
++++ b/imx9/lec_imx95/overlay/packages/apps/Settings/res/values/config.xml
+@@ -0,0 +1,22 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!-- Copyright (C) 2007 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++
++<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
++    <string name="additional_system_update" translatable="false">com.example.android.systemupdatersample</string>
++    <string name="additional_system_update_menu" translatable="false">com.example.android.systemupdatersample.ui.MainActivity</string>
++    <string name="config_work_policy_info_intent_action" translatable="false">com.google.android.settings.privacy.ACTION_SHOW_WORK_POLICY_INFO</string>
++
++</resources>
+diff --git a/imx9/lec_imx95/overlay/packages/modules/Connectivity/Tethering/res/values/overlay_config.xml b/imx9/lec_imx95/overlay/packages/modules/Connectivity/Tethering/res/values/overlay_config.xml
+new file mode 100644
+index 00000000..215ba804
+--- /dev/null
++++ b/imx9/lec_imx95/overlay/packages/modules/Connectivity/Tethering/res/values/overlay_config.xml
+@@ -0,0 +1,6 @@
++<resources>
++	<!-- Which USB function should be enabled when TETHERING_USB is requested. 0: RNDIS, 1: NCM.
++		-->
++	<integer translatable="false" name="config_tether_usb_functions">1</integer>
++
++</resources>
+diff --git a/imx9/lec_imx95/overlay/packages/modules/Connectivity/service/ServiceConnectivityResources/res/values/config.xml b/imx9/lec_imx95/overlay/packages/modules/Connectivity/service/ServiceConnectivityResources/res/values/config.xml
+new file mode 100644
+index 00000000..4aa9f919
+--- /dev/null
++++ b/imx9/lec_imx95/overlay/packages/modules/Connectivity/service/ServiceConnectivityResources/res/values/config.xml
+@@ -0,0 +1,3 @@
++<resources>
++    <string translatable="false" name="config_ethernet_iface_regex">eth\\d+</string>
++</resources>
+diff --git a/imx9/lec_imx95/overlay/packages/modules/NetworkStack/res/values/config.xml b/imx9/lec_imx95/overlay/packages/modules/NetworkStack/res/values/config.xml
+new file mode 100644
+index 00000000..04e5cbec
+--- /dev/null
++++ b/imx9/lec_imx95/overlay/packages/modules/NetworkStack/res/values/config.xml
+@@ -0,0 +1,4 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <bool name="config_dhcp_client_hostname">true</bool>
++</resources>
+diff --git a/imx9/lec_imx95/powerhint_imx95.json b/imx9/lec_imx95/powerhint_imx95.json
+new file mode 100644
+index 00000000..52a4e5ef
+--- /dev/null
++++ b/imx9/lec_imx95/powerhint_imx95.json
+@@ -0,0 +1,220 @@
++{
++  "Nodes": [
++    {
++      "Name": "CPULittleClusterMaxFreq",
++      "Path": "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq",
++      "Values": [
++        "1800000",
++        "1404000",
++        "900000",
++        "500000"
++      ],
++      "DefaultIndex": 0,
++      "ResetOnInit": true
++    },
++    {
++      "Name": "CPULittleClusterMinFreq",
++      "Path": "/sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq",
++      "Values": [
++        "1800000",
++        "1404000",
++        "900000",
++        "500000"
++      ],
++      "ResetOnInit": true
++    },
++    {
++      "Name": "TASchedtuneBoost",
++      "Path": "/dev/cpuctl/top-app/cpu.uclamp.min",
++      "Values": [
++        "60",
++        "10"
++      ],
++      "DefaultIndex": 1,
++      "ResetOnInit": true
++    },
++    {
++      "Name": "PMQoSCpuDmaLatency",
++      "Path": "/dev/cpu_dma_latency",
++      "Values": [
++        "0",
++        "3000"
++      ],
++      "DefaultIndex": 1,
++      "HoldFd": true
++    },
++    {
++      "Name": "PowerHALMainState",
++      "Path": "vendor.powerhal.state",
++      "Values": [
++        "SUSTAINED_PERFORMANCE",
++        ""
++      ],
++      "Type": "Property"
++    },
++    {
++      "Name": "PowerHALAudioState",
++      "Path": "vendor.powerhal.audio",
++      "Values": [
++        "AUDIO_STREAMING_LOW_LATENCY",
++        ""
++      ],
++      "Type": "Property"
++    },
++    {
++      "Name": "PowerHALRenderingState",
++      "Path": "vendor.powerhal.rendering",
++      "Values": [
++        "EXPENSIVE_RENDERING",
++        ""
++      ],
++      "Type": "Property"
++    }
++  ],
++  "Actions": [
++    {
++      "PowerHint": "SUSTAINED_PERFORMANCE",
++      "Node": "PowerHALMainState",
++      "Duration": 0,
++      "Value": "SUSTAINED_PERFORMANCE"
++    },
++    {
++      "PowerHint": "SUSTAINED_PERFORMANCE",
++      "Node": "CPULittleClusterMaxFreq",
++      "Duration": 0,
++      "Value": "1404000"
++    },
++    {
++      "PowerHint": "INTERACTION",
++      "Node": "CPULittleClusterMinFreq",
++      "Duration": 0,
++      "Value": "1800000"
++    },
++    {
++      "PowerHint": "INTERACTION",
++      "Node": "TASchedtuneBoost",
++      "Duration": 0,
++      "Value": "60"
++    },
++    {
++      "PowerHint": "INTERACTION",
++      "Node": "PMQoSCpuDmaLatency",
++      "Duration": 500,
++      "Value": "0"
++    },
++    {
++      "PowerHint": "BOOSTWIDEVINE",
++      "Node": "CPULittleClusterMinFreq",
++      "Duration": 0,
++      "Value": "1800000"
++    },
++    {
++      "PowerHint": "BOOSTWIDEVINE",
++      "Node": "PMQoSCpuDmaLatency",
++      "Duration": 500,
++      "Value": "0"
++    },
++    {
++      "PowerHint": "LAUNCH",
++      "Node": "CPULittleClusterMinFreq",
++      "Duration": 5000,
++      "Value": "1800000"
++    },
++    {
++      "PowerHint": "LAUNCH",
++      "Node": "CPULittleClusterMaxFreq",
++      "Duration": 5000,
++      "Value": "1800000"
++    },
++    {
++      "PowerHint": "LAUNCH",
++      "Node": "PMQoSCpuDmaLatency",
++      "Duration": 5000,
++      "Value": "0"
++    },
++    {
++      "PowerHint": "CAMERA_LAUNCH",
++      "Node": "CPULittleClusterMinFreq",
++      "Duration": 5000,
++      "Value": "1800000"
++    },
++    {
++      "PowerHint": "CAMERA_LAUNCH",
++      "Node": "CPULittleClusterMaxFreq",
++      "Duration": 5000,
++      "Value": "1800000"
++    },
++    {
++      "PowerHint": "CAMERA_LAUNCH",
++      "Node": "PMQoSCpuDmaLatency",
++      "Duration": 1000,
++      "Value": "0"
++    },
++    {
++      "PowerHint": "CAMERA_STREAMING_MID",
++      "Node": "CPULittleClusterMaxFreq",
++      "Duration": 0,
++      "Value": "1404000"
++    },
++    {
++      "PowerHint": "CAMERA_SHOT",
++      "Node": "CPULittleClusterMinFreq",
++      "Duration": 5000,
++      "Value": "1800000"
++    },
++    {
++      "PowerHint": "CAMERA_SHOT",
++      "Node": "CPULittleClusterMaxFreq",
++      "Duration": 5000,
++      "Value": "1800000"
++    },
++    {
++      "PowerHint": "CAMERA_SHOT",
++      "Node": "PMQoSCpuDmaLatency",
++      "Duration": 1000,
++      "Value": "0"
++    },
++    {
++      "PowerHint": "AUDIO_LAUNCH",
++      "Node": "PMQoSCpuDmaLatency",
++      "Duration": 0,
++      "Value": "0"
++    },
++    {
++      "PowerHint": "LOW_POWER",
++      "Node": "CPULittleClusterMinFreq",
++      "Duration": 0,
++      "Value": "500000"
++    },
++    {
++      "PowerHint": "LOW_POWER",
++      "Node": "CPULittleClusterMaxFreq",
++      "Duration": 0,
++      "Value": "1404000"
++    },
++    {
++      "PowerHint": "AUDIO_STREAMING_LOW_LATENCY",
++      "Node": "PowerHALAudioState",
++      "Duration": 0,
++      "Value": "AUDIO_STREAMING_LOW_LATENCY"
++    },
++    {
++      "PowerHint": "AUDIO_STREAMING_LOW_LATENCY",
++      "Node": "PMQoSCpuDmaLatency",
++      "Duration": 0,
++      "Value": "0"
++    },
++    {
++      "PowerHint": "FIXED_PERFORMANCE",
++      "Node": "CPULittleClusterMaxFreq",
++      "Duration": 0,
++      "Value": "1404000"
++    },
++    {
++      "PowerHint": "FIXED_PERFORMANCE",
++      "Node": "CPULittleClusterMinFreq",
++      "Duration": 0,
++      "Value": "1404000"
++    }
++  ]
++}
+diff --git a/imx9/lec_imx95/product.prop b/imx9/lec_imx95/product.prop
+new file mode 100644
+index 00000000..5f384e89
+--- /dev/null
++++ b/imx9/lec_imx95/product.prop
+@@ -0,0 +1,16 @@
++
++# Set supported Bluetooth profiles to enabled
++bluetooth.profile.asha.central.enabled?=false
++bluetooth.profile.a2dp.source.enabled?=true
++bluetooth.profile.avrcp.target.enabled?=true
++bluetooth.profile.bas.client.enabled?=false
++bluetooth.profile.gatt.enabled?=true
++bluetooth.profile.hfp.ag.enabled?=true
++bluetooth.profile.hid.device.enabled?=true
++bluetooth.profile.hid.host.enabled?=true
++bluetooth.profile.map.server.enabled?=true
++bluetooth.profile.opp.enabled?=true
++bluetooth.profile.pan.nap.enabled?=true
++bluetooth.profile.pan.panu.enabled?=true
++bluetooth.profile.pbap.server.enabled?=true
++bluetooth.profile.sap.server.enabled?=true
+diff --git a/imx9/lec_imx95/required_hardware.xml b/imx9/lec_imx95/required_hardware.xml
+new file mode 100644
+index 00000000..e201fea0
+--- /dev/null
++++ b/imx9/lec_imx95/required_hardware.xml
+@@ -0,0 +1,36 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!-- Copyright (C) 2009 The Android Open Source Project
++     Copyright 2018 NXP
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++
++<!-- These are the hardware components that are included in i.MX reference board
++-->
++<permissions>
++    <!-- This is Android and fully CTS compatible.  Basically this is for CTS tests to use. -->
++    <feature name="android.software.cts" />
++    <feature name="android.hardware.microphone" />
++    <feature name="android.hardware.camera.any" />
++    <feature name="android.software.cant_save_state" />
++    <feature name="android.software.home_screen" />
++    <feature name="android.software.input_methods" />
++    <feature name="android.hardware.location" />
++    <feature name="android.hardware.location.network" />
++    <feature name="android.hardware.bluetooth" />
++    <feature name="android.software.companion_device_setup" />
++    <feature name="android.software.autofill" />
++    <feature name="android.software.secure_lock_screen" />
++    <feature name="android.hardware.keystore.app_attest_key" />
++    <feature name="android.hardware.security.model.compatible" />
++</permissions>
+diff --git a/imx9/lec_imx95/seccomp/mediacodec-seccomp.policy b/imx9/lec_imx95/seccomp/mediacodec-seccomp.policy
+new file mode 100644
+index 00000000..9bac41bf
+--- /dev/null
++++ b/imx9/lec_imx95/seccomp/mediacodec-seccomp.policy
+@@ -0,0 +1 @@
++select: 1
+diff --git a/imx9/lec_imx95/seccomp/mediaextractor-seccomp.policy b/imx9/lec_imx95/seccomp/mediaextractor-seccomp.policy
+new file mode 100644
+index 00000000..abbef2c2
+--- /dev/null
++++ b/imx9/lec_imx95/seccomp/mediaextractor-seccomp.policy
+@@ -0,0 +1,5 @@
++uname: 1
++fchmodat: 1
++ftruncate64: 1
++readlinkat: 1
++pread64: 1
+diff --git a/imx9/lec_imx95/sepolicy/app.te b/imx9/lec_imx95/sepolicy/app.te
+new file mode 100644
+index 00000000..f9bb2a77
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/app.te
+@@ -0,0 +1 @@
++allow { appdomain -isolated_app_all } npu_device:chr_file rw_file_perms;
+diff --git a/imx9/lec_imx95/sepolicy/bootanim.te b/imx9/lec_imx95/sepolicy/bootanim.te
+new file mode 100644
+index 00000000..b7fe2596
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/bootanim.te
+@@ -0,0 +1 @@
++allow bootanim sysfs_mali_gpu:file { getattr read open };
+diff --git a/imx9/lec_imx95/sepolicy/cameraserver.te b/imx9/lec_imx95/sepolicy/cameraserver.te
+new file mode 100644
+index 00000000..3bf6e534
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/cameraserver.te
+@@ -0,0 +1 @@
++allow cameraserver hal_graphics_allocator_default_tmpfs:file { read write map };
+diff --git a/imx9/lec_imx95/sepolicy/crash_dump.te b/imx9/lec_imx95/sepolicy/crash_dump.te
+new file mode 100644
+index 00000000..0dedfff4
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/crash_dump.te
+@@ -0,0 +1 @@
++allow crash_dump profiling_mali_gpu:file  { read open getattr map };
+diff --git a/imx9/lec_imx95/sepolicy/device.te b/imx9/lec_imx95/sepolicy/device.te
+new file mode 100644
+index 00000000..4efa35d5
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/device.te
+@@ -0,0 +1,2 @@
++type dmabuf_cma_heap_device, dmabuf_heap_device_type, dev_type;
++type npu_device, dev_type, mlstrustedobject;
+diff --git a/imx9/lec_imx95/sepolicy/file.te b/imx9/lec_imx95/sepolicy/file.te
+new file mode 100644
+index 00000000..d90e8979
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/file.te
+@@ -0,0 +1,2 @@
++type sysfs_mali_gpu, fs_type, sysfs_type;
++type profiling_mali_gpu, vendor_file_type, file_type;
+diff --git a/imx9/lec_imx95/sepolicy/file_contexts b/imx9/lec_imx95/sepolicy/file_contexts
+new file mode 100644
+index 00000000..a7775352
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/file_contexts
+@@ -0,0 +1,51 @@
++/dev/block/mmcblk0boot0                      u:object_r:emmc_boot0:s0
++/dev/block/mmcblk1                           u:object_r:sdcard:s0
++
++#peripheral
++/dev/ttyLP[0-9]*                u:object_r:tty_device:s0
++/dev/sda[0-8]*                  u:object_r:fuse:s0
++
++#Thermal HAL service
++/vendor/bin/hw/android\.hardware\.thermal@2\.0-service.imx         u:object_r:hal_thermal_default_exec:s0
++/vendor/bin/hw/android\.hardware\.thermal-service\.imx             u:object_r:hal_thermal_default_exec:s0
++
++#Neural Network HAL service
++/vendor/bin/hw/android\.hardware\.neuralnetworks-shell-service-imx             u:object_r:hal_neuralnetworks_imx_exec:s0
++
++# Media Codec2 service
++/vendor/bin/hw/android\.hardware\.media\.c2\.service\.imx    u:object_r:mediacodec_exec:s0
++
++/dev/block/pmem0  u:object_r:rebootescrow_device:s0
++
++# libcamera related
++/dev/v4l-subdev[0-9]*                       u:object_r:video_device:s0
++/dev/media[0-9]*                            u:object_r:video_device:s0
++
++#Bluetootn HAL service
++/vendor/bin/hw/android\.hardware\.bluetooth-service.default.nxp            u:object_r:hal_bluetooth_default_exec:s0
++
++# android.system.suspend@1.0-service
++/sys/devices/virtual/wakeup/wakeup[0-9]*(/.*)?                                                                                                        u:object_r:sysfs_wakeup:s0
++/sys/devices/virtual/power_supply/battery/wakeup[0-9]*(/.*)?                                                                                          u:object_r:sysfs_wakeup:s0
++/sys/devices/virtual/power_supply/usb/wakeup[0-9]*(/.*)?                                                                                              u:object_r:sysfs_wakeup:s0
++/sys/devices/platform/firmware:scmi/scmi_dev.[0-9]*(/.*)?/wakeup[0-9]*(/.*)?                                                                          u:object_r:sysfs_wakeup:s0
++/sys/devices/platform/firmware:scmi/scmi_dev.[0-9]*(/.*)?/rtc/rtc[0-9]*(/.*)?/alarmtimer.[0-9]*(/.*)?.auto/wakeup[0-9]*(/.*)?                         u:object_r:sysfs_wakeup:s0
++/sys/devices/platform/soc/42000000.bus/426d0000.i2c/i2c-6/6-0050/power_supply/tcpm-source-psy-6-0050/wakeup[0-9]*(/.*)?                               u:object_r:sysfs_wakeup:s0
++/sys/devices/platform/soc/4c300000.pcie/pci0000:00/0000:00:00.0/0000:01:00.[0-9]*(/.*)?/wakeup[0-9]*(/.*)?                                            u:object_r:sysfs_wakeup:s0
++/sys/devices/platform/soc/42000000.bus/42530000.i2c/i2c-2/2-0050/power_supply/tcpm-source-psy-2-0050/wakeup[0-9]*(/.*)?                               u:object_r:sysfs_wakeup:s0
++/sys/devices/platform/soc/42800000.bus/428b0000.mmc/mmc_host/mmc2/mmc2:0001/mmc2:0001:1/wakeup[0-9]*(/.*)?                                            u:object_r:sysfs_wakeup:s0
++/sys/devices/platform/soc/42000000.bus/426d0000.i2c/i2c-6/6-0052/power_supply/tcpm-source-psy-6-0052/wakeup[0-9]*(/.*)?                               u:object_r:sysfs_wakeup:s0
++
++# mali gpu related
++/dev/mali0                                    u:object_r:gpu_device:s0
++/dev/dma_heap/linux,cma                       u:object_r:dmabuf_cma_heap_device:s0
++/vendor/lib(64)?/arm\.mali\.platform-V2-ndk\.so                                             u:object_r:same_process_hal_file:s0
++/vendor/lib(64)?/arm\.graphics-V5-ndk\.so                                                   u:object_r:same_process_hal_file:s0
++/vendor/lib(64)?/libdrm\.so                                                                 u:object_r:same_process_hal_file:s0
++/(vendor|system/vendor)/lib(64)?/hw/mapper\.arm\.so                                         u:object_r:same_process_hal_file:s0
++/vendor/lib(64)?/hw/vulkan\.mali\.so                                                        u:object_r:same_process_hal_file:s0
++/sys/module/mali_kbase/parameters/large_page_conf                                           u:object_r:sysfs_mali_gpu:s0
++/vendor/lib(64)?/libgpudataproducer\.so                                                     u:object_r:profiling_mali_gpu:s0
++
++# neutron npu
++/dev/neutron0                                 u:object_r:npu_device:s0
+diff --git a/imx9/lec_imx95/sepolicy/genfs_contexts b/imx9/lec_imx95/sepolicy/genfs_contexts
+new file mode 100644
+index 00000000..c6af5407
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/genfs_contexts
+@@ -0,0 +1,23 @@
++genfscon sysfs /devices/platform/soc@0/30000000.bus/30370000.snvs/30370000.snvs:snvs-rtc-lp/rtc/rtc0/hctosys     u:object_r:sysfs_rtc:s0
++genfscon sysfs /devices/platform/soc/42800000.bus/42850000.mmc/mmc_host/mmc0/mmc0:0001/block/mmcblk0 u:object_r:sysfs_block_devices:s0
++genfscon sysfs /devices/platform/soc/42800000.bus/42860000.mmc/mmc_host/mmc1/mmc1:aaaa/block/mmcblk1 u:object_r:sysfs_block_devices:s0
++genfscon sysfs /devices/platform/soc@0/30800000.bus/30bb0000.spi/spi_master/spi0/spi0.0/mtd/mtd0/mtdblock0 u:object_r:sysfs_block_devices:s0
++
++#sys/class/net
++genfscon sysfs /devices/platform/soc/42000000.bus/425b0000.can/net u:object_r:sysfs_net:s0
++genfscon sysfs /devices/platform/soc/42800000.bus/428b0000.mmc/mmc_host/mmc2/mmc2:0001/mmc2:0001:1/net u:object_r:sysfs_net:s0
++genfscon sysfs /devices/platform/soc@0/30800000.bus/30be0000.ethernet/net                u:object_r:sysfs_net:s0
++genfscon sysfs /devices/platform/soc@0/30800000.bus/30bf0000.ethernet/net                u:object_r:sysfs_net:s0
++genfscon sysfs /devices/platform/soc@0/33800000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/net  u:object_r:sysfs_net:s0
++genfscon sysfs /devices/platform/soc/4ca00000.pcie/pci0002:00/0002:00:08.0/net u:object_r:sysfs_net:s0
++genfscon sysfs /devices/platform/soc/4ca00000.pcie/pci0002:00/0002:00:10.0/net u:object_r:sysfs_net:s0
++genfscon sysfs /devices/platform/soc/4ca00000.pcie/pci0002:00/0002:00:00.0/net u:object_r:sysfs_net:s0
++genfscon sysfs /devices/platform/soc/4c300000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/net u:object_r:sysfs_net:s0
++genfscon sysfs /devices/platform/soc/4c300000.pcie/pci0000:00/0000:00:00.0/0000:01:00.1/net u:object_r:sysfs_net:s0
++genfscon sysfs /devices/platform/soc/4ca00000.pcie/pci0001:00/0001:00:00.0/net u:object_r:sysfs_net:s0
++genfscon sysfs /devices/platform/soc/4ca00000.pcie/pci0001:00/0001:00:08.0/net u:object_r:sysfs_net:s0
++
++genfscon sysfs /devices/platform/soc@0/30800000.bus/30a30000.i2c/i2c-1/1-0050/extcon u:object_r:sysfs_extcon:s0
++
++# for dumpstate to access the stat file
++genfscon sysfs /devices/platform/94400000.pmem/ndbus0/region0/namespace0.0/block/pmem0                                       u:object_r:sysfs_block_devices:s0
+diff --git a/imx9/lec_imx95/sepolicy/hal_camera_default.te b/imx9/lec_imx95/sepolicy/hal_camera_default.te
+new file mode 100644
+index 00000000..71d166ba
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/hal_camera_default.te
+@@ -0,0 +1,4 @@
++set_prop(hal_camera_default, vendor_camera_hal_prop)
++get_prop(hal_camera_default, vendor_camera_hal_prop)
++allow hal_camera_default dmabuf_cma_heap_device:chr_file r_file_perms;
++allow hal_camera_default hal_graphics_allocator_default_tmpfs:file { read write map };
+diff --git a/imx9/lec_imx95/sepolicy/hal_graphics_allocator_default.te b/imx9/lec_imx95/sepolicy/hal_graphics_allocator_default.te
+new file mode 100644
+index 00000000..5962b844
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/hal_graphics_allocator_default.te
+@@ -0,0 +1,3 @@
++allow hal_graphics_allocator_default dmabuf_cma_heap_device:chr_file r_file_perms;
++allow { hal_graphics_allocator_client -isolated_app_all } hal_graphics_allocator_default_tmpfs:file { getattr read write map };
++allow { hal_graphics_allocator_client -isolated_app_all } sysfs_mali_gpu:file { getattr read open };
+diff --git a/imx9/lec_imx95/sepolicy/init.te b/imx9/lec_imx95/sepolicy/init.te
+new file mode 100644
+index 00000000..a97fa55c
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/init.te
+@@ -0,0 +1 @@
++allow init vendor_configs_file:dir  { mounton };
+diff --git a/imx9/lec_imx95/sepolicy/mediacodec.te b/imx9/lec_imx95/sepolicy/mediacodec.te
+new file mode 100644
+index 00000000..7e106041
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/mediacodec.te
+@@ -0,0 +1,2 @@
++allow mediacodec hal_graphics_allocator_default_tmpfs:file { read write map };
++allow mediacodec dmabuf_cma_heap_device:chr_file  { open ioctl map read write };
+diff --git a/imx9/lec_imx95/sepolicy/mediaserver.te b/imx9/lec_imx95/sepolicy/mediaserver.te
+new file mode 100644
+index 00000000..fe4d8b02
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/mediaserver.te
+@@ -0,0 +1 @@
++allow mediaserver hal_graphics_allocator_default_tmpfs:file { read write map };
+diff --git a/imx9/lec_imx95/sepolicy/platform_app.te b/imx9/lec_imx95/sepolicy/platform_app.te
+new file mode 100644
+index 00000000..153e9470
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/platform_app.te
+@@ -0,0 +1 @@
++allow platform_app sysfs_mali_gpu:file { getattr read open };
+diff --git a/imx9/lec_imx95/sepolicy/priv_app.te b/imx9/lec_imx95/sepolicy/priv_app.te
+new file mode 100644
+index 00000000..3eeb144e
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/priv_app.te
+@@ -0,0 +1 @@
++allow priv_app sysfs_mali_gpu:file { getattr read open };
+diff --git a/imx9/lec_imx95/sepolicy/property.te b/imx9/lec_imx95/sepolicy/property.te
+new file mode 100644
+index 00000000..5f370220
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/property.te
+@@ -0,0 +1 @@
++vendor_internal_prop(vendor_camera_hal_prop)
+diff --git a/imx9/lec_imx95/sepolicy/property_contexts b/imx9/lec_imx95/sepolicy/property_contexts
+new file mode 100644
+index 00000000..579a3859
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/property_contexts
+@@ -0,0 +1,3 @@
++ro.vendor.arm.gralloc.                  u:object_r:vendor_public_default_prop:s0
++ro.vendor.arm.egl.configs.              u:object_r:vendor_public_default_prop:s0
++vendor.mali.                            u:object_r:vendor_public_default_prop:s0
+diff --git a/imx9/lec_imx95/sepolicy/service_contexts b/imx9/lec_imx95/sepolicy/service_contexts
+new file mode 100644
+index 00000000..61085e7e
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/service_contexts
+@@ -0,0 +1 @@
++mapper/arm      u:object_r:hal_graphics_mapper_service:s0
+diff --git a/imx9/lec_imx95/sepolicy/shell.te b/imx9/lec_imx95/sepolicy/shell.te
+new file mode 100644
+index 00000000..3db386f9
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/shell.te
+@@ -0,0 +1 @@
++allow shell profiling_mali_gpu:file { read open getattr map execute };
+diff --git a/imx9/lec_imx95/sepolicy/surfaceflinger.te b/imx9/lec_imx95/sepolicy/surfaceflinger.te
+new file mode 100644
+index 00000000..2eb05791
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/surfaceflinger.te
+@@ -0,0 +1 @@
++allow surfaceflinger sysfs_mali_gpu:file { getattr read open };
+diff --git a/imx9/lec_imx95/sepolicy/system_app.te b/imx9/lec_imx95/sepolicy/system_app.te
+new file mode 100644
+index 00000000..9d113b6f
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/system_app.te
+@@ -0,0 +1 @@
++allow system_app sysfs_mali_gpu:file { getattr read open };
+diff --git a/imx9/lec_imx95/sepolicy/system_server.te b/imx9/lec_imx95/sepolicy/system_server.te
+new file mode 100644
+index 00000000..ec055575
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/system_server.te
+@@ -0,0 +1 @@
++allow system_server sysfs_mali_gpu:file { getattr read open };
+diff --git a/imx9/lec_imx95/sepolicy/untrusted_app.te b/imx9/lec_imx95/sepolicy/untrusted_app.te
+new file mode 100644
+index 00000000..7d8fc90e
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/untrusted_app.te
+@@ -0,0 +1 @@
++allow untrusted_app hal_graphics_allocator_default_tmpfs:file { read write map };
+diff --git a/imx9/lec_imx95/sepolicy/untrusted_app_27.te b/imx9/lec_imx95/sepolicy/untrusted_app_27.te
+new file mode 100644
+index 00000000..25e802b8
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/untrusted_app_27.te
+@@ -0,0 +1 @@
++allow untrusted_app_27 hal_graphics_allocator_default_tmpfs:file { read write map };
+diff --git a/imx9/lec_imx95/sepolicy/untrusted_app_30.te b/imx9/lec_imx95/sepolicy/untrusted_app_30.te
+new file mode 100644
+index 00000000..d97465f0
+--- /dev/null
++++ b/imx9/lec_imx95/sepolicy/untrusted_app_30.te
+@@ -0,0 +1 @@
++allow untrusted_app_30 hal_graphics_allocator_default_tmpfs:file { read write map };
+diff --git a/imx9/lec_imx95/thermal_info_config_imx95.json b/imx9/lec_imx95/thermal_info_config_imx95.json
+new file mode 100644
+index 00000000..b242022b
+--- /dev/null
++++ b/imx9/lec_imx95/thermal_info_config_imx95.json
+@@ -0,0 +1,56 @@
++{
++    "HotplugCPUs":[
++            "cpu3",
++            "cpu4",
++            "cpu5"
++    ],
++    "Sensors":[
++        {
++            "Name":"a55",
++            "Type":"CPU",
++            "HotThreshold":[
++                "NAN",
++                80.0,
++                82.0,
++                86.0,
++                88.0,
++                "NAN",
++                90.0
++            ],
++            "HotHysteresis":[
++                2.0,
++                2.0,
++                2.0,
++                2.0,
++                2.0,
++                2.0,
++                2.0
++            ],
++            "VrThreshold":"NAN",
++            "Multiplier":0.001,
++            "Monitor":true
++        },
++        {
++            "Name":"battery",
++            "Type":"BATTERY",
++            "HotThreshold":[
++                "NAN",
++                "NAN",
++                "NAN",
++                "NAN",
++                "NAN",
++                "NAN",
++                100.0
++            ],
++            "VrThreshold":"NAN",
++            "Multiplier":0.001,
++            "Monitor":true
++        }
++    ],
++    "CoolingDevices":[
++        {
++            "Name":"cpufreq-cpu0",
++            "Type":"CPU"
++        }
++    ]
++}
+diff --git a/imx9/lec_imx95/ueventd.nxp.rc b/imx9/lec_imx95/ueventd.nxp.rc
+new file mode 100644
+index 00000000..270b57b1
+--- /dev/null
++++ b/imx9/lec_imx95/ueventd.nxp.rc
+@@ -0,0 +1,41 @@
++/dev/block/by-name/presistdata 0600   system     system
++/dev/block/by-name/fbmisc 0600   system     system
++/dev/ttyLP4              0660   bluetooth  bluetooth
++# for libcamera
++/dev/media* 0660 system camera
++/dev/v4l-subdev* 0660 system camera
++/dev/snd/*                0660   system     audio
++/dev/video*               0660   system     camera
++/dev/dma_heap/dsp         0660   mediacodec      mediacodec
++/dev/rpmsg0               0660   mediacodec      mediacodec
++/dev/rpmsg1               0660   mediacodec      mediacodec
++/dev/mxc_hifi4            0660   media      drmrpc
++/dev/ion                  0666   media      drmrpc
++/dev/mali0                0666   system     graphics
++/dev/dri/card0            0666   system     graphics
++/dev/graphics/fb0         0660   system     graphics
++/dev/watchdog             0660   system     root
++/dev/mmcblk0rpmb    0600   system     system
++/dev/trusty-ipc-dev0      0660   system     drmrpc
++/dev/trusty-log0          0660   system     system
++/dev/hsm1_ch0      0660   system     drmrpc
++/dev/hsm1_ch1      0660   system     drmrpc
++/dev/block/pmem0          0660   system     system
++/dev/dma_heap/reserved    0666   system     system
++/dev/dma_heap/reserved-uncached    0666   system     system
++/dev/dma_heap/secure      0666   system     system
++
++/dev/dma_heap/linux,cma            0666 system graphics
++/dev/dma_heap/linux,cma-uncached   0666 system graphics
++/dev/dma_heap/system               0666 system graphics
++/dev/dma_heap/system-uncached      0666 system graphics
++
++/sys/devices/virtual/thermal/thermal_zone* trip_point_0_temp 0660 system system
++/sys/devices/virtual/thermal/thermal_zone* trip_point_1_temp 0660 system system
++
++/sys/devices/virtual/thermal/thermal_zone* trip_point_0_hyst 0660 system system
++/sys/devices/virtual/thermal/thermal_zone* trip_point_1_hyst 0660 system system
++
++/dev/dmabuf_imx           0664   system     system
++/dev/neutron0             0666   system     graphics
++/sys/class/backlight/* brightness 0660 system system
+diff --git a/imx9/lec_imx95/usb_audio_policy_configuration-direct-output.xml b/imx9/lec_imx95/usb_audio_policy_configuration-direct-output.xml
+new file mode 100644
+index 00000000..b826785a
+--- /dev/null
++++ b/imx9/lec_imx95/usb_audio_policy_configuration-direct-output.xml
+@@ -0,0 +1,56 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!-- Copyright (C) 2019 The Android Open Source Project
++     Copyright 2019 NXP
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<!-- USB Audio HAL Audio Policy Configuration file -->
++
++<module name="usb" halVersion="2.0">
++    <mixPorts>
++        <mixPort name="usb_accessory output" role="source">
++            <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
++                     samplingRates="44100" channelMasks="AUDIO_CHANNEL_OUT_STEREO"/>
++        </mixPort>
++        <mixPort name="direct output" role="source" flags="AUDIO_OUTPUT_FLAG_DIRECT">
++            <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
++                     samplingRates="384000" channelMasks="AUDIO_CHANNEL_OUT_STEREO"/>
++        </mixPort>
++        <mixPort name="usb_device output" role="source"/>
++        <mixPort name="usb_device input" role="sink"/>
++    </mixPorts>
++    <devicePorts>
++        <devicePort tagName="USB Host Out" type="AUDIO_DEVICE_OUT_USB_ACCESSORY" role="sink">
++            <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
++                     samplingRates="44100" channelMasks="AUDIO_CHANNEL_OUT_STEREO"/>
++        </devicePort>
++        <devicePort tagName="USB Device Out" type="AUDIO_DEVICE_OUT_USB_DEVICE" role="sink"/>
++        <devicePort tagName="USB Headset Out" type="AUDIO_DEVICE_OUT_USB_HEADSET" role="sink"/>
++        <devicePort tagName="USB Device In" type="AUDIO_DEVICE_IN_USB_DEVICE" role="source"/>
++        <devicePort tagName="USB Headset In" type="AUDIO_DEVICE_IN_USB_HEADSET" role="source"/>
++    </devicePorts>
++    <routes>
++        <route type="mix" sink="USB Host Out"
++               sources="usb_accessory output"/>
++        <route type="mix" sink="USB Device Out"
++               sources="usb_device output"/>
++        <route type="mix" sink="USB Headset Out"
++               sources="usb_device output"/>
++        <route type="mix" sink="usb_device input"
++               sources="USB Device In,USB Headset In"/>
++        <route type="mix" sink="USB Device Out"
++               sources="direct output"/>
++        <route type="mix" sink="USB Headset Out"
++               sources="direct output"/>
++    </routes>
++</module>
+-- 
+2.34.1
+

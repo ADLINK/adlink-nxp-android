@@ -1,0 +1,8 @@
+// adlink_pwm on AOSP project
+
+cc_binary {
+    name: "adlink_pwm",
+    srcs: ["src/adlink_pwm.c","src/gpiopwm_routines.c"],
+    cflags: ["-O2", "-g", "-W", "-Wall", "-Wno-error=unused-parameter"],
+    local_include_dirs: ["include"],
+}
