@@ -101,7 +101,19 @@ $ cd ${HOME}/android_build/vendor/nxp-opensource/imx-mkimage
 $ git am ${HOME}/adlink-nxp-android/patches/imx-android-15.0.0_1.0.0/android_build/lec-imx95/vendor/nxp-opensource/imx-mkimage/0001-lec-imx95-add-support.patch
 ```
 
-### 5. External Libraries
+### 5. imx-oei
+```
+$ cd ${HOME}/android_build/vendor/nxp-opensource/imx-oei
+$ git am ${HOME}/adlink-nxp-android/patches/imx-android-15.0.0_1.0.0/android_build/lec-imx95/vendor/nxp-opensource/imx-oei/0001-lec-imx95-add-initial-board-support.patch
+```
+
+### 6. libbt
+```
+$ cd ${HOME}/android_build/hardware/nxp/libbt
+$ git am ${HOME}/adlink-nxp-android/patches/imx-android-15.0.0_1.0.0/android_build/lec-imx95/hardware/nxp/libbt/0001-lec-imx95-add-bt-uart-support.patch
+```
+
+### 7. External Libraries
 ```
 $ cd ${HOME}/android_build/external
 $ cp -rf ${HOME}/adlink-nxp-android/patches/imx-android-15.0.0_1.0.0/android_build/lec-imx95/external/* ./

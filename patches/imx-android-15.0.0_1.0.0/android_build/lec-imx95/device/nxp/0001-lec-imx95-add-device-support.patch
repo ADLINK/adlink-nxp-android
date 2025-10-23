@@ -2180,7 +2180,7 @@ index 00000000..a033f859
 +PRODUCT_COPY_FILES += \
 +    vendor/nxp/imx-firmware/nxp/FwImage_8997_SD/sdiouart8997_combo_v4.bin:vendor/firmware/sdiouart8997_combo_v4.bin \
 +    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf \
-+    hardware/nxp/libbt/conf/nxp/lec_imx8mp/bt_uart.conf:vendor/etc/bluetooth/bt_vendor.conf
++    hardware/nxp/libbt/conf/nxp/lec_imx95/bt_uart.conf:vendor/etc/bluetooth/bt_vendor.conf
 +
 +# Wifi regulatory
 +PRODUCT_COPY_FILES += \

@@ -1,0 +1,61 @@
+From 16f6db214816299c31e0346809395a955faa650a Mon Sep 17 00:00:00 2001
+From: veeraadlink <veera.h@adlinktech.com>
+Date: Thu, 23 Oct 2025 16:23:18 +0530
+Subject: [PATCH] lec-imx95-add-bt-uart-support
+
+---
+ Android.mk                      |  3 +++
+ conf/nxp/lec_imx95/Android.mk   | 10 ++++++++++
+ conf/nxp/lec_imx95/bt_uart.conf |  9 +++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 conf/nxp/lec_imx95/Android.mk
+ create mode 100644 conf/nxp/lec_imx95/bt_uart.conf
+
+diff --git a/Android.mk b/Android.mk
+index 4bd207b..17e9448 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -95,6 +95,9 @@ endif
+ ifeq ($(TARGET_PRODUCT), evk_95)
+     include $(LOCAL_PATH)/conf/nxp/evk_95/Android.mk
+ endif
++ifeq ($(TARGET_PRODUCT), lec_imx95)
++    include $(LOCAL_PATH)/conf/nxp/lec_imx95/Android.mk
++endif
+ ifeq ($(TARGET_PRODUCT),$(filter $(TARGET_PRODUCT),mek_8q mek_8q_car mek_8q_car2))
+     include $(LOCAL_PATH)/conf/nxp/mek_8q/Android.mk
+ endif
+diff --git a/conf/nxp/lec_imx95/Android.mk b/conf/nxp/lec_imx95/Android.mk
+new file mode 100644
+index 0000000..9d849ae
+--- /dev/null
++++ b/conf/nxp/lec_imx95/Android.mk
+@@ -0,0 +1,10 @@
++LOCAL_PATH := $(call my-dir)
++
++include $(CLEAR_VARS)
++
++LOCAL_MODULE := bt_vendor_adlink.conf
++LOCAL_MODULE_CLASS := ETC
++LOCAL_MODULE_PATH := $(TARGET_OUT_VENDOR)/etc/bluetooth
++LOCAL_SRC_FILES := $(LOCAL_MODULE)
++
++include $(BUILD_PREBUILT)
+diff --git a/conf/nxp/lec_imx95/bt_uart.conf b/conf/nxp/lec_imx95/bt_uart.conf
+new file mode 100644
+index 0000000..8a2d197
+--- /dev/null
++++ b/conf/nxp/lec_imx95/bt_uart.conf
+@@ -0,0 +1,9 @@
++mchar_port = /dev/ttyLP4
++pFileName_helper =  /vendor/firmware/mrvl/helper_uart_3000000.bin
++pFileName_image = /vendor/firmware/mrvl/uart8997_bt_v4.bin
++baudrate_dl_helper = 115200
++baudrate_dl_image = 3000000
++iSecondBaudrate = 0
++baudrate_fw_init = 115200
++baudrate_bt = 3000000
++enable_download_fw=0
+-- 
+2.34.1
+
