@@ -16,9 +16,11 @@ $ git config --global user.email "first.last@company.com"
 ```
 
 ### Setup GCC Compiler
-Download GCC from [here](https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu/12.3.rel1/binrel/arm-gnu-toolchain-12.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz) and copy into ${HOME} directory
+Download GCC from [AARCH64 here](https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu/12.3.rel1/binrel/arm-gnu-toolchain-12.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz) [AARCH32 here](https://developer.arm.com/-/media/Files/downloads/gnu/12.3.rel1/binrel/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar.xz?rev=dccb66bb394240a98b87f0f24e70e87d&hash=B788763BE143D9396B59AA91DBA056B6) and copy into ${HOME} directory
 ```
 
+$ sudo tar -xvJf ${HOME}/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar.xz -C /opt
+$ export AARCH32_GCC_CROSS_COMPILE=/opt/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-
 $ sudo tar -xvJf ${HOME}/arm-gnu-toolchain-12.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz -C /opt
 $ export AARCH64_GCC_CROSS_COMPILE=/opt/arm-gnu-toolchain-12.3.rel1-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
 ```
@@ -84,7 +86,7 @@ $ git am ${HOME}/adlink-nxp-android/patches/imx-android-15.0.0_1.0.0/android_bui
 ### 2. Kernel
 ```
 $ cd ${HOME}/android_build/vendor/nxp-opensource/kernel_imx
-$ git am ${HOME}/adlink-nxp-android/patches/imx-android-15.0.0_1.0.0/android_build/lec-imx95/vendor/nxp-opensource/kernel_imx/0001-lec-imx95-add-initial-board-support.patch
+$ git am ${HOME}/adlink-nxp-android/patches/imx-android-15.0.0_1.0.0/android_build/lec-imx95/vendor/nxp-opensource/kernel-imx/0001-lec-imx95-add-initial-board-support.patch
 ```
 
 ### 3. U-boot
