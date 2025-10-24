@@ -8,12 +8,13 @@ You can follow the same steps to build your own customized BSP based on your int
 | :--------- | :----------------------------------------------------------: |
 | SP2-IMX8MP | [Click here](https://www.adlinktech.com/Products/Panel_PCs_Monitors/Panel_PCs_Monitors/SP2-IMX8_Series?lang=en) |
 | LEC-IMX8MP | [Click here](https://www.adlinktech.com/Products/Computer_on_Modules/SMARC/LEC-IMX8MP?lang=en) |
+| LEC-IMX95  | [Click here](https://www.adlinktech.com/Products/Computer_on_Modules/SMARC/LEC-IMX95?lang=en) |
 
 # 2. Supported Android Versions
 
 |  Android Version   |      Supported Products                                |
 | :--------- | :----------------------------------------------------------: |
-| Android 15 | [LEC-IMX8MP](https://github.com/ADLINK/imx8mp_android/tree/Android-15) |
+| Android 15 | [LEC-IMX8MP](https://github.com/ADLINK/imx8mp_android/tree/Android-15) [LEC-IMX95](https://github.com/ADLINK/imx8mp_android/tree/Android-15) |
 | Android 14 | [LEC-IMX8MP&SP2-IMX8MP ](https://github.com/ADLINK/imx8mp_android/tree/Android-14) |
 | Android 13 | [LEC-IMX8MP](https://github.com/ADLINK/imx8mp_android/tree/Android-13)  [SP2IMX8MP](https://github.com/ADLINK/imx8mp_android/tree/SP2-IMX8MP) |
 | Android 11 | [LEC-IMX8MP](https://github.com/ADLINK/imx8mp_android/tree/Android11) |
