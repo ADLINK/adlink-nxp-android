@@ -1,0 +1,488 @@
+From 76e12e9078051028a2a3a2db98fd797868cf9b8c Mon Sep 17 00:00:00 2001
+From: "shangavelan.m" <shangavelan.m@adlinktech.com>
+Date: Fri, 25 Sep 2026 15:29:31 +0530
+Subject: [PATCH] lec-imx95-adding-nxp-mwifiex-SD8997
+
+Signed-off-by: shangavelan.m <shangavelan.m@adlinktech.com>
+---
+ Makefile               |  5 +++++
+ mlan/mlan_cmdevt.c     |  5 +++--
+ mlan/mlan_decl.h       |  8 +++++++
+ mlan/mlan_main.h       |  8 +++----
+ mlan/mlan_misc.c       |  7 ++++++
+ mlan/mlan_sdio.c       | 41 ++++++++++++++++++++++++++---------
+ mlinux/mlan_decl.h     |  8 +++++++
+ mlinux/moal_init.c     |  3 +++
+ mlinux/moal_main.c     | 49 ++++++++++++++++++++++++++++++++++++++++++
+ mlinux/moal_sdio.h     |  7 ++++++
+ mlinux/moal_sdio_mmc.c | 48 +++++++++++++++++++++++++++++++++++------
+ mwifiex.bzl            |  1 +
+ 12 files changed, 168 insertions(+), 22 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index dd18056..76f2549 100644
+--- a/Makefile
++++ b/Makefile
+@@ -37,6 +37,7 @@ CONFIG_PCIE8897=n
+ CONFIG_SD8977=n
+ CONFIG_SD8978=y
+ CONFIG_USB8978=n
++CONFIG_SD8997=y
+ CONFIG_SD8987=y
+ CONFIG_SD9097=n
+ CONFIG_SD9177=y
+@@ -292,6 +293,10 @@ ifeq ($(CONFIG_SD8978),y)
+ 	CONFIG_SDIO=y
+ 	ccflags-y += -DSD8978
+ endif
++ifeq ($(CONFIG_SD8997),y)
++	CONFIG_SDIO=y
++	ccflags-y += -DSD8997
++endif
+ ifeq ($(CONFIG_SD8987),y)
+ 	CONFIG_SDIO=y
+ 	ccflags-y += -DSD8987
+diff --git a/mlan/mlan_cmdevt.c b/mlan/mlan_cmdevt.c
+index cb4477e..b7ce944 100644
+--- a/mlan/mlan_cmdevt.c
++++ b/mlan/mlan_cmdevt.c
+@@ -6222,9 +6222,10 @@ mlan_status wlan_process_vdll_event(pmlan_private pmpriv, pmlan_buffer pevent)
+ 		break;
+ 	case VDLL_IND_TYPE_INTF_RESET:
+ 		PRINTM(MEVENT, "VDLL_IND (INTF_RESET)\n");
+-#if defined(SD8987) || defined(SD8978)
++#if defined(SD8997) || defined(SD8987) || defined(SD8978)
+ 		/* For SDIO, need to reset wr_port only */
+-		if (IS_SD8987(pmadapter->card_type) ||
++		if (IS_SD8997(pmadapter->card_type) ||
++		    IS_SD8987(pmadapter->card_type) ||
+ 		    IS_SD8978(pmadapter->card_type)) {
+ 			pmadapter->pcard_sd->curr_wr_port =
+ 				pmadapter->pcard_sd->reg->start_wr_port;
+diff --git a/mlan/mlan_decl.h b/mlan/mlan_decl.h
+index a4ae8b2..045e900 100644
+--- a/mlan/mlan_decl.h
++++ b/mlan/mlan_decl.h
+@@ -380,6 +380,8 @@ typedef t_u8 mlan_802_11_mac_addr[MLAN_MAC_ADDR_LENGTH];
+ #define CARD_TYPE_8897 0x02
+ /** 8977 card type */
+ #define CARD_TYPE_8977 0x03
++/** 8997 card type */
++#define CARD_TYPE_8997 0x04
+ /** 8987 card type */
+ #define CARD_TYPE_8987 0x05
+ /** 9098 card type */
+@@ -420,6 +422,8 @@ typedef t_u8 mlan_802_11_mac_addr[MLAN_MAC_ADDR_LENGTH];
+ #define CARD_TYPE_SD8977 (CARD_TYPE_8977 | (INTF_SD << 8))
+ /** SD8978 card type */
+ #define CARD_TYPE_SD8978 (CARD_TYPE_8978 | (INTF_SD << 8))
++/** SD8997 card type */
++#define CARD_TYPE_SD8997 (CARD_TYPE_8997 | (INTF_SD << 8))
+ /** SD8987 card type */
+ #define CARD_TYPE_SD8987 (CARD_TYPE_8987 | (INTF_SD << 8))
+ /** SD9097 card type */
+@@ -441,6 +445,7 @@ typedef t_u8 mlan_802_11_mac_addr[MLAN_MAC_ADDR_LENGTH];
+ #define IS_SD8897(ct) (CARD_TYPE_SD8897 == (ct))
+ #define IS_SD8977(ct) (CARD_TYPE_SD8977 == (ct))
+ #define IS_SD8978(ct) (CARD_TYPE_SD8978 == (ct))
++#define IS_SD8997(ct) (CARD_TYPE_SD8997 == (ct))
+ #define IS_SD8987(ct) (CARD_TYPE_SD8987 == (ct))
+ #define IS_SD9097(ct) (CARD_TYPE_SD9097 == (ct))
+ #define IS_SD9098(ct) (CARD_TYPE_SD9098 == (ct))
+@@ -458,6 +463,8 @@ typedef t_u8 mlan_802_11_mac_addr[MLAN_MAC_ADDR_LENGTH];
+ #define CARD_SD8977 "SD8977"
+ /** SD8978 Card */
+ #define CARD_SD8978 "SDIW416"
++/** SD8997 Card */
++#define CARD_SD8997 "SD8997"
+ /** SD8987 Card */
+ #define CARD_SD8987 "SD8987"
+ /** SD9097 Card */
+@@ -567,6 +574,7 @@ typedef t_u8 mlan_802_11_mac_addr[MLAN_MAC_ADDR_LENGTH];
+ #define IS_CARD8897(ct) (CARD_TYPE_8897 == ((ct)&0xf))
+ #define IS_CARD8977(ct) (CARD_TYPE_8977 == ((ct)&0xf))
+ #define IS_CARD8978(ct) (CARD_TYPE_8978 == ((ct)&0xf))
++#define IS_CARD8997(ct) (CARD_TYPE_8997 == ((ct)&0xf))
+ #define IS_CARD8987(ct) (CARD_TYPE_8987 == ((ct)&0xf))
+ #define IS_CARD9098(ct) (CARD_TYPE_9098 == ((ct)&0xf))
+ #define IS_CARD9097(ct) (CARD_TYPE_9097 == ((ct)&0xf))
+diff --git a/mlan/mlan_main.h b/mlan/mlan_main.h
+index dcedf76..37c2c1a 100644
+--- a/mlan/mlan_main.h
++++ b/mlan/mlan_main.h
+@@ -605,10 +605,10 @@ extern t_void (*assert_callback)(t_void *pmoal_handle, t_u32 cond);
+ #define SDIO_CMD53_MAX_SIZE 65280
+ #define MAX_SUPPORT_AMSDU_SIZE 4096
+ /** Maximum numbfer of registers to read for multiple port */
+-#if defined(SD8887) || defined(SD8977) || defined(SD8987) ||                   \
+-	defined(SD9098) || defined(SD9097) || defined(SDAW693) ||              \
+-	defined(SDIW624) || defined(SD8978) || defined(SD9177) ||              \
+-	defined(SDIW610)
++#if defined(SD8887) || defined(SD8997) || defined(SD8977) ||                   \
++	defined(SD8987) || defined(SD9098) || defined(SD9097) ||               \
++	defined(SDAW693) || defined(SDIW624) || defined(SD8978) ||             \
++	defined(SD9177) || defined(SDIW610)
+ #define MAX_MP_REGS 196
+ #else
+ /* upto 0xB7 */
+diff --git a/mlan/mlan_misc.c b/mlan/mlan_misc.c
+index 6a73d18..c062eea 100644
+--- a/mlan/mlan_misc.c
++++ b/mlan/mlan_misc.c
+@@ -8730,6 +8730,13 @@ mlan_status wlan_misc_ioctl_edmac_cfg(pmlan_adapter pmadapter,
+ 			misc->param.edmac_cfg.ed_ctrl_5g = 0x1;
+ 			misc->param.edmac_cfg.ed_offset_5g = 0xA;
+ 			misc->param.edmac_cfg.ed_bitmap_txq_lock = 0x1e00FF;
++		} else if (IS_CARD8997(pmadapter->card_type)) {
++			// from config/ed_mac_ctrl_V2_8997.conf
++			misc->param.edmac_cfg.ed_ctrl_2g = 0x1;
++			misc->param.edmac_cfg.ed_offset_2g = 0x0;
++			misc->param.edmac_cfg.ed_ctrl_5g = 0x1;
++			misc->param.edmac_cfg.ed_offset_5g = 0x4;
++			misc->param.edmac_cfg.ed_bitmap_txq_lock = 0xFF;
+ 		} else if (IS_CARD8978(pmadapter->card_type)) {
+ 			// from config/ed_mac_ctrl_V2_iw416.conf
+ 			misc->param.edmac_cfg.ed_ctrl_2g = 0x1;
+diff --git a/mlan/mlan_sdio.c b/mlan/mlan_sdio.c
+index 9fb5a39..a16a7fa 100644
+--- a/mlan/mlan_sdio.c
++++ b/mlan/mlan_sdio.c
+@@ -185,9 +185,10 @@ static const struct _mlan_card_info mlan_card_info_sd8897 = {
+ };
+ #endif
+ 
+-#if defined(SD8977) || defined(SD8987) || defined(SD9098) ||                   \
+-	defined(SD9097) || defined(SDIW624) || defined(SDAW693) ||             \
+-	defined(SD8978) || defined(SD9177) || defined(SDIW610)
++#if defined(SD8977) || defined(SD8997) || defined(SD8987) ||                   \
++	defined(SD9098) || defined(SD9097) || defined(SDIW624) ||              \
++	defined(SDAW693) || defined(SD8978) || defined(SD9177) ||              \
++	defined(SDIW610)
+ static const struct _mlan_sdio_card_reg mlan_reg_sd8977 = {
+ 	.start_rd_port = 0,
+ 	.start_wr_port = 0,
+@@ -260,6 +261,16 @@ static const struct _mlan_sdio_card_reg mlan_reg_sd8977 = {
+ };
+ #endif
+ 
++#ifdef SD8997
++static const struct _mlan_card_info mlan_card_info_sd8997 = {
++	.max_tx_buf_size = MLAN_TX_DATA_BUF_SIZE_4K,
++	.v16_fw_api = 1,
++	.supp_ps_handshake = 0,
++	.default_11n_tx_bf_cap = DEFAULT_11N_TX_BF_CAP_2X2,
++	.support_11mc = 1,
++};
++#endif
++
+ #ifdef SD9097
+ static const struct _mlan_card_info mlan_card_info_sd9097 = {
+ 	.max_tx_buf_size = MLAN_TX_DATA_BUF_SIZE_4K,
+@@ -2301,6 +2312,12 @@ mlan_status wlan_get_sdio_device(pmlan_adapter pmadapter)
+ 		pmadapter->pcard_info = &mlan_card_info_sd8977;
+ 		break;
+ #endif
++#ifdef SD8997
++	case CARD_TYPE_SD8997:
++		pmadapter->pcard_sd->reg = &mlan_reg_sd8977;
++		pmadapter->pcard_info = &mlan_card_info_sd8997;
++		break;
++#endif
+ #ifdef SD8987
+ 	case CARD_TYPE_SD8987:
+ 		pmadapter->pcard_sd->reg = &mlan_reg_sd8977;
+@@ -2948,8 +2965,8 @@ exit:
+ }
+ 
+ #if defined(SD9098) || defined(SD9097) || defined(SDIW624) ||                  \
+-	defined(SDAW693) || defined(SD9177) || defined(SD8987) ||              \
+-	defined(SD8978) || defined(SDIW610)
++	defined(SDAW693) || defined(SD9177) || defined(SD8997) ||              \
++	defined(SD8987) || defined(SD8978) || defined(SDIW610)
+ /**
+  *  @brief This function sends vdll data to the card.
+  *
+@@ -3014,8 +3031,8 @@ static mlan_status wlan_sdio_host_to_card_ext(pmlan_private pmpriv, t_u8 type,
+ 	mlan_adapter *pmadapter = pmpriv->adapter;
+ 
+ #if defined(SD9098) || defined(SD9097) || defined(SDIW624) ||                  \
+-	defined(SDAW693) || defined(SD9177) || defined(SD8987) ||              \
+-	defined(SD8978) || defined(SDIW610)
++	defined(SDAW693) || defined(SD9177) || defined(SD8997) ||              \
++	defined(SD8987) || defined(SD8978) || defined(SDIW610)
+ 	if (type == MLAN_TYPE_VDLL)
+ 		return wlan_sdio_send_vdll(pmadapter, pmbuf);
+ #endif
+@@ -3617,10 +3634,14 @@ mlan_status wlan_reset_fw(pmlan_adapter pmadapter)
+ 		ret = MLAN_STATUS_FAILURE;
+ 		goto done;
+ 	}
+-#if defined(SD8977) || defined(SD8987) || defined(SD9098) ||                   \
+-	defined(SD9097) || defined(SDIW624) || defined(SDAW693) ||             \
+-	defined(SD8978) || defined(SD9177) || defined(SDIW610)
++#if defined(SD8977) || defined(SD8997) || defined(SD8987) ||                   \
++	defined(SD9098) || defined(SD9097) || defined(SDIW624) ||              \
++	defined(SDAW693) || defined(SD8978) || defined(SD9177) ||              \
++	defined(SDIW610)
+ 	if (MFALSE
++#ifdef SD8997
++	    || IS_SD8997(pmadapter->card_type)
++#endif
+ #ifdef SD8977
+ 	    || IS_SD8977(pmadapter->card_type)
+ #endif
+diff --git a/mlinux/mlan_decl.h b/mlinux/mlan_decl.h
+index a4ae8b2..045e900 100644
+--- a/mlinux/mlan_decl.h
++++ b/mlinux/mlan_decl.h
+@@ -380,6 +380,8 @@ typedef t_u8 mlan_802_11_mac_addr[MLAN_MAC_ADDR_LENGTH];
+ #define CARD_TYPE_8897 0x02
+ /** 8977 card type */
+ #define CARD_TYPE_8977 0x03
++/** 8997 card type */
++#define CARD_TYPE_8997 0x04
+ /** 8987 card type */
+ #define CARD_TYPE_8987 0x05
+ /** 9098 card type */
+@@ -420,6 +422,8 @@ typedef t_u8 mlan_802_11_mac_addr[MLAN_MAC_ADDR_LENGTH];
+ #define CARD_TYPE_SD8977 (CARD_TYPE_8977 | (INTF_SD << 8))
+ /** SD8978 card type */
+ #define CARD_TYPE_SD8978 (CARD_TYPE_8978 | (INTF_SD << 8))
++/** SD8997 card type */
++#define CARD_TYPE_SD8997 (CARD_TYPE_8997 | (INTF_SD << 8))
+ /** SD8987 card type */
+ #define CARD_TYPE_SD8987 (CARD_TYPE_8987 | (INTF_SD << 8))
+ /** SD9097 card type */
+@@ -441,6 +445,7 @@ typedef t_u8 mlan_802_11_mac_addr[MLAN_MAC_ADDR_LENGTH];
+ #define IS_SD8897(ct) (CARD_TYPE_SD8897 == (ct))
+ #define IS_SD8977(ct) (CARD_TYPE_SD8977 == (ct))
+ #define IS_SD8978(ct) (CARD_TYPE_SD8978 == (ct))
++#define IS_SD8997(ct) (CARD_TYPE_SD8997 == (ct))
+ #define IS_SD8987(ct) (CARD_TYPE_SD8987 == (ct))
+ #define IS_SD9097(ct) (CARD_TYPE_SD9097 == (ct))
+ #define IS_SD9098(ct) (CARD_TYPE_SD9098 == (ct))
+@@ -458,6 +463,8 @@ typedef t_u8 mlan_802_11_mac_addr[MLAN_MAC_ADDR_LENGTH];
+ #define CARD_SD8977 "SD8977"
+ /** SD8978 Card */
+ #define CARD_SD8978 "SDIW416"
++/** SD8997 Card */
++#define CARD_SD8997 "SD8997"
+ /** SD8987 Card */
+ #define CARD_SD8987 "SD8987"
+ /** SD9097 Card */
+@@ -567,6 +574,7 @@ typedef t_u8 mlan_802_11_mac_addr[MLAN_MAC_ADDR_LENGTH];
+ #define IS_CARD8897(ct) (CARD_TYPE_8897 == ((ct)&0xf))
+ #define IS_CARD8977(ct) (CARD_TYPE_8977 == ((ct)&0xf))
+ #define IS_CARD8978(ct) (CARD_TYPE_8978 == ((ct)&0xf))
++#define IS_CARD8997(ct) (CARD_TYPE_8997 == ((ct)&0xf))
+ #define IS_CARD8987(ct) (CARD_TYPE_8987 == ((ct)&0xf))
+ #define IS_CARD9098(ct) (CARD_TYPE_9098 == ((ct)&0xf))
+ #define IS_CARD9097(ct) (CARD_TYPE_9097 == ((ct)&0xf))
+diff --git a/mlinux/moal_init.c b/mlinux/moal_init.c
+index a8ece12..bb467cc 100644
+--- a/mlinux/moal_init.c
++++ b/mlinux/moal_init.c
+@@ -394,6 +394,9 @@ static card_type_entry card_type_map_tbl[] = {
+ #ifdef SD8978
+ 	{CARD_TYPE_SD8978, 0, CARD_SD8978},
+ #endif
++#ifdef SD8997
++	{CARD_TYPE_SD8997, 0, CARD_SD8997},
++#endif
+ #ifdef SD8987
+ 	{CARD_TYPE_SD8987, 0, CARD_SD8987},
+ #endif
+diff --git a/mlinux/moal_main.c b/mlinux/moal_main.c
+index 4df972a..c743ff4 100644
+--- a/mlinux/moal_main.c
++++ b/mlinux/moal_main.c
+@@ -814,6 +814,50 @@ static struct _card_info card_info_USBIW610 = {
+ };
+ #endif
+ 
++#ifdef SD8997
++static struct _card_info card_info_SD8997 = {
++	.embedded_supp = 1,
++	.drcs = 0,
++	.go_noa = 1,
++	.v16_fw_api = 1,
++	.pmic = 1,
++	.cal_data_cfg = 1,
++	.low_power_enable = 0,
++	.rx_rate_max = 196,
++	.histogram_table_num = 3,
++	.feature_control = FEATURE_CTRL_DEFAULT,
++	.rev_id_reg = 0xc8,
++	.host_strap_reg = 0xf4,
++	.magic_reg = 0xf0,
++	.fw_name = SD8997_DEFAULT_COMBO_FW_NAME,
++	.fw_name_wlan = SD8997_DEFAULT_WLAN_FW_NAME,
++#ifdef SDIO
++	.dump_fw_info = DUMP_FW_SDIO_V3,
++	.dump_fw_ctrl_reg = 0xf9,
++	.dump_fw_start_reg = 0xf1,
++	.dump_fw_end_reg = 0xf8,
++	.dump_fw_host_ready = 0xcc,
++	.dump_reg.reg_table = {0x08, 0x58, 0x5C, 0x5D, 0x60, 0x61, 0x62, 0x64,
++			       0x65, 0x66, 0x68, 0x69, 0x6a},
++	.dump_reg.reg_table_size = 13,
++	.scratch_reg = 0xe8,
++	.func1_reg_start = 0x10,
++	.func1_reg_end = 0x17,
++	.fw_stuck_code_reg = 0xEB,
++	.fw_reset_reg = 0x0EE,
++	.fw_reset_val = 0x99,
++	.fw_wakeup_reg = 0,
++	.fw_wakeup_val = 2,
++	.fw_winner_status_reg = 0xFC,
++	.slew_rate_reg = 0x80002328,
++	.slew_rate_bit_offset = 12,
++#endif
++	.sniffer_support = 1,
++	.per_pkt_cfg_support = 1,
++	.host_mlme_required = 1,
++};
++#endif
++
+ #ifdef SD8987
+ static struct _card_info card_info_SD8987 = {
+ 	.embedded_supp = 1,
+@@ -10511,6 +10555,11 @@ static int woal_get_card_info(moal_handle *phandle)
+ 		phandle->card_info = &card_info_USBIW610;
+ 		break;
+ #endif
++#ifdef SD8997
++	case CARD_TYPE_SD8997:
++		phandle->card_info = &card_info_SD8997;
++		break;
++#endif
+ #ifdef SD8987
+ 	case CARD_TYPE_SD8987:
+ 		phandle->card_info = &card_info_SD8987;
+diff --git a/mlinux/moal_sdio.h b/mlinux/moal_sdio.h
+index efbc7dc..73cb039 100644
+--- a/mlinux/moal_sdio.h
++++ b/mlinux/moal_sdio.h
+@@ -94,6 +94,13 @@
+ #define SD8977_DEFAULT_WLAN_FW_NAME "nxp/sd8977_wlan_v2.bin"
+ #endif /* SD8977 */
+ 
++#ifdef SD8997
++#define SD8997_DEFAULT_COMBO_FW_NAME "nxp/sduart8997_combo_v4.bin"
++#define SDUART8997_DEFAULT_COMBO_FW_NAME "nxp/sduart8997_combo_v4.bin"
++#define SDSD8997_DEFAULT_COMBO_FW_NAME "nxp/sdsd8997_combo_v4.bin"
++#define SD8997_DEFAULT_WLAN_FW_NAME "nxp/sd8997_wlan_v4.bin"
++#endif /* SD8997 */
++
+ #ifdef SD8987
+ #define SD8987_DEFAULT_COMBO_FW_NAME "nxp/sduart8987_combo.bin"
+ #define SDUART8987_DEFAULT_COMBO_FW_NAME "nxp/sduart8987_combo.bin"
+diff --git a/mlinux/moal_sdio_mmc.c b/mlinux/moal_sdio_mmc.c
+index 478125b..04059a9 100644
+--- a/mlinux/moal_sdio_mmc.c
++++ b/mlinux/moal_sdio_mmc.c
+@@ -83,6 +83,10 @@ static moal_if_ops sdiommc_ops;
+ /** Device ID for SD8978 */
+ #define SD_DEVICE_ID_8978 (0x9159)
+ #endif
++#ifdef SD8997
++/** Device ID for SD8997 */
++#define SD_DEVICE_ID_8997 (0x9141)
++#endif
+ #ifdef SD8987
+ /** Device ID for SD8987 */
+ #define SD_DEVICE_ID_8987 (0x9149)
+@@ -130,6 +134,9 @@ static const struct sdio_device_id wlan_ids[] = {
+ #ifdef SD8978
+ 	{SDIO_DEVICE(MRVL_VENDOR_ID, SD_DEVICE_ID_8978)},
+ #endif
++#ifdef SD8997
++	{SDIO_DEVICE(MRVL_VENDOR_ID, SD_DEVICE_ID_8997)},
++#endif
+ #ifdef SD8987
+ 	{SDIO_DEVICE(MRVL_VENDOR_ID, SD_DEVICE_ID_8987)},
+ #endif
+@@ -651,6 +658,20 @@ static t_u16 woal_update_card_type(t_void *card)
+ 				(strlen(INTF_CARDTYPE) + strlen(KERN_VERSION)));
+ 	}
+ #endif
++#ifdef SD8997
++	if (cardp_sd->func->device == SD_DEVICE_ID_8997) {
++		card_type = CARD_TYPE_SD8997;
++		moal_memcpy_ext(NULL, driver_version, CARD_SD8997,
++				strlen(CARD_SD8997), strlen(driver_version));
++		moal_memcpy_ext(
++			NULL,
++			driver_version + strlen(INTF_CARDTYPE) +
++				strlen(KERN_VERSION),
++			V16, strlen(V16),
++			strnlen(driver_version, MLAN_MAX_VER_STR_LEN - 1) -
++				(strlen(INTF_CARDTYPE) + strlen(KERN_VERSION)));
++	}
++#endif
+ #ifdef SD8987
+ 	if (cardp_sd->func->device == SD_DEVICE_ID_8987) {
+ 		card_type = CARD_TYPE_SD8987;
+@@ -1870,9 +1891,9 @@ static mlan_status woal_sdiommc_get_fw_name(moal_handle *handle)
+ 	t_u32 revision_id = 0;
+ 	t_u32 rev_id_reg = handle->card_info->rev_id_reg;
+ 
+-#if defined(SD8987) || defined(SD9098) || defined(SD9097) ||                   \
+-	defined(SDIW624) || defined(SDAW693) || defined(SD8978) ||             \
+-	defined(SD9177) || defined(SDIW610)
++#if defined(SD8987) || defined(SD8997) || defined(SD9098) ||                   \
++	defined(SD9097) || defined(SDIW624) || defined(SDAW693) ||             \
++	defined(SD8978) || defined(SD9177) || defined(SDIW610)
+ 	t_u32 magic_reg = handle->card_info->magic_reg;
+ 	t_u32 magic = 0;
+ 	t_u32 host_strap_reg = handle->card_info->host_strap_reg;
+@@ -1893,9 +1914,9 @@ static mlan_status woal_sdiommc_get_fw_name(moal_handle *handle)
+ 	PRINTM(MCMND, "revision_id=0x%x sdio_blk_size=%d\n", revision_id,
+ 	       handle->sdio_blk_size);
+ 
+-#if defined(SD8987) || defined(SD9098) || defined(SD9097) ||                   \
+-	defined(SDIW624) || defined(SDAW693) || defined(SD8978) ||             \
+-	defined(SD9177) || defined(SDIW610)
++#if defined(SD8987) || defined(SD8997) || defined(SD9098) ||                   \
++	defined(SD9097) || defined(SDIW624) || defined(SDAW693) ||             \
++	defined(SD8978) || defined(SD9177) || defined(SDIW610)
+ 	/** Revision ID register */
+ 	woal_sdiommc_read_reg(handle, magic_reg, &magic);
+ 	/** Revision ID register */
+@@ -1956,6 +1977,21 @@ static mlan_status woal_sdiommc_get_fw_name(moal_handle *handle)
+ 	}
+ #endif
+ 
++#ifdef SD8997
++	if (IS_SD8997(handle->card_type)) {
++		if (magic == CHIP_MAGIC_VALUE) {
++			if (strap == CARD_TYPE_SD_UART)
++				strncpy(handle->card_info->fw_name,
++					SDUART8997_DEFAULT_COMBO_FW_NAME,
++					FW_NAMW_MAX_LEN);
++			else
++				strncpy(handle->card_info->fw_name,
++					SDSD8997_DEFAULT_COMBO_FW_NAME,
++					FW_NAMW_MAX_LEN);
++		}
++	}
++#endif
++
+ #ifdef SD8987
+ 	if (IS_SD8987(handle->card_type)) {
+ 		if (magic == CHIP_MAGIC_VALUE) {
+diff --git a/mwifiex.bzl b/mwifiex.bzl
+index 47b730c..58b28a9 100644
+--- a/mwifiex.bzl
++++ b/mwifiex.bzl
+@@ -71,6 +71,7 @@ _BUS_COPTS = [
+ # Note: SD8978 is disabled when ANDROID_BUILD=1
+ _CHIP_COPTS = [
+     # SDIO chips
++    "-DSD8997",    # CONFIG_SD8997=y
+     "-DSD8987",    # CONFIG_SD8987=y
+     "-DSD9177",    # CONFIG_SD9177=y
+     "-DSD9098",    # CONFIG_SD9098=y
+-- 
+2.43.0
+

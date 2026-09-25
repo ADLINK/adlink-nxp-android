@@ -1,0 +1,6686 @@
+From 91739493268bdd496353ea062c2078ab643990d1 Mon Sep 17 00:00:00 2001
+From: shiva-adlink <shivashankar.t@adlinktech.com>
+Date: Fri, 25 Sep 2026 20:40:50 +0530
+Subject: [PATCH] lec-imx95-add-initial-board-support
+
+Signed-off-by: shiva-adlink <shivashankar.t@adlinktech.com>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |    8 +
+ .../boot/dts/freescale/g080uan02-basic.dts    |   72 +
+ .../boot/dts/freescale/g156hat02.6-basic.dts  |   90 +
+ .../dts/freescale/lec-imx95-cameras-lvds.dts  |    9 +
+ .../dts/freescale/lec-imx95-g080uan02.dts     |    7 +
+ .../dts/freescale/lec-imx95-g156hat02.dts     |    7 +
+ .../boot/dts/freescale/lec-imx95-lt9611.dts   |    9 +
+ .../boot/dts/freescale/lec-imx95-lt96114k.dts |    8 +
+ .../dts/freescale/lec-imx95-ov13855-lvds.dts  |   10 +
+ .../boot/dts/freescale/lec-imx95-ov13855.dts  |   10 +
+ .../boot/dts/freescale/lec-imx95-ov5640.dts   |    8 +
+ arch/arm64/boot/dts/freescale/lec-imx95.dts   | 1554 +++++++++++++
+ .../arm64/boot/dts/freescale/lt9611-basic.dts |  125 ++
+ .../boot/dts/freescale/lt96114k-basic.dts     |  112 +
+ .../boot/dts/freescale/ov13855-basic.dts      |  147 ++
+ .../arm64/boot/dts/freescale/ov5640-basic.dts |  127 ++
+ arch/arm64/configs/lec_imx95_gki.fragment     |  258 +++
+ drivers/gpio/Kconfig                          |    8 +
+ drivers/gpio/Makefile                         |    1 +
+ drivers/gpio/gpio-adl1000.c                   |  884 ++++++++
+ drivers/gpu/drm/bridge/Kconfig                |   15 +
+ drivers/gpu/drm/bridge/Makefile               |    1 +
+ drivers/gpu/drm/bridge/adlink-lt9611.c        | 1985 +++++++++++++++++
+ drivers/gpu/drm/panel/panel-simple.c          |   60 +
+ drivers/net/phy/realtek/realtek_main.c        |    6 +
+ drivers/tty/serial/Kconfig                    |    8 +
+ drivers/tty/serial/Makefile                   |    1 +
+ drivers/tty/serial/adl1001.c                  |  802 +++++++
+ sound/soc/codecs/tlv320aic3x.c                |   24 +-
+ 29 files changed, 6354 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/g080uan02-basic.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/g156hat02.6-basic.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/lec-imx95-cameras-lvds.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/lec-imx95-g080uan02.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/lec-imx95-g156hat02.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/lec-imx95-lt9611.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/lec-imx95-lt96114k.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/lec-imx95-ov13855-lvds.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/lec-imx95-ov13855.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/lec-imx95-ov5640.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/lec-imx95.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/lt9611-basic.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/lt96114k-basic.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/ov13855-basic.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/ov5640-basic.dts
+ create mode 100644 arch/arm64/configs/lec_imx95_gki.fragment
+ create mode 100644 drivers/gpio/gpio-adl1000.c
+ create mode 100644 drivers/gpu/drm/bridge/adlink-lt9611.c
+ create mode 100644 drivers/tty/serial/adl1001.c
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 7a83329ebc33..27b7123b0e3b 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -902,6 +902,14 @@ imx943-orangebox-netc-m33-dtbs := imx943-orangebox.dtb \
+ dtb-$(CONFIG_ARCH_MXC) += imx943-orangebox-netc-m33.dtb
+ 
+ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk.dtb
++dtb-$(CONFIG_ARCH_MXC) += lec-imx95-g080uan02.dtb
++dtb-$(CONFIG_ARCH_MXC) += lec-imx95-g156hat02.dtb
++dtb-$(CONFIG_ARCH_MXC) += lec-imx95-lt9611.dtb
++dtb-$(CONFIG_ARCH_MXC) += lec-imx95-ov13855.dtb
++dtb-$(CONFIG_ARCH_MXC) += lec-imx95-ov13855-lvds.dtb
++dtb-$(CONFIG_ARCH_MXC) += lec-imx95-cameras-lvds.dtb
++dtb-$(CONFIG_ARCH_MXC) += lec-imx95-lt96114k.dtb  lec-imx95-ov5640.dtb
++
+ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-flexspi-m2.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-mqs.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-aud-hat.dtb
+diff --git a/arch/arm64/boot/dts/freescale/g080uan02-basic.dts b/arch/arm64/boot/dts/freescale/g080uan02-basic.dts
+new file mode 100644
+index 000000000000..fc2ffc1cc038
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/g080uan02-basic.dts
+@@ -0,0 +1,72 @@
++
++
++
++&{/} {
++
++	lcd0_backlight: backlight {
++		compatible = "pwm-backlight";
++		pwms = <&tpm6 2 6666667 PWM_POLARITY_INVERTED>;
++		brightness-levels = <0 45 63 88 119 158 203 255>;
++		default-brightness-level = <6>;
++		enable-gpios = <&i2c3_adl1000 9 GPIO_ACTIVE_HIGH>;
++	};
++};
++
++
++&display_pixel_link {
++	status = "okay";
++};
++
++&dpu {
++	assigned-clocks = <&scmi_clk IMX95_CLK_DISP1PIX>,
++			  <&scmi_clk IMX95_CLK_VIDEOPLL1_VCO>,
++			  <&scmi_clk IMX95_CLK_VIDEOPLL1>;
++	assigned-clock-parents = <&scmi_clk IMX95_CLK_VIDEOPLL1>;
++	assigned-clock-rates = <0>, <4008000000>, <445333334>;
++};
++
++&mipi_dsi {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	panel@0 {
++		compatible = "auo,g080uan02";
++		reg = <0>;
++		enable-gpios = <&i2c3_adl1000 8 GPIO_ACTIVE_HIGH>; //LCD0_VDD_EN_1V8
++		dsi-lanes = <4>;
++		v3p3-supply = <&reg_3p3v>;
++		v1p8-supply = <&reg_1p8v>;
++		backlight = <&lcd0_backlight>;
++
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&dsi_out>;
++			};
++		};
++	};
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@1 {
++			reg = <1>;
++
++			dsi_out: endpoint {
++				remote-endpoint = <&panel_in>;
++			};
++		};
++	};
++};
++
++&pixel_interleaver {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	channel@1 {
++		reg = <1>;
++		status = "okay";
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/g156hat02.6-basic.dts b/arch/arm64/boot/dts/freescale/g156hat02.6-basic.dts
+new file mode 100644
+index 000000000000..fea76d4814b8
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/g156hat02.6-basic.dts
+@@ -0,0 +1,90 @@
++
++/delete-node/ &display_pixel_link1_to_ldb_ch1;
++/delete-node/ &ldb_ch1_to_display_pixel_link1;
++
++&{/} {
++	lvds0_panel {
++		compatible = "auo,g156hat026";
++		backlight = <&lcd0_backlight>;
++		enable-gpios = <&i2c3_adl1000 8 GPIO_ACTIVE_HIGH>; //LCD0_VDD_EN_1V8
++		
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				dual-lvds-odd-pixels;
++				panel_in_odd: endpoint {
++					remote-endpoint = <&lvds0_out>;
++				};
++			};
++
++
++			port@1 {
++				reg = <1>;
++				dual-lvds-even-pixels;
++				panel_in_even: endpoint {
++					remote-endpoint = <&lvds1_out>;
++				};
++			};
++		};
++	};
++
++	lcd0_backlight: backlight {
++		compatible = "pwm-backlight";
++		pwms = <&tpm6 2 6666667 PWM_POLARITY_INVERTED>;
++		brightness-levels = <0 45 63 88 119 158 203 255>;
++		default-brightness-level = <6>;
++		enable-gpios = <&i2c3_adl1000 9 GPIO_ACTIVE_HIGH>;
++	};
++};
++
++&display_pixel_link {
++	status = "okay";
++};
++
++&ldb {
++    status = "okay";
++
++    channel@0 {
++        status = "okay";
++        port@1 {
++            reg = <1>;
++            lvds0_out: endpoint {
++                remote-endpoint = <&panel_in_odd>;
++            };
++        };
++    };
++
++    channel@1 {
++        status = "okay";
++
++        port@0 {
++            /delete-node/ endpoint;
++        };
++
++        port@1 {
++            reg = <1>;
++            lvds1_out: endpoint {
++                remote-endpoint = <&panel_in_even>;
++            };
++        };
++    };
++};
++
++&ldb0_phy {
++	status = "okay";
++};
++
++&ldb1_phy {
++	status = "okay";
++};
++
++&pixel_interleaver {
++        status = "okay";
++
++        channel@0 {
++                status = "okay";
++        };
++};
+diff --git a/arch/arm64/boot/dts/freescale/lec-imx95-cameras-lvds.dts b/arch/arm64/boot/dts/freescale/lec-imx95-cameras-lvds.dts
+new file mode 100644
+index 000000000000..12ad902677b1
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/lec-imx95-cameras-lvds.dts
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 NXP
++ */
++
++#include "lec-imx95.dts"
++#include "g156hat02.6-basic.dts"
++#include "ov5640-basic.dts"
++#include "ov13855-basic.dts"
+diff --git a/arch/arm64/boot/dts/freescale/lec-imx95-g080uan02.dts b/arch/arm64/boot/dts/freescale/lec-imx95-g080uan02.dts
+new file mode 100644
+index 000000000000..7b332a3685ee
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/lec-imx95-g080uan02.dts
+@@ -0,0 +1,7 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 NXP
++ */
++
++#include "lec-imx95.dts"
++#include "g080uan02-basic.dts"
+diff --git a/arch/arm64/boot/dts/freescale/lec-imx95-g156hat02.dts b/arch/arm64/boot/dts/freescale/lec-imx95-g156hat02.dts
+new file mode 100644
+index 000000000000..7faa6340ec78
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/lec-imx95-g156hat02.dts
+@@ -0,0 +1,7 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 NXP
++ */
++#include "lec-imx95.dts"
++#include "lt9611-basic.dts"
++#include "g156hat02.6-basic.dts"
+diff --git a/arch/arm64/boot/dts/freescale/lec-imx95-lt9611.dts b/arch/arm64/boot/dts/freescale/lec-imx95-lt9611.dts
+new file mode 100644
+index 000000000000..d94709e5b9ae
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/lec-imx95-lt9611.dts
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 NXP
++ */
++
++
++#include "lec-imx95.dts"
++#include "lt9611-basic.dts"
++
+diff --git a/arch/arm64/boot/dts/freescale/lec-imx95-lt96114k.dts b/arch/arm64/boot/dts/freescale/lec-imx95-lt96114k.dts
+new file mode 100644
+index 000000000000..5ef44a49131e
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/lec-imx95-lt96114k.dts
+@@ -0,0 +1,8 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 NXP
++ */
++
++
++#include "lec-imx95.dts"
++#include "lt96114k-basic.dts"
+diff --git a/arch/arm64/boot/dts/freescale/lec-imx95-ov13855-lvds.dts b/arch/arm64/boot/dts/freescale/lec-imx95-ov13855-lvds.dts
+new file mode 100644
+index 000000000000..3e4f59735973
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/lec-imx95-ov13855-lvds.dts
+@@ -0,0 +1,10 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 NXP
++ */
++
++#include "lec-imx95.dts"
++#include "lt9611-basic.dts"
++#include "g156hat02.6-basic.dts"
++#include "ov13855-basic.dts"
++
+diff --git a/arch/arm64/boot/dts/freescale/lec-imx95-ov13855.dts b/arch/arm64/boot/dts/freescale/lec-imx95-ov13855.dts
+new file mode 100644
+index 000000000000..4b9f1f6daf2b
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/lec-imx95-ov13855.dts
+@@ -0,0 +1,10 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 NXP
++ */
++
++#include "lec-imx95.dts"
++#include "lt9611-basic.dts"
++//#include "g156hat02.6-basic.dts"
++#include "ov13855-basic.dts"
++
+diff --git a/arch/arm64/boot/dts/freescale/lec-imx95-ov5640.dts b/arch/arm64/boot/dts/freescale/lec-imx95-ov5640.dts
+new file mode 100644
+index 000000000000..59b332543e0d
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/lec-imx95-ov5640.dts
+@@ -0,0 +1,8 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 NXP
++ */
++
++#include "lec-imx95.dts"
++#include "g156hat02.6-basic.dts"
++#include "ov5640-basic.dts"
+diff --git a/arch/arm64/boot/dts/freescale/lec-imx95.dts b/arch/arm64/boot/dts/freescale/lec-imx95.dts
+new file mode 100644
+index 000000000000..f2f2cffca5ec
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/lec-imx95.dts
+@@ -0,0 +1,1554 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2024 NXP
++ */
++
++/dts-v1/;
++
++#include <dt-bindings/pwm/pwm.h>
++#include <dt-bindings/phy/phy-imx8-pcie.h>
++#include <dt-bindings/usb/pd.h>
++#include "imx95.dtsi"
++
++#define FALLING_EDGE			1
++#define RISING_EDGE			2
++
++#define BRD_SM_CTRL_SD3_WAKE		0x8000	/* PCAL6408A-0 */
++#define BRD_SM_CTRL_PCIE1_WAKE		0x8001	/* PCAL6408A-4 */
++#define BRD_SM_CTRL_BT_WAKE		0x8002	/* PCAL6408A-5 */
++#define BRD_SM_CTRL_PCIE2_WAKE		0x8003	/* PCAL6408A-6 */
++#define BRD_SM_CTRL_BUTTON		0x8004	/* PCAL6408A-7 */
++
++&ele_if0 {
++	memory-region = <&ele_reserved>;
++};
++
++/ {
++	model = "NXP i.MX95 19X19 board";
++	compatible = "fsl,imx95-19x19-evk", "fsl,imx95";
++
++	aliases {
++		ethernet0 = &enetc_port0;
++		ethernet1 = &enetc_port1;
++		gpio0 = &gpio1;
++		gpio1 = &gpio2;
++		gpio2 = &gpio3;
++		gpio3 = &gpio4;
++		gpio4 = &gpio5;
++		i2c0 = &lpi2c1;
++		i2c1 = &lpi2c2;
++		i2c2 = &lpi2c3;
++		i2c3 = &lpi2c4;
++		i2c4 = &lpi2c5;
++		i2c5 = &lpi2c6;
++		i2c6 = &lpi2c7;
++		i2c7 = &lpi2c8;
++		mmc0 = &usdhc1;
++		mmc1 = &usdhc2;
++		serial0 = &lpuart1;
++		serial4 = &lpuart5;
++	};
++
++/*	bt_sco_codec: audio-codec-bt-sco {
++		#sound-dai-cells = <1>;
++		compatible = "linux,bt-sco";
++	};*/
++
++	ch:chosen {
++		stdout-path = &lpuart1;
++		#address-cells = <2>;
++		#size-cells = <2>;
++		/* will be updated by U-boot when booting Xen */
++		module@0 {
++			bootargs = "earlycon=xen console=hvc0 loglevel=8 root=/dev/mmcblk1p2 rw rootwait";
++			compatible = "xen,linux-zimage", "xen,multiboot-module";
++			reg = <0x00000000 0x9e000000 0x00000000 0x2000000>;
++		};
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpios>; // use this driver to initial some gpio pads
++
++		key_sleep {
++			label = "SLEEP";
++			linux,code = <KEY_SLEEP>;
++			gpios = <&i2c2_gpio_expander_71 10 GPIO_ACTIVE_LOW>;
++		};
++
++	};
++
++	leds {
++		compatible = "gpio-leds";
++		//pinctrl-names = "default";
++		//pinctrl-0 = <&pinctrl_leds>;
++
++		led-1 {
++			label = "sys_status_1v8";
++			default-state = "on";
++			gpios = <&i2c3_adl1000 16 GPIO_ACTIVE_HIGH>;
++		};
++
++	};
++
++
++	dmic: dmic {
++		compatible = "dmic-codec";
++		#sound-dai-cells = <0>;
++		num-channels = <2>;
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x0 0x80000000 0 0x80000000>;
++	};
++/*
++	fan0: pwm-fan {
++		compatible = "pwm-fan";
++		#cooling-cells = <2>;
++		pwms = <&tpm5 1 4000000 PWM_POLARITY_INVERTED>;
++		cooling-levels = <64 128 192 255>;
++	};
++*/
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		linux_cma: linux,cma {
++			compatible = "shared-dma-pool";
++			alloc-ranges = <0 0x80000000 0 0x7f000000>;
++			size = <0 0x3c000000>;
++			linux,cma-default;
++			reusable;
++		};
++
++		vpu_boot: vpu_boot@a0000000 {
++			reg = <0 0xa0000000 0 0x100000>;
++			no-map;
++		};
++
++		mali_protected: mali_protected {
++			reg = <0 0xa0100000 0 0x1000000>;
++			no-map;
++		};
++
++		vdev0vring0: vdev0vring0@88000000 {
++			reg = <0 0x88000000 0 0x8000>;
++			no-map;
++		};
++
++		vdev0vring1: vdev0vring1@88008000 {
++			reg = <0 0x88008000 0 0x8000>;
++			no-map;
++		};
++
++		vdev1vring0: vdev1vring0@88010000 {
++			reg = <0 0x88010000 0 0x8000>;
++			no-map;
++		};
++
++		vdev1vring1: vdev1vring1@88018000 {
++			reg = <0 0x88018000 0 0x8000>;
++			no-map;
++		};
++
++		rsc_table: rsc-table@88220000 {
++			reg = <0 0x88220000 0 0x1000>;
++			no-map;
++		};
++
++		vdevbuffer: vdevbuffer@88020000 {
++			compatible = "shared-dma-pool";
++			reg = <0 0x88020000 0 0x100000>;
++			no-map;
++		};
++
++		ele_reserved: ele-reserved@a4120000 {
++			compatible = "shared-dma-pool";
++			reg = <0 0xa4120000 0 0x100000>;
++			no-map;
++		};
++
++	};
++
++	reg_vref_1v8: regulator-adc-vref {
++		compatible = "regulator-fixed";
++		regulator-max-microvolt = <1800000>;
++		regulator-min-microvolt = <1800000>;
++		regulator-name = "vref_1v8";
++	};
++
++	reg_3p3v: regulator-3p3v {
++		compatible = "regulator-fixed";
++		regulator-max-microvolt = <3300000>;
++		regulator-min-microvolt = <3300000>;
++		regulator-name = "+V3.3_SW";
++	};
++	
++	reg_tpm_rst: regulator-tmp {
++		compatible = "regulator-fixed";
++		regulator-name = "TPM_RST";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++
++		gpio =  <&i2c2_gpio_expander_71 8 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		regulator-always-on;
++		startup-delay-us = <5000>;
++	};
++
++	reg_pcie0: regulator-pcie {
++		compatible = "regulator-fixed";
++		regulator-name = "PCIE_WLAN_EN";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		gpio = <&i2c2_gpio_expander_71 3 GPIO_ACTIVE_HIGH>; //RC210_EN_3V
++		enable-active-high;
++	};
++
++	reg_1p8v: regulator-1p8v {
++		compatible = "regulator-fixed";
++		regulator-max-microvolt = <1800000>;
++		regulator-min-microvolt = <1800000>;
++		regulator-name = "+V1.8_SW";
++	};
++
++	reg_usdhc2_vmmc: regulator-usdhc2 {
++		compatible = "regulator-fixed";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_reg_usdhc2_vmmc>;
++		regulator-name = "VDD_SD2_3V3";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		gpio = <&gpio3 7 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		off-on-delay-us = <12000>;
++	};
++
++
++	reg_usdhc3_en: regulator-usdhc3-en {
++		compatible = "regulator-fixed";
++		regulator-name = "usdhc3-en";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		gpio = <&i2c3_adl1000 22 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
++
++	reg_usb_vbus: regulator-vbus {
++		compatible = "regulator-fixed";
++		regulator-name = "USB_VBUS";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++	//	gpio = <&i2c7_pcal6524 3 GPIO_ACTIVE_HIGH>;
++	//	enable-active-high;
++	};
++
++	/*sound-bt-sco {
++		compatible = "simple-audio-card";
++		simple-audio-card,name = "bt-sco-audio";
++		simple-audio-card,format = "dsp_a";
++		simple-audio-card,bitclock-inversion;
++		simple-audio-card,frame-master = <&btcpu>;
++		simple-audio-card,bitclock-master = <&btcpu>;
++
++		btcpu: simple-audio-card,cpu {
++			sound-dai = <&sai1>;
++			dai-tdm-slot-num = <2>;
++			dai-tdm-slot-width = <16>;
++		};
++
++		simple-audio-card,codec {
++			sound-dai = <&bt_sco_codec 1>;
++		};
++	};*/
++
++	reg_serdes_en: regulator-mac-en {
++		compatible = "regulator-fixed";
++		regulator-name = "mac-en";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		gpio = <&i2c3_adl1000 6 GPIO_ACTIVE_HIGH>;//ETH_CLK_EN_1V8 
++	};
++
++	cm7: imx95-cm7 {
++		compatible = "fsl,imx95-cm7";
++		mbox-names = "tx", "rx", "rxdb";
++		mboxes = <&mu7 0 1
++			  &mu7 1 1
++			  &mu7 3 1>;
++		memory-region = <&vdevbuffer>, <&vdev0vring0>, <&vdev0vring1>,
++				<&vdev1vring0>, <&vdev1vring1>, <&rsc_table>;
++		/* cpuid and lmmid must align with SM firmware */
++		fsl,cpu-id = <1>;
++		fsl,lmm-id = <1>;
++		fsl,startup-delay-ms = <50>;
++		status = "okay";
++	};
++
++	mali_pma: protected-memory-allocator {
++		 compatible = "arm,protected-memory-allocator";
++		 memory-region = <&mali_protected>;
++	};
++
++	/* SMARC BB CN1701 */
++	sound-tlv320aic3x {
++		compatible = "simple-audio-card";
++		simple-audio-card,name = "tlv320aic3x";
++		model = "tlv320aic3x";
++
++		simple-audio-card,widgets =
++			"Microphone", "Microphone Jack",
++			"Headphone", "Headphone Jack";
++		simple-audio-card,routing =
++			"MIC3L", "Microphone Jack",
++			"MIC3R", "Microphone Jack",
++			"Headphone Jack", "HPLOUT",
++			"Headphone Jack", "HPROUT";
++
++		simple-audio-card,format = "i2s";
++		simple-audio-card,bitclock-master = <&sound_master>;
++		simple-audio-card,frame-master = <&sound_master>;
++
++		simple-audio-card,cpu {
++			sound-dai = <&sai3>;
++		};
++
++		sound_master: simple-audio-card,codec {
++			sound-dai = <&tlv320aic3x07>;
++		};
++	};
++
++};
++
++&adc1 {
++	vref-supply = <&reg_vref_1v8>;
++	status = "okay";
++};
++/*U2001 RTL8211FI-CG_REALTEK*/
++&enetc_port0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_enetc0>,<&pinctrl_ethphy0>;
++	phy-handle = <&ethphy0>;
++	phy-mode = "rgmii-id";
++	status = "okay";
++};
++
++/*U2101 RTL8211FI-CG_REALTEK*/
++&enetc_port1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_enetc1>,<&pinctrl_ethphy1>;
++	phy-handle = <&ethphy1>;
++	phy-mode = "rgmii-id";
++	status = "okay";
++};
++
++&enetc_port2 {
++	phy-handle = <&ethphy2>;
++	phy-mode = "10gbase-r";
++	serdes-supply = <&reg_serdes_en>;
++	managed = "in-band-status";
++	reset-gpio = <&i2c2_gpio_expander_71 2 GPIO_ACTIVE_LOW>; //SERDES_RST#_3V
++	//status = "okay";
++};
++
++&displaymix_irqsteer {
++	status = "okay";
++};
++
++&dpu {
++	status = "okay";
++};
++
++&flexcan1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_flexcan1>;
++	//phys = <&flexcan1_phy>;
++	status = "okay";
++};
++
++&flexcan5 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_flexcan5>;
++	status = "okay";
++};
++
++&flexspi1 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_flexspi1>;
++	pinctrl-1 = <&pinctrl_flexspi1>;
++	status = "okay";
++
++	/*U2200 W25Q64JWXGIQ*/
++	flash0: W25Q64JWXGIQ@0 {
++		reg = <0>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		compatible = "jedec,spi-nor";
++		spi-max-frequency = <133000000>;
++		spi-tx-bus-width = <4>;
++		spi-rx-bus-width = <4>;
++	};
++};
++
++&lpi2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <100000>;
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_lpi2c2>;
++	pinctrl-1 = <&pinctrl_lpi2c2>;
++	status = "okay";
++
++	/*U1000 SX1509BIULTRT_SEMTECH */
++	i2c2_gpio_expander_71: i2c2_gpio_expander_71@71 {
++		/* GPIO Expander  Mapping :
++		 * - 0: ENET1_RST_B_3V			=>			U2001
++		 * - 1: ENET2_RST_B_3V			=>			U2101			
++		 * - 2: SERDES_RST#_3V			=>			SMARC S77 PCIE_C_RST
++		 * - 3: RC210_EN_3V			=>			U1300 ,RC21008B001GND
++		 * - 4: LT9611_RSTN_3V			=>			U1500
++		 * - 5: HDMI_INT_3V				<= 			U1500
++		 * - 6: PCIEA_RST#_3V			=>			SMARC P75	
++		 * - 7: PCIEB_RST#_3V			=>			SMARC S76			
++		 * - 8: TPM_RST_N_1V8			=> 			U2400
++		 * - 9: LID#_1V8				<= R1005	SMARC S148
++		 * - 10: SLEEP#_1V8				<= R1010	SMARC S149
++		 * - 11: CHARGING#_1V8			<= R1007	SMARC S151
++		 * - 12: CHARGER_PRSNT#_1V8		<= R1011	SMARC S152
++		 * - 13: BATLOW#_1V8			<= R1014	SMARC S156
++		 * - 14: TEST#_1V8				<= R1015	SMARC S157
++		 * - 15: DSI0_TE_1V8    		<= R1087	SMARC S144
++		 */
++		#gpio-cells = <2>;
++		#interrupt-cells = <2>;
++		compatible = "semtech,sx1509q";
++		reg = <0x71>;
++
++		semtech,probe-reset;
++		gpio-controller;
++		interrupt-controller;
++		interrupt-parent = <&gpio4>;
++		interrupts = <15 IRQ_TYPE_LEVEL_LOW>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_sx1509q>;
++
++		status = "okay";
++	};
++	/* U2400 TPM - ST33HTPH2X32AHD5_ST */
++	st33tphf2xi2c@2e {
++		#gpio-cells = <2>;
++		#interrupt-cells = <2>;
++		//compatible = "st,st33htpm-i2c";
++		compatible = "infineon,slb9673";
++		reg = <0x2e>;
++
++		label = "tpm";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_i2c2_tpm>;
++		interrupt-parent = <&gpio2>;
++		interrupts = <27 IRQ_TYPE_LEVEL_LOW>;
++
++		tpm-supply = <&reg_tpm_rst>;
++		status = "okay";
++	};
++        eeprom@50 {
++            compatible = "atmel,24c128";
++            reg = <0x50>;
++            pagesize = <64>;
++            //wp-gpios = <&i2c3_adl1000 14 GPIO_ACTIVE_HIGH>;
++            num-addresses = <1>;
++        };
++};
++
++&lpi2c3 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <400000>;
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_lpi2c3>;
++	pinctrl-1 = <&pinctrl_lpi2c3>;
++	status = "okay";
++
++	/*U1001 ADLINK MCU GPIO */
++	i2c3_adl1000: i2c3_adl1000@20 {
++		compatible = "adlink,adl1000";//24 pin
++		pinctrl-names = "default";
++		//interrupt pin A3, A4, B0, B1, B2, B5, B6, B10, B11, B12, B13, B14, B15
++		//INT : PC2 , SCL : PB8 , SDA : PB9
++		/* GPIO Expander  Mapping :
++		 * - 0: PA0 		LCD1_VDD_EN_1V8			=>			SMARC S116 LCD1_VDD_EN
++		 * - 1: PA1 		LCD1_BKLT_EN_1V8		=>			SMARC S107 LCD1_BKLT_EN
++		 * - 2: PA3(int)	CN_GPIO13_1V8			=>			SMARC S123 GPIO13
++		 * - 3: PA4(int) 	CN_GPIO12_1V8			=>			SMARC S142 GPIO12
++		 * - 4: PA5 		Detect_SYS_1V8			<=			R1040 VDD_1V8_S
++		 * - 5: PA2 		FAN_PWM_MCU_1V8	(A2)	=>			NI => CN_GPIO5_PWM_1V8 (SMARC P113)
++		 * - 6: PA7 		ETH_CLK_EN_1V8			=>			U1300 RC21008B001GND#BB0_RENESAS GPIO4
++		 * - 7: PA10 		ONOFF_1V8	    		=> 			U600 (IMX95)
++
++		 * - 8: PA11 		LCD0_VDD_EN_1V8	    	=> 			SMARC S133 LCD0_VDD_EN
++		 * - 9: PA12 		LCD0_BKLT_EN_1V8		=>			SMARC S127 LCD0_BKLT_EN
++		 * - 10: PB0(int) 	CN_GPIO0_CAM0_PWR#_1V8			=>	SMARC P108 CAM0_PWR
++		 * - 11: PB1(int) 	CN_GPIO1_CAM1_PWR#_1V8			=> 	SMARC P109 CAM1_PWR
++		 * - 12: PB2(int) 	CN_GPIO2_CAM0_RST#_1V8			=> 	SMARC P110 CAM0_RST
++		 * - 13: PB5(int) 	CN_GPIO3_CAM1_RST#_1V8			=>  SMARC P111 CAM1_RST
++		 * - 14: PB12 		EEPROM_WP				=>			U1601
++		 * - 15: PB10(int) 	CN_GPIO11_1V8			=>			SMARC P119 GPIO11
++
++		 * - 16: PB11(int) 	SYS_STATUS_1V8 (A2)		=>			Q1700 LED1700
++		 * - 17: PB3 	R1097/R1096			(A2)
++		 * - 18: PB4 	R1099/R1098			(A2)
++		 * - 19: PB14(int) 	CN_GPIO9_1V8    		=>			SMARC P117 GPIO9
++		 * - 20: PB15(int) 	CN_GPIO10_1V8			=>			SMARC P118 GPIO10
++		 * - 21: PC3 		HOST_WAKE_BT_IN#_1V8	=>			U1900 AW-CM276NF pull-up
++		 * - 22: PC4 		WL_PWR_DOWN#_1V8		=>			U1900 AW-CM276NF pull-up
++		 * - 23: PC5 		HOST_WAKE_WL_IN_1V8		=>			U1900 AW-CM276NF pull-down
++		 */
++		pinctrl-0 = <&pinctrl_i2c3_adl1000>;
++		reg = <0x20>;
++		gpio-controller;
++		#gpio-cells = <2>;
++		interrupt-controller;
++		#interrupt-cells = <2>;
++		interrupt-parent = <&gpio5>;
++		interrupts = <13 IRQ_TYPE_EDGE_FALLING>; // MCU_INTB1_1V8 , PC2
++
++	};
++	/*U2401 RTC PCF8563BS/4_NXP */
++	pcf8563: rtc@51 {
++		compatible = "nxp,pcf8563";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_i2c3_rtc>;
++		reg = <0x51>;
++		#clock-cells = <0>;
++		interrupt-parent = <&gpio4>;
++		interrupts = <14 IRQ_TYPE_LEVEL_LOW>;
++		wakeup-source;
++	};
++	rtc_i2c: rtc@32 {
++                compatible = "epson,rx8130";
++                reg = <0x32>;
++                pinctrl-names = "default";
++                pinctrl-0 = <&pinctrl_i2c3_rtc>;
++                #clock-cells = <0>;
++                //interrupt-parent = <&gpio4>;
++                //interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
++                //wakeup-source;
++        };
++
++};
++
++&lpi2c8 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <400000>;
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_lpi2c8>;
++	pinctrl-1 = <&pinctrl_lpi2c8>;
++	status = "okay";
++
++/*U1001 ADLINK MCU UART */
++// removed A2
++/*
++	i2c8_adl1001: i2c8_adl1001@48 {
++		compatible = "adlink,adl1001";
++		pinctrl-names = "default";
++		
++		pinctrl-0 = <&pinctrl_i2c8_adl1001>;
++		reg = <0x48>;
++		interrupt-parent = <&gpio5>;
++		interrupts = <14 IRQ_TYPE_EDGE_FALLING>; //MCU_INTB2_1V8 , PD2
++	};
++*/
++	/* SMARC BB CN1701 */
++    tlv320aic3x07: tlv320aic310x@18 {
++		clock-names = "mclk";
++		clocks = <&scmi_clk IMX95_CLK_SAI3>;
++		compatible = "ti,tlv320aic3x";
++		#sound-dai-cells = <0>;
++		reg = <0x18>;
++		ai3x-micbias-vg = <2>; /* MICBIAS_2_5V */
++		status = "okay";
++        };
++
++	/* SX1509(2) U1001@IPi SMARC Plus */
++	gpio8: i2c2_gpioext0@3e {
++		/* GPIO Expander 2 Mapping :
++		 * - 0: E_GPIO1_0	<=>					IPi SMARC Plus CN101_PIN29: E_GPIO1_0
++		 * - 1: E_GPIO1_1	<=>					IPi SMARC Plus CN101_PIN31: E_GPIO1_1
++		 * - 2: E_GPIO1_2	<=>					IPi SMARC Plus CN101_PIN32: E_GPIO1_2
++		 * - 3: E_GPIO1_3	<=>					IPi SMARC Plus CN101_PIN33: E_GPIO1_3
++		 * - 4: E_GPIO1_4	<=>					IPi SMARC Plus CN101_PIN35: E_GPIO1_4
++		 * - 5: E_GPIO1_5	<=>					IPi SMARC Plus CN101_PIN36: E_GPIO1_5
++		 * - 6: E_GPIO1_6	<=>					IPi SMARC Plus CN101_PIN37: E_GPIO1_6
++		 * - 7: E_GPIO1_7	<=>					IPi SMARC Plus CN101_PIN38: E_GPIO1_7
++		 * - 8: E_GPIO2_8	<=>					IPi SMARC Plus CN101_PIN40: E_GPIO2_8
++		 * - 9: TP1002		<=>					IPi SMARC Plus TP1002 (won't use)
++		 * - 10: TP1003		<=>					IPi SMARC Plus TP1003 (won't use)
++		 * - 11: TP1004		<=>					IPi SMARC Plus TP1004 (won't use)
++		 * - 12: TP1005		<=>					IPi SMARC Plus TP1005 (won't use)
++		 * - 13: TP1006		<=>					IPi SMARC Plus TP1006 (won't use)
++		 * - 14: TP1007		<=>					IPi SMARC Plus TP1007 (won't use)
++		 * - 15: TP1008		<=>					IPi SMARC Plus TP1008 (won't use)
++		 * - 16: OSCIO		<=>					IPi SMARC Plus TP1001 (won't use)
++		 */
++		#gpio-cells = <2>;
++		#interrupt-cells = <2>;
++		compatible = "semtech,sx1509q";
++		reg = <0x3e>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio8_int>;
++
++		semtech,probe-reset;
++		gpio-controller;
++		interrupt-controller;
++
++		interrupt-parent = <&gpio2>;
++		interrupts = <22 IRQ_TYPE_EDGE_FALLING>;
++	};
++};
++
++
++&lpuart1 {
++	/* console */
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart1>;
++	status = "okay";
++};
++
++&lpuart2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart2>;
++	status = "okay";
++};
++
++//M7 console, default disable
++&lpuart3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart3>;
++	//status = "okay";
++};
++
++/*U1900 AW-CM276NF*/
++&lpuart5 {
++	/* BT */
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart5>;
++	status = "okay";
++	uart-has-rtscts;
++
++	bluetooth {
++		compatible = "nxp,88w8997-bt";
++	};
++};
++//SMARC SER0
++&lpuart7 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart7>;
++	status = "okay";
++};
++//SMARC SER2 , share pins with lpspi7 in A2 ,default enable
++&lpuart6 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart6>;
++	status = "okay";
++};
++//SMARC SPI0
++&lpspi6 {
++	fsl,spi-num-chipselects = <2>;
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_lpspi6>;
++	pinctrl-1 = <&pinctrl_lpspi6>;
++	cs-gpios = <&gpio2 0 GPIO_ACTIVE_LOW>,<&gpio2 24 GPIO_ACTIVE_LOW>;
++	status = "okay";
++        spidev@0 {
++                compatible = "rohm,dh2228fv";
++                spi-max-frequency = <5000000>;
++                reg = <0>;
++        };
++        spidev@1 {
++                compatible = "rohm,dh2228fv";
++                spi-max-frequency = <5000000>;
++                reg = <1>;
++	};
++};
++
++&lpspi7 {
++	fsl,spi-num-chipselects = <2>;
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_lpspi7>;
++	pinctrl-1 = <&pinctrl_lpspi7>;
++	cs-gpios = <&gpio2 4 GPIO_ACTIVE_LOW>,<&gpio2 25 GPIO_ACTIVE_LOW>;
++	status = "okay";
++	spidev@0 {
++                compatible = "rohm,dh2228fv";
++                spi-max-frequency = <5000000>;
++                reg = <0>;
++	};
++	spidev@1 {
++                compatible = "rohm,dh2228fv";
++                spi-max-frequency = <5000000>;
++                reg = <1>;
++        };
++};
++
++&sram1 {
++	//setup 32k susclock for wifi
++       clocks = <&scmi_clk IMX95_CLK_CCMCKO3>;
++       assigned-clocks = <&scmi_clk IMX95_CLK_CCMCKO3>;
++       assigned-clock-parents = <&scmi_clk IMX95_CLK_32K>;
++       assigned-clock-rates = <32000>;
++       status = "okay";
++};
++
++&mu7 {
++	status = "okay";
++};
++
++&neoisp0 {
++	status = "okay";
++};
++
++&netcmix_blk_ctrl {
++	status = "okay";
++};
++
++&netc_blk_ctrl {
++	status = "okay";
++};
++
++&netc_emdio {	
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_emdio>;
++	status = "okay";
++
++	/*U2001 RTL8211FI-CG_REALTEK*/
++	ethphy0: ethernet-phy@1 {
++		reg = <1>;
++		
++		reset-gpios = <&i2c2_gpio_expander_71 0 GPIO_ACTIVE_LOW>;
++		reset-assert-us = <10000>;
++		reset-deassert-us = <80000>;
++		interrupt-parent = <&gpio5>;
++		interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
++
++		realtek,clkout-disable;
++		adlink,led = <0x4f20 0x205b>;
++		compatible = "ethernet-phy-id001c.c916";//RTL8211
++	};
++	/*U2101 RTL8211FI-CG_REALTEK*/
++	ethphy1: ethernet-phy@4 {
++		reg = <4>;
++		
++		reset-gpios = <&i2c2_gpio_expander_71 1 GPIO_ACTIVE_LOW>;
++		reset-assert-us = <10000>;
++		reset-deassert-us = <80000>;
++		interrupt-parent = <&gpio5>;
++		interrupts = <17 IRQ_TYPE_EDGE_FALLING>;
++
++		realtek,clkout-disable;
++		adlink,led = <0x4f20 0x205b>;
++		compatible = "ethernet-phy-id001c.c916";//RTL8211
++	};
++//SMARC
++	ethphy2: ethernet-phy@8 {
++		compatible = "ethernet-phy-ieee802.3-c45";
++		reg = <8>;
++	};
++	
++};
++
++
++&netc_timer {
++	status = "okay";
++};
++/* SMARC PCIE_A*/
++&pcie0 {
++	pinctrl-0 = <&pinctrl_pcie0>;
++	pinctrl-names = "default";
++	reset-gpio = <&i2c2_gpio_expander_71 6 GPIO_ACTIVE_LOW>; //PCIEA_RST#_3V
++	vpcie-supply = <&reg_pcie0>;
++	supports-clkreq;
++	status = "okay";
++};
++
++&pcie0_ep {
++	pinctrl-0 = <&pinctrl_pcie0>;
++	pinctrl-names = "default";
++	vpcie-supply = <&reg_pcie0>;
++	status = "disabled";
++};
++/* U1900 AW-CM276NF */
++&pcie1 {
++	pinctrl-0 = <&pinctrl_pcie1>;
++	pinctrl-names = "default";
++	reset-gpio = <&i2c2_gpio_expander_71 7 GPIO_ACTIVE_LOW>; //PCIEB_RST#_3V
++	status = "okay";
++};
++
++&pcie1_ep {
++	pinctrl-0 = <&pinctrl_pcie1>;
++	pinctrl-names = "default";
++	//vpcie-supply = <&reg_slot_pwr>;
++	status = "disabled";
++};
++
++/* U1500 LT9611_LONTIUM 
++&sai1 {
++	#sound-dai-cells = <0>;
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_sai1>;
++	pinctrl-1 = <&pinctrl_sai1_sleep>;
++	assigned-clocks = <&scmi_clk IMX95_CLK_AUDIOPLL1_VCO>,
++			  <&scmi_clk IMX95_CLK_AUDIOPLL2_VCO>,
++			  <&scmi_clk IMX95_CLK_AUDIOPLL1>,
++			  <&scmi_clk IMX95_CLK_AUDIOPLL2>,
++			  <&scmi_clk IMX95_CLK_SAI1>;
++	assigned-clock-parents = <0>, <0>, <0>, <0>,
++				 <&scmi_clk IMX95_CLK_AUDIOPLL1>;
++	assigned-clock-rates = <3932160000>,
++			       <3612672000>, <393216000>,
++			       <361267200>, <12288000>;
++	fsl,sai-mclk-direction-output;
++	status = "okay";
++};*/
++
++&sai1 {
++	#sound-dai-cells = <0>;
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_sai1>;
++	pinctrl-1 = <&pinctrl_sai1_sleep>;
++	/* Do NOT re-rate the shared AUDIOPLL1/2 here; SAI3 already owns them.
++	 * Only parent SAI1's own clock to AUDIOPLL1 and set its MCLK divider. */
++	assigned-clocks = <&scmi_clk IMX95_CLK_SAI1>;
++	assigned-clock-parents = <&scmi_clk IMX95_CLK_AUDIOPLL1>;
++	assigned-clock-rates = <12288000>;
++	fsl,sai-mclk-direction-output;
++	status = "okay";
++};
++&sai3 {
++	#sound-dai-cells = <0>;
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_sai3>;
++	pinctrl-1 = <&pinctrl_sai3_sleep>;
++	assigned-clocks = <&scmi_clk IMX95_CLK_AUDIOPLL1_VCO>,
++			  <&scmi_clk IMX95_CLK_AUDIOPLL2_VCO>,
++			  <&scmi_clk IMX95_CLK_AUDIOPLL1>,
++			  <&scmi_clk IMX95_CLK_AUDIOPLL2>,
++			  <&scmi_clk IMX95_CLK_SAI3>;
++	assigned-clock-parents = <0>, <0>, <0>, <0>,
++				 <&scmi_clk IMX95_CLK_AUDIOPLL1>;
++	assigned-clock-rates = <3932160000>,
++			       <3612672000>, <393216000>,
++			       <361267200>, <12288000>;
++	fsl,sai-mclk-direction-output;
++	status = "okay";
++};
++
++/*
++&tpm5 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_tpm5>;
++	pwm-rst;
++	status = "okay";
++};
++*/
++//4c200000 USB2 controller
++&usb2 {
++	dr_mode = "host";
++	disable-over-current;
++	vbus-supply = <&reg_usb_vbus>;
++	status = "okay";
++};
++//4c010010
++&usb3 {
++	status = "okay";
++};
++//4c100000 USB1 controller
++&usb3_dwc3 {
++	dr_mode = "host";//this causes USB can't work , need to check
++	hnp-disable;
++	srp-disable;
++	adp-disable;
++	usb-role-switch;
++	role-switch-default-mode = "peripheral";
++	snps,dis-u1-entry-quirk;
++	snps,dis-u2-entry-quirk;
++	status = "okay";
++
++};
++//4c1f0040
++&usb3_phy {
++	//	fsl,phy-tx-vref-tune-percent = <0x73>;
++	fsl,phy-pcs-tx-deemph-3p5db-attenuation-db = <17>;
++	fsl,phy-pcs-tx-swing-full-percent = <100>;
++	fsl,phy-tx-preemp-amp-tune-microamp = <600>;
++	fsl,phy-tx-vboost-level-microvolt = <1156>;
++	fsl,phy-tx-vref-tune-percent = <100>;
++	orientation-switch;
++	status = "okay";
++
++};
++//U1200 PTE7AAMI-64GI EMMC
++&usdhc1 {
++	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
++	pinctrl-0 = <&pinctrl_usdhc1>;
++	pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
++	pinctrl-3 = <&pinctrl_usdhc1>;
++	bus-width = <8>;
++	non-removable;
++	no-sdio;
++	no-sd;
++	status = "okay";
++};
++//SMARC SDIO
++&usdhc2 {
++	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
++	pinctrl-0 = <&pinctrl_usdhc2>, <&pinctrl_usdhc2_gpio>;
++	pinctrl-1 = <&pinctrl_usdhc2_100mhz>, <&pinctrl_usdhc2_gpio>;
++	pinctrl-2 = <&pinctrl_usdhc2_200mhz>, <&pinctrl_usdhc2_gpio>;
++	pinctrl-3 = <&pinctrl_usdhc2>, <&pinctrl_usdhc2_gpio>;
++	cd-gpios = <&gpio3 0 GPIO_ACTIVE_LOW>;
++	fsl,cd-gpio-wakeup-disable;
++	vmmc-supply = <&reg_usdhc2_vmmc>;
++	bus-width = <4>;
++	status = "okay";
++};
++
++/*U1900 AW-CM276NF*/
++&usdhc3 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
++	pinctrl-0 = <&pinctrl_usdhc3>,<&pinctrl_usdhc3_susclk>;
++	pinctrl-1 = <&pinctrl_usdhc3>,<&pinctrl_usdhc3_susclk>;
++	pinctrl-2 = <&pinctrl_usdhc3_200mhz>,<&pinctrl_usdhc3_susclk>;
++	pinctrl-3 = <&pinctrl_usdhc3>,<&pinctrl_usdhc3_susclk>;
++	keep-power-in-suspend;
++	wakeup-source;
++
++	vmmc-supply = <&reg_usdhc3_en>;
++	bus-width = <4>;
++	non-removable;
++	status = "okay";
++
++
++	mwifiex: wifi@1 {
++		compatible = "marvell,sd8997";
++		reg = <1>;
++
++		marvell,caldata_00_txpwrlimit_2g_cfg_set = /bits/ 8 <
++			 0x01 0x00 0x06 0x00 0x08 0x02 0x89 0x01>;
++		marvell,wakeup-pin = <14>;
++	};
++};
++
++
++&scmi_misc {
++	nxp,ctrl-ids = <BRD_SM_CTRL_SD3_WAKE	FALLING_EDGE
++			BRD_SM_CTRL_PCIE1_WAKE	FALLING_EDGE
++			BRD_SM_CTRL_BT_WAKE	FALLING_EDGE
++			BRD_SM_CTRL_PCIE2_WAKE	FALLING_EDGE
++			BRD_SM_CTRL_BUTTON	FALLING_EDGE>;
++};
++
++&wdog3 {
++	fsl,ext-reset-output;
++	status = "okay";
++};
++
++&scmi_iomuxc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_hog>;
++
++	pinctrl_emdio: emdiogrp {
++		fsl,pins = <
++			IMX95_PAD_ENET1_MDC__NETCMIX_TOP_NETC_MDC		0x50e
++			IMX95_PAD_ENET1_MDIO__NETCMIX_TOP_NETC_MDIO		0x90e
++		>;
++	};
++/*
++	pinctrl_enetc0: enetc0grp {
++		fsl,pins = <
++			IMX95_PAD_ENET1_TD3__NETCMIX_TOP_ETH0_RGMII_TD3		0x50e
++			IMX95_PAD_ENET1_TD2__NETCMIX_TOP_ETH0_RGMII_TD2		0x50e
++			IMX95_PAD_ENET1_TD1__NETCMIX_TOP_ETH0_RGMII_TD1		0x50e
++			IMX95_PAD_ENET1_TD0__NETCMIX_TOP_ETH0_RGMII_TD0		0x50e
++			IMX95_PAD_ENET1_TX_CTL__NETCMIX_TOP_ETH0_RGMII_TX_CTL	0x57e
++			IMX95_PAD_ENET1_TXC__NETCMIX_TOP_ETH0_RGMII_TX_CLK	0x58e
++			IMX95_PAD_ENET1_RX_CTL__NETCMIX_TOP_ETH0_RGMII_RX_CTL	0x57e
++			IMX95_PAD_ENET1_RXC__NETCMIX_TOP_ETH0_RGMII_RX_CLK	0x58e
++			IMX95_PAD_ENET1_RD0__NETCMIX_TOP_ETH0_RGMII_RD0		0x57e
++			IMX95_PAD_ENET1_RD1__NETCMIX_TOP_ETH0_RGMII_RD1		0x57e
++			IMX95_PAD_ENET1_RD2__NETCMIX_TOP_ETH0_RGMII_RD2		0x57e
++			IMX95_PAD_ENET1_RD3__NETCMIX_TOP_ETH0_RGMII_RD3		0x57e
++		>;
++	};
++
++	pinctrl_enetc1: enetc1grp {
++		fsl,pins = <
++			IMX95_PAD_ENET2_TD3__NETCMIX_TOP_ETH1_RGMII_TD3		0x57e
++			IMX95_PAD_ENET2_TD2__NETCMIX_TOP_ETH1_RGMII_TD2		0x57e
++			IMX95_PAD_ENET2_TD1__NETCMIX_TOP_ETH1_RGMII_TD1		0x57e
++			IMX95_PAD_ENET2_TD0__NETCMIX_TOP_ETH1_RGMII_TD0		0x57e
++			IMX95_PAD_ENET2_TX_CTL__NETCMIX_TOP_ETH1_RGMII_TX_CTL	0x57e
++			IMX95_PAD_ENET2_TXC__NETCMIX_TOP_ETH1_RGMII_TX_CLK	0x5fe
++			IMX95_PAD_ENET2_RX_CTL__NETCMIX_TOP_ETH1_RGMII_RX_CTL	0x57e
++			IMX95_PAD_ENET2_RXC__NETCMIX_TOP_ETH1_RGMII_RX_CLK	0x5fe
++			IMX95_PAD_ENET2_RD0__NETCMIX_TOP_ETH1_RGMII_RD0		0x57e
++			IMX95_PAD_ENET2_RD1__NETCMIX_TOP_ETH1_RGMII_RD1		0x57e
++			IMX95_PAD_ENET2_RD2__NETCMIX_TOP_ETH1_RGMII_RD2		0x57e
++			IMX95_PAD_ENET2_RD3__NETCMIX_TOP_ETH1_RGMII_RD3		0x57e
++		>;
++	};
++*/
++
++	pinctrl_enetc0: enetc0grp {
++		fsl,pins = <
++			IMX95_PAD_ENET1_TD3__NETCMIX_TOP_ETH0_RGMII_TD3		0x57e
++			IMX95_PAD_ENET1_TD2__NETCMIX_TOP_ETH0_RGMII_TD2		0x57e
++			IMX95_PAD_ENET1_TD1__NETCMIX_TOP_ETH0_RGMII_TD1		0x57e
++			IMX95_PAD_ENET1_TD0__NETCMIX_TOP_ETH0_RGMII_TD0		0x57e
++			IMX95_PAD_ENET1_TX_CTL__NETCMIX_TOP_ETH0_RGMII_TX_CTL	0x57e
++			IMX95_PAD_ENET1_TXC__NETCMIX_TOP_ETH0_RGMII_TX_CLK	0x58e
++			IMX95_PAD_ENET1_RX_CTL__NETCMIX_TOP_ETH0_RGMII_RX_CTL	0x57e
++			IMX95_PAD_ENET1_RXC__NETCMIX_TOP_ETH0_RGMII_RX_CLK	0x58e
++			IMX95_PAD_ENET1_RD0__NETCMIX_TOP_ETH0_RGMII_RD0		0x57e
++			IMX95_PAD_ENET1_RD1__NETCMIX_TOP_ETH0_RGMII_RD1		0x57e
++			IMX95_PAD_ENET1_RD2__NETCMIX_TOP_ETH0_RGMII_RD2		0x57e
++			IMX95_PAD_ENET1_RD3__NETCMIX_TOP_ETH0_RGMII_RD3		0x57e
++		>;
++	};
++
++	pinctrl_enetc1: enetc1grp {
++		fsl,pins = <
++			IMX95_PAD_ENET2_TD3__NETCMIX_TOP_ETH1_RGMII_TD3		0x57e
++			IMX95_PAD_ENET2_TD2__NETCMIX_TOP_ETH1_RGMII_TD2		0x57e
++			IMX95_PAD_ENET2_TD1__NETCMIX_TOP_ETH1_RGMII_TD1		0x57e
++			IMX95_PAD_ENET2_TD0__NETCMIX_TOP_ETH1_RGMII_TD0		0x57e
++			IMX95_PAD_ENET2_TX_CTL__NETCMIX_TOP_ETH1_RGMII_TX_CTL	0x57e
++			IMX95_PAD_ENET2_TXC__NETCMIX_TOP_ETH1_RGMII_TX_CLK	0x5fe
++			IMX95_PAD_ENET2_RX_CTL__NETCMIX_TOP_ETH1_RGMII_RX_CTL	0x57e
++			IMX95_PAD_ENET2_RXC__NETCMIX_TOP_ETH1_RGMII_RX_CLK	0x5fe
++			IMX95_PAD_ENET2_RD0__NETCMIX_TOP_ETH1_RGMII_RD0		0x57e
++			IMX95_PAD_ENET2_RD1__NETCMIX_TOP_ETH1_RGMII_RD1		0x57e
++			IMX95_PAD_ENET2_RD2__NETCMIX_TOP_ETH1_RGMII_RD2		0x57e
++			IMX95_PAD_ENET2_RD3__NETCMIX_TOP_ETH1_RGMII_RD3		0x57e
++		>;
++	};
++
++	pinctrl_flexcan1: flexcan1grp {
++		fsl,pins = <
++			IMX95_PAD_PDM_CLK__AONMIX_TOP_CAN1_TX			0x39e
++			IMX95_PAD_PDM_BIT_STREAM0__AONMIX_TOP_CAN1_RX		0x39e
++		>;
++	};
++
++	pinctrl_flexcan5: flexcan5grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO30__CAN5_TX				0x39e
++			IMX95_PAD_GPIO_IO31__CAN5_RX				0x39e
++		>;
++	};
++
++	pinctrl_flexspi1: flexspi1grp {
++		fsl,pins = <
++			IMX95_PAD_XSPI1_SS0_B__FLEXSPI1_A_SS0_B			0x3fe
++			IMX95_PAD_XSPI1_SCLK__FLEXSPI1_A_SCLK			0x3fe
++			IMX95_PAD_XSPI1_DATA0__FLEXSPI1_A_DATA_BIT0		0x3fe
++			IMX95_PAD_XSPI1_DATA1__FLEXSPI1_A_DATA_BIT1		0x3fe
++			IMX95_PAD_XSPI1_DATA2__FLEXSPI1_A_DATA_BIT2		0x3fe
++			IMX95_PAD_XSPI1_DATA3__FLEXSPI1_A_DATA_BIT3		0x3fe
++		>;
++	};
++
++	pinctrl_flexspi1_reset: flexspi1-reset-grp {
++		fsl,pins = <
++			IMX95_PAD_XSPI1_SS1_B__GPIO5_IO_BIT11			0x3fe
++		>;
++	};
++
++	pinctrl_hog: hoggrp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO33__GPIO5_IO_BIT13				0x31e
++		>;
++	};
++
++	pinctrl_i2c2_tpm: i2c2tpmgrp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO27__GPIO2_IO_BIT27			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++		>;
++	};
++
++	pinctrl_i2c3_rtc: i2c3rtcgrp {
++		fsl,pins = <
++			IMX95_PAD_ENET2_MDC__GPIO4_IO_BIT14			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++		>;
++	};
++
++	pinctrl_SMB_INT_B_1V8: SMB_INT_B_1V8grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO18__GPIO2_IO_BIT18			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++		>;
++	};
++
++	pinctrl_ethphy0: ethphy0grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO36__GPIO5_IO_BIT16			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++			//IMX95_PAD_CCM_CLKO3__NETCMIX_TOP_NETC_TMR_1588_TRIG2	0x57e
++		>;
++	};
++
++	pinctrl_lpi2c2: lpi2c2grp {
++		fsl,pins = <
++			IMX95_PAD_I2C2_SCL__AONMIX_TOP_LPI2C2_SCL		0x40000b9e
++			IMX95_PAD_I2C2_SDA__AONMIX_TOP_LPI2C2_SDA		0x40000b9e
++		>;
++	};
++
++	pinctrl_lpi2c3: lpi2c3grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO28__LPI2C3_SDA			0x40000b9e
++			IMX95_PAD_GPIO_IO29__LPI2C3_SCL			0x40000b9e
++		>;
++	};
++
++
++	pinctrl_lpi2c8: lpi2c8grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO12__LPI2C8_SDA			0x40000b9e
++			IMX95_PAD_GPIO_IO13__LPI2C8_SCL 		0x40000b9e
++		>;
++	};
++
++	pinctrl_lpspi6: lpspi6grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO00__GPIO2_IO_BIT0	0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++			IMX95_PAD_GPIO_IO24__GPIO2_IO_BIT24	0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++			IMX95_PAD_GPIO_IO01__LPSPI6_SIN		0x3fe
++			IMX95_PAD_GPIO_IO02__LPSPI6_SOUT	0x3fe
++			IMX95_PAD_GPIO_IO03__LPSPI6_SCK		0x3fe
++		>;
++	};
++	pinctrl_lpspi7: lpspi7grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO25__GPIO2_IO_BIT25	0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++			IMX95_PAD_GPIO_IO04__GPIO2_IO_BIT4	0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++			IMX95_PAD_GPIO_IO05__LPSPI7_SIN		0x3fe
++			IMX95_PAD_GPIO_IO06__LPSPI7_SOUT	0x3fe
++			IMX95_PAD_GPIO_IO07__LPSPI7_SCK		0x3fe
++		>;
++	};
++
++	pinctrl_lpspi7_sleep: lpspi7sleepgrp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO04__GPIO2_IO_BIT4		0x59e
++			IMX95_PAD_GPIO_IO05__GPIO2_IO_BIT5		0x59e
++			IMX95_PAD_GPIO_IO06__GPIO2_IO_BIT6		0x59e
++			IMX95_PAD_GPIO_IO07__GPIO2_IO_BIT7		0x59e
++		>;
++	};
++
++	pinctrl_pcie0: pcie0grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO32__HSIOMIX_TOP_PCIE1_CLKREQ_B		0x4000031e
++		>;
++	};
++
++	pinctrl_pcie1: pcie1grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO35__HSIOMIX_TOP_PCIE2_CLKREQ_B		0x4000031e
++		>;
++	};
++
++
++	pinctrl_pcal6416: pcal6416grp {
++		fsl,pins = <
++			IMX95_PAD_CCM_CLKO3__GPIO4_IO_BIT28			0x31e
++		>;
++	};
++
++	pinctrl_i2c3_adl1000: i2c8adl1000grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO33__GPIO5_IO_BIT13			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++		>;
++	};
++
++	pinctrl_sx1509q: sx1509qgrp {
++		fsl,pins = <
++			IMX95_PAD_ENET2_MDIO__GPIO4_IO_BIT15			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++		>;
++	};
++
++	pinctrl_pdm_sleep: pdmsleepgrp {
++		fsl,pins = <
++			IMX95_PAD_PDM_CLK__AONMIX_TOP_GPIO1_IO_BIT8			0x51e
++			IMX95_PAD_PDM_BIT_STREAM0__AONMIX_TOP_GPIO1_IO_BIT9		0x51e
++		>;
++	};
++
++	pinctrl_sai1: sai1grp {
++		fsl,pins = <
++			IMX95_PAD_SAI1_RXD0__AONMIX_TOP_SAI1_RX_DATA_BIT0    0x31e
++			IMX95_PAD_SAI1_TXC__AONMIX_TOP_SAI1_TX_BCLK      0x31e
++			IMX95_PAD_SAI1_TXFS__AONMIX_TOP_SAI1_TX_SYNC     0x31e
++			IMX95_PAD_SAI1_TXD0__AONMIX_TOP_SAI1_TX_DATA_BIT0    0x31e
++		>;
++	};
++
++	pinctrl_sai1_sleep: sai1sleepgrp {
++		fsl,pins = <
++			IMX95_PAD_SAI1_RXD0__AONMIX_TOP_GPIO1_IO_BIT14			0x51e
++			IMX95_PAD_SAI1_TXC__AONMIX_TOP_GPIO1_IO_BIT12			0x51e
++			IMX95_PAD_SAI1_TXFS__AONMIX_TOP_GPIO1_IO_BIT11			0x51e
++			IMX95_PAD_SAI1_TXD0__AONMIX_TOP_GPIO1_IO_BIT13			0x51e
++		>;
++	};
++
++
++	pinctrl_sai3: sai3grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO17__SAI3_MCLK				0x31e
++			IMX95_PAD_GPIO_IO16__SAI3_TX_BCLK			0x31e
++			IMX95_PAD_GPIO_IO26__SAI3_TX_SYNC			0x31e
++			IMX95_PAD_GPIO_IO20__SAI3_RX_DATA_BIT0			0x31e
++			IMX95_PAD_GPIO_IO21__SAI3_TX_DATA_BIT0			0x31e
++		>;
++	};
++
++	pinctrl_sai3_sleep: sai3sleepgrp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO17__GPIO2_IO_BIT17			0x51e
++			IMX95_PAD_GPIO_IO16__GPIO2_IO_BIT16			0x51e
++			IMX95_PAD_GPIO_IO26__GPIO2_IO_BIT26			0x51e
++			IMX95_PAD_GPIO_IO20__GPIO2_IO_BIT20			0x51e
++			IMX95_PAD_GPIO_IO21__GPIO2_IO_BIT21			0x51e
++		>;
++	};
++	
++	pinctrl_gpio8_int: gpio8grp {
++		fsl,pins = <
++		//SMARC GPIO5 for iPI SMARC plus external gpio's interrupt pin
++			IMX95_PAD_GPIO_IO22__GPIO2_IO_BIT22			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++		>;
++	};
++	pinctrl_tpm6: tpm6grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO19__TPM6_CH2			0x51e
++			IMX95_PAD_GPIO_IO23__TPM6_CH1			0x51e
++		>;
++	};
++
++	pinctrl_uart1: uart1grp {
++		fsl,pins = <
++			IMX95_PAD_UART1_RXD__AONMIX_TOP_LPUART1_RX      0x31e
++			IMX95_PAD_UART1_TXD__AONMIX_TOP_LPUART1_TX      0x31e
++		>;
++	};
++
++	pinctrl_uart2: uart2grp {
++		fsl,pins = <
++			IMX95_PAD_UART2_RXD__AONMIX_TOP_LPUART2_RX      0x31e
++			IMX95_PAD_UART2_TXD__AONMIX_TOP_LPUART2_TX      0x31e
++		>;
++	};
++
++	pinctrl_uart3: uart3grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO15__LPUART3_RX      0x31e
++			IMX95_PAD_GPIO_IO14__LPUART3_TX      0x31e
++		>;
++	};
++
++
++	pinctrl_uart5: uart5grp {
++		fsl,pins = <
++			IMX95_PAD_DAP_TDO_TRACESWO__LPUART5_TX		0x31e
++			IMX95_PAD_DAP_TDI__LPUART5_RX			0x31e
++			IMX95_PAD_DAP_TMS_SWDIO__LPUART5_RTS_B		0x31e
++			IMX95_PAD_DAP_TCLK_SWCLK__LPUART5_CTS_B		0x31e
++		>;
++	};
++
++	pinctrl_uart6: uart6grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO04__LPUART6_TX			0x31e
++			IMX95_PAD_GPIO_IO05__LPUART6_RX				0x31e
++			IMX95_PAD_GPIO_IO07__LPUART6_RTS_B			0x31e
++			IMX95_PAD_GPIO_IO06__LPUART6_CTS_B			0x31e
++		>;
++	};
++
++	pinctrl_uart7: uart7grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO08__LPUART7_TX			0x31e
++			IMX95_PAD_GPIO_IO09__LPUART7_RX				0x31e
++			IMX95_PAD_GPIO_IO11__LPUART7_RTS_B			0x31e
++			IMX95_PAD_GPIO_IO10__LPUART7_CTS_B			0x31e
++		>;
++	};
++
++
++	pinctrl_ethphy1: ethphy1grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO37__GPIO5_IO_BIT17			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++		>;
++	};
++	pinctrl_i2c8_adl1001: i2c8adl1001grp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO34__GPIO5_IO_BIT14			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++		>;
++	};
++
++	pinctrl_usdhc1: usdhc1grp {
++		fsl,pins = <
++			IMX95_PAD_SD1_CLK__USDHC1_CLK			0x158e
++			IMX95_PAD_SD1_CMD__USDHC1_CMD			0x138e
++			IMX95_PAD_SD1_DATA0__USDHC1_DATA0		0x138e
++			IMX95_PAD_SD1_DATA1__USDHC1_DATA1		0x138e
++			IMX95_PAD_SD1_DATA2__USDHC1_DATA2		0x138e
++			IMX95_PAD_SD1_DATA3__USDHC1_DATA3		0x138e
++			IMX95_PAD_SD1_DATA4__USDHC1_DATA4		0x138e
++			IMX95_PAD_SD1_DATA5__USDHC1_DATA5		0x138e
++			IMX95_PAD_SD1_DATA6__USDHC1_DATA6		0x138e
++			IMX95_PAD_SD1_DATA7__USDHC1_DATA7		0x138e
++			IMX95_PAD_SD1_STROBE__USDHC1_STROBE		0x158e
++		>;
++	};
++	pinctrl_usdhc3: usdhc3grp {
++		fsl,pins = <
++			IMX95_PAD_SD3_CLK__USDHC3_CLK				0x158e
++			IMX95_PAD_SD3_CMD__USDHC3_CMD				0x138e
++			IMX95_PAD_SD3_DATA0__USDHC3_DATA0			0x138e
++			IMX95_PAD_SD3_DATA1__USDHC3_DATA1			0x138e
++			IMX95_PAD_SD3_DATA2__USDHC3_DATA2			0x138e
++			IMX95_PAD_SD3_DATA3__USDHC3_DATA3			0x138e
++		>;
++	};
++
++	pinctrl_usdhc3_200mhz: usdhc3-200mhzgrp {
++		fsl,pins = <
++			IMX95_PAD_SD3_CLK__USDHC3_CLK				0x15fe
++			IMX95_PAD_SD3_CMD__USDHC3_CMD				0x13fe
++			IMX95_PAD_SD3_DATA0__USDHC3_DATA0			0x13fe
++			IMX95_PAD_SD3_DATA1__USDHC3_DATA1			0x13fe
++			IMX95_PAD_SD3_DATA2__USDHC3_DATA2			0x13fe
++			IMX95_PAD_SD3_DATA3__USDHC3_DATA3			0x13fe
++		>;
++	};
++	//setup up susclk at sram1
++	pinctrl_usdhc3_susclk: usdhc3grp-susclk {
++		fsl,pins = <
++			IMX95_PAD_CCM_CLKO3__CCMSRCGPCMIX_TOP_CLKO_3	0x31e
++		>;
++	};
++	pinctrl_usdhc1_100mhz: usdhc1-100mhzgrp {
++		fsl,pins = <
++			IMX95_PAD_SD1_CLK__USDHC1_CLK			0x158e
++			IMX95_PAD_SD1_CMD__USDHC1_CMD			0x138e
++			IMX95_PAD_SD1_DATA0__USDHC1_DATA0		0x138e
++			IMX95_PAD_SD1_DATA1__USDHC1_DATA1		0x138e
++			IMX95_PAD_SD1_DATA2__USDHC1_DATA2		0x138e
++			IMX95_PAD_SD1_DATA3__USDHC1_DATA3		0x138e
++			IMX95_PAD_SD1_DATA4__USDHC1_DATA4		0x138e
++			IMX95_PAD_SD1_DATA5__USDHC1_DATA5		0x138e
++			IMX95_PAD_SD1_DATA6__USDHC1_DATA6		0x138e
++			IMX95_PAD_SD1_DATA7__USDHC1_DATA7		0x138e
++			IMX95_PAD_SD1_STROBE__USDHC1_STROBE		0x158e
++		>;
++	};
++
++	pinctrl_usdhc1_200mhz: usdhc1-200mhzgrp {
++		fsl,pins = <
++			IMX95_PAD_SD1_CLK__USDHC1_CLK			0x15fe
++			IMX95_PAD_SD1_CMD__USDHC1_CMD			0x13fe
++			IMX95_PAD_SD1_DATA0__USDHC1_DATA0		0x13fe
++			IMX95_PAD_SD1_DATA1__USDHC1_DATA1		0x13fe
++			IMX95_PAD_SD1_DATA2__USDHC1_DATA2		0x13fe
++			IMX95_PAD_SD1_DATA3__USDHC1_DATA3		0x13fe
++			IMX95_PAD_SD1_DATA4__USDHC1_DATA4		0x13fe
++			IMX95_PAD_SD1_DATA5__USDHC1_DATA5		0x13fe
++			IMX95_PAD_SD1_DATA6__USDHC1_DATA6		0x13fe
++			IMX95_PAD_SD1_DATA7__USDHC1_DATA7		0x13fe
++			IMX95_PAD_SD1_STROBE__USDHC1_STROBE		0x15fe
++		>;
++	};
++
++	pinctrl_reg_usdhc2_vmmc: regusdhc2vmmcgrp {
++		fsl,pins = <
++				IMX95_PAD_SD2_RESET_B__GPIO3_IO_BIT7			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++		>;
++	};
++
++	pinctrl_leds: ledsgrp {
++		fsl,pins = <
++//			IMX95_PAD_XSPI1_DATA7__GPIO5_IO_BIT7			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++		>;
++	};
++
++	pinctrl_gpios: gpiosgrp {
++		fsl,pins = <
++			//SMARC GPIO4
++			IMX95_PAD_GPIO_IO34__GPIO5_IO_BIT14			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++			//SMARC GPIO6
++			IMX95_PAD_XSPI1_DATA7__GPIO5_IO_BIT7			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++			//SMARC GPIO8
++			IMX95_PAD_GPIO_IO15__GPIO2_IO_BIT15			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++			//SMARC GPIO7
++			IMX95_PAD_GPIO_IO14__GPIO2_IO_BIT14			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++			//SMARC GPIO9
++			IMX95_PAD_CCM_CLKO2__GPIO3_IO_BIT27			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++			//IMX95_PAD_CCM_CLKO2__NETCMIX_TOP_NETC_TMR_1588_PP1	0x57e
++			//SMARC GPIO10
++			IMX95_PAD_CCM_CLKO4__GPIO4_IO_BIT29			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++			//IMX95_PAD_CCM_CLKO4__NETCMIX_TOP_NETC_TMR_1588_PP2	0x57e
++		>;
++	};
++
++	pinctrl_typec: typecgrp {
++		fsl,pins = <
++			IMX95_PAD_GPIO_IO34__GPIO5_IO_BIT14			0x31e
++		>;
++	};
++
++
++	pinctrl_usdhc2_gpio: usdhc2gpiogrp {
++		fsl,pins = <
++			IMX95_PAD_SD2_CD_B__GPIO3_IO_BIT0			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++			IMX95_PAD_XSPI1_DQS__GPIO5_IO_BIT8			0x1fe	//not pull down,not pull up ,Fast slew rate, drive X6
++		>;
++	};
++
++	pinctrl_usdhc2: usdhc2grp {
++		fsl,pins = <
++			IMX95_PAD_SD2_CLK__USDHC2_CLK			0x158e
++			IMX95_PAD_SD2_CMD__USDHC2_CMD			0x138e
++			IMX95_PAD_SD2_DATA0__USDHC2_DATA0		0x138e
++			IMX95_PAD_SD2_DATA1__USDHC2_DATA1		0x138e
++			IMX95_PAD_SD2_DATA2__USDHC2_DATA2		0x138e
++			IMX95_PAD_SD2_DATA3__USDHC2_DATA3		0x138e
++			IMX95_PAD_SD2_VSELECT__USDHC2_VSELECT		0x51e
++		>;
++	};
++
++	pinctrl_usdhc2_100mhz: usdhc2-100mhzgrp {
++		fsl,pins = <
++			IMX95_PAD_SD2_CLK__USDHC2_CLK			0x158e
++			IMX95_PAD_SD2_CMD__USDHC2_CMD			0x138e
++			IMX95_PAD_SD2_DATA0__USDHC2_DATA0		0x138e
++			IMX95_PAD_SD2_DATA1__USDHC2_DATA1		0x138e
++			IMX95_PAD_SD2_DATA2__USDHC2_DATA2		0x138e
++			IMX95_PAD_SD2_DATA3__USDHC2_DATA3		0x138e
++			IMX95_PAD_SD2_VSELECT__USDHC2_VSELECT		0x51e
++		>;
++	};
++
++	pinctrl_usdhc2_200mhz: usdhc2-200mhzgrp {
++		fsl,pins = <
++			IMX95_PAD_SD2_CLK__USDHC2_CLK			0x158e
++			IMX95_PAD_SD2_CMD__USDHC2_CMD			0x138e
++			IMX95_PAD_SD2_DATA0__USDHC2_DATA0		0x138e
++			IMX95_PAD_SD2_DATA1__USDHC2_DATA1		0x138e
++			IMX95_PAD_SD2_DATA2__USDHC2_DATA2		0x138e
++			IMX95_PAD_SD2_DATA3__USDHC2_DATA3		0x138e
++			IMX95_PAD_SD2_VSELECT__USDHC2_VSELECT		0x51e
++		>;
++	};
++};
++
++&thermal_zones {
++
++	pf09-thermal {
++		polling-delay = <2000>;
++		polling-delay-passive = <250>;
++		thermal-sensors = <&scmi_sensor 2>;
++
++		trips {
++			pf09_alert: trip0 {
++				hysteresis = <2000>;
++				temperature = <140000>;
++				type = "passive";
++			};
++
++			pf09_crit: trip1 {
++				hysteresis = <2000>;
++				temperature = <155000>;
++				type = "critical";
++			};
++		};
++	};
++
++	pf53arm-thermal {
++		polling-delay = <2000>;
++		polling-delay-passive = <250>;
++		thermal-sensors = <&scmi_sensor 4>;
++
++		cooling-maps {
++			map0 {
++				trip = <&pf5301_alert>;
++				cooling-device =
++					<&A55_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++					<&A55_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++					<&A55_2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++					<&A55_3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++					<&A55_4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++					<&A55_5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
++			};
++		};
++
++		trips {
++			pf5301_alert: trip0 {
++				hysteresis = <2000>;
++				temperature = <140000>;
++				type = "passive";
++			};
++
++			pf5301_crit: trip1 {
++				hysteresis = <2000>;
++				temperature = <155000>;
++				type = "critical";
++			};
++		};
++	};
++
++	pf53soc-thermal {
++		polling-delay = <2000>;
++		polling-delay-passive = <250>;
++		thermal-sensors = <&scmi_sensor 3>;
++
++		trips {
++			pf5302_alert: trip0 {
++				hysteresis = <2000>;
++				temperature = <140000>;
++				type = "passive";
++			};
++
++			pf5302_crit: trip1 {
++				hysteresis = <2000>;
++				temperature = <155000>;
++				type = "critical";
++			};
++		};
++	};
++};
++
++&mali {
++	protected-memory-allocator = <&mali_pma>;
++};
++
++&tpm6 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_tpm6>;
++	pwm-rst;
++	status = "okay";
++};
++
++&vpuctrl {
++	boot = <&vpu_boot>;
++	sram = <&sram1>;
++};
++
++#include "imx95-android.dtsi"
+diff --git a/arch/arm64/boot/dts/freescale/lt9611-basic.dts b/arch/arm64/boot/dts/freescale/lt9611-basic.dts
+new file mode 100644
+index 000000000000..27f43b6009bf
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/lt9611-basic.dts
+@@ -0,0 +1,125 @@
++&{/} {
++	hdmi-connector {
++		compatible = "hdmi-connector";
++		label = "hdmi";
++		type = "a";
++
++		port {
++			hdmi_connector_in: endpoint {
++				remote-endpoint = <&lt9611_out>;
++			};
++		};
++	};
++
++	sound-hdmi {
++		compatible = "simple-audio-card";
++		simple-audio-card,name = "sound-hdmi";
++		simple-audio-card,format = "i2s";
++		simple-audio-card,frame-master = <&hdmicpu>;
++		simple-audio-card,bitclock-master = <&hdmicpu>;
++		simple-audio-card,mclk-fs = <256>;
++		model = "sound-hdmi";
++
++		hdmicpu:simple-audio-card,cpu {
++			sound-dai = <&sai1>;
++			system-clock-direction-out;
++		};
++
++		simple-audio-card,codec {
++			sound-dai = <&lt9611_codec 0>;
++		};
++	};
++	/*
++	reg_mux_sel: regulator-mux-sel {
++		compatible = "regulator-fixed";
++		regulator-name = "mux-sel-hdmi";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		//need to check with MCU for the gpio define of PA9 
++		gpio = <&i2c3_adl1000 16 GPIO_ACTIVE_LOW>;//CN_GPIO6_1V8
++		enable-active-low;
++		regulator-always-on;
++	};
++	*/
++
++};
++
++&display_pixel_link {
++	status = "okay";
++};
++
++&dpu {
++	assigned-clocks = <&scmi_clk IMX95_CLK_DISP1PIX>,
++			  <&scmi_clk IMX95_CLK_VIDEOPLL1_VCO>,
++			  <&scmi_clk IMX95_CLK_VIDEOPLL1>;
++	assigned-clock-parents = <&scmi_clk IMX95_CLK_VIDEOPLL1>;
++	assigned-clock-rates = <0>, <4008000000>, <445333334>;
++	status = "okay";
++};
++
++&lpi2c3 {
++	clock-frequency = <400000>;
++	status = "okay";
++
++
++	/* U1500 LT9611_LONTIUM */
++	lt9611_codec: hdmi-bridge@3b {
++		#sound-dai-cells = <1>;
++		compatible = "adlink,lt9611";
++		reg = <0x3b>;
++		interrupts-extended = <&i2c2_gpio_expander_71 5 IRQ_TYPE_EDGE_FALLING>;
++		reset-gpios = <&i2c2_gpio_expander_71 4 GPIO_ACTIVE_LOW>;
++
++		clocks = <&scmi_clk IMX95_CLK_DISP1PIX>, <&scmi_clk IMX95_CLK_VIDEOPLL1_VCO>, <&scmi_clk IMX95_CLK_VIDEOPLL1>;
++		clock-names = "pix","vco","videopll1";
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++
++				lt9611_to_dsi: endpoint {
++					remote-endpoint = <&dsi_to_lt9611>;
++				};
++			};
++
++			port@2 {
++				reg = <2>;
++
++				lt9611_out: endpoint {
++					remote-endpoint = <&hdmi_connector_in>;
++				};
++			};
++		};
++	};
++};
++
++&mipi_dsi {
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@1 {
++			reg = <1>;
++
++			dsi_to_lt9611: endpoint {
++				remote-endpoint = <&lt9611_to_dsi>;
++			};
++		};
++	};
++};
++
++&pixel_interleaver {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	channel@1 {
++		reg = <1>;
++		status = "okay";
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/lt96114k-basic.dts b/arch/arm64/boot/dts/freescale/lt96114k-basic.dts
+new file mode 100644
+index 000000000000..85b4d4dde81a
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/lt96114k-basic.dts
+@@ -0,0 +1,112 @@
++
++&{/} {
++	hdmi-connector {
++		compatible = "hdmi-connector";
++		label = "hdmi";
++		type = "a";
++
++		port {
++			hdmi_connector_in: endpoint {
++				remote-endpoint = <&lt9611_out>;
++			};
++		};
++	};
++
++	sound-hdmi {
++		compatible = "simple-audio-card";
++		simple-audio-card,name = "sound-hdmi";
++		simple-audio-card,format = "i2s";
++		simple-audio-card,frame-master = <&hdmicpu>;
++		simple-audio-card,bitclock-master = <&hdmicpu>;
++
++		hdmicpu:simple-audio-card,cpu {
++			sound-dai = <&sai1>;
++			system-clock-direction-out;
++		};
++
++		simple-audio-card,codec {
++			sound-dai = <&lt9611_codec 0>;
++		};
++	};
++
++};
++
++&display_pixel_link {
++	status = "okay";
++};
++
++&dpu {
++	assigned-clocks = <&scmi_clk IMX95_CLK_DISP1PIX>,
++			  <&scmi_clk IMX95_CLK_VIDEOPLL1_VCO>,
++			  <&scmi_clk IMX95_CLK_VIDEOPLL1>;
++	assigned-clock-parents = <&scmi_clk IMX95_CLK_VIDEOPLL1>;
++	assigned-clock-rates = <0>, <2673000000>, <297000000>;
++	status = "okay";
++};
++
++&lpi2c3 {
++	clock-frequency = <400000>;
++	status = "okay";
++
++
++	/* U1500 LT9611_LONTIUM */
++	lt9611_codec: hdmi-bridge@3b {
++		#sound-dai-cells = <1>;
++		compatible = "adlink,lt9611";
++		reg = <0x3b>;
++		interrupts-extended = <&i2c2_gpio_expander_71 5 IRQ_TYPE_EDGE_FALLING>;
++		reset-gpios = <&i2c2_gpio_expander_71 4 GPIO_ACTIVE_LOW>;
++
++		clocks = <&scmi_clk IMX95_CLK_DISP1PIX>, <&scmi_clk IMX95_CLK_VIDEOPLL1_VCO>, <&scmi_clk IMX95_CLK_VIDEOPLL1>;
++		clock-names = "pix","vco","videopll1";
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++
++				lt9611_to_dsi: endpoint {
++					remote-endpoint = <&dsi_to_lt9611>;
++				};
++			};
++
++			port@2 {
++				reg = <2>;
++
++				lt9611_out: endpoint {
++					remote-endpoint = <&hdmi_connector_in>;
++				};
++			};
++		};
++	};
++};
++
++&mipi_dsi {
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@1 {
++			reg = <1>;
++
++			dsi_to_lt9611: endpoint {
++				remote-endpoint = <&lt9611_to_dsi>;
++			};
++		};
++	};
++};
++
++&pixel_interleaver {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	channel@1 {
++		reg = <1>;
++		status = "okay";
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/ov13855-basic.dts b/arch/arm64/boot/dts/freescale/ov13855-basic.dts
+new file mode 100644
+index 000000000000..c3dff4bdc7c9
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/ov13855-basic.dts
+@@ -0,0 +1,147 @@
++
++&scmi_iomuxc {
++	pinctrl_csi_mclk: csi_mclk {
++		fsl,pins = <
++			IMX95_PAD_CCM_CLKO1__CCMSRCGPCMIX_TOP_CLKO_1	0x39e
++		>;
++	};
++};
++
++&lpi2c3 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	/*
++	ov5640_0: ov5640_mipi@3c {
++		compatible = "ovti,ov5640";
++		reg = <0x3c>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_csi_mclk>;
++		clocks = <&scmi_clk IMX95_CLK_CCMCKO1>;
++		clock-names = "xclk";
++		assigned-clocks = <&scmi_clk IMX95_CLK_CCMCKO1>;
++		assigned-clock-parents = <&osc_24m>;
++		assigned-clock-rates = <24000000>;
++		powerdown-gpios = <&i2c3_adl1000 10 GPIO_ACTIVE_HIGH>; 	//CN_GPIO0_CAM0_PWR#_1V8
++		reset-gpios = <&i2c3_adl1000 12 GPIO_ACTIVE_LOW>;	//CN_GPIO2_CAM0_RST#_1V8
++		status = "okay";
++
++		port {
++			ov13855_mipi_0_ep: endpoint {
++				remote-endpoint = <&mipi_csi0_ep>;
++				data-lanes = <1 2>;
++				clock-lanes = <0>;
++			};
++		};
++	};
++	*/
++	
++	ov13855_mipi: ov13855_mipi@36 {
++		compatible = "ov13855_mipi";
++		reg = <0x36>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_csi_mclk>;
++		mclk = <24000000>;
++		mclk_source = <0>;
++		clocks = <&scmi_clk IMX95_CLK_CCMCKO1>;
++		clock-names = "csi_mclk";
++		assigned-clocks = <&scmi_clk IMX95_CLK_CCMCKO1>;
++		assigned-clock-parents = <&osc_24m>;
++		assigned-clock-rates = <24000000>;
++
++		//pwn-gpios = <&i2c2_gpio_expander_71 0 GPIO_ACTIVE_HIGH>; 	//CN_GPIO1_CAM1_PWR#_1V8
++		//rst-gpios = <&i2c2_gpio_expander_71 1 GPIO_ACTIVE_LOW>;	//CN_GPIO3_CAM1_RST#_1V8
++		pwn-gpios = <&i2c3_adl1000 11 GPIO_ACTIVE_HIGH>; 	//CN_GPIO1_CAM1_PWR#_1V8
++		rst-gpios = <&i2c3_adl1000 13 GPIO_ACTIVE_LOW>;	//CN_GPIO3_CAM1_RST#_1V8
++		//pwn-gpios = <&i2c3_adl1000 11 GPIO_ACTIVE_HIGH>; 	//CN_GPIO1_CAM1_PWR#_1V8
++		//rst-gpios = <&i2c3_adl1000 13 GPIO_ACTIVE_LOW>;	//CN_GPIO3_CAM1_RST#_1V8
++		virtual_channel = <0>;
++		mipi_csi;
++
++		port@0 {
++			ov13855_mipi_0_ep: endpoint {
++				remote-endpoint = <&mipi_csi0_ep>;
++				data-lanes = <1 2 3 4>;
++				clock-lanes = <0>;
++			};
++		};
++	};
++	
++
++};
++
++&dphy_rx {
++	status = "okay";
++};
++
++&mipi_csi0 {
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			reg = <0>;
++			mipi_csi0_ep: endpoint {
++				remote-endpoint = <&ov13855_mipi_0_ep>;
++				data-lanes = <1 2 3 4>;
++				clock-lanes = <0>;
++			};
++		};
++
++		port@1 {
++			reg = <1>;
++				mipi_csi0_out: endpoint {
++				remote-endpoint = <&formatter_0_in>;
++				//remote-endpoint = <&isi_in_2>;
++			};
++		};
++	};
++};
++
++&csi_pixel_formatter_0 {
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			reg = <0>;
++
++			formatter_0_in: endpoint {
++				remote-endpoint = <&mipi_csi0_out>;
++			};
++		};
++
++		port@1 {
++			reg = <1>;
++
++			formatter_0_out: endpoint {
++				remote-endpoint = <&isi_in_2>;
++			};
++		};
++	};
++};
++
++&isi {
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@2 {
++			reg = <2>;
++
++			isi_in_2: endpoint {
++				remote-endpoint = <&formatter_0_out>;
++				//remote-endpoint = <&mipi_csi0_out>;
++			};
++		};
++	};
++};
++
++
+diff --git a/arch/arm64/boot/dts/freescale/ov5640-basic.dts b/arch/arm64/boot/dts/freescale/ov5640-basic.dts
+new file mode 100644
+index 000000000000..49ae3d110087
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/ov5640-basic.dts
+@@ -0,0 +1,127 @@
++
++&scmi_iomuxc {
++	pinctrl_csi_mclk: csi_mclk {
++		fsl,pins = <
++			IMX95_PAD_CCM_CLKO1__CCMSRCGPCMIX_TOP_CLKO_1	0x39e
++		>;
++	};
++};
++
++
++&lpi2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++
++	ov5640_0: ov5640_mipi@3c {
++		compatible = "ovti,ov5640";
++		reg = <0x3c>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_csi_mclk>;
++		clocks = <&scmi_clk IMX95_CLK_CCMCKO1>;
++		clock-names = "xclk";
++		assigned-clocks = <&scmi_clk IMX95_CLK_CCMCKO1>;
++		assigned-clock-parents = <&osc_24m>;
++		assigned-clock-rates = <24000000>;
++		powerdown-gpios = <&i2c3_adl1000 10 GPIO_ACTIVE_HIGH>; 	//CN_GPIO0_CAM0_PWR#_1V8
++		reset-gpios = <&i2c3_adl1000 12 GPIO_ACTIVE_LOW>;	//CN_GPIO2_CAM0_RST#_1V8
++		status = "okay";
++
++		port {
++			ov5640_mipi_1_ep: endpoint {
++				remote-endpoint = <&mipi_csi1_ep>;
++				data-lanes = <1 2>;
++				clock-lanes = <0>;
++			};
++		};
++	};
++};
++
++&display_stream_csr {
++	status = "disabled";
++};
++
++&display_master_csr {
++	status = "disabled";
++};
++
++&mipi_tx_phy_csr {
++	status = "disabled";
++};
++
++&mipi_dsi_intf {
++	status = "okay";
++};
++
++&combo_rx {
++	status = "okay";
++};
++
++&mipi_csi1 {
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			reg = <0>;
++			mipi_csi1_ep: endpoint {
++				remote-endpoint = <&ov5640_mipi_1_ep>;
++				data-lanes = <1 2>;
++				clock-lanes = <0>;
++			};
++		};
++
++		port@1 {
++			reg = <1>;
++				mipi_csi1_out: endpoint {
++				remote-endpoint = <&formatter_1_in>;
++			};
++		};
++	};
++};
++
++
++&csi_pixel_formatter_1 {
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			reg = <0>;
++
++			formatter_1_in: endpoint {
++				remote-endpoint = <&mipi_csi1_out>;
++			};
++		};
++
++		port@1 {
++			reg = <1>;
++
++			formatter_1_out: endpoint {
++				remote-endpoint = <&isi_in_3>;
++			};
++		};
++	};
++};
++
++&isi {
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@3 {
++			reg = <3>;
++
++			isi_in_3: endpoint {
++				remote-endpoint = <&formatter_1_out>;
++			};
++		};
++	};
++};
+diff --git a/arch/arm64/configs/lec_imx95_gki.fragment b/arch/arm64/configs/lec_imx95_gki.fragment
+new file mode 100644
+index 000000000000..d1e8b96ff090
+--- /dev/null
++++ b/arch/arm64/configs/lec_imx95_gki.fragment
+@@ -0,0 +1,258 @@
++# CONFIG_IMX8M_BLK_CTRL is not set
++# CONFIG_MXC_HANTRO_V4L2 is not set
++# CONFIG_VIDEO_AMPHION_VPU is not set
++# CONFIG_DEBUG_INFO_BTF_MODULES is not set
++CONFIG_IMX_GKI_FIX=y
++CONFIG_AQUANTIA_PHY=m
++CONFIG_ARCH_MXC=y
++CONFIG_ARCH_NXP=y
++CONFIG_ARM_IMX_CPUFREQ_DT=m
++CONFIG_ARM_SCMI_POWER_CONTROL=m
++CONFIG_ARM_SMMU_V3=m
++CONFIG_ARM_SCMI_POWER_DOMAIN=m
++CONFIG_BACKLIGHT_LED=m
++CONFIG_BACKLIGHT_PWM=m
++# CONFIG_BATTERY_DUMMY=m
++CONFIG_GPIO_ADL1000=y
++CONFIG_CAN_FLEXCAN=m
++CONFIG_CLK_IMX95_BLK_CTL=m
++CONFIG_COMMON_CLK_SCMI=m
++CONFIG_CPUFREQ_DT=m
++CONFIG_DMABUF_HEAPS_CMA=m
++CONFIG_DMABUF_HEAPS_DSP=m
++CONFIG_DMABUF_HEAPS_SYSTEM=m
++CONFIG_DMABUF_IMX=m
++CONFIG_DRM_DISPLAY_CONNECTOR=m
++CONFIG_DRM_FSL_IMX_LVDS_BRIDGE=m
++CONFIG_DRM_I2C_ADV7511=m
++# CONFIG_DRM_I2C_ADV7511_CEC is not set
++CONFIG_DRM_IMX95_DPU=m
++CONFIG_DRM_IMX95_LDB=m
++CONFIG_DRM_IMX95_MIPI_DSI=m
++CONFIG_DRM_IMX95_PIXEL_INTERLEAVER=m
++CONFIG_DRM_IMX95_PIXEL_LINK=m
++CONFIG_DRM_IMX_LCDIF=m
++CONFIG_DRM_IMX_RPMSG=m
++CONFIG_DRM_ITE_IT6161=m
++CONFIG_DRM_ITE_IT6263=m
++CONFIG_DRM_ITE_IT6263_NXP=m
++CONFIG_DRM_LONTIUM_LT8912B=m
++CONFIG_DRM_ADLINK_LT9611=m
++CONFIG_RTC_HCTOSYS=y
++CONFIG_RTC_HCTOSYS_DEVICE="rtc1"
++CONFIG_RTC_DRV_PCF8563=y
++CONFIG_RTC_DRV_DS1307=y
++CONFIG_PINCTRL_SX150X=y
++# CONFIG_DRM_LONTIUM_LT9611UXC is not set
++CONFIG_DRM_TI_SN65DSI83=m
++CONFIG_DRM_MAX96752_LVDS=m
++CONFIG_DRM_MAX96789_DSI=m
++CONFIG_DRM_NWL_MIPI_DSI=m
++CONFIG_DRM_PANEL_RAYDIUM_RM67191=m
++CONFIG_DRM_PANEL_RAYDIUM_RM692C9=m
++CONFIG_DRM_PANEL_ROCKTECK_HIMAX8394F=m
++CONFIG_DRM_PANEL_SIMPLE=m
++CONFIG_DRM_PANEL_LVDS=m
++CONFIG_DRM_WAVESHARE_BRIDGE=m
++CONFIG_ETHERNET=y
++CONFIG_FSL_EDMA=m
++CONFIG_NXP_ENETC4=m
++CONFIG_FSL_ENETC_CORE=m
++CONFIG_FSL_ENETC_MDIO=m
++CONFIG_FSL_ENETC_QOS=y
++CONFIG_FSL_ENETC_VF=m
++CONFIG_FSL_IMX9_DDR_PMU=m
++CONFIG_NXP_NETC_BLK_CTRL=m
++CONFIG_NXP_NETC_LIB=m
++CONFIG_GPIO_ADP5585=m
++CONFIG_GPIO_PCA953X=m
++CONFIG_GPIO_PCA953X_IRQ=y
++CONFIG_GPIO_VF610=m
++CONFIG_HWMON=m
++CONFIG_SENSORS_ARM_SCMI=m
++CONFIG_I2C_CHARDEV=m
++CONFIG_I2C_IMX_LPI2C=m
++CONFIG_I2C_RPBUS=m
++CONFIG_I2C_MUX=m
++CONFIG_SVC_I3C_MASTER=m
++CONFIG_IMX7ULP_WDT=m
++CONFIG_IMX93_ADC=m
++CONFIG_IMX_DISPMU=m
++CONFIG_IMX_DSP=m
++CONFIG_IMX_IRQSTEER=m
++CONFIG_IMX_MBOX=m
++CONFIG_IMX_NEUTRON_REMOTEPROC=m
++CONFIG_IMX_SCMI_LMM_EXT=m
++CONFIG_IMX_SCMI_CPU_EXT=m
++CONFIG_IMX_SCMI_CPU_DRV=m
++CONFIG_IMX_SCMI_LMM_DRV=m
++CONFIG_IMX_REMOTEPROC=m
++CONFIG_IMX_SCMI_BBM_EXT=m
++CONFIG_RTC_DRV_IMX_BBM_SCMI=m
++CONFIG_IMX_SCMI_MISC_EXT=m
++CONFIG_IMX_SCMI_MISC_DRV=m
++CONFIG_IMX_SEC_ENCLAVE=m
++CONFIG_LEDS_GPIO=m
++CONFIG_LEDS_PCA963X=m
++CONFIG_LEDS_PCA995X=m
++CONFIG_MAC80211=m
++CONFIG_CFG80211=m
++CONFIG_MALI_CSF_SUPPORT=y
++CONFIG_MALI_MIDGARD=m
++CONFIG_MALI_PROTECTED_MEMORY_ALLOCATOR=m
++CONFIG_MALI_TRACE_POWER_GPU_WORK_PERIOD=y
++CONFIG_MEDIA_SUPPORT=y
++CONFIG_DRM_PANTHOR=m
++CONFIG_MFD_MAX96752=m
++CONFIG_MFD_MAX96752_I2C=m
++CONFIG_MFD_ADP5585=m
++CONFIG_MFD_MAX96789=m
++CONFIG_MFD_MAX96789_I2C=m
++CONFIG_IMX8M_BUSFREQ=m
++CONFIG_MMC_SDHCI_ESDHC_IMX=m
++CONFIG_MUX_MMIO=m
++CONFIG_MXC_MUR=m
++CONFIG_MXC_VIDEO_WAVE6=m
++CONFIG_NET_ACT_GATE=m
++CONFIG_NET_CLS_FLOWER=m
++CONFIG_NET_SCH_CBS=m
++CONFIG_NET_SCH_ETF=m
++CONFIG_NET_SCH_MQPRIO=m
++CONFIG_NET_SCH_TAPRIO=m
++CONFIG_NET_VENDOR_FREESCALE=y
++CONFIG_NEUTRON=m
++CONFIG_NOP_USB_XCEIV=m
++CONFIG_NVMEM_IMX_OCOTP=m
++CONFIG_PCI_IMX6=m
++CONFIG_PCS_XPCS=m
++CONFIG_PHY_FSL_IMX8MQ_USB=m
++CONFIG_PHY_FSL_IMX9_DPHY_RX=m
++CONFIG_PHY_FSL_IMX8MP_LVDS=m
++CONFIG_PINCTRL_IMX8ULP=m
++CONFIG_PINCTRL_IMX=m
++CONFIG_PINCTRL_IMX_SCMI=m
++CONFIG_POWER_RESET_IMX=m
++CONFIG_PTP_1588_CLOCK=m
++CONFIG_PTP_NETC_V4_TIMER=m
++CONFIG_PWM_IMX_TPM=m
++CONFIG_PWRSEQ_SIMPLE=m
++CONFIG_REALTEK_PHY=m
++CONFIG_RPMSG_VIRTIO=m
++CONFIG_SERIAL_IMX_EARLYCON=y
++CONFIG_SERIAL_FSL_LPUART=m
++CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
++CONFIG_SND_IMX_SOC=m
++CONFIG_SND_SIMPLE_CARD=m
++CONFIG_SND_SIMPLE_CARD_UTILS=m
++CONFIG_SND_SOC_DMIC=m
++CONFIG_SND_SOC_AK4458=m
++CONFIG_SND_SOC_AK5558=m
++CONFIG_SND_SOC_BT_SCO=m
++CONFIG_SND_SOC_CS42XX8=m
++CONFIG_SND_SOC_CS42XX8_I2C=m
++CONFIG_SND_SOC_FSL_ASOC_CARD=m
++CONFIG_SND_SOC_FSL_ASRC=m
++CONFIG_SND_SOC_FSL_MICFIL=m
++CONFIG_SND_SOC_FSL_MQS=m
++CONFIG_SND_SOC_FSL_RPMSG=m
++CONFIG_SND_SOC_FSL_SAI=m
++CONFIG_SND_SOC_FSL_SPDIF=m
++CONFIG_SND_SOC_IMX_AUDIO_RPMSG=m
++CONFIG_SND_SOC_IMX_CARD=m
++CONFIG_SND_SOC_IMX_PCM_DMA=m
++CONFIG_SND_SOC_IMX_PCM_RPMSG=m
++CONFIG_SND_SOC_IMX_RPMSG=m
++CONFIG_SND_SOC_WM8962=m
++CONFIG_SND_SOC_WM8904=m
++CONFIG_SND_AUDIO_GRAPH_CARD2=m
++CONFIG_SND_SOC_SOF_IMX9=m
++CONFIG_SND_SOC_SOF_OF=m
++CONFIG_SND_SOC_SOF_TOPLEVEL=y
++CONFIG_SND_SOC_SOF_IMX_TOPLEVEL=y
++CONFIG_SOC_IMX9=m
++CONFIG_SOC_IMX8M=m
++# CONFIG_IMX9_LPM_CTRL is not set
++CONFIG_SPI_BITBANG=m
++CONFIG_SPI_FSL_LPSPI=m
++CONFIG_SPI_NXP_FLEXSPI=m
++CONFIG_SPI_SPIDEV=m
++CONFIG_MTD=m
++CONFIG_MTD_SPI_NOR=m
++CONFIG_TIMER_IMX_SYS_CTR=m
++CONFIG_TRUSTY=m
++CONFIG_TRUSTY_CRASH_IS_PANIC=y
++CONFIG_USB_CHIPIDEA=m
++CONFIG_USB_CHIPIDEA_HOST=y
++CONFIG_USB_CHIPIDEA_IMX=m
++CONFIG_USB_CHIPIDEA_UDC=y
++# CONFIG_USB_CHIPIDEA_PCI is not set
++CONFIG_USB_DWC3_IMX8MP=m
++CONFIG_TOUCHSCREEN_FTS=m
++CONFIG_TOUCHSCREEN_ILITEK=m
++CONFIG_TOUCHSCREEN_EXC3000=m
++CONFIG_TOUCHSCREEN_GOODIX=m
++CONFIG_TYPEC_SWITCH_GPIO=m
++CONFIG_VIDEO_AP1302=m
++CONFIG_VIDEO_DWC_MIPI_CSIS=m
++CONFIG_VIDEO_IMX8_ISI=m
++CONFIG_VIDEO_IMX8_ISI_M2M=y
++CONFIG_VIDEO_IMX8_JPEG=m
++CONFIG_VIDEO_IMX_CSI_FORMATTER=m
++CONFIG_VIDEO_MX95MBCAM=m
++CONFIG_VIDEO_MAX96717_LIB=m
++CONFIG_VIDEO_MAX96724=m
++CONFIG_VIDEO_NXP_NEOISP=m
++CONFIG_VIDEO_OX03C10_LIB=m
++CONFIG_VIDEO_OX05B1S=m
++CONFIG_ZRAM=m
++CONFIG_ZSMALLOC=m
++CONFIG_PWM_ADP5585=m
++CONFIG_WIDEVINE_L1_SKIP_MEMSET_SECUREHEAP=y
++CONFIG_IMX_RPMSG_CHRE=m
++CONFIG_SENSORS_PWM_FAN=m
++
++# CONFIG_DRM_FBDEV_EMULATION is not set
++CONFIG_DRM_CLIENT_SELECTION=m
++CONFIG_DRM_CLIENT_DEFAULT_FBDEV=y
++CONFIG_DRM_FBDEV_HELPER=m
++CONFIG_FB=m
++CONFIG_FB_CORE=m
++CONFIG_LOGO=y
++# CONFIG_LOGO_LINUX_MONO is not set
++# CONFIG_LOGO_LINUX_VGA16 is not set
++CONFIG_LOGO_LINUX_CLUT224=y
++
++# Disable automatic module signing during build (sign-file needs key)
++# CONFIG_MODULE_SIG is kept enabled (required by GKI)
++# But we disable signing ALL modules at build time
++# CONFIG_MODULE_SIG_ALL is not set
++
++# Disable protected symbol enforcement (allow unsigned modules to export symbols)
++CONFIG_MODULE_SIG_PROTECT_LIST=""
++
++# Disable Tegra platform support
++# CONFIG_ARCH_TEGRA is not set
++# CONFIG_TEGRA_BPMP is not set
++# CONFIG_SERIAL_TEGRA_TCU is not set
++# CONFIG_TEGRA_HSP_MBOX is not set
++# CONFIG_ARCH_TEGRA_234_SOC is not set
++
++# Disable Qualcomm platform support
++# CONFIG_ARCH_QCOM is not set
++# CONFIG_PCIE_QCOM is not set
++# CONFIG_SERIAL_QCOM_GENI is not set
++# CONFIG_SERIAL_QCOM_GENI_CONSOLE is not set
++# CONFIG_GUNYAH_QCOM_TRUSTED_VM is not set
++# CONFIG_QCOM_GENI_SE is not set
++CONFIG_TCG_TPM=y
++CONFIG_TCG_TIS_I2C_INFINEON=y
++CONFIG_TCG_TIS_I2C=y
++CONFIG_BT_NXPUART=m
++CONFIG_SND_SOC_TLV320AIC3X_I2C=m
++CONFIG_SND_SOC_IMX_TLV320AIC3X=m
++CONFIG_VIDEO_OV13855=m
++CONFIG_VIDEO_OV5640=m
++CONFIG_EEPROM_AT24=m
++CONFIG_BT_NXPUART=m
++CONFIG_SND_SOC_IMX_HDMI=m
++CONFIG_SND_SOC_HDMI_CODEC=m
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 168ae49cc98f..5bde8664e59c 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -1189,6 +1189,14 @@ config GPIO_MAX732X_IRQ
+ 	  Say yes here to enable the max732x to be used as an interrupt
+ 	  controller. It requires the driver to be built in the kernel.
+ 
++config GPIO_ADL1000
++	tristate "ADL1000 I/O ports"
++	select REGMAP_I2C
++	help
++	  Say yes here to provide access to the ADL1000 register-oriented
++	  SMBus I/O expanders
++
++
+ config GPIO_PCA953X
+ 	tristate "PCA95[357]x, PCA9698, TCA64xx, and MAX7310 I/O ports"
+ 	select REGMAP_I2C
+diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+index 0e155dad1d8f..42e19eaeb7ff 100644
+--- a/drivers/gpio/Makefile
++++ b/drivers/gpio/Makefile
+@@ -136,6 +136,7 @@ obj-$(CONFIG_GPIO_OCTEON)		+= gpio-octeon.o
+ obj-$(CONFIG_GPIO_OMAP)			+= gpio-omap.o
+ obj-$(CONFIG_GPIO_PALMAS)		+= gpio-palmas.o
+ obj-$(CONFIG_GPIO_PCA953X)		+= gpio-pca953x.o
++obj-$(CONFIG_GPIO_ADL1000)		+= gpio-adl1000.o
+ obj-$(CONFIG_GPIO_PCA9570)		+= gpio-pca9570.o
+ obj-$(CONFIG_GPIO_PCF857X)		+= gpio-pcf857x.o
+ obj-$(CONFIG_GPIO_PCH)			+= gpio-pch.o
+diff --git a/drivers/gpio/gpio-adl1000.c b/drivers/gpio/gpio-adl1000.c
+new file mode 100644
+index 000000000000..f4322a47fbcf
+--- /dev/null
++++ b/drivers/gpio/gpio-adl1000.c
+@@ -0,0 +1,884 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ *  ADLink 40 bit I/O ports
++ *
++ *
++ *  Derived from drivers/i2c/chips/pca953x.c
++ */
++
++#include <linux/bitmap.h>
++#include <linux/gpio/consumer.h>
++#include <linux/gpio/driver.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/interrupt.h>
++#include <linux/module.h>
++#include <linux/of_platform.h>
++#include <linux/regmap.h>
++#include <linux/regulator/consumer.h>
++#include <linux/seq_file.h>
++#include <linux/reset.h>
++#include <linux/slab.h>
++
++#include <linux/unaligned.h>
++
++#include <linux/delay.h>
++#define REGMAP_BUCK 0
++#define REGMAP_BUCK_RETRY_CNT 3
++
++#define ADL1000_INPUT		0x06
++#define ADL1000_OUTPUT		0x0A
++//#define ADL1000_INVERT		0x08
++#define ADL1000_DIRECTION	0x00
++
++//#define ADL1000_IN_LATCH	0x48
++#define ADL1000_PULL_EN		0x20
++#define ADL1000_PULL_SEL	0x26
++#define ADL1000_INT_MASK	0x10
++#define ADL1000_INT_STAT	0x16
++#define ADL1000_INT_VER0	0x2e
++#define ADL1000_INT_VER1	0x2f
++
++#define ADL1000_NPIN		24
++
++
++static const struct i2c_device_id adl1000_id[] = {
++	{ "adl1000", ADL1000_NPIN , },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, adl1000_id);
++
++#define MAX_BANK 6
++#define BANK_SZ 8
++#define MAX_LINE	(MAX_BANK * BANK_SZ)
++
++#define NBANK(chip) DIV_ROUND_UP(chip->gpio_chip.ngpio, BANK_SZ)
++
++
++struct adl1000_platform_data {
++	/* number of the first GPIO */
++	unsigned	gpio_base;
++
++	/* initial polarity inversion setting */
++	u32		invert;
++
++	/* interrupt base */
++	int		irq_base;
++
++	void		*context;	/* param to setup/teardown */
++
++	int		(*setup)(struct i2c_client *client,
++				unsigned gpio, unsigned ngpio,
++				void *context);
++	void		(*teardown)(struct i2c_client *client,
++				unsigned gpio, unsigned ngpio,
++				void *context);
++	const char	*const *names;
++};
++
++struct adl1000_reg_config {
++	int direction;
++	int output;
++	int input;
++	//int invert;
++};
++
++static const struct adl1000_reg_config adl1000_regs = {
++	.direction = ADL1000_DIRECTION,
++	.output = ADL1000_OUTPUT,
++	.input = ADL1000_INPUT ,
++	//.invert = ADL1000_INVERT,
++};
++
++
++
++struct adl1000_chip {
++	unsigned gpio_start;
++	struct mutex i2c_lock;
++	struct regmap *regmap;
++
++
++	struct mutex irq_lock;
++	DECLARE_BITMAP(irq_mask, MAX_LINE);
++	DECLARE_BITMAP(irq_stat, MAX_LINE);
++	DECLARE_BITMAP(irq_trig_raise, MAX_LINE);
++	DECLARE_BITMAP(irq_trig_fall, MAX_LINE);
++
++	atomic_t wakeup_path;
++
++	struct i2c_client *client;
++	struct gpio_chip gpio_chip;
++	const char *const *names;
++	unsigned long driver_data;
++	struct regulator *regulator;
++
++	const struct adl1000_reg_config *regs;
++
++	u8 (*recalc_addr)(struct adl1000_chip *chip, int reg, int off);
++};
++
++static bool adl1000_readable_register(struct device *dev, unsigned int reg)
++{
++	struct adl1000_chip *chip = dev_get_drvdata(dev);
++	if(
++		(reg>=ADL1000_INPUT && reg<(ADL1000_INPUT+ NBANK(chip))) ||
++		(reg>=ADL1000_OUTPUT && reg<(ADL1000_OUTPUT+ NBANK(chip))) ||
++//		(reg>=ADL1000_INVERT && reg<(ADL1000_INVERT+ NBANK(chip))) ||
++		(reg>=ADL1000_DIRECTION && reg<(ADL1000_DIRECTION+ NBANK(chip))) ||
++//		(reg>=ADL1000_IN_LATCH && reg<(ADL1000_IN_LATCH+ NBANK(chip))) ||
++		(reg>=ADL1000_PULL_EN && reg<(ADL1000_PULL_EN+ NBANK(chip))) ||
++		(reg>=ADL1000_PULL_SEL && reg<(ADL1000_PULL_SEL+ NBANK(chip))) ||
++		(reg>=ADL1000_INT_MASK && reg<(ADL1000_INT_MASK+ NBANK(chip))) ||
++		(reg>=ADL1000_INT_STAT && reg<(ADL1000_INT_STAT+ NBANK(chip)))
++		)
++	{
++		return true;
++	}
++	else 
++	{
++		return false;
++	}
++}
++
++static bool adl1000_writeable_register(struct device *dev, unsigned int reg)
++{
++	struct adl1000_chip *chip = dev_get_drvdata(dev);
++	if(
++		(reg>=ADL1000_OUTPUT && reg<(ADL1000_OUTPUT+ NBANK(chip))) ||
++//		(reg>=ADL1000_INVERT && reg<(ADL1000_INVERT+ NBANK(chip))) ||
++		(reg>=ADL1000_DIRECTION && reg<(ADL1000_DIRECTION+ NBANK(chip))) ||
++//		(reg>=ADL1000_IN_LATCH && reg<(ADL1000_IN_LATCH+ NBANK(chip))) ||
++		(reg>=ADL1000_PULL_EN && reg<(ADL1000_PULL_EN+ NBANK(chip))) ||
++		(reg>=ADL1000_PULL_SEL && reg<(ADL1000_PULL_SEL+ NBANK(chip))) ||
++		(reg>=ADL1000_INT_MASK && reg<(ADL1000_INT_MASK+ NBANK(chip)))
++		)
++	{
++		return true;
++	}
++	else 
++	{
++		return false;
++	}
++}
++
++static bool adl1000_volatile_register(struct device *dev, unsigned int reg)
++{
++	struct adl1000_chip *chip = dev_get_drvdata(dev);
++	if(
++		(reg>=ADL1000_INPUT && reg<(ADL1000_INPUT+ NBANK(chip))) ||
++		(reg>=ADL1000_INT_STAT && reg<(ADL1000_INT_STAT+ NBANK(chip)))
++	)
++	{
++		return true;
++	}
++	else 
++	{
++		return false;
++	}
++}
++
++static const struct regmap_config adl1000_i2c_regmap = {
++	.reg_bits = 8,
++	.val_bits = 8,
++
++	.use_single_read = true,
++	.use_single_write = true,
++
++	.readable_reg = adl1000_readable_register,
++	.writeable_reg = adl1000_writeable_register,
++	.volatile_reg = adl1000_volatile_register,
++
++	.disable_locking = true,
++	.cache_type = REGCACHE_RBTREE,
++	.max_register = 0x7f,
++};
++
++
++static u8 adl1000_recalc_addr(struct adl1000_chip *chip, int reg, int off)
++{
++
++	u8 regaddr = reg + (off / BANK_SZ);
++
++	return regaddr;
++}
++
++static int adl1000_write_regs(struct adl1000_chip *chip, int reg, unsigned long *val)
++{
++	u8 regaddr = chip->recalc_addr(chip, reg, 0);
++	u8 value[MAX_BANK];
++	int i, ret;
++
++	for (i = 0; i < NBANK(chip); i++)
++		value[i] = bitmap_get_value8(val, i * BANK_SZ);
++
++#if REGMAP_BUCK
++	ret = regmap_bulk_write(chip->regmap, regaddr, value, NBANK(chip));
++	if (ret < 0) {
++		dev_err(&chip->client->dev, "failed writing register\n");
++		return ret;
++	}
++#else
++	for (i = 0; i < NBANK(chip); i++)
++	{
++		int retry = 0;
++
++		ret=1;
++		while(ret)
++		{
++			ret = regmap_write(chip->regmap, regaddr+i, (unsigned int)value[i]);
++			if(ret)
++			{
++				retry++;
++				dev_err(&chip->client->dev, "jimmy adl1000_write_regs regmap_write failed reg:0x%x ret:0x%x retry:%d\n",regaddr+i,ret,retry);
++				if(retry >= REGMAP_BUCK_RETRY_CNT)
++					break;
++				udelay(300);
++			}
++		}
++		if (ret < 0) {
++			dev_err(&chip->client->dev, "failed writing register\n");
++			return ret;
++		}
++	}
++	
++#endif
++	return 0;
++}
++
++static int adl1000_read_regs(struct adl1000_chip *chip, int reg, unsigned long *val)
++{
++	u8 regaddr = chip->recalc_addr(chip, reg, 0);
++	u8 value[MAX_BANK];
++	int i, ret;
++
++#if REGMAP_BUCK
++	ret = regmap_bulk_read(chip->regmap, regaddr, value, NBANK(chip));
++	printk("jimmy adl1000_read_regs  regaddr:%d ret:0x%x i:%d\n",regaddr,ret,i++);
++	if (ret < 0) {
++		dev_err(&chip->client->dev, "failed reading register\n");
++		return ret;
++	}
++#else
++	for (i = 0; i < NBANK(chip); i++)
++	{
++		int retry = 0;
++
++		ret=1;
++		while(ret)
++		{
++			ret = regmap_read(chip->regmap, regaddr+i, ( unsigned int *)&value[i]);
++			if(ret)
++			{
++				retry++;
++				dev_err(&chip->client->dev, "jimmy adl1000_read_regs regmap_read failed reg:0x%x ret:0x%x retry:%d\n",regaddr+i,ret,retry);
++				if(retry >= REGMAP_BUCK_RETRY_CNT)
++					break;
++				udelay(300);
++			}
++		}
++		if (ret < 0) {
++			dev_err(&chip->client->dev, "failed reading register\n");
++			return ret;
++		}
++	}
++#endif
++	for (i = 0; i < NBANK(chip); i++)
++	{
++		bitmap_set_value8(val, value[i], i * BANK_SZ);
++	}
++
++	return 0;
++}
++
++static int adl1000_gpio_direction_input(struct gpio_chip *gc, unsigned off)
++{
++	struct adl1000_chip *chip = gpiochip_get_data(gc);
++	u8 dirreg = chip->recalc_addr(chip, chip->regs->direction, off);
++	u8 bit = BIT(off % BANK_SZ);
++	int ret;
++
++	mutex_lock(&chip->i2c_lock);
++
++	ret = regmap_write_bits(chip->regmap, dirreg, bit, bit);
++	mutex_unlock(&chip->i2c_lock);
++	return ret;
++}
++
++static int adl1000_gpio_direction_output(struct gpio_chip *gc,
++		unsigned off, int val)
++{
++	struct adl1000_chip *chip = gpiochip_get_data(gc);
++	u8 dirreg = chip->recalc_addr(chip, chip->regs->direction, off);
++	u8 outreg = chip->recalc_addr(chip, chip->regs->output, off);
++	u8 bit = BIT(off % BANK_SZ);
++	int ret;
++
++	mutex_lock(&chip->i2c_lock);
++	/* set output level */
++	ret = regmap_write_bits(chip->regmap, outreg, bit, val ? bit : 0);
++	if (ret)
++		goto exit;
++
++	/* then direction */
++	ret = regmap_write_bits(chip->regmap, dirreg, bit, 0);
++exit:
++	mutex_unlock(&chip->i2c_lock);
++	return ret;
++}
++
++static int adl1000_gpio_get_value(struct gpio_chip *gc, unsigned off)
++{
++	struct adl1000_chip *chip = gpiochip_get_data(gc);
++	u8 inreg = chip->recalc_addr(chip, chip->regs->input, off);
++	u8 bit = BIT(off % BANK_SZ);
++	u32 reg_val;
++	int ret;
++
++	mutex_lock(&chip->i2c_lock);
++	ret = regmap_read(chip->regmap, inreg, &reg_val);
++
++	mutex_unlock(&chip->i2c_lock);
++	if (ret < 0)
++		return ret;
++
++	return !!(reg_val & bit);
++}
++
++static int adl1000_gpio_set_value(struct gpio_chip *gc, unsigned int off, int val)
++{
++	struct adl1000_chip *chip = gpiochip_get_data(gc);
++	u8 outreg = chip->recalc_addr(chip, chip->regs->output, off);
++	u8 bit = BIT(off % BANK_SZ);
++	int ret;
++
++	mutex_lock(&chip->i2c_lock);
++	ret = regmap_write_bits(chip->regmap, outreg, bit, val ? bit : 0);
++	mutex_unlock(&chip->i2c_lock);
++
++	return ret;
++}
++
++static int adl1000_gpio_get_direction(struct gpio_chip *gc, unsigned off)
++{
++	struct adl1000_chip *chip = gpiochip_get_data(gc);
++	u8 dirreg = chip->recalc_addr(chip, chip->regs->direction, off);
++	u8 bit = BIT(off % BANK_SZ);
++	u32 reg_val;
++	int ret;
++
++	mutex_lock(&chip->i2c_lock);
++	ret = regmap_read(chip->regmap, dirreg, &reg_val);
++
++	mutex_unlock(&chip->i2c_lock);
++	if (ret < 0)
++		return ret;
++
++	if (reg_val & bit)
++		return GPIO_LINE_DIRECTION_IN;
++
++	return GPIO_LINE_DIRECTION_OUT;
++}
++
++static int adl1000_gpio_set_pull_up_down(struct adl1000_chip *chip,
++					 unsigned int offset,
++					 unsigned long config)
++{
++	enum pin_config_param param = pinconf_to_config_param(config);
++
++	u8 pull_en_reg = chip->recalc_addr(chip, ADL1000_PULL_EN, offset);
++	u8 pull_sel_reg = chip->recalc_addr(chip, ADL1000_PULL_SEL, offset);
++	u8 bit = BIT(offset % BANK_SZ);
++	int ret;
++
++	/*
++	 * pull-up/pull-down configuration requires PCAL extended
++	 * registers
++	 */
++
++	mutex_lock(&chip->i2c_lock);
++
++	/* Configure pull-up/pull-down */
++	if (param == PIN_CONFIG_BIAS_PULL_UP)
++	{
++		ret = regmap_write_bits(chip->regmap, pull_sel_reg, bit, bit);
++	}
++	else if (param == PIN_CONFIG_BIAS_PULL_DOWN)
++	{
++		ret = regmap_write_bits(chip->regmap, pull_sel_reg, bit, 0);
++	}
++	else
++		ret = 0;
++	if (ret)
++		goto exit;
++
++	/* Disable/Enable pull-up/pull-down */
++	if (param == PIN_CONFIG_BIAS_DISABLE)
++	{
++		ret = regmap_write_bits(chip->regmap, pull_en_reg, bit, 0);
++	}
++	else
++	{
++		ret = regmap_write_bits(chip->regmap, pull_en_reg, bit, bit);
++	}
++
++exit:
++	mutex_unlock(&chip->i2c_lock);
++	return ret;
++}
++
++static int adl1000_gpio_set_config(struct gpio_chip *gc, unsigned int offset,
++				   unsigned long config)
++{
++	struct adl1000_chip *chip = gpiochip_get_data(gc);
++
++	switch (pinconf_to_config_param(config)) {
++	case PIN_CONFIG_BIAS_PULL_UP:
++	case PIN_CONFIG_BIAS_PULL_PIN_DEFAULT:
++	case PIN_CONFIG_BIAS_PULL_DOWN:
++	case PIN_CONFIG_BIAS_DISABLE:
++		return adl1000_gpio_set_pull_up_down(chip, offset, config);
++	default:
++		return -ENOTSUPP;
++	}
++}
++
++static void adl1000_setup_gpio(struct adl1000_chip *chip, int gpios)
++{
++	struct gpio_chip *gc;
++
++	gc = &chip->gpio_chip;
++
++	gc->direction_input  = adl1000_gpio_direction_input;
++	gc->direction_output = adl1000_gpio_direction_output;
++	gc->get = adl1000_gpio_get_value;
++	gc->set = adl1000_gpio_set_value;
++	gc->get_direction = adl1000_gpio_get_direction;
++	gc->set_config = adl1000_gpio_set_config;
++	gc->can_sleep = true;
++
++	gc->base = chip->gpio_start;
++	gc->ngpio = gpios;
++	gc->label = dev_name(&chip->client->dev);
++	gc->parent = &chip->client->dev;
++	gc->owner = THIS_MODULE;
++	gc->names = chip->names;
++}
++
++
++static void adl1000_irq_mask(struct irq_data *d)
++{
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
++	struct adl1000_chip *chip = gpiochip_get_data(gc);
++	irq_hw_number_t hwirq = irqd_to_hwirq(d);
++
++	clear_bit(hwirq, chip->irq_mask);
++	gpiochip_disable_irq(gc, hwirq);
++}
++
++static void adl1000_irq_unmask(struct irq_data *d)
++{
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
++	struct adl1000_chip *chip = gpiochip_get_data(gc);
++	irq_hw_number_t hwirq = irqd_to_hwirq(d);
++
++	gpiochip_enable_irq(gc, hwirq);
++	set_bit(hwirq, chip->irq_mask);
++}
++
++static int adl1000_irq_set_wake(struct irq_data *d, unsigned int on)
++{
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
++	struct adl1000_chip *chip = gpiochip_get_data(gc);
++
++	if (on)
++		atomic_inc(&chip->wakeup_path);
++	else
++		atomic_dec(&chip->wakeup_path);
++
++	return irq_set_irq_wake(chip->client->irq, on);
++}
++
++static void adl1000_irq_bus_lock(struct irq_data *d)
++{
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
++	struct adl1000_chip *chip = gpiochip_get_data(gc);
++
++	mutex_lock(&chip->irq_lock);
++}
++
++static void adl1000_irq_bus_sync_unlock(struct irq_data *d)
++{
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
++	struct adl1000_chip *chip = gpiochip_get_data(gc);
++	DECLARE_BITMAP(irq_mask, MAX_LINE);
++	DECLARE_BITMAP(reg_direction, MAX_LINE);
++	int level;
++
++	{
++		bitmap_complement(irq_mask, chip->irq_mask, gc->ngpio);
++
++		/* Unmask enabled interrupts */
++		adl1000_write_regs(chip, ADL1000_INT_MASK, irq_mask);
++	}
++
++	/* Switch direction to input if needed */
++	adl1000_read_regs(chip, chip->regs->direction, reg_direction);
++
++	bitmap_or(irq_mask, chip->irq_trig_fall, chip->irq_trig_raise, gc->ngpio);
++	bitmap_complement(reg_direction, reg_direction, gc->ngpio);
++	bitmap_and(irq_mask, irq_mask, reg_direction, gc->ngpio);
++
++	/* Look for any newly setup interrupt */
++	for_each_set_bit(level, irq_mask, gc->ngpio)
++		adl1000_gpio_direction_input(&chip->gpio_chip, level);
++
++	mutex_unlock(&chip->irq_lock);
++}
++
++static int adl1000_irq_set_type(struct irq_data *d, unsigned int type)
++{
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
++	struct adl1000_chip *chip = gpiochip_get_data(gc);
++	irq_hw_number_t hwirq = irqd_to_hwirq(d);
++
++	if (!(type & IRQ_TYPE_EDGE_BOTH)) {
++		dev_err(&chip->client->dev, "irq %d: unsupported type %d\n",
++			d->irq, type);
++		return -EINVAL;
++	}
++
++	assign_bit(hwirq, chip->irq_trig_fall, type & IRQ_TYPE_EDGE_FALLING);
++	assign_bit(hwirq, chip->irq_trig_raise, type & IRQ_TYPE_EDGE_RISING);
++
++	return 0;
++}
++
++static void adl1000_irq_shutdown(struct irq_data *d)
++{
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
++	struct adl1000_chip *chip = gpiochip_get_data(gc);
++	irq_hw_number_t hwirq = irqd_to_hwirq(d);
++
++	clear_bit(hwirq, chip->irq_trig_raise);
++	clear_bit(hwirq, chip->irq_trig_fall);
++}
++
++static void adl1000_irq_print_chip(struct irq_data *data, struct seq_file *p)
++{
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++
++	seq_printf(p, dev_name(gc->parent));
++}
++
++static const struct irq_chip adl1000_irq_chip = {
++	.irq_mask		= adl1000_irq_mask,
++	.irq_unmask		= adl1000_irq_unmask,
++	.irq_set_wake		= adl1000_irq_set_wake,
++	.irq_bus_lock		= adl1000_irq_bus_lock,
++	.irq_bus_sync_unlock	= adl1000_irq_bus_sync_unlock,
++	.irq_set_type		= adl1000_irq_set_type,
++	.irq_shutdown		= adl1000_irq_shutdown,
++	.irq_print_chip		= adl1000_irq_print_chip,
++	.flags			= IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
++};
++
++static bool adl1000_irq_pending(struct adl1000_chip *chip, unsigned long *pending)
++{
++	struct gpio_chip *gc = &chip->gpio_chip;
++	DECLARE_BITMAP(cur_stat, MAX_LINE);
++	DECLARE_BITMAP(new_stat, MAX_LINE);
++	DECLARE_BITMAP(trigger, MAX_LINE);
++	int ret;
++
++	/* Read the current interrupt status from the device */
++	ret = adl1000_read_regs(chip, ADL1000_INT_STAT, trigger);
++	if (ret)
++		return false;
++
++	/* Apply filter for rising/falling edge selection */
++	bitmap_replace(new_stat, chip->irq_trig_fall, chip->irq_trig_raise, cur_stat, gc->ngpio);
++	bitmap_and(pending, new_stat, trigger, gc->ngpio);
++
++	return !bitmap_empty(pending, gc->ngpio);
++}
++
++static irqreturn_t adl1000_irq_handler(int irq, void *devid)
++{
++	struct adl1000_chip *chip = devid;
++	struct gpio_chip *gc = &chip->gpio_chip;
++	DECLARE_BITMAP(pending, MAX_LINE);
++	int level;
++	bool ret;
++
++	bitmap_zero(pending, MAX_LINE);
++
++	mutex_lock(&chip->i2c_lock);
++	ret = adl1000_irq_pending(chip, pending);
++
++	mutex_unlock(&chip->i2c_lock);
++
++	if (ret) {
++		ret = 0;
++
++		for_each_set_bit(level, pending, gc->ngpio) {
++			int nested_irq = irq_find_mapping(gc->irq.domain, level);
++
++			if (unlikely(nested_irq <= 0)) {
++				dev_warn_ratelimited(gc->parent, "unmapped interrupt %d\n", level);
++				continue;
++			}
++
++			handle_nested_irq(nested_irq);
++			ret = 1;
++		}
++	}
++	return IRQ_RETVAL(ret);
++}
++
++static int adl1000_irq_setup(struct adl1000_chip *chip, int irq_base)
++{
++	struct i2c_client *client = chip->client;
++	DECLARE_BITMAP(reg_direction, MAX_LINE);
++	DECLARE_BITMAP(irq_stat, MAX_LINE);
++	struct gpio_irq_chip *girq;
++	int ret;
++
++	if (!client->irq)
++		return 0;
++
++	if (irq_base == -1)
++		return 0;
++
++	ret = adl1000_read_regs(chip, chip->regs->input, irq_stat);
++	if (ret)
++		return ret;
++
++	/*
++	 * There is no way to know which GPIO line generated the
++	 * interrupt.  We have to rely on the previous read for
++	 * this purpose.
++	 */
++	adl1000_read_regs(chip, chip->regs->direction, reg_direction);
++	bitmap_and(chip->irq_stat, irq_stat, reg_direction, chip->gpio_chip.ngpio);
++	mutex_init(&chip->irq_lock);
++
++	girq = &chip->gpio_chip.irq;
++	gpio_irq_chip_set_chip(girq, &adl1000_irq_chip);
++	/* This will let us handle the parent IRQ in the driver */
++	girq->parent_handler = NULL;
++	girq->num_parents = 0;
++	girq->parents = NULL;
++	girq->default_type = IRQ_TYPE_NONE;
++	girq->handler = handle_simple_irq;
++	girq->threaded = true;
++	girq->first = irq_base; /* FIXME: get rid of this */
++
++	ret = devm_request_threaded_irq(&client->dev, client->irq,
++					NULL, adl1000_irq_handler,
++					IRQF_ONESHOT | IRQF_SHARED,
++					dev_name(&client->dev), chip);
++	if (ret) {
++		dev_err(&client->dev, "failed to request irq %d\n",
++			client->irq);
++		return ret;
++	}
++
++	return 0;
++}
++
++
++
++static int device_pca95xx_init(struct adl1000_chip *chip, u32 invert)
++{
++	u8 regaddr;
++	int ret;
++
++	regaddr = chip->recalc_addr(chip, chip->regs->output, 0);
++	ret = regcache_sync_region(chip->regmap, regaddr,
++				   regaddr + NBANK(chip) - 1);
++	if (ret)
++		goto out;
++
++	regaddr = chip->recalc_addr(chip, chip->regs->direction, 0);
++	ret = regcache_sync_region(chip->regmap, regaddr,
++				   regaddr + NBANK(chip) - 1);
++	if (ret)
++		goto out;
++
++out:
++	return ret;
++}
++
++
++
++static int adl1000_probe(struct i2c_client *client)
++{
++	struct adl1000_platform_data *pdata;
++	struct adl1000_chip *chip;
++	int irq_base = 0;
++	int ret;
++	u32 invert = 0;
++	struct regulator *reg;
++	const struct regmap_config *regmap_config;
++
++	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
++	if (chip == NULL)
++		return -ENOMEM;
++
++	pdata = dev_get_platdata(&client->dev);
++	if (pdata) {
++		irq_base = pdata->irq_base;
++		chip->gpio_start = pdata->gpio_base;
++		invert = pdata->invert;
++		chip->names = pdata->names;
++	} else {
++		struct gpio_desc *reset_gpio;
++
++		chip->gpio_start = -1;
++		irq_base = 0;
++
++		reset_gpio = devm_gpiod_get_optional(&client->dev, "reset",
++						     GPIOD_OUT_LOW);
++		if (IS_ERR(reset_gpio))
++			return PTR_ERR(reset_gpio);
++	}
++
++	chip->client = client;
++	chip->driver_data = (uintptr_t)i2c_get_match_data(client);
++	if (!chip->driver_data)
++		return -ENODEV;
++
++	reg = devm_regulator_get(&client->dev, "vcc");
++	if (IS_ERR(reg))
++		return dev_err_probe(&client->dev, PTR_ERR(reg), "reg get err\n");
++
++	ret = regulator_enable(reg);
++	if (ret) {
++		dev_err(&client->dev, "reg en err: %d\n", ret);
++		return ret;
++	}
++	chip->regulator = reg;
++
++	i2c_set_clientdata(client, chip);
++	adl1000_setup_gpio(chip, chip->driver_data );
++
++	regmap_config = &adl1000_i2c_regmap;
++	chip->recalc_addr = adl1000_recalc_addr;
++
++	chip->regmap = devm_regmap_init_i2c(client, regmap_config);
++	if (IS_ERR(chip->regmap)) {
++		ret = PTR_ERR(chip->regmap);
++		goto err_exit;
++	}
++
++	regcache_mark_dirty(chip->regmap);
++
++	mutex_init(&chip->i2c_lock);
++	/*
++	 * In case we have an i2c-mux controlled by a GPIO provided by an
++	 * expander using the same driver higher on the device tree, read the
++	 * i2c adapter nesting depth and use the retrieved value as lockdep
++	 * subclass for chip->i2c_lock.
++	 *
++	 * REVISIT: This solution is not complete. It protects us from lockdep
++	 * false positives when the expander controlling the i2c-mux is on
++	 * a different level on the device tree, but not when it's on the same
++	 * level on a different branch (in which case the subclass number
++	 * would be the same).
++	 *
++	 * TODO: Once a correct solution is developed, a similar fix should be
++	 * applied to all other i2c-controlled GPIO expanders (and potentially
++	 * regmap-i2c).
++	 */
++	lockdep_set_subclass(&chip->i2c_lock,
++			     i2c_adapter_depth(client->adapter));
++
++	ret = device_reset(&client->dev);
++	if (ret == -EPROBE_DEFER)
++		return -EPROBE_DEFER;
++
++	/* initialize cached registers from their original values.
++	 * we can't share this chip with another i2c master.
++	 */
++
++	chip->regs = &adl1000_regs;
++	ret = device_pca95xx_init(chip, invert);
++
++	if (ret)
++		goto err_exit;
++
++	ret = adl1000_irq_setup(chip, irq_base);
++	if (ret)
++		goto err_exit;
++
++	ret = devm_gpiochip_add_data(&client->dev, &chip->gpio_chip, chip);
++	if (ret)
++		goto err_exit;
++
++	if (pdata && pdata->setup) {
++		ret = pdata->setup(client, chip->gpio_chip.base,
++				   chip->gpio_chip.ngpio, pdata->context);
++		if (ret < 0)
++			dev_warn(&client->dev, "setup failed, %d\n", ret);
++	}
++
++	return 0;
++
++err_exit:
++	regulator_disable(chip->regulator);
++	return ret;
++}
++
++static void adl1000_remove(struct i2c_client *client)
++{
++	struct adl1000_platform_data *pdata = dev_get_platdata(&client->dev);
++	struct adl1000_chip *chip = i2c_get_clientdata(client);
++
++	if (pdata && pdata->teardown) {
++		pdata->teardown(client, chip->gpio_chip.base,
++				chip->gpio_chip.ngpio, pdata->context);
++	}
++
++	regulator_disable(chip->regulator);
++}
++
++
++static const struct of_device_id adl1000_dt_ids[] = {
++	{ .compatible = "adlink,adl1000", },
++	{ }
++};
++
++MODULE_DEVICE_TABLE(of, adl1000_dt_ids);
++
++
++static struct i2c_driver adl1000_driver = {
++	.driver = {
++		.name	= "adl1000",
++		.of_match_table = adl1000_dt_ids,
++	},
++	.probe		= adl1000_probe,
++	.remove		= adl1000_remove,
++	.id_table	= adl1000_id,
++};
++
++static int __init adl1000_init(void)
++{
++	return i2c_add_driver(&adl1000_driver);
++}
++/* register after i2c postcore initcall and before
++ * subsys initcalls that may rely on these GPIOs
++ */
++subsys_initcall(adl1000_init);
++
++static void __exit adl1000_exit(void)
++{
++	i2c_del_driver(&adl1000_driver);
++}
++module_exit(adl1000_exit);
++
++MODULE_AUTHOR("Jimmy Yu <jimmy.yu@adlinktech.com>");
++MODULE_DESCRIPTION("GPIO expander driver for PCA953x");
++MODULE_LICENSE("GPL");
++
++
+diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
+index c0322858b3c3..521caefef7c4 100644
+--- a/drivers/gpu/drm/bridge/Kconfig
++++ b/drivers/gpu/drm/bridge/Kconfig
+@@ -170,6 +170,21 @@ config DRM_LONTIUM_LT9611
+ 	  HDMI signals
+ 	  Please say Y if you have such hardware.
+ 
++config DRM_ADLINK_LT9611
++	tristate "Adlink LT9611 DSI/HDMI bridge"
++	depends on OF
++	select DRM_PANEL_BRIDGE
++	select DRM_KMS_HELPER
++	select DRM_MIPI_DSI
++	select REGMAP_I2C
++	select SND_SOC_HDMI_CODEC
++	help
++	  Driver for Lontium LT9611 DSI to HDMI bridge
++	  chip driver that converts dual DSI and I2S to
++	  HDMI signals
++	  Please say Y if you have such hardware.
++
++
+ config DRM_LONTIUM_LT9611UXC
+ 	tristate "Lontium LT9611UXC DSI/HDMI bridge"
+ 	select SND_SOC_HDMI_CODEC if SND_SOC
+diff --git a/drivers/gpu/drm/bridge/Makefile b/drivers/gpu/drm/bridge/Makefile
+index db425ccb11d0..998d8f79ad1b 100644
+--- a/drivers/gpu/drm/bridge/Makefile
++++ b/drivers/gpu/drm/bridge/Makefile
+@@ -15,6 +15,7 @@ obj-$(CONFIG_DRM_ITE_IT6505) += ite-it6505.o
+ obj-$(CONFIG_DRM_LONTIUM_LT8912B) += lontium-lt8912b.o
+ obj-$(CONFIG_DRM_LONTIUM_LT9211) += lontium-lt9211.o
+ obj-$(CONFIG_DRM_LONTIUM_LT9611) += lontium-lt9611.o
++obj-$(CONFIG_DRM_ADLINK_LT9611) += adlink-lt9611.o
+ obj-$(CONFIG_DRM_LONTIUM_LT9611UXC) += lontium-lt9611uxc.o
+ obj-$(CONFIG_DRM_FSL_IMX_LVDS_BRIDGE) += fsl-imx-ldb.o
+ obj-$(CONFIG_DRM_LVDS_CODEC) += lvds-codec.o
+diff --git a/drivers/gpu/drm/bridge/adlink-lt9611.c b/drivers/gpu/drm/bridge/adlink-lt9611.c
+new file mode 100644
+index 000000000000..66ca0be174dd
+--- /dev/null
++++ b/drivers/gpu/drm/bridge/adlink-lt9611.c
+@@ -0,0 +1,1985 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2018, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2019-2020. Linaro Limited.
++ */
++#include <linux/gpio/consumer.h>
++#include <linux/i2c.h>
++#include <linux/interrupt.h>
++#include <linux/media-bus-format.h>
++#include <linux/module.h>
++#include <linux/of_graph.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/regulator/consumer.h>
++
++#include <sound/hdmi-codec.h>
++
++#include <drm/drm_atomic_helper.h>
++#include <drm/drm_bridge.h>
++#include <drm/drm_mipi_dsi.h>
++#include <drm/drm_of.h>
++#include <drm/drm_print.h>
++#include <drm/drm_probe_helper.h>
++
++#include <linux/clk.h>
++#include <media/cec.h>
++
++#include <drm/drm_edid.h>
++#include <drm/display/drm_hdmi_helper.h>
++
++#define EDID_SEG_SIZE	256
++#define EDID_LEN	32
++#define EDID_LOOP	8
++#define KEY_DDC_ACCS_DONE 0x02
++#define DDC_NO_ACK	0x50
++
++#define LT9611_4LANES	0
++#define AR_16_9 0x02 
++#define AR_4_3 0x01
++#define	MPEG_PKT_EN 0x01
++#define	AIF_PKT_EN  0x02
++#define SPD_PKT_EN	0x04//9611 RXΪMIPI������Ҫ��SPD_PKT
++#define AVI_PKT_EN	0x08
++#define UD1_PKT_EN	0x10
++#define UD0_PKT_EN	0x20
++#define PREFER_MODE 0
++
++static int lt9611_pattern_enabled;
++
++struct lt9611 {
++	struct device *dev;
++	struct drm_bridge bridge;
++	struct drm_connector connector;
++
++	struct regmap *regmap;
++
++	struct device_node *dsi0_node;
++	struct device_node *dsi1_node;
++	struct mipi_dsi_device *dsi0;
++	struct mipi_dsi_device *dsi1;
++	struct platform_device *audio_pdev;
++
++	bool ac_mode;
++
++	struct gpio_desc *reset_gpio;
++	struct gpio_desc *enable_gpio;
++
++	bool power_on;
++	bool sleep;
++	bool is4k;
++
++	struct i2c_client *client;
++
++	enum drm_connector_status status;
++
++	struct cec_adapter *cec_adap;
++
++	u8 edid_buf[EDID_SEG_SIZE];
++	u32 vic;
++	struct clk *vco;
++	struct clk *videopll1;
++	struct clk *pix;
++#if PREFER_MODE
++	int prefer_mode;
++#endif
++};
++
++
++#define LT9611_PAGE_CONTROL	0xff
++
++static const struct regmap_range_cfg lt9611_ranges[] = {
++	{
++		.name = "register_range",
++		.range_min =  0,
++		.range_max = 0x85ff,
++		.selector_reg = LT9611_PAGE_CONTROL,
++		.selector_mask = 0xff,
++		.selector_shift = 0,
++		.window_start = 0,
++		.window_len = 0x100,
++	},
++};
++
++static const struct regmap_config lt9611_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.max_register = 0xffff,
++	.ranges = lt9611_ranges,
++	.num_ranges = ARRAY_SIZE(lt9611_ranges),
++};
++
++struct lt9611_mode {
++	u16 hdisplay;
++	u16 vdisplay;
++	u8 vrefresh;
++	u8 lanes;
++	u8 intfs;
++	unsigned long vco;
++	unsigned long videopll1;
++	unsigned long pix;
++	bool is4k;
++	u32 vic;
++};
++
++static struct lt9611_mode lt9611_modes[] = {
++	{ 4096, 2160, 30, 4, 1 , 2673000000 , 297000000 , 297000000 , TRUE , 100 }, /* 4096x2160 24bit 30Hz 4Lane 1port */
++	{ 3840, 2160, 30, 4, 1 , 2673000000 , 297000000 , 297000000 , TRUE , 95 }, /* 3840x2160 24bit 30Hz 4Lane 1port */
++	{ 1920, 1080, 60, 4, 1 , 4008000000 , 445333334 , 148444444 , FALSE , 16 }, /* 1080P 24bit 60Hz 4lane 1port */
++	{ 1920, 1200, 60, 4, 1 , 4158000000 , 462000000 , 154000000 , FALSE , 0 }, /* 1920x1200 24bit 60Hz 4lane 1port */
++	{ 1536, 2048, 61, 4, 1 , 2655000000 , 295000000 , 295000000 , TRUE , 0 }, /* 1536x2048 24bit 60Hz 4lane 1port */
++};
++
++
++struct video_timing {
++u16 hfp;
++u16 hs;
++u16 hbp;
++u16 hact;
++u16 htotal;
++u16 vfp;
++u16 vs;
++u16 vbp;
++u16 vact;
++u16 vtotal;
++bool h_polarity;
++bool v_polarity;
++u16	vic;
++u8 aspact_ratio;  // 0=no data, 1=4:3, 2=16:9, 3=no data.
++u32 pclk_khz;
++};
++
++struct video_timing video_3840x2160_30Hz   =    {176,  88, 296, 3840, 4400,  8,  10, 72, 2160, 2250, 1,1,95,AR_16_9, 297000};
++struct video_timing video_4096x2160_30Hz   =    {88,  88, 128, 4096, 4400,  8,  10, 72, 2160, 2250, 1,1,100,AR_4_3, 297000};
++struct video_timing video_1920x1080_60Hz   =    {88,  44, 148, 1920,  2200,  4,  5,  36, 1080, 1125, 1,1,16,AR_16_9,148500};
++struct video_timing video_1920x1200_60Hz   =    {48,  32, 80, 1920,  2080,  3,  6,  26, 1200, 1235, 1,1,0,AR_16_9,154128};
++//video_1536x2048_60Hz
++struct video_timing video_1536x2048_61Hz   =    {200,  64, 460, 1536,  2260,  60,  10,  10, 2048, 2128, 1,1,0,AR_16_9,295000};
++
++#define DVI 0x00
++#define HDMI 0x01
++#define UD0_PKT_EN	0x20
++
++static void LT9611_System_Init(struct lt9611 *lt9611)
++{
++	regmap_write(lt9611->regmap, 0x8251, 0x11);
++	//Timer for Frequency meter
++	regmap_write(lt9611->regmap, 0x821b, 0x69);
++	regmap_write(lt9611->regmap, 0x821c, 0x78);
++	regmap_write(lt9611->regmap, 0x82cb, 0x69);//Timer 1
++	regmap_write(lt9611->regmap, 0x82cc, 0x78);
++	/*power consumption for work*/
++	regmap_write(lt9611->regmap, 0x8004, 0xf0);
++	regmap_write(lt9611->regmap, 0x8006, 0xf0);
++	regmap_write(lt9611->regmap, 0x800a, 0x80);
++	regmap_write(lt9611->regmap, 0x800b, 0x46);	//csc clk//46
++	regmap_write(lt9611->regmap, 0x800d, 0xef);
++	regmap_write(lt9611->regmap, 0x8011, 0xfa);
++}
++
++static void LT9611_pattern_en(struct lt9611 *lt9611)
++{
++	regmap_write(lt9611->regmap, 0x824f, 0x80);//[7] = Select ad_txpll_d_clk.
++	regmap_write(lt9611->regmap, 0x8250, 0x20);
++}
++
++static void LT9611_PLL(struct lt9611 *lt9611, struct video_timing *video_format)
++{
++	u32 pclk;
++	unsigned int pll_lock_flag, cal_done_flag, band_out;
++	u8 hdmi_post_div;
++	u8 i;
++	pclk = video_format->pclk_khz;
++	u8 pcr_m;
++
++	printk("\r\nLT9611_PLL: set rx pll = %d\n", pclk);
++
++	regmap_write(lt9611->regmap, 0x8123, 0x40);//Enable LDO and disable PD
++	regmap_write(lt9611->regmap, 0x8124, 0x62);//0x62, LG25UM58 issue, 20180824
++	regmap_write(lt9611->regmap, 0x8125, 0x80);//pre-divider
++	regmap_write(lt9611->regmap, 0x8126, 0x55);
++	regmap_write(lt9611->regmap, 0x812c, 0x37);
++	regmap_write(lt9611->regmap, 0x812f, 0x01);
++	regmap_write(lt9611->regmap, 0x8127, 0x66);
++	regmap_write(lt9611->regmap, 0x8128, 0x88);
++	regmap_write(lt9611->regmap, 0x812a, 0x20);//for U3.
++
++	if(pclk > 150000)
++	{
++		regmap_write(lt9611->regmap, 0x812d, 0x88);
++		hdmi_post_div = 0x01;
++	}
++	else if(pclk > 80000)
++	{
++		regmap_write(lt9611->regmap, 0x812d, 0x99);
++		hdmi_post_div = 0x02;
++	}
++	else
++	{
++		regmap_write(lt9611->regmap, 0x812d, 0xaa);
++		hdmi_post_div = 0x04;
++	}
++
++	pcr_m = (u8)((pclk*5*hdmi_post_div)/27000);
++    pcr_m --;
++    printk("\r\nLT9611_PLL: pcr_m = 0x%x, hdmi_post_div = %d", pcr_m, hdmi_post_div); //Hex
++
++	regmap_write(lt9611->regmap, 0x832d, 0x40);// M up limit
++	regmap_write(lt9611->regmap, 0x8331, 0x08);// M down limit
++	regmap_write(lt9611->regmap, 0x8326, 0x80|pcr_m);/* fixed M is to let pll locked*/
++
++	pclk = pclk / 2;
++	regmap_write(lt9611->regmap, 0x82e3, pclk/65536);// 13.5M
++	pclk = pclk % 65536;
++	regmap_write(lt9611->regmap, 0x82e4, pclk/256);
++	regmap_write(lt9611->regmap, 0x82e5, pclk%256);
++
++	regmap_write(lt9611->regmap, 0x82de, 0x20);// pll cal en, start calibration
++	regmap_write(lt9611->regmap, 0x82de, 0xe0);
++
++	regmap_write(lt9611->regmap, 0x8011, 0x5a);/* Pcr clk reset */
++	regmap_write(lt9611->regmap, 0x8011, 0xfa);
++
++	regmap_write(lt9611->regmap, 0x8016, 0xf2);/* pll cal digital reset */
++	regmap_write(lt9611->regmap, 0x8018, 0xdc);/* pll analog reset */
++	regmap_write(lt9611->regmap, 0x8018, 0xfc);
++	regmap_write(lt9611->regmap, 0x8016, 0xf3);/*start calibration*/
++
++	/* pll lock status */
++	for(i = 0; i < 6 ; i++)
++	{
++		regmap_write(lt9611->regmap, 0x8016, 0xe3);/* pll lock logic reset */
++		regmap_write(lt9611->regmap, 0x8016, 0xf3);
++
++		regmap_read(lt9611->regmap, 0x82e7, (unsigned int*)&cal_done_flag);
++		regmap_read(lt9611->regmap, 0x82e6, (unsigned int*)&band_out);
++		regmap_read(lt9611->regmap, 0x8215, (unsigned int*)&pll_lock_flag);
++
++		if((pll_lock_flag & 0x80)&&(cal_done_flag & 0x80)&&(band_out != 0xff))
++		{
++			printk("\r\nLT9611_PLL: HDMI pll locked band out: 0x%x", band_out);
++			break;
++		}
++		else
++		{
++			regmap_write(lt9611->regmap, 0x8011, 0x5a);/* Pcr clk reset */
++			regmap_write(lt9611->regmap, 0x8011, 0xfa);
++			regmap_write(lt9611->regmap, 0x8016, 0xf2);/* pll cal digital reset */
++			regmap_write(lt9611->regmap, 0x8018, 0xdc);/* pll analog reset */
++			regmap_write(lt9611->regmap, 0x8018, 0xfc);
++			regmap_write(lt9611->regmap, 0x8016, 0xf3);/*start calibration*/
++			printk("\r\nLT9611_PLL: HDMI pll unlocked, reset pll");
++		}
++	}
++}
++
++static void LT9611_pattern_gcm(struct lt9611 *lt9611, struct video_timing *video_format)
++{
++	u8 POL;
++	POL = (video_format-> h_polarity)*0x10 + (video_format-> v_polarity)*0x20;
++	POL = ~POL;
++	POL &= 0x30;
++
++	regmap_write(lt9611->regmap, 0x82a3, (u8)((video_format->hs+video_format->hbp)/256));//de_delay
++	regmap_write(lt9611->regmap, 0x82a4, (u8)((video_format->hs+video_format->hbp)%256));
++	regmap_write(lt9611->regmap, 0x82a5, (u8)((video_format->vs+video_format->vbp)%256));//de_top
++	regmap_write(lt9611->regmap, 0x82a6, (u8)(video_format->hact/256));
++	regmap_write(lt9611->regmap, 0x82a7, (u8)(video_format->hact%256));//de_cnt
++	regmap_write(lt9611->regmap, 0x82a8, (u8)(video_format->vact/256));
++	regmap_write(lt9611->regmap, 0x82a9, (u8)(video_format->vact%256));//de_line
++	regmap_write(lt9611->regmap, 0x82aa, (u8)(video_format->htotal/256));
++	regmap_write(lt9611->regmap, 0x82ab, (u8)(video_format->htotal%256));//htotal
++	regmap_write(lt9611->regmap, 0x82ac, (u8)(video_format->vtotal/256));
++	regmap_write(lt9611->regmap, 0x82ad, (u8)(video_format->vtotal%256));//vtotal
++	regmap_write(lt9611->regmap, 0x82ae, (u8)(video_format->hs/256));
++	regmap_write(lt9611->regmap, 0x82af, (u8)(video_format->hs%256));//hvsa
++	regmap_write(lt9611->regmap, 0x82b0, (u8)(video_format->vs%256));//vsa
++	regmap_write(lt9611->regmap, 0x8247, (u8)(POL|0x07));//sync polarity
++}
++
++static void LT9611_HDMI_TX_Digital(struct lt9611 *lt9611, struct video_timing *video_format) //dsren
++{
++	u8 VIC = video_format->vic;
++	u8 AR = video_format->aspact_ratio;
++	u8 pb0,pb2,pb4;
++	u8 infoFrame_en;
++
++	infoFrame_en = (AIF_PKT_EN|AVI_PKT_EN|SPD_PKT_EN);
++	pb2 =  (AR<<4) + 0x08;
++	pb4 =  VIC;
++	pb0 = ((pb2 + pb4) <= 0x5f)?(0x5f - pb2 - pb4):(0x15f - pb2 - pb4);
++
++	regmap_write(lt9611->regmap, 0x82d6, 0x8e);
++	regmap_write(lt9611->regmap, 0x82d7, 0x04);
++
++	//AVI
++	regmap_write(lt9611->regmap, 0x8443, pb0);//AVI_PB0
++	regmap_write(lt9611->regmap, 0x8445, pb2);//AVI_PB2
++	regmap_write(lt9611->regmap, 0x8447, pb4);//AVI_PB4
++	regmap_write(lt9611->regmap, 0x8410, 0x02);//data iland
++	regmap_write(lt9611->regmap, 0x8412, 0x64);//act_h_blank
++
++	//VS_IF, 4k 30hz need send VS_IF packet.
++	if(VIC == 95)
++	{
++		regmap_write(lt9611->regmap, 0x8413d, infoFrame_en|UD0_PKT_EN);//UD1 infoframe enable //revise on 20200715
++		regmap_write(lt9611->regmap, 0x8474, 0x81);//HB0
++		regmap_write(lt9611->regmap, 0x8475, 0x01);//HB1
++		regmap_write(lt9611->regmap, 0x8476, 0x05);//HB2
++		regmap_write(lt9611->regmap, 0x8477, 0x49);//PB0
++		regmap_write(lt9611->regmap, 0x8478, 0x03);//PB1
++		regmap_write(lt9611->regmap, 0x8479, 0x0c);//PB2
++		regmap_write(lt9611->regmap, 0x847a, 0x00);//PB3
++		regmap_write(lt9611->regmap, 0x847b, 0x20);//PB4
++		regmap_write(lt9611->regmap, 0x847c, 0x01);//PB5
++	}
++	else
++	{
++		regmap_write(lt9611->regmap, 0x843d, infoFrame_en);//UD1 infoframe enable
++	}
++
++	if(infoFrame_en & SPD_PKT_EN)
++	{
++		regmap_write(lt9611->regmap, 0x84c0, 0x00);//HB0
++		regmap_write(lt9611->regmap, 0x84c1, 0x00);//HB1
++		regmap_write(lt9611->regmap, 0x84c2, 0x00);//HB2
++
++		regmap_write(lt9611->regmap, 0x84c3, 0x00);//PB0
++		regmap_write(lt9611->regmap, 0x84c4, 0x00);//PB1
++		regmap_write(lt9611->regmap, 0x84c5, 0x00);//PB2
++		regmap_write(lt9611->regmap, 0x84c6, 0x00);//PB3
++		regmap_write(lt9611->regmap, 0x84c7, 0x00);//PB4
++		regmap_write(lt9611->regmap, 0x84c8, 0x00);//PB5
++	}
++}
++
++static void LT9611_HDMI_TX_Phy(struct lt9611 *lt9611)
++{
++	regmap_write(lt9611->regmap, 0x8130, 0x6a);//tap0/1
++
++	regmap_write(lt9611->regmap, 0x8131, 0x73);//DC: 0x44, AC:0x73
++	regmap_write(lt9611->regmap, 0x8132, 0x4a);
++	regmap_write(lt9611->regmap, 0x8133, 0x0b);
++	regmap_write(lt9611->regmap, 0x8134, 0x00);
++	regmap_write(lt9611->regmap, 0x8135, 0x00);
++	regmap_write(lt9611->regmap, 0x8136, 0x00);
++	regmap_write(lt9611->regmap, 0x8137, 0x44);
++	regmap_write(lt9611->regmap, 0x813f, 0x0f);
++	regmap_write(lt9611->regmap, 0x8140, 0x98);//clk swing
++	regmap_write(lt9611->regmap, 0x8141, 0x98);//D0 swing
++	regmap_write(lt9611->regmap, 0x8142, 0x98);//D1 swing
++	regmap_write(lt9611->regmap, 0x8143, 0x98);//D2 swing
++	regmap_write(lt9611->regmap, 0x8144, 0x0a);
++}
++
++static void LT9611_HDCP_Disable(struct lt9611 *lt9611)
++{
++	regmap_write(lt9611->regmap, 0x8515, 0x45);
++}
++
++static void LT9611_HDMI_Out_Enable(struct lt9611 *lt9611)
++{
++	regmap_write(lt9611->regmap, 0x8123, 0x40);
++	regmap_write(lt9611->regmap, 0x82de, 0x20);
++	regmap_write(lt9611->regmap, 0x82de, 0xe0);
++	regmap_write(lt9611->regmap, 0x8018, 0xdc);/* txpll sw rst */
++	regmap_write(lt9611->regmap, 0x8018, 0xfc);
++	regmap_write(lt9611->regmap, 0x8016, 0xf1);/* txpll calibration rest */
++	regmap_write(lt9611->regmap, 0x8016, 0xf3);
++	regmap_write(lt9611->regmap, 0x8011, 0x5a);//Pcr reset
++	regmap_write(lt9611->regmap, 0x8011, 0xfa);
++	regmap_write(lt9611->regmap, 0x8130, 0xea);
++
++	LT9611_HDCP_Disable(lt9611);
++}
++static void LT9611_test_pattern(struct lt9611 *lt9611)
++{
++	struct video_timing *video;
++
++	if(lt9611_pattern_enabled == 1)
++		video = &video_3840x2160_30Hz;
++	else if(lt9611_pattern_enabled == 2)
++		video = &video_1920x1080_60Hz;
++	else if(lt9611_pattern_enabled == 3)
++		video = &video_4096x2160_30Hz;
++	else if(lt9611_pattern_enabled == 4)
++		video = &video_1920x1200_60Hz;
++	else
++		video = &video_1920x1080_60Hz;
++
++	LT9611_System_Init(lt9611);
++	LT9611_pattern_en(lt9611);
++	LT9611_PLL(lt9611, video);
++	LT9611_pattern_gcm(lt9611, video);
++	LT9611_HDMI_TX_Digital(lt9611, video);
++	LT9611_HDMI_TX_Phy(lt9611);
++	LT9611_HDMI_Out_Enable(lt9611);
++}
++
++static struct lt9611 *bridge_to_lt9611(struct drm_bridge *bridge)
++{
++	return container_of(bridge, struct lt9611, bridge);
++}
++
++static struct lt9611 *connector_to_lt9611(struct drm_connector *connector)
++{
++	return container_of(connector, struct lt9611, connector);
++}
++
++static void prepare_clk(struct lt9611 *lt9611, struct lt9611_mode *lt9611_mode)
++{
++	int ret;
++	if (lt9611->vco)
++	{
++		printk("lt9611 prepare_clk vco:%ld\n",clk_get_rate(lt9611->vco));
++		clk_prepare_enable(lt9611->vco);
++		clk_disable_unprepare(lt9611->vco);
++
++		printk("lt9611 prepare_clk vco:%ld\n", lt9611_mode->vco);
++		clk_set_rate(lt9611->vco, lt9611_mode->vco);
++		ret = clk_prepare_enable(lt9611->vco);
++		if (ret < 0) {
++			printk("Failed to enable vco\n");
++		}
++		else
++		{
++			printk("lt9611 prepare_clk enable vco:%ld\n",clk_get_rate(lt9611->vco));
++		}
++	}
++
++	if (lt9611->videopll1)
++	{
++		printk("lt9611 prepare_clk videopll1:%ld\n",clk_get_rate(lt9611->videopll1));
++		clk_prepare_enable(lt9611->videopll1);
++		clk_disable_unprepare(lt9611->videopll1);
++
++		printk("lt9611 prepare_clk videopll1:%ld\n", lt9611_mode->videopll1);
++		clk_set_rate(lt9611->videopll1, lt9611_mode->videopll1);
++		ret = clk_prepare_enable(lt9611->videopll1);
++		if (ret < 0) {
++			printk("Failed to enable videopll1\n");
++		}
++		else
++		{
++			printk("lt9611 prepare_clk enable videopll1:%ld\n",clk_get_rate(lt9611->videopll1));
++		}
++	}
++
++	if (lt9611->pix)
++	{
++		printk("lt9611 prepare_clk pix:%ld\n",clk_get_rate(lt9611->pix));
++		clk_prepare_enable(lt9611->pix);
++		clk_disable_unprepare(lt9611->pix);
++
++		printk("lt9611 prepare_clk pix:%ld\n", lt9611_mode->pix);
++		clk_set_rate(lt9611->pix, lt9611_mode->pix);
++		ret = clk_prepare_enable(lt9611->pix);
++		if (ret < 0) {
++			printk("Failed to enable pix\n");
++		}
++		else
++		{
++			printk("lt9611 prepare_clk enable pix:%ld\n",clk_get_rate(lt9611->pix));
++		}
++	}
++}
++
++static int lt9611_mipi_input_analog(struct lt9611 *lt9611)
++{
++	const struct reg_sequence reg_cfg[] = {
++		{ 0x8106, 0x60 }, /* port A rx current */
++		{ 0x8107, 0x1b }, //eq 5:3 for lane0 2:0 for lane1
++		{ 0x8108, 0x1b }, //eq 5:3 lane2 2:0 lane3
++		{ 0x810a, 0xfe }, /* port A ldo voltage set */
++		{ 0x810b, 0xbf }, /* enable port A lprx */
++		{ 0x811c, 0x03 }, /* PortA clk lane no-LP mode */
++	};
++	if(lt9611_pattern_enabled) return 0;
++
++	return regmap_multi_reg_write(lt9611->regmap, reg_cfg, ARRAY_SIZE(reg_cfg));
++}
++
++static void lt9611_mipi_input_digital(struct lt9611 *lt9611)
++{
++	int settle_count;
++	int temp;
++	int i;
++
++	if(lt9611_pattern_enabled) return;
++
++	if(lt9611->is4k)
++		settle_count=0x16;
++	else
++		settle_count=0x0b;
++
++	regmap_write(lt9611->regmap, 0x8302, settle_count);
++	regmap_write(lt9611->regmap, 0x8306, settle_count);
++
++	regmap_write(lt9611->regmap, 0x824f, 0x80);
++	regmap_write(lt9611->regmap, 0x8250, 0x10);
++	regmap_write(lt9611->regmap, 0x8303, 0x00);
++	for(i=0;i<10;i++)
++	{
++		regmap_read(lt9611->regmap, 0x8398, &temp);
++		printk("port A lane 0 settle = 0x%x loop:%d\n",temp,i);
++		if(temp)
++			break;
++		msleep(10);
++	}
++	printk("port A lane 0 settle = 0x%x loop:%d\n",temp,i);
++	regmap_read(lt9611->regmap, 0x839a, &temp);
++	printk("port A lane 1 settle = 0x%x \n",temp);
++	regmap_read(lt9611->regmap, 0x839c, &temp);
++	printk("port A lane 2 settle = 0x%x \n",temp);
++	regmap_read(lt9611->regmap, 0x839e, &temp);
++	printk("port A lane 3 settle = 0x%x \n",temp);
++	regmap_read(lt9611->regmap, 0x8398, &temp);
++	settle_count = temp;
++
++	if(settle_count > 0x40)
++	{
++		settle_count = 0x06;
++	}
++	else
++	{
++		if(settle_count)
++			settle_count = settle_count/2;
++		else
++		{
++			if(lt9611->is4k)
++				settle_count = 0x16;
++			else
++				settle_count = 0x0b;
++		}
++	}
++	printk("settle = 0x%x \n",settle_count);
++
++	regmap_write(lt9611->regmap, 0x8300, LT9611_4LANES);
++	regmap_write(lt9611->regmap, 0x8302, settle_count);
++	regmap_write(lt9611->regmap, 0x8306, settle_count);
++	regmap_write(lt9611->regmap, 0x830a, 0x00);//single_port_mipi
++
++}
++
++
++static void lt9611_mipi_video_setup(struct lt9611 *lt9611,
++				    const struct drm_display_mode *mode)
++{
++	u32 h_total, hactive, hsync_len, hfront_porch, hsync_porch;
++	u32 v_total, vactive, vsync_len, vfront_porch, vsync_porch;
++
++	h_total = mode->htotal;
++	v_total = mode->vtotal;
++
++	hactive = mode->hdisplay;
++	hsync_len = mode->hsync_end - mode->hsync_start;
++	hfront_porch = mode->hsync_start - mode->hdisplay;
++	hsync_porch = hsync_len + mode->htotal - mode->hsync_end;
++
++	vactive = mode->vdisplay;
++	vsync_len = mode->vsync_end - mode->vsync_start;
++	vfront_porch = mode->vsync_start - mode->vdisplay;
++	vsync_porch = vsync_len + mode->vtotal - mode->vsync_end;
++	
++	if(lt9611_pattern_enabled) return;
++
++	printk("lt9611_mipi_video_setup hactive:%d is4k:%d\n",hactive,lt9611->is4k);
++
++	regmap_write(lt9611->regmap, 0x830d, (u8)(v_total / 256));
++	regmap_write(lt9611->regmap, 0x830e, (u8)(v_total % 256));
++
++	regmap_write(lt9611->regmap, 0x830f, (u8)(vactive / 256));
++	regmap_write(lt9611->regmap, 0x8310, (u8)(vactive % 256));
++
++	regmap_write(lt9611->regmap, 0x8311, (u8)(h_total / 256));
++	regmap_write(lt9611->regmap, 0x8312, (u8)(h_total % 256));
++
++	regmap_write(lt9611->regmap, 0x8313, (u8)(hactive / 256));
++	regmap_write(lt9611->regmap, 0x8314, (u8)(hactive % 256));
++
++	regmap_write(lt9611->regmap, 0x8315, (u8)(vsync_len % 256));
++	regmap_write(lt9611->regmap, 0x8316, (u8)(hsync_len % 256));
++
++	regmap_write(lt9611->regmap, 0x8317, (u8)(vfront_porch % 256));
++
++	regmap_write(lt9611->regmap, 0x8318, (u8)(vsync_porch % 256));
++
++	regmap_write(lt9611->regmap, 0x8319, (u8)(hfront_porch % 256));
++
++	regmap_write(lt9611->regmap, 0x831a, (u8)(hsync_porch / 256));
++	regmap_write(lt9611->regmap, 0x831b, (u8)(hsync_porch % 256));
++}
++
++static void lt9611_pcr_setup(struct lt9611 *lt9611, const struct drm_display_mode *mode , int pcr_m)
++{
++	int pol, h_polarity,v_polarity;
++
++	const struct reg_sequence reg_cfg[] = {
++		{ 0x830b, 0x01 },
++		{ 0x830c, 0x10 },
++		{ 0x8348, 0x00 },
++		{ 0x8349, 0x81 },
++
++		/* stage 1 */
++		{ 0x8321, 0x4a },
++		{ 0x8324, 0x71 },
++		{ 0x8325, 0x30 },
++		{ 0x832a, 0x01 },
++
++
++		{ 0x834a, 0x40 },
++		{ 0x831d, 0x10 },
++	};
++
++
++	if(lt9611_pattern_enabled) return;
++
++	h_polarity=1;
++	v_polarity=1;
++	pol = (h_polarity)*0x02 + (v_polarity);
++	pol = ~pol;
++	pol &= 0x03;
++
++	regmap_multi_reg_write(lt9611->regmap, reg_cfg, ARRAY_SIZE(reg_cfg));
++	/* stage 2 */
++	regmap_write(lt9611->regmap, 0x834a, 0x40);
++	regmap_write(lt9611->regmap, 0x831d, 0x10 | pol);
++
++	lt9611_mipi_video_setup(lt9611, mode);
++
++	regmap_write(lt9611->regmap, 0x8326, pcr_m);
++
++	/* pcr rst */
++	regmap_write(lt9611->regmap, 0x8011, 0x5a);
++	regmap_write(lt9611->regmap, 0x8011, 0xfa);
++}
++
++static int lt9611_pll_setup(struct lt9611 *lt9611, const struct drm_display_mode *mode , int *pcr_m)
++{
++	unsigned int pclk = mode->clock;
++	int hdmi_post_div ;
++	unsigned int pll_lock_flag, cal_done_flag, band_out;
++	int i;
++
++	const struct reg_sequence reg_cfg[] = {
++		/* txpll init */
++		{ 0x8123, 0x40 },
++		{ 0x8124, 0x62 },
++		{ 0x8125, 0x80 },
++		{ 0x8126, 0x55 },
++		{ 0x812c, 0x37 },
++		{ 0x812f, 0x01 },
++		{ 0x8127, 0x66 },
++		{ 0x8128, 0x88 },
++		{ 0x812a, 0x20 },    //for U3
++	};
++
++	if(lt9611_pattern_enabled) return 0;
++
++	regmap_multi_reg_write(lt9611->regmap, reg_cfg, ARRAY_SIZE(reg_cfg));
++
++	if (pclk > 150000)
++	{
++		regmap_write(lt9611->regmap, 0x812d, 0x88);
++		hdmi_post_div = 0x01;
++	}
++	else if (pclk > 80000)
++	{
++		regmap_write(lt9611->regmap, 0x812d, 0x99);
++		hdmi_post_div = 0x02;
++	}
++	else
++	{
++		regmap_write(lt9611->regmap, 0x812d, 0xaa);
++		hdmi_post_div = 0x04;
++	}
++	*pcr_m = ((pclk*5*hdmi_post_div)/27000);
++	(*pcr_m) --;
++
++	printk("\r\nlt9611_pll_setup: pcr_m = 0x%x, hdmi_post_div = %d", *pcr_m, hdmi_post_div); //Hex
++
++	regmap_write(lt9611->regmap, 0x832d, 0x40);
++	regmap_write(lt9611->regmap, 0x8331, 0x08);
++	regmap_write(lt9611->regmap, 0x8326, 0x80| *pcr_m);
++
++	/*
++	 * first divide pclk by 2 first
++	 *  - write divide by 64k to 19:16 bits which means shift by 17
++	 *  - write divide by 256 to 15:8 bits which means shift by 9
++	 *  - write remainder to 7:0 bits, which means shift by 1
++	 */
++	pclk = pclk / 2;
++	regmap_write(lt9611->regmap, 0x82e3, pclk/65536);
++	pclk = pclk % 65536;
++	regmap_write(lt9611->regmap, 0x82e4, pclk/256);
++	regmap_write(lt9611->regmap, 0x82e5, pclk%256);
++
++	regmap_write(lt9611->regmap, 0x82de, 0x20);
++	regmap_write(lt9611->regmap, 0x82de, 0xe0);
++
++	regmap_write(lt9611->regmap, 0x8011, 0x5a);/* Pcr clk reset */
++	regmap_write(lt9611->regmap, 0x8011, 0xfa);
++
++	regmap_write(lt9611->regmap, 0x8016, 0xf2);/* pll cal digital reset */
++	regmap_write(lt9611->regmap, 0x8018, 0xdc);/* pll analog reset */
++	regmap_write(lt9611->regmap, 0x8018, 0xfc);
++	regmap_write(lt9611->regmap, 0x8016, 0xf3);/*start calibration*/
++
++	/* pll lock status */
++	for(i = 0; i < 6 ; i++)
++	{
++		regmap_write(lt9611->regmap, 0x8016, 0xe3);/* pll lock logic reset */
++		regmap_write(lt9611->regmap, 0x8016, 0xf3);
++
++		regmap_read(lt9611->regmap, 0x82e7, (unsigned int*)&cal_done_flag);
++		regmap_read(lt9611->regmap, 0x82e6, (unsigned int*)&band_out);
++		regmap_read(lt9611->regmap, 0x8215, (unsigned int*)&pll_lock_flag);
++
++		if((pll_lock_flag & 0x80)&&(cal_done_flag & 0x80)&&(band_out != 0xff))
++		{
++			printk("\r\nLT9611_PLL: HDMI pll locked band out: 0x%x", band_out);
++			break;
++		}
++		else
++		{
++			regmap_write(lt9611->regmap, 0x8011, 0x5a);/* Pcr clk reset */
++			regmap_write(lt9611->regmap, 0x8011, 0xfa);
++			regmap_write(lt9611->regmap, 0x8016, 0xf2);/* pll cal digital reset */
++			regmap_write(lt9611->regmap, 0x8018, 0xdc);/* pll analog reset */
++			regmap_write(lt9611->regmap, 0x8018, 0xfc);
++			regmap_write(lt9611->regmap, 0x8016, 0xf3);/*start calibration*/
++			printk("\r\nLT9611_PLL: HDMI pll unlocked, reset pll");
++		}
++	}
++
++	return 0;
++}
++
++static int lt9611_read_video_check(struct lt9611 *lt9611, unsigned int reg)
++{
++	unsigned int temp, temp2;
++	int ret;
++
++	ret = regmap_read(lt9611->regmap, reg, &temp);
++	if (ret)
++		return ret;
++	temp <<= 8;
++	ret = regmap_read(lt9611->regmap, reg + 1, &temp2);
++	if (ret)
++		return ret;
++
++	return (temp + temp2);
++}
++
++static int lt9611_video_check(struct lt9611 *lt9611)
++{
++	u32 v_total, vactive, hactive_a, hactive_b, h_total_sysclk;
++	int temp;
++
++	/* top module video check */
++
++	/* vactive */
++	temp = lt9611_read_video_check(lt9611, 0x8282);
++	if (temp < 0)
++		goto end;
++	vactive = temp;
++
++	/* v_total */
++	temp = lt9611_read_video_check(lt9611, 0x826c);
++	if (temp < 0)
++		goto end;
++	v_total = temp;
++
++	/* h_total_sysclk */
++	temp = lt9611_read_video_check(lt9611, 0x8286);
++	if (temp < 0)
++		goto end;
++	h_total_sysclk = temp;
++
++	/* hactive_a */
++	temp = lt9611_read_video_check(lt9611, 0x8382);
++	if (temp < 0)
++		goto end;
++	hactive_a = temp / 3;
++
++	/* hactive_b */
++	temp = lt9611_read_video_check(lt9611, 0x8386);
++	if (temp < 0)
++		goto end;
++	hactive_b = temp / 3;
++
++	dev_info(lt9611->dev,
++		 "video check: hactive_a=%d, hactive_b=%d, vactive=%d, v_total=%d, h_total_sysclk=%d\n",
++		 hactive_a, hactive_b, vactive, v_total, h_total_sysclk);
++
++	return 0;
++
++end:
++	dev_err(lt9611->dev, "read video check error\n");
++	return temp;
++}
++
++static void lt9611_hdmi_tx_digital(struct lt9611 *lt9611)
++{
++	int AR = AR_16_9;
++	int pb0,pb2,pb4;
++	int infoFrame_en,VIC;
++
++	if(lt9611_pattern_enabled) return;
++/*
++	if(lt9611->vic==0)
++		if(lt9611->is4k)
++			lt9611->vic = 95;
++		else
++			lt9611->vic = 16;
++*/
++	VIC=lt9611->vic;
++	infoFrame_en = (AIF_PKT_EN|AVI_PKT_EN|SPD_PKT_EN);
++	pb2 =  (AR<<4) + 0x08;
++	pb4 =  VIC;
++	pb0 = ((pb2 + pb4) <= 0x5f)?(0x5f - pb2 - pb4):(0x15f - pb2 - pb4);
++
++	regmap_write(lt9611->regmap, 0x82d6, 0x8e);//sync polarity
++	regmap_write(lt9611->regmap, 0x82d7, 0x04);
++
++	//AVI
++	regmap_write(lt9611->regmap, 0x8443, pb0); 
++	regmap_write(lt9611->regmap, 0x8445, pb2);
++	regmap_write(lt9611->regmap, 0x8447, pb4);
++	regmap_write(lt9611->regmap, 0x8410, 0x02);//data iland
++	regmap_write(lt9611->regmap, 0x8412, 0x64);//act_h_blank
++
++	//VS_IF, 4k 30hz need send VS_IF packet.
++	if(VIC == 95)
++	{
++		regmap_write(lt9611->regmap, 0x8413d, infoFrame_en|UD0_PKT_EN);//UD1 infoframe enable //revise on 20200715
++		regmap_write(lt9611->regmap, 0x8474, 0x81);//HB0
++		regmap_write(lt9611->regmap, 0x8475, 0x01);//HB1
++		regmap_write(lt9611->regmap, 0x8476, 0x05);//HB2
++		regmap_write(lt9611->regmap, 0x8477, 0x49);//PB0
++		regmap_write(lt9611->regmap, 0x8478, 0x03);//PB1
++		regmap_write(lt9611->regmap, 0x8479, 0x0c);//PB2
++		regmap_write(lt9611->regmap, 0x847a, 0x00);//PB3
++		regmap_write(lt9611->regmap, 0x847b, 0x20);//PB4
++		regmap_write(lt9611->regmap, 0x847c, 0x01);//PB5
++	}
++	else
++	{
++		regmap_write(lt9611->regmap, 0x843d, infoFrame_en);//UD1 infoframe enable
++	}
++
++	if(infoFrame_en & SPD_PKT_EN)
++	{
++		regmap_write(lt9611->regmap, 0x84c0, 0x00);//HB0
++		regmap_write(lt9611->regmap, 0x84c1, 0x00);//HB1
++		regmap_write(lt9611->regmap, 0x84c2, 0x00);//HB2
++
++		regmap_write(lt9611->regmap, 0x84c3, 0x00);//PB0
++		regmap_write(lt9611->regmap, 0x84c4, 0x00);//PB1
++		regmap_write(lt9611->regmap, 0x84c5, 0x00);//PB2
++		regmap_write(lt9611->regmap, 0x84c6, 0x00);//PB3
++		regmap_write(lt9611->regmap, 0x84c7, 0x00);//PB4
++		regmap_write(lt9611->regmap, 0x84c8, 0x00);//PB5
++	}
++}
++
++static void lt9611_hdmi_tx_phy(struct lt9611 *lt9611)
++{
++	struct reg_sequence reg_cfg[] = {
++		{ 0x8130, 0x6a },
++		{ 0x8131, 0x73 }, /* HDMI AC mode */
++		{ 0x8132, 0x4a },
++		{ 0x8133, 0x0b },
++		{ 0x8134, 0x09 },
++		{ 0x8135, 0x09 },
++		{ 0x8136, 0x09 },
++		{ 0x8137, 0x44 },
++		{ 0x813f, 0x0f },
++		{ 0x8140, 0x70 },//clk swing
++		{ 0x8141, 0x70 },//D0 swing
++		{ 0x8142, 0x70 },//D1 swing
++		{ 0x8143, 0x70 },//D2 swing
++		{ 0x8144, 0x0a },
++	};
++
++	struct reg_sequence reg_cfg_4k[] = {
++		{ 0x8130, 0x6a },
++		{ 0x8131, 0x73 }, /* HDMI AC mode */
++		{ 0x8132, 0x4a },
++		{ 0x8133, 0x0b },
++		{ 0x8134, 0x1c },
++		{ 0x8135, 0x1c },
++		{ 0x8136, 0x1c },
++		{ 0x8137, 0x44 },
++		{ 0x813f, 0x0f },
++		{ 0x8140, 0x95 },
++		{ 0x8141, 0xb0 },
++		{ 0x8142, 0xb0 },
++		{ 0x8143, 0xb0 },
++		{ 0x8144, 0x0a },
++	};
++
++	if(lt9611_pattern_enabled) return ;
++	
++	if(lt9611->is4k)
++		regmap_multi_reg_write(lt9611->regmap, reg_cfg_4k, ARRAY_SIZE(reg_cfg_4k));
++	else
++		regmap_multi_reg_write(lt9611->regmap, reg_cfg, ARRAY_SIZE(reg_cfg));
++}
++
++static void lt9611_lowpower_mode(struct lt9611 *lt9611, bool on)
++{
++	 if(on)
++	 {
++		regmap_write(lt9611->regmap, 0x8102, 0x49);
++		regmap_write(lt9611->regmap, 0x8123, 0x80);
++		regmap_write(lt9611->regmap, 0x8130, 0x00); //0x00 --> 0xc0, tx phy and clk can not power down, otherwise dc det don't work.
++		regmap_write(lt9611->regmap, 0x8011, 0x0a);
++
++	 }
++	 else
++	 {
++		regmap_write(lt9611->regmap, 0x8102, 0x12);
++		regmap_write(lt9611->regmap, 0x8123, 0x40);
++		regmap_write(lt9611->regmap, 0x8130, 0x0a);
++		regmap_write(lt9611->regmap, 0x8011, 0xfa);
++	 }
++}
++
++static irqreturn_t lt9611_irq_thread_handler(int irq, void *dev_id)
++{
++	struct lt9611 *lt9611 = dev_id;
++	unsigned int irq_flag0 = 0;
++	unsigned int irq_flag3 = 0;
++
++	regmap_read(lt9611->regmap, 0x820f, &irq_flag3);
++	regmap_read(lt9611->regmap, 0x820c, &irq_flag0);
++
++	if(lt9611_pattern_enabled) return IRQ_HANDLED;
++
++	/* hpd changed low */
++	if (irq_flag3 & 0x80) {
++		dev_info(lt9611->dev, "hdmi cable disconnected\n");
++#if PREFER_MODE
++		lt9611->prefer_mode = -1;
++#endif
++		regmap_write(lt9611->regmap, 0x8207, 0xbf);
++		regmap_write(lt9611->regmap, 0x8207, 0x3f);
++		lt9611_lowpower_mode(lt9611,true);
++	}
++
++	/* hpd changed high */
++	if (irq_flag3 & 0x40) {
++		dev_info(lt9611->dev, "hdmi cable connected\n");
++		lt9611_lowpower_mode(lt9611,false);
++
++		regmap_write(lt9611->regmap, 0x8207, 0x7f);
++		regmap_write(lt9611->regmap, 0x8207, 0x3f);
++		msleep(200);
++	}
++
++	if (irq_flag3 & 0xc0 && lt9611->bridge.dev)
++		drm_kms_helper_hotplug_event(lt9611->bridge.dev);
++
++	/* video input changed */
++	if (irq_flag0 & 0x01) {
++		dev_info(lt9611->dev, "video input changed\n");
++		regmap_write(lt9611->regmap, 0x829e, 0xff);
++		regmap_write(lt9611->regmap, 0x829e, 0xf7);
++		regmap_write(lt9611->regmap, 0x8204, 0xff);
++		regmap_write(lt9611->regmap, 0x8204, 0xfe);
++	}
++
++	return IRQ_HANDLED;
++}
++
++static void lt9611_enable_hpd_interrupts(struct lt9611 *lt9611)
++{
++	unsigned int val;
++
++	if(lt9611_pattern_enabled) return ;
++
++	regmap_read(lt9611->regmap, 0x8203, &val);
++
++	val &= ~0xc0;
++	regmap_write(lt9611->regmap, 0x8203, val);
++	regmap_write(lt9611->regmap, 0x8207, 0xff); /* clear */
++	regmap_write(lt9611->regmap, 0x8207, 0x3f);
++}
++
++static void lt9611_sleep_setup(struct lt9611 *lt9611)
++{
++	const struct reg_sequence sleep_setup[] = {
++		{ 0x8024, 0x76 },
++		{ 0x8023, 0x01 },
++		{ 0x8157, 0x03 }, /* set addr pin as output */
++		{ 0x8149, 0x0b },
++		{ 0x8151, 0x30 }, /* disable IRQ */
++		{ 0x8102, 0x48 }, /* MIPI Rx power down */
++		{ 0x8123, 0x80 },
++		{ 0x8130, 0x00 },
++		{ 0x8100, 0x01 }, /* bandgap power down */
++		{ 0x8101, 0x00 }, /* system clk power down */
++	};
++
++	if(lt9611_pattern_enabled) return ;
++
++	regmap_multi_reg_write(lt9611->regmap,
++			       sleep_setup, ARRAY_SIZE(sleep_setup));
++	lt9611->sleep = true;
++}
++
++static int lt9611_power_on(struct lt9611 *lt9611)
++{
++	int ret;
++	const struct reg_sequence seq[] = {
++		/* LT9611_System_Init */
++		{ 0x8101, 0x18 }, /* sel xtal clock */
++
++		/* timer for frequency meter */
++		{ 0x821b, 0x69 }, /* timer 2 */
++		{ 0x821c, 0x78 },
++		{ 0x82cb, 0x69 }, /* timer 1 */
++		{ 0x82cc, 0x78 },
++
++		/* irq init */
++		{ 0x8251, 0x01 },
++		{ 0x8258, 0x0a }, /* hpd irq */
++		{ 0x8259, 0x80 }, /* hpd debounce width */
++		{ 0x829e, 0xf7 }, /* video check irq */
++
++		/* power consumption for work */
++		{ 0x8004, 0xf0 },
++		{ 0x8006, 0xf0 },
++		{ 0x800a, 0x80 },
++		{ 0x800b, 0x46 },
++		{ 0x800d, 0xef },
++		{ 0x8011, 0xfa },
++	};
++
++	if(lt9611_pattern_enabled) return 0;
++
++	if (lt9611->power_on)
++		return 0;
++
++	ret = regmap_multi_reg_write(lt9611->regmap, seq, ARRAY_SIZE(seq));
++	if (!ret)
++		lt9611->power_on = true;
++
++	return ret;
++}
++
++static int lt9611_power_off(struct lt9611 *lt9611)
++{
++	int ret;
++
++	if(lt9611_pattern_enabled) return 0;
++
++	ret = regmap_write(lt9611->regmap, 0x8130, 0x6a);
++	if (!ret)
++		lt9611->power_on = false;
++
++	return ret;
++}
++
++static void lt9611_reset(struct lt9611 *lt9611)
++{
++	gpiod_set_value_cansleep(lt9611->reset_gpio, 0);
++	msleep(20);
++
++	gpiod_set_value_cansleep(lt9611->reset_gpio, 1);
++	msleep(20);
++
++	gpiod_set_value_cansleep(lt9611->reset_gpio, 0);
++	msleep(100);
++}
++
++static void __maybe_unused lt9611_assert_5v(struct lt9611 *lt9611)
++{
++	if (!lt9611->enable_gpio)
++		return;
++
++	gpiod_set_value_cansleep(lt9611->enable_gpio, 1);
++	msleep(20);
++}
++
++static struct lt9611_mode *lt9611_find_mode(const struct drm_display_mode *mode
++#if PREFER_MODE
++, int prefer_mode
++#endif
++)
++{
++	int i;
++
++printk("lt9611_find_mode hdisplay:%d vdisplay:%d vrefresh:%d\n",mode->hdisplay,mode->vdisplay,drm_mode_vrefresh(mode));
++	for (i = 0; i < ARRAY_SIZE(lt9611_modes); i++) {
++		if (lt9611_modes[i].hdisplay == mode->hdisplay &&
++		    lt9611_modes[i].vdisplay == mode->vdisplay &&
++		    lt9611_modes[i].vrefresh == drm_mode_vrefresh(mode)) {
++#if PREFER_MODE
++			if((prefer_mode!=-1)&&(prefer_mode!=i))
++				return NULL;
++#endif
++			return &lt9611_modes[i];
++		}
++	}
++
++	return NULL;
++}
++
++/* connector funcs */
++static enum drm_connector_status
++lt9611_connector_detect(struct drm_connector *connector, bool force)
++{
++	struct lt9611 *lt9611 = connector_to_lt9611(connector);
++	unsigned int reg_val = 0;
++	int connected = 0;
++
++	regmap_read(lt9611->regmap, 0x825e, &reg_val);
++	connected  = (reg_val & BIT(2));
++
++	lt9611->status = connected ?  connector_status_connected :
++				connector_status_disconnected;
++
++	return lt9611->status;
++}
++
++static int lt9611_read_edid(struct lt9611 *lt9611)
++{
++	unsigned int temp;
++	int ret = 0;
++	int i, j;
++
++	if(lt9611_pattern_enabled) return 0;
++
++	msleep(500);//wait for clk_disable_unused finish
++
++	/* memset to clear old buffer, if any */
++	memset(lt9611->edid_buf, 0, sizeof(lt9611->edid_buf));
++
++	regmap_write(lt9611->regmap, 0x8503, 0xc9);
++
++	/* 0xA0 is EDID device address */
++	regmap_write(lt9611->regmap, 0x8504, 0xa0);
++	/* 0x00 is EDID offset address */
++	regmap_write(lt9611->regmap, 0x8505, 0x00);
++
++	/* length for read */
++	regmap_write(lt9611->regmap, 0x8506, EDID_LEN);
++	regmap_write(lt9611->regmap, 0x8514, 0x7f);
++
++	for (i = 0; i < EDID_LOOP; i++) {
++		/* offset address */
++		regmap_write(lt9611->regmap, 0x8505, i * EDID_LEN);
++		regmap_write(lt9611->regmap, 0x8507, 0x36);
++		regmap_write(lt9611->regmap, 0x8507, 0x31);
++		regmap_write(lt9611->regmap, 0x8507, 0x37);
++		usleep_range(5000, 10000);
++
++		regmap_read(lt9611->regmap, 0x8540, &temp);
++
++		if (temp & KEY_DDC_ACCS_DONE) {
++			for (j = 0; j < EDID_LEN; j++) {
++				regmap_read(lt9611->regmap, 0x8583, &temp);
++				lt9611->edid_buf[i * EDID_LEN + j] = temp;
++			}
++
++		} else if (temp & DDC_NO_ACK) { /* DDC No Ack or Abitration lost */
++			dev_err(lt9611->dev, "read edid failed: no ack\n");
++			ret = -EIO;
++			goto end;
++
++		} else {
++			dev_err(lt9611->dev, "read edid failed: access not done\n");
++			ret = -EIO;
++			goto end;
++		}
++	}
++
++end:
++	regmap_write(lt9611->regmap, 0x8507, 0x1f);
++	return ret;
++}
++#if PREFER_MODE
++static void lt9611_prefer_mode(struct lt9611 *lt9611)
++{
++	int i;
++	{
++		for(i=0;i<sizeof(lt9611->edid_buf);i+=16)
++		{
++			printk("0x%02x : %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x",
++				i, *(lt9611->edid_buf+i+0) , *(lt9611->edid_buf+i+1) , *(lt9611->edid_buf+i+2) , *(lt9611->edid_buf+i+3)
++				, *(lt9611->edid_buf+i+4) , *(lt9611->edid_buf+i+5) , *(lt9611->edid_buf+i+6) , *(lt9611->edid_buf+i+7)
++				, *(lt9611->edid_buf+i+8) , *(lt9611->edid_buf+i+9) , *(lt9611->edid_buf+i+10) , *(lt9611->edid_buf+i+11)
++				, *(lt9611->edid_buf+i+12) , *(lt9611->edid_buf+i+13) , *(lt9611->edid_buf+i+14) , *(lt9611->edid_buf+i+15)
++				);
++		}
++	}
++	if((*(lt9611->edid_buf+0x36)!=0)&&(*(lt9611->edid_buf+0x37)!=0))
++	{
++		int h_active = (((*(lt9611->edid_buf+0x3a))&0xf0)<<4)|(*(lt9611->edid_buf+0x38));
++
++		printk("lt9611_prefer_mode h_active:%d\n",h_active);
++
++		for (i = 0; i < ARRAY_SIZE(lt9611_modes); i++) {
++			if (lt9611_modes[i].hdisplay == h_active)
++			{
++				lt9611->prefer_mode = i;
++				break;
++			}
++		}
++	}
++}
++#endif
++static int
++lt9611_get_edid_block(void *data, u8 *buf, unsigned int block, size_t len)
++{
++	struct lt9611 *lt9611 = data;
++	int ret;
++
++	if (len > 128)
++		return -EINVAL;
++
++	/* supports up to 1 extension block */
++	/* TODO: add support for more extension blocks */
++	if (block > 1)
++		return -EINVAL;
++
++	if (block == 0) {
++		ret = lt9611_read_edid(lt9611);
++		if (ret) {
++			dev_err(lt9611->dev, "edid read failed\n");
++			return ret;
++		}
++	}
++
++	block %= 2;
++#if PREFER_MODE
++	if(lt9611->prefer_mode == -1)
++		lt9611_prefer_mode(lt9611);
++#endif
++	memcpy(buf, lt9611->edid_buf + (block * 128), len);
++
++	return 0;
++}
++/*
++static int lt9611_connector_get_modes(struct drm_connector *connector)
++{
++	struct lt9611 *lt9611 = connector_to_lt9611(connector);
++	unsigned int count;
++	struct edid *edid;
++
++	lt9611_power_on(lt9611);
++	//edid = drm_do_get_edid(connector, lt9611_get_edid_block, lt9611);
++	edid = drm_edid_read_custom(connector, lt9611_get_edid_block, lt9611);
++	drm_connector_update_edid_property(connector, edid);
++	count = drm_add_edid_modes(connector, edid);
++	kfree(edid);
++
++	return count;
++}*/
++
++static int lt9611_connector_get_modes(struct drm_connector *connector)
++{
++	struct lt9611 *lt9611 = connector_to_lt9611(connector);
++	const struct drm_edid *drm_edid;
++	unsigned int count = 0;
++
++	lt9611_power_on(lt9611);
++	drm_edid = drm_edid_read_custom(connector, lt9611_get_edid_block, lt9611);
++	drm_edid_connector_update(connector, drm_edid);
++	count = drm_edid_connector_add_modes(connector);
++	drm_edid_free(drm_edid);
++	return count;
++}
++
++static enum drm_mode_status
++lt9611_connector_mode_valid(struct drm_connector *connector,
++			    const struct drm_display_mode *mode)
++{
++	struct lt9611_mode *lt9611_mode = lt9611_find_mode(mode
++#if PREFER_MODE
++	,-1
++#endif
++	);
++
++	return lt9611_mode ? MODE_OK : MODE_BAD;
++}
++
++/* bridge funcs */
++static void lt9611_bridge_enable(struct drm_bridge *bridge)
++{
++	struct lt9611 *lt9611 = bridge_to_lt9611(bridge);
++
++	if(lt9611_pattern_enabled) return ;
++
++	if (lt9611_power_on(lt9611)) {
++		dev_err(lt9611->dev, "power on failed\n");
++		return;
++	}
++
++	lt9611_mipi_input_analog(lt9611);
++	lt9611_mipi_input_digital(lt9611);
++	//lt9611_mipi_input_digital(lt9611);
++	lt9611_hdmi_tx_digital(lt9611);
++	lt9611_hdmi_tx_phy(lt9611);
++
++	//msleep(500);
++
++	lt9611_video_check(lt9611);
++
++	/* Enable HDMI output */
++	regmap_write(lt9611->regmap, 0x8130, 0xff);
++}
++
++static void lt9611_bridge_disable(struct drm_bridge *bridge)
++{
++	struct lt9611 *lt9611 = bridge_to_lt9611(bridge);
++	int ret;
++
++	if(lt9611_pattern_enabled) return ;
++
++	/* Disable HDMI output */
++	ret = regmap_write(lt9611->regmap, 0x8130, 0x6a);
++	if (ret) {
++		dev_err(lt9611->dev, "video on failed\n");
++		return;
++	}
++
++	if (lt9611_power_off(lt9611)) {
++		dev_err(lt9611->dev, "power on failed\n");
++		return;
++	}
++}
++
++static struct
++drm_connector_helper_funcs lt9611_bridge_connector_helper_funcs = {
++	.get_modes = lt9611_connector_get_modes,
++	.mode_valid = lt9611_connector_mode_valid,
++};
++
++static const struct drm_connector_funcs lt9611_bridge_connector_funcs = {
++	.fill_modes = drm_helper_probe_single_connector_modes,
++	.detect = lt9611_connector_detect,
++	.destroy = drm_connector_cleanup,
++	.reset = drm_atomic_helper_connector_reset,
++	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
++	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
++};
++
++static struct mipi_dsi_device *lt9611_attach_dsi(struct lt9611 *lt9611,
++						 struct device_node *dsi_node)
++{
++	const struct mipi_dsi_device_info info = { "lt9611", 0, NULL };
++	struct mipi_dsi_device *dsi;
++	struct mipi_dsi_host *host;
++	int ret;
++
++	host = of_find_mipi_dsi_host_by_node(dsi_node);
++	if (!host) {
++		dev_err(lt9611->dev, "failed to find dsi host\n");
++		return ERR_PTR(-EPROBE_DEFER);
++	}
++
++	dsi = mipi_dsi_device_register_full(host, &info);
++	if (IS_ERR(dsi)) {
++		dev_err(lt9611->dev, "failed to create dsi device\n");
++		return dsi;
++	}
++
++	dsi->lanes = 4;
++	dsi->format = MIPI_DSI_FMT_RGB888;
++	dsi->mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
++			  MIPI_DSI_MODE_VIDEO_HSE;
++
++	ret = mipi_dsi_attach(dsi);
++	if (ret < 0) {
++		dev_err(lt9611->dev, "failed to attach dsi to host\n");
++		mipi_dsi_device_unregister(dsi);
++		return ERR_PTR(ret);
++	}
++
++	return dsi;
++}
++
++static void lt9611_bridge_detach(struct drm_bridge *bridge)
++{
++	struct lt9611 *lt9611 = bridge_to_lt9611(bridge);
++
++	if (lt9611->dsi1) {
++		mipi_dsi_detach(lt9611->dsi1);
++		mipi_dsi_device_unregister(lt9611->dsi1);
++	}
++
++	mipi_dsi_detach(lt9611->dsi0);
++	mipi_dsi_device_unregister(lt9611->dsi0);
++}
++
++static int lt9611_connector_init(struct drm_bridge *bridge, struct lt9611 *lt9611)
++{
++	int ret;
++
++	ret = drm_connector_init(bridge->dev, &lt9611->connector,
++				 &lt9611_bridge_connector_funcs,
++				 DRM_MODE_CONNECTOR_HDMIA);
++	if (ret) {
++		DRM_ERROR("Failed to initialize connector with drm\n");
++		return ret;
++	}
++
++	drm_connector_helper_add(&lt9611->connector,
++				 &lt9611_bridge_connector_helper_funcs);
++	drm_connector_attach_encoder(&lt9611->connector, bridge->encoder);
++
++	if (!bridge->encoder) {
++		DRM_ERROR("Parent encoder object not found");
++		return -ENODEV;
++	}
++
++	return 0;
++}
++
++static int lt9611_bridge_attach(struct drm_bridge *bridge,
++				struct drm_encoder *encoder,
++				enum drm_bridge_attach_flags flags)
++{
++	struct lt9611 *lt9611 = bridge_to_lt9611(bridge);
++	int ret;
++
++	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR)) {
++		ret = lt9611_connector_init(bridge, lt9611);
++		if (ret < 0)
++			return ret;
++	}
++
++	/* Attach primary DSI */
++	lt9611->dsi0 = lt9611_attach_dsi(lt9611, lt9611->dsi0_node);
++	if (IS_ERR(lt9611->dsi0))
++		return PTR_ERR(lt9611->dsi0);
++
++	/* Attach secondary DSI, if specified */
++	if (lt9611->dsi1_node) {
++		lt9611->dsi1 = lt9611_attach_dsi(lt9611, lt9611->dsi1_node);
++		if (IS_ERR(lt9611->dsi1)) {
++			ret = PTR_ERR(lt9611->dsi1);
++			goto err_unregister_dsi0;
++		}
++	}
++
++	return 0;
++
++err_unregister_dsi0:
++	lt9611_bridge_detach(bridge);
++	drm_connector_cleanup(&lt9611->connector);
++	mipi_dsi_device_unregister(lt9611->dsi0);
++
++	return ret;
++}
++
++static enum drm_mode_status lt9611_bridge_mode_valid(struct drm_bridge *bridge,
++						     const struct drm_display_info *info,
++						     const struct drm_display_mode *mode)
++{
++	struct lt9611 *lt9611 = bridge_to_lt9611(bridge);
++	struct lt9611_mode *lt9611_mode = lt9611_find_mode(mode
++#if PREFER_MODE
++	,lt9611->prefer_mode
++#endif
++	);
++
++	if (!lt9611_mode)
++	{
++		return MODE_BAD;
++	}
++	else if (lt9611_mode->intfs > 1 && !lt9611->dsi1)
++	{
++		return MODE_PANEL;
++	}
++	else
++	{
++		return MODE_OK;
++	}
++}
++
++static void lt9611_bridge_pre_enable(struct drm_bridge *bridge)
++{
++	struct lt9611 *lt9611 = bridge_to_lt9611(bridge);
++
++	if(lt9611_pattern_enabled) return ;
++
++	if (!lt9611->sleep)
++		return;
++
++	lt9611_reset(lt9611);
++	regmap_write(lt9611->regmap, 0x80ee, 0x01);
++
++	lt9611->sleep = false;
++}
++
++static void __maybe_unused lt9611_bridge_post_disable(struct drm_bridge *bridge)
++{
++	struct lt9611 *lt9611 = bridge_to_lt9611(bridge);
++
++	lt9611_sleep_setup(lt9611);
++}
++
++static void lt9611_bridge_mode_set(struct drm_bridge *bridge,
++				   const struct drm_display_mode *mode,
++				   const struct drm_display_mode *adj_mode)
++{
++	struct lt9611 *lt9611 = bridge_to_lt9611(bridge);
++	struct hdmi_avi_infoframe avi_frame;
++	struct lt9611_mode *lt9611_mode = lt9611_find_mode(mode
++#if PREFER_MODE
++	,-1
++#endif
++	);
++	int ret;
++	int pcr_m=0;
++
++	if(lt9611_mode)
++	{
++		prepare_clk(lt9611,lt9611_mode);
++		lt9611->is4k = lt9611_mode->is4k;
++	}
++	lt9611_bridge_pre_enable(bridge);
++
++	//lt9611_mipi_input_digital(lt9611, mode);
++	lt9611_pll_setup(lt9611, mode ,&pcr_m);
++	//lt9611_mipi_video_setup(lt9611, mode);
++	lt9611_pcr_setup(lt9611, mode,pcr_m);
++
++	ret = drm_hdmi_avi_infoframe_from_display_mode(&avi_frame,
++						       &lt9611->connector,
++						       mode);
++	if (!ret)
++	{
++		lt9611->vic = avi_frame.video_code;
++	}
++	if(lt9611->vic==0)
++		if(lt9611_mode)
++			lt9611->vic = lt9611_mode->vic;
++
++	printk("lt9611_bridge_mode_set hdisplay:%d vic:%d\n",mode->hdisplay,lt9611_mode->vic);
++}
++
++static enum drm_connector_status lt9611_bridge_detect(struct drm_bridge *bridge,
++						       struct drm_connector *connector)
++{
++	struct lt9611 *lt9611 = bridge_to_lt9611(bridge);
++	unsigned int reg_val = 0;
++	int connected;
++
++	regmap_read(lt9611->regmap, 0x825e, &reg_val);
++	connected  = reg_val & BIT(2);
++
++	lt9611->status = connected ?  connector_status_connected :
++				connector_status_disconnected;
++
++	return lt9611->status;
++}
++/*
++static struct edid *lt9611_bridge_get_edid(struct drm_bridge *bridge,
++					   struct drm_connector *connector)
++{
++	struct lt9611 *lt9611 = bridge_to_lt9611(bridge);
++	struct edid *edid;
++
++	lt9611_power_on(lt9611);
++	//edid = drm_do_get_edid(connector, lt9611_get_edid_block, lt9611);
++	edid = drm_edid_read_custom(connector, lt9611_get_edid_block, lt9611);
++	cec_s_phys_addr_from_edid(lt9611->cec_adap, edid);
++
++	return edid;
++}*/
++
++static const struct drm_edid *lt9611_bridge_get_edid(struct drm_bridge *bridge,
++						     struct drm_connector *connector)
++{
++	struct lt9611 *lt9611 = bridge_to_lt9611(bridge);
++	const struct drm_edid *drm_edid;
++
++	lt9611_power_on(lt9611);
++	drm_edid = drm_edid_read_custom(connector, lt9611_get_edid_block, lt9611);
++	cec_s_phys_addr_from_edid(lt9611->cec_adap, drm_edid_raw(drm_edid));
++
++	return drm_edid;
++}
++
++static void __maybe_unused lt9611_bridge_hpd_enable(struct drm_bridge *bridge)
++{
++	struct lt9611 *lt9611 = bridge_to_lt9611(bridge);
++
++	lt9611_enable_hpd_interrupts(lt9611);
++}
++
++
++
++static void __maybe_unused lt9611_bridge_hpd_notify(struct drm_bridge *bridge,
++				      enum drm_connector_status status)
++{
++	struct lt9611 *adv = bridge_to_lt9611(bridge);
++
++	if (status == connector_status_disconnected)
++	{
++		cec_phys_addr_invalidate(adv->cec_adap);
++	}
++}
++
++static const struct drm_bridge_funcs lt9611_bridge_funcs = {
++	.enable = lt9611_bridge_enable,
++	.disable = lt9611_bridge_disable,
++	.mode_set = lt9611_bridge_mode_set,
++	.mode_valid = lt9611_bridge_mode_valid,
++	.attach = lt9611_bridge_attach,
++	.detect = lt9611_bridge_detect,
++	.edid_read = lt9611_bridge_get_edid,
++	.detach = lt9611_bridge_detach,
++	//.hpd_notify = lt9611_bridge_hpd_notify,
++};
++
++static int lt9611_parse_dt(struct device *dev,
++			   struct lt9611 *lt9611)
++{
++	lt9611->dsi0_node = of_graph_get_remote_node(dev->of_node, 0, -1);
++	if (!lt9611->dsi0_node) {
++		dev_err(lt9611->dev, "failed to get remote node for primary dsi\n");
++		return -ENODEV;
++	}
++
++	lt9611->dsi1_node = of_graph_get_remote_node(dev->of_node, 1, -1);
++
++	lt9611->ac_mode = of_property_read_bool(dev->of_node, "lt,ac-mode");
++
++	return 0;
++}
++
++static int lt9611_gpio_init(struct lt9611 *lt9611)
++{
++	struct device *dev = lt9611->dev;
++
++	lt9611->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
++	if (IS_ERR(lt9611->reset_gpio)) {
++		dev_err(dev, "failed to acquire reset gpio\n");
++		return PTR_ERR(lt9611->reset_gpio);
++	}
++	return 0;
++}
++
++static int lt9611_read_device_rev(struct lt9611 *lt9611)
++{
++	unsigned int rev;
++	int ret;
++
++	regmap_write(lt9611->regmap, 0x80ee, 0x01);
++	ret = regmap_read(lt9611->regmap, 0x8002, &rev);
++	if (ret)
++		dev_err(lt9611->dev, "failed to read revision: %d\n", ret);
++	else
++		dev_info(lt9611->dev, "LT9611 revision: 0x%x\n", rev);
++
++	return ret;
++}
++
++static int lt9611_hdmi_hw_params(struct device *dev, void *data,
++				 struct hdmi_codec_daifmt *fmt,
++				 struct hdmi_codec_params *hparms)
++{
++	struct lt9611 *lt9611 = data;
++
++	if(lt9611_pattern_enabled) return 0 ;
++
++	if (hparms->sample_rate == 48000)
++		regmap_write(lt9611->regmap, 0x840f, 0x2b);
++	else if (hparms->sample_rate == 96000)
++		regmap_write(lt9611->regmap, 0x840f, 0xab);
++	else
++		return -EINVAL;
++
++	regmap_write(lt9611->regmap, 0x8435, 0x00);
++	regmap_write(lt9611->regmap, 0x8436, 0x18);
++	regmap_write(lt9611->regmap, 0x8437, 0x00);
++
++	return 0;
++}
++
++static int lt9611_audio_startup(struct device *dev, void *data)
++{
++	struct lt9611 *lt9611 = data;
++
++	if(lt9611_pattern_enabled) return 0;
++
++	regmap_write(lt9611->regmap, 0x82d6, 0x8c);
++	regmap_write(lt9611->regmap, 0x82d7, 0x04);
++
++	regmap_write(lt9611->regmap, 0x8406, 0x08);
++	regmap_write(lt9611->regmap, 0x8407, 0x10);
++
++	regmap_write(lt9611->regmap, 0x8434, 0xd5);
++
++	return 0;
++}
++
++static void lt9611_audio_shutdown(struct device *dev, void *data)
++{
++	struct lt9611 *lt9611 = data;
++
++	if(lt9611_pattern_enabled) return ;
++
++	regmap_write(lt9611->regmap, 0x8406, 0x00);
++	regmap_write(lt9611->regmap, 0x8407, 0x00);
++}
++
++static int lt9611_hdmi_i2s_get_dai_id(struct snd_soc_component *component,
++				      struct device_node *endpoint,
++				      void *data)
++{
++	struct of_endpoint of_ep;
++	int ret;
++
++	ret = of_graph_parse_endpoint(endpoint, &of_ep);
++	if (ret < 0)
++		return ret;
++
++	/*
++	 * HDMI sound should be located as reg = <2>
++	 * Then, it is sound port 0
++	 */
++	if (of_ep.port == 2)
++		return 0;
++
++	return -EINVAL;
++}
++
++static const struct hdmi_codec_ops lt9611_codec_ops = {
++	.hw_params	= lt9611_hdmi_hw_params,
++	.audio_shutdown = lt9611_audio_shutdown,
++	.audio_startup	= lt9611_audio_startup,
++	.get_dai_id	= lt9611_hdmi_i2s_get_dai_id,
++};
++
++static int lt9611_audio_init(struct device *dev, struct lt9611 *lt9611)
++{
++	struct hdmi_codec_pdata codec_data = {
++		.ops		  = &lt9611_codec_ops,
++		.max_i2s_channels = 8,
++		.i2s		  = 1,
++		.data		  = lt9611,
++	};
++	struct platform_device *pdev;
++	int ret;
++
++	pdev = platform_device_alloc(HDMI_CODEC_DRV_NAME, PLATFORM_DEVID_AUTO);
++	if (!pdev)
++		return -ENOMEM;
++
++	/*
++	 * Give the codec platform device the bridge's OF node so that
++	 * "sound-dai = <&lt9611 0>" in the machine (simple-audio-card) node
++	 * resolves to this codec's ASoC component. Resolution would also
++	 * work via the i2c-client parent fallback in soc_component_to_node(),
++	 * but setting it explicitly removes that dependency. The node must be
++	 * set before platform_device_add() so it is in place when the generic
++	 * hdmi-codec driver probes and registers its component/DAI.
++	 */
++	pdev->dev.of_node = of_node_get(dev->of_node);
++
++	ret = platform_device_add_data(pdev, &codec_data, sizeof(codec_data));
++	if (ret)
++		goto err;
++
++	ret = platform_device_add(pdev);
++	if (ret)
++		goto err;
++
++	lt9611->audio_pdev = pdev;
++	return 0;
++
++err:
++	platform_device_put(pdev);	/* release path drops the of_node ref */
++	return ret;
++}
++
++static void lt9611_audio_exit(struct lt9611 *lt9611)
++{
++	if (lt9611->audio_pdev) {
++		platform_device_unregister(lt9611->audio_pdev);
++		lt9611->audio_pdev = NULL;
++	}
++}
++
++static int lt9611_probe(struct i2c_client *client)
++{
++	struct lt9611 *lt9611;
++	struct device *dev = &client->dev;
++	int ret;
++
++	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
++		dev_err(dev, "device doesn't support I2C\n");
++		return -ENODEV;
++	}
++
++	lt9611 = devm_drm_bridge_alloc(dev, struct lt9611, bridge,
++				       &lt9611_bridge_funcs);
++	if (IS_ERR(lt9611))
++		return PTR_ERR(lt9611);
++
++	lt9611->dev = &client->dev;
++	lt9611->client = client;
++	lt9611->sleep = false;
++
++	lt9611->regmap = devm_regmap_init_i2c(client, &lt9611_regmap_config);
++	if (IS_ERR(lt9611->regmap)) {
++		dev_err(lt9611->dev, "regmap i2c init failed\n");
++		return PTR_ERR(lt9611->regmap);
++	}
++
++	ret = lt9611_parse_dt(&client->dev, lt9611);
++	if (ret) {
++		dev_err(dev, "failed to parse device tree\n");
++		return ret;
++	}
++
++	ret = lt9611_gpio_init(lt9611);
++	if (ret < 0)
++		goto err_of_put;
++
++	lt9611_reset(lt9611);
++
++
++	ret = lt9611_read_device_rev(lt9611);
++	if (ret) {
++		dev_err(dev, "failed to read chip rev\n");
++		goto err_disable_regulators;
++	}
++
++	if(lt9611_pattern_enabled)
++		LT9611_test_pattern(lt9611);
++
++	lt9611->vco = devm_clk_get(dev, "vco");
++	if (IS_ERR(lt9611->vco)) {
++            lt9611->vco = NULL;
++            dev_err(dev, "vco missing or invalid\n");
++    }
++
++	lt9611->videopll1 = devm_clk_get(dev, "videopll1");
++	if (IS_ERR(lt9611->videopll1)) {
++            lt9611->videopll1 = NULL;
++            dev_err(dev, "videopll1 missing or invalid\n");
++    }
++
++	lt9611->pix = devm_clk_get(dev, "pix");
++	if (IS_ERR(lt9611->pix)) {
++            lt9611->pix = NULL;
++            dev_err(dev, "pix missing or invalid\n");
++    }
++#if PREFER_MODE
++	lt9611->prefer_mode = -1;
++#endif
++	ret = devm_request_threaded_irq(dev, client->irq, NULL,
++					lt9611_irq_thread_handler,
++					IRQF_ONESHOT, "lt9611_irq", lt9611);
++	if (ret) {
++		dev_err(dev, "failed to request irq\n");
++		goto err_disable_regulators;
++	}
++
++	i2c_set_clientdata(client, lt9611);
++
++	lt9611->bridge.of_node = client->dev.of_node;
++	lt9611->bridge.ops = DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID |
++			     DRM_BRIDGE_OP_HPD | DRM_BRIDGE_OP_MODES;
++	lt9611->bridge.type = DRM_MODE_CONNECTOR_HDMIA;
++
++	drm_bridge_add(&lt9611->bridge);
++
++	lt9611_enable_hpd_interrupts(lt9611);
++
++	/*
++	 * HDMI audio is optional: a failure here must not tear down the DRM
++	 * bridge (and with it the display), so warn and continue rather than
++	 * propagating the error out of probe.
++	 */
++	ret = lt9611_audio_init(dev, lt9611);
++	if (ret)
++		dev_warn(dev, "failed to init HDMI audio: %d\n", ret);
++
++	return 0;
++
++err_disable_regulators:
++
++err_of_put:
++	of_node_put(lt9611->dsi1_node);
++	of_node_put(lt9611->dsi0_node);
++
++	return ret;
++}
++static void lt9611_remove(struct i2c_client *client)
++{
++	struct lt9611 *lt9611 = i2c_get_clientdata(client);
++
++	disable_irq(client->irq);
++	lt9611_audio_exit(lt9611);
++	drm_bridge_remove(&lt9611->bridge);
++	
++	//cec_unregister_adapter(lt9611->cec_adap);
++
++	of_node_put(lt9611->dsi1_node);
++	of_node_put(lt9611->dsi0_node);
++}
++
++static int __init __maybe_unused lt9611_test_pattern_enable(char *str)
++{
++	if (!strcmp(str, "4k")) {
++		pr_info("Enable the lt9611 test pattern 4k mode.\n");
++		lt9611_pattern_enabled = 1;
++	}
++	if (!strcmp(str, "1080p")) {
++		pr_info("Enable the lt9611 test pattern 1080p mode.\n");
++		lt9611_pattern_enabled = 2;
++	}
++	if (!strcmp(str, "4096")) {
++		pr_info("Enable the lt9611 test pattern 4096x2160 mode.\n");
++		lt9611_pattern_enabled = 3;
++	}
++	if (!strcmp(str, "1200")) {
++		pr_info("Enable the lt9611 test pattern 1920x1200 mode.\n");
++		lt9611_pattern_enabled = 4;
++	}
++	return 1;
++}
++
++static void lt9611_shutdown(struct i2c_client *client)
++{
++	struct lt9611 *lt9611 = i2c_get_clientdata(client);
++
++	gpiod_set_value_cansleep(lt9611->reset_gpio, 1);
++}
++
++__setup("lt9611_pattern_enabled=", lt9611_test_pattern_enable);
++
++static struct i2c_device_id lt9611_id[] = {
++	{ "adlink,lt9611", 0 },
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, lt9611_id);
++
++static const struct of_device_id lt9611_match_table[] = {
++	{ .compatible = "adlink,lt9611" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, lt9611_match_table);
++
++static struct i2c_driver lt9611_driver = {
++	.driver = {
++		.name = "adlink-lt9611",
++		.of_match_table = lt9611_match_table,
++	},
++	.probe = lt9611_probe,
++	.remove = lt9611_remove,
++	.shutdown = lt9611_shutdown,
++	.id_table = lt9611_id,
++};
++module_i2c_driver(lt9611_driver);
++
++MODULE_LICENSE("GPL v2");
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index d1651e875fec..4f339c822ef0 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -2879,6 +2879,31 @@ static const struct drm_display_mode innolux_zj070na_01p_mode = {
+ 	.vtotal = 600 + 16 + 4 + 16,
+ };
+ 
++static const struct drm_display_mode auo_g156hat026_mode = {
++	.clock = 141000,
++	.hdisplay = 1920,
++	.hsync_start = 1920 + 80,
++	.hsync_end = 1920 + 80 + 80,
++	.htotal = 1920 + 80 + 80 + 80,
++
++	.vdisplay = 1080,
++	.vsync_start = 1080 + 8,
++	.vsync_end = 1080 + 8 + 20,
++	.vtotal = 1080 + 8 + 20 + 8,
++};
++
++static const struct panel_desc auo_g156hat026 = {
++	.modes = &auo_g156hat026_mode,
++	.num_modes = 1,
++	.bpc = 8,
++	.size = {
++		.width = 344,
++		.height = 194,
++	},
++	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
++	.connector_type = DRM_MODE_CONNECTOR_LVDS,
++};
++
+ static const struct panel_desc innolux_zj070na_01p = {
+ 	.modes = &innolux_zj070na_01p_mode,
+ 	.num_modes = 1,
+@@ -5054,6 +5079,9 @@ static const struct of_device_id platform_of_match[] = {
+ 	}, {
+ 		.compatible = "auo,g156xtn01",
+ 		.data = &auo_g156xtn01,
++	}, {
++		.compatible = "auo,g156hat026",
++		.data = &auo_g156hat026,
+ 	}, {
+ 		.compatible = "auo,g185han01",
+ 		.data = &auo_g185han01,
+@@ -5576,6 +5604,35 @@ static const struct panel_desc_dsi auo_b080uan01 = {
+ 	.lanes = 4,
+ };
+ 
++
++static const struct drm_display_mode auo_g080uan02_mode = {
++	.clock = 154500,
++	.hdisplay = 1200,
++	.hsync_start = 1200 + 1,
++	.hsync_end = 1200 + 139 + 1,
++	.htotal = 1200 + 139 + 1 + 1,
++	.vdisplay = 1920,
++	.vsync_start = 1920 + 1,
++	.vsync_end = 1920 + 59 + 1,
++	.vtotal = 1920 + 59 + 1 + 1,
++};
++
++static const struct panel_desc_dsi auo_g080uan02 = {
++	.desc = {
++		.modes = &auo_g080uan02_mode,
++		.num_modes = 1,
++		.bpc = 8,
++		.size = {
++			.width = 107,
++			.height = 172,
++		},
++		.connector_type = DRM_MODE_CONNECTOR_DSI,
++	},
++	.flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_CLOCK_NON_CONTINUOUS,
++	.format = MIPI_DSI_FMT_RGB888,
++	.lanes = 4,
++};
++
+ static const struct drm_display_mode boe_tv080wum_nl0_mode = {
+ 	.clock = 160000,
+ 	.hdisplay = 1200,
+@@ -5754,6 +5811,9 @@ static const struct of_device_id dsi_of_match[] = {
+ 	{
+ 		.compatible = "auo,b080uan01",
+ 		.data = &auo_b080uan01
++	}, {
++		.compatible = "auo,g080uan02",
++		.data = &auo_g080uan02
+ 	}, {
+ 		.compatible = "boe,tv080wum-nl0",
+ 		.data = &boe_tv080wum_nl0
+diff --git a/drivers/net/phy/realtek/realtek_main.c b/drivers/net/phy/realtek/realtek_main.c
+index 7c3d277efaf0..1a6b65c63853 100644
+--- a/drivers/net/phy/realtek/realtek_main.c
++++ b/drivers/net/phy/realtek/realtek_main.c
+@@ -691,6 +691,12 @@ static int rtl8211f_config_init(struct phy_device *phydev)
+ 			ERR_PTR(ret));
+ 		return ret;
+ 	}
++	ret = phy_modify_paged_changed(phydev, 0xd04, 0x10, 0x4f20, 0x205b);
++	if (ret < 0) {
++		dev_err(dev, "failed to modify paged register 0xd04: %pe\n",
++			ERR_PTR(ret));
++		return ret;
++	}
+ 
+ 	return rtl8211f_config_phy_eee(phydev);
+ }
+diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+index 1130617af51a..a31f9612c59b 100644
+--- a/drivers/tty/serial/Kconfig
++++ b/drivers/tty/serial/Kconfig
+@@ -333,6 +333,14 @@ config SERIAL_MAX310X
+ 
+ 	  Say Y here if you want to support this ICs.
+ 
++config SERIAL_ADL1001
++	tristate "ADL1001 support"
++	depends on I2C
++	select SERIAL_CORE
++	select REGMAP_I2C if I2C
++	help
++	  ADL1001 chip support
++
+ config SERIAL_DZ
+ 	bool "DECstation DZ serial driver"
+ 	depends on MACH_DECSTATION && 32BIT
+diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
+index a6e5bbddc9fd..4283429cdf11 100644
+--- a/drivers/tty/serial/Makefile
++++ b/drivers/tty/serial/Makefile
+@@ -51,6 +51,7 @@ obj-$(CONFIG_SERIAL_LITEUART)		+= liteuart.o
+ obj-$(CONFIG_SERIAL_HS_LPC32XX)		+= lpc32xx_hs.o
+ obj-$(CONFIG_SERIAL_MAX3100)		+= max3100.o
+ obj-$(CONFIG_SERIAL_MAX310X)		+= max310x.o
++obj-$(CONFIG_SERIAL_ADL1001)            += adl1001.o
+ obj-$(CONFIG_SERIAL_MCF)		+= mcf.o
+ obj-$(CONFIG_SERIAL_MEN_Z135)		+= men_z135_uart.o
+ obj-$(CONFIG_SERIAL_MILBEAUT_USIO)	+= milbeaut_usio.o
+diff --git a/drivers/tty/serial/adl1001.c b/drivers/tty/serial/adl1001.c
+new file mode 100644
+index 000000000000..433b60970016
+--- /dev/null
++++ b/drivers/tty/serial/adl1001.c
+@@ -0,0 +1,802 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ *  ADL1001 serial driver
++ *
++ *
++ *  Based on max310x.c, by Jimmy Yu <jimmy.yu@adlinktech.com>
++ */
++
++#include <linux/bitops.h>
++#include <linux/clk.h>
++#include <linux/delay.h>
++#include <linux/device.h>
++#include <linux/gpio/driver.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/mod_devicetable.h>
++#include <linux/property.h>
++#include <linux/regmap.h>
++#include <linux/serial_core.h>
++#include <linux/serial.h>
++#include <linux/tty.h>
++#include <linux/tty_flip.h>
++#include <linux/uaccess.h>
++
++#define CIRC_EMPTY_SLEEP	10
++#define TX_BUSY_SLEEP		10
++#define ADL1001_BAUD_MIN	4800
++#define ADL1001_BAUD_MAX	115200
++#define ADL1001_NAME			"adl1001"
++#define ADL1001_UART_NRMAX		1
++
++/* ADL1001 register definitions */
++#define ADL1001_BAUD			(0x1)
++#define ADL1001_RXFIFOLVL_REG	(0x2) /* RX FIFO level */
++#define ADL1001_RHR_REG			(0x03) /* RX FIFO */
++#define ADL1001_THR_REG			(0x04) /* TX FIFO */
++#define ADL1001_TX_BUSY			(0x05) /* TX BUSY */
++#define ADL1001_WORD_LENGTH		(0x06) 
++#define ADL1001_STOP_BITS		(0x07) 
++#define ADL1001_PARITY			(0x08) 
++#define ADL1001_HWCONTROL			(0x09) 
++
++#define ADL1001_HWCONTROL_RTS_CTS	(0x08)
++#define ADL1001_HWCONTROL_NONE		(0x01)
++
++#define ADL1001_BAUD_4800			(0x01)
++#define ADL1001_BAUD_9600			(0x02)
++#define ADL1001_BAUD_19200			(0x04)
++#define ADL1001_BAUD_38400			(0x08)
++#define ADL1001_BAUD_57600			(0x10)
++#define ADL1001_BAUD_115200			(0x20)
++
++#define ADL1001_WORD_LENGTH_7B		(0x01) 
++#define ADL1001_WORD_LENGTH_8B		(0x02) 
++
++#define ADL1001_STOP_BITS_1		(0x02)
++#define ADL1001_STOP_BITS_2		(0x08)
++
++#define ADL1001_PARITY_NONE			(0x01) 
++#define ADL1001_PARITY_EVEN			(0x02) 
++#define ADL1001_PARITY_ODD			(0x04)
++#define ADL1001_REG_1F			(0x1f)
++
++/* Global commands */
++
++/* Misc definitions */
++#define ADL1001_FIFO_SIZE		(128)
++
++struct adl1001_devtype {
++	char	name[9];
++	int	nr;
++	void	(*power)(struct uart_port *, int);
++};
++
++struct adl1001_one {
++	struct uart_port	port;
++	struct work_struct	tx_work;
++	struct regmap		*regmap;
++
++	u8 rx_buf[ADL1001_FIFO_SIZE];
++};
++#define to_adl1001_port(_port) \
++	container_of(_port, struct adl1001_one, port)
++
++struct adl1001_port {
++	const struct adl1001_devtype *devtype;
++	struct regmap		*regmap;
++	struct clk		*clk;
++	struct adl1001_one	p[];
++};
++
++static struct uart_driver adl1001_uart = {
++	.owner		= THIS_MODULE,
++	.driver_name	= ADL1001_NAME,
++	.dev_name	= "ttyADL",
++	.nr		= ADL1001_UART_NRMAX,
++};
++
++static DECLARE_BITMAP(adl1001_lines, ADL1001_UART_NRMAX);
++
++static u8 adl1001_port_read(struct uart_port *port, u8 reg)
++{
++	struct adl1001_one *one = to_adl1001_port(port);
++	unsigned int val = 0;
++
++	regmap_read(one->regmap, reg, &val);
++
++	return val;
++}
++
++static void adl1001_port_write(struct uart_port *port, u8 reg, u8 val)
++{
++	struct adl1001_one *one = to_adl1001_port(port);
++
++	regmap_write(one->regmap, reg, val);
++}
++
++static void adl1001_power(struct uart_port *port, int on)
++{
++
++}
++
++static const struct adl1001_devtype adl1001_devtype = {
++	.name	= "ADL1001",
++	.nr	= 1,
++	.power	= adl1001_power,
++};
++
++static bool adl1001_reg_writeable(struct device *dev, unsigned int reg)
++{
++	switch (reg) {
++	case ADL1001_RXFIFOLVL_REG:
++	case ADL1001_TX_BUSY:
++		return false;
++	default:
++		break;
++	}
++
++	return true;
++
++}
++
++static bool adl1001_reg_volatile(struct device *dev, unsigned int reg)
++{
++	switch (reg) {
++	case ADL1001_RHR_REG:
++	case ADL1001_THR_REG:
++	case ADL1001_RXFIFOLVL_REG:
++	case ADL1001_TX_BUSY:
++		return true;
++	default:
++		break;
++	}
++
++	return false;
++}
++
++static bool adl1001_reg_precious(struct device *dev, unsigned int reg)
++{
++	switch (reg) {
++	case ADL1001_RHR_REG:
++		return true;
++	default:
++		break;
++	}
++
++	return false;
++}
++
++static bool adl1001_reg_noinc(struct device *dev, unsigned int reg)
++{
++	switch (reg) {
++	case ADL1001_RHR_REG:
++	case ADL1001_THR_REG:
++		return true;
++	default:
++		break;
++	}
++
++	return false;
++}
++
++static int adl1001_set_baud(struct uart_port *port, int baud)
++{
++	u8 val;
++	switch (baud) {
++	case 115200:
++		val = ADL1001_BAUD_115200;
++		break;
++	case 57600:
++		val = ADL1001_BAUD_57600;
++		break;
++	case 38400:
++		val = ADL1001_BAUD_38400;
++		break;
++	case 19200:
++		val = ADL1001_BAUD_19200;
++		break;
++	case 9600:
++		val = ADL1001_BAUD_9600;
++		break;
++	case 4800:
++		val = ADL1001_BAUD_4800;
++		break;
++	default:
++		val = ADL1001_BAUD_115200;
++		baud = 115200;
++		break;
++	}
++	adl1001_port_write(port, ADL1001_BAUD, val);
++	/* Return the actual baud rate we just programmed */
++	return baud;
++}
++
++static void adl1001_batch_write(struct uart_port *port, u8 *txbuf, unsigned int len)
++{
++	u8 buf[ADL1001_FIFO_SIZE+1];
++	struct adl1001_one *one = to_adl1001_port(port);
++
++	buf[0]=len;
++	memcpy(buf+1,txbuf,len);
++
++	while (adl1001_port_read(port, ADL1001_TX_BUSY))
++	{
++		dev_dbg(port->dev, "TX Busy !!! sleep %dms\n",TX_BUSY_SLEEP);
++		msleep(TX_BUSY_SLEEP);
++	}
++
++	regmap_noinc_write(one->regmap, ADL1001_THR_REG, buf, len+1);
++}
++
++static void adl1001_batch_read(struct uart_port *port, u8 *rxbuf, unsigned int len)
++{
++	struct adl1001_one *one = to_adl1001_port(port);
++
++	regmap_noinc_read(one->regmap, ADL1001_RHR_REG, rxbuf, len);
++}
++
++static void adl1001_handle_rx(struct uart_port *port, unsigned int rxlen)
++{
++	struct adl1001_one *one = to_adl1001_port(port);
++	unsigned int sts, i;
++	u8 flag;
++
++	{
++		adl1001_batch_read(port, one->rx_buf, rxlen);
++
++		port->icount.rx += rxlen;
++		flag = TTY_NORMAL;
++
++		for (i = 0; i < rxlen; ++i)
++			uart_insert_char(port, sts, 0, one->rx_buf[i], flag);
++
++	} 
++
++	tty_flip_buffer_push(&port->state->port);
++}
++/*
++static void adl1001_handle_tx(struct uart_port *port)
++{
++	//struct circ_buf *xmit = &port->state->xmit;
++	struct tty_port *tport = &port->state->port;
++	unsigned int txlen, to_send, until_end;
++
++	while(1)
++	{
++		if (unlikely(port->x_char)) {
++			dev_dbg(port->dev, "send x_char\n");
++			adl1001_batch_write(port, &(port->x_char), 1);
++			port->icount.tx++;
++			port->x_char = 0;
++			continue;
++		}
++		
++		if (uart_tx_stopped(port))
++		{
++			dev_dbg(port->dev, "tx stop\n");
++			break;
++		}
++	
++		{
++			dev_dbg(port->dev, "TX CIRC EMPTY !!! sleep %dms\n",TX_BUSY_SLEEP);
++			msleep(CIRC_EMPTY_SLEEP);
++		}
++		while (kfifo_is_empty(&tport->xmit_fifo))
++		{
++    			dev_dbg(port->dev, "TX CIRC EMPTY !!! sleep %dms\n", TX_BUSY_SLEEP);
++    			msleep(CIRC_EMPTY_SLEEP);
++		}
++		to_send = kfifo_len(&tport->xmit_fifo);
++		until_end = CIRC_CNT_TO_END(xmit->head, xmit->tail, UART_XMIT_SIZE);
++		
++		if (likely(to_send)) {
++			txlen = 0;
++			txlen = port->fifosize - txlen;
++			to_send = (to_send > txlen) ? txlen : to_send;
++
++			if (until_end < to_send) {
++				adl1001_batch_write(port, xmit->buf + xmit->tail, until_end);
++				adl1001_batch_write(port, xmit->buf, to_send - until_end);
++			} else {
++				adl1001_batch_write(port, xmit->buf + xmit->tail, to_send);
++			}
++			uart_xmit_advance(port, to_send);
++		}
++
++		if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
++			uart_write_wakeup(port);
++	}
++}*/
++
++static void adl1001_handle_tx(struct uart_port *port)
++{
++	struct tty_port *tport = &port->state->port;
++	unsigned char tx_buf[256];
++	unsigned int chunk_size, bytes_copied;
++
++	while (1) {
++		if (unlikely(port->x_char)) {
++			dev_dbg(port->dev, "send x_char\n");
++			adl1001_batch_write(port, &(port->x_char), 1);
++			port->icount.tx++;
++			port->x_char = 0;
++			continue;
++		}
++
++		if (uart_tx_stopped(port)) {
++			dev_dbg(port->dev, "tx stop\n");
++			break;
++		}
++
++		while (kfifo_is_empty(&tport->xmit_fifo)) {
++			dev_dbg(port->dev, "TX CIRC EMPTY !!! sleep %dms\n", TX_BUSY_SLEEP);
++			msleep(CIRC_EMPTY_SLEEP);
++		}
++
++		/* Determine how many bytes to transfer in this batch */
++		chunk_size = min3(kfifo_len(&tport->xmit_fifo),
++				  (unsigned int)sizeof(tx_buf),
++				  port->fifosize);
++
++		if (likely(chunk_size)) {
++			/* kfifo_out copies bytes and automatically advances the read pointer */
++			bytes_copied = kfifo_out(&tport->xmit_fifo, tx_buf, chunk_size);
++
++			/* Send batch over I2C/SPI */
++			adl1001_batch_write(port, tx_buf, bytes_copied);
++
++			port->icount.tx += bytes_copied;
++		}
++
++		/* Wake up the tty layer if fifo level dropped below threshold */
++		if (kfifo_len(&tport->xmit_fifo) < WAKEUP_CHARS)
++			uart_write_wakeup(port);
++	}
++}
++
++static void adl1001_start_tx(struct uart_port *port)
++{
++	struct adl1001_one *one = to_adl1001_port(port);
++
++	schedule_work(&one->tx_work);
++}
++
++static irqreturn_t adl1001_port_irq(struct adl1001_port *s, int portno)
++{
++	struct uart_port *port = &s->p[portno].port;
++	irqreturn_t res = IRQ_NONE;
++
++	{
++		unsigned int rxlen;
++
++		/* Read IRQ status & RX FIFO level */
++		rxlen = adl1001_port_read(port, ADL1001_RXFIFOLVL_REG);
++
++		res = IRQ_HANDLED;
++
++		if (rxlen)
++			adl1001_handle_rx(port, rxlen);
++	} 
++	return res;
++}
++
++static irqreturn_t adl1001_ist(int irq, void *dev_id)
++{
++	struct adl1001_port *s = (struct adl1001_port *)dev_id;
++	bool handled = false;
++#if 0
++	if (s->devtype->nr > 1) {
++		do {
++			unsigned int val = ~0;
++
++			//WARN_ON_ONCE(regmap_read(s->regmap,
++			//			 ADL1001_GLOBALIRQ_REG, &val));
++			val = ((1 << s->devtype->nr) - 1) & ~val;
++			if (!val)
++				break;
++			if (adl1001_port_irq(s, fls(val) - 1) == IRQ_HANDLED)
++				handled = true;
++		} while (1);
++	} else 
++#endif
++	{
++		if (adl1001_port_irq(s, 0) == IRQ_HANDLED)
++			handled = true;
++	}
++
++	return IRQ_RETVAL(handled);
++}
++
++static void adl1001_tx_proc(struct work_struct *ws)
++{
++	struct adl1001_one *one = container_of(ws, struct adl1001_one, tx_work);
++	
++	adl1001_handle_tx(&one->port);
++}
++
++static unsigned int adl1001_tx_empty(struct uart_port *port)
++{
++	u8 lvl = adl1001_port_read(port, ADL1001_TX_BUSY);
++
++	return lvl ? 0 : TIOCSER_TEMT;
++}
++
++static unsigned int adl1001_get_mctrl(struct uart_port *port)
++{
++	/* DCD and DSR are not wired and CTS/RTS is handled automatically
++	 * so just indicate DSR and CAR asserted
++	 */
++	return TIOCM_DSR | TIOCM_CAR;
++}
++
++static void adl1001_set_mctrl(struct uart_port *port, unsigned int mctrl)
++{
++
++}
++
++static void adl1001_break_ctl(struct uart_port *port, int break_state)
++{
++
++}
++
++static void adl1001_set_termios(struct uart_port *port,
++				struct ktermios *termios,
++				const struct ktermios *old)
++{
++	int baud;
++
++	/* Mask termios capabilities we don't support */
++	termios->c_cflag &= ~CMSPAR;
++	termios->c_cflag &= ~(CMSPAR);
++
++	{
++		u8 val;
++		if (termios->c_cflag & CRTSCTS) {
++			/* Enable AUTORTS and AUTOCTS */
++			port->status |= UPSTAT_AUTOCTS | UPSTAT_AUTORTS;
++			val = ADL1001_HWCONTROL_RTS_CTS;
++		}
++		else
++			val = ADL1001_HWCONTROL_NONE;
++		adl1001_port_write(port, ADL1001_HWCONTROL , val);
++	}
++
++	//only support CS7,CS8
++	if (((termios->c_cflag & CSIZE) == CS5 )||((termios->c_cflag & CSIZE) == CS6 ))
++	{
++		termios->c_cflag &= ~(CSIZE);
++		termios->c_cflag |= (CS8);
++	}
++
++	{
++		u8 val;
++		switch (termios->c_cflag & CSIZE) {
++		case CS7:
++			val = ADL1001_WORD_LENGTH_7B;
++			break;
++		case CS8:
++		default:
++			val = ADL1001_WORD_LENGTH_8B;
++			break;
++		}
++		adl1001_port_write(port, ADL1001_WORD_LENGTH, val);
++	}
++
++	if (termios->c_cflag & CSTOPB)
++		adl1001_port_write(port, ADL1001_STOP_BITS, ADL1001_STOP_BITS_2); //2 stop bit
++	else
++		adl1001_port_write(port, ADL1001_STOP_BITS, ADL1001_STOP_BITS_1); //1 stop bit
++
++
++	if (termios->c_cflag & PARENB) {
++		if (termios->c_cflag & PARODD)
++			adl1001_port_write(port, ADL1001_PARITY, ADL1001_PARITY_ODD);
++		else
++			adl1001_port_write(port, ADL1001_PARITY, ADL1001_PARITY_EVEN);
++	}
++	else
++		adl1001_port_write(port, ADL1001_PARITY, ADL1001_PARITY_NONE);
++
++	/* Set status ignore mask */
++	port->ignore_status_mask = 0;
++
++	baud = uart_get_baud_rate(port, termios, old,ADL1001_BAUD_MIN,ADL1001_BAUD_MAX);
++
++	/* Setup baudrate generator */
++	baud = adl1001_set_baud(port, baud);
++
++	/* Update timeout according to new baud rate */
++	uart_update_timeout(port, termios->c_cflag, baud);
++}
++
++static int adl1001_startup(struct uart_port *port)
++{
++	return 0;
++}
++
++static void adl1001_shutdown(struct uart_port *port)
++{
++
++}
++
++static const char *adl1001_type(struct uart_port *port)
++{
++	struct adl1001_port *s = dev_get_drvdata(port->dev);
++
++	return (port->type == 124) ? s->devtype->name : NULL;
++}
++
++static int adl1001_request_port(struct uart_port *port)
++{
++	/* Do nothing */
++	return 0;
++}
++
++static void adl1001_config_port(struct uart_port *port, int flags)
++{
++	if (flags & UART_CONFIG_TYPE)
++		port->type = 124;
++}
++
++static int adl1001_verify_port(struct uart_port *port, struct serial_struct *s)
++{
++	if ((s->type != PORT_UNKNOWN) && (s->type != 124))
++		return -EINVAL;
++	if (s->irq != port->irq)
++		return -EINVAL;
++
++	return 0;
++}
++
++static void adl1001_null_void(struct uart_port *port)
++{
++	/* Do nothing */
++}
++
++static const struct uart_ops adl1001_ops = {
++	.tx_empty	= adl1001_tx_empty,
++	.set_mctrl	= adl1001_set_mctrl,
++	.get_mctrl	= adl1001_get_mctrl,
++	.stop_tx	= adl1001_null_void,
++	.start_tx	= adl1001_start_tx,
++	.stop_rx	= adl1001_null_void,
++	.break_ctl	= adl1001_break_ctl,
++	.startup	= adl1001_startup,
++	.shutdown	= adl1001_shutdown,
++	.set_termios	= adl1001_set_termios,
++	.type		= adl1001_type,
++	.request_port	= adl1001_request_port,
++	.release_port	= adl1001_null_void,
++	.config_port	= adl1001_config_port,
++	.verify_port	= adl1001_verify_port,
++};
++
++static int __maybe_unused adl1001_suspend(struct device *dev)
++{
++	struct adl1001_port *s = dev_get_drvdata(dev);
++	int i;
++
++	for (i = 0; i < s->devtype->nr; i++) {
++		uart_suspend_port(&adl1001_uart, &s->p[i].port);
++		s->devtype->power(&s->p[i].port, 0);
++	}
++
++	return 0;
++}
++
++static int __maybe_unused adl1001_resume(struct device *dev)
++{
++	struct adl1001_port *s = dev_get_drvdata(dev);
++	int i;
++
++	for (i = 0; i < s->devtype->nr; i++) {
++		s->devtype->power(&s->p[i].port, 1);
++		uart_resume_port(&adl1001_uart, &s->p[i].port);
++	}
++
++	return 0;
++}
++
++static SIMPLE_DEV_PM_OPS(adl1001_pm_ops, adl1001_suspend, adl1001_resume);
++
++static int adl1001_probe(struct device *dev, const struct adl1001_devtype *devtype,
++//			 const struct adl1001_if_cfg *if_cfg,
++			 struct regmap *regmaps[], int irq)
++{
++	int i, ret;
++	struct adl1001_port *s;
++	u32 uartclk = 0;
++
++	for (i = 0; i < devtype->nr; i++)
++		if (IS_ERR(regmaps[i]))
++			return PTR_ERR(regmaps[i]);
++
++	/* Alloc port structure */
++	s = devm_kzalloc(dev, struct_size(s, p, devtype->nr), GFP_KERNEL);
++	if (!s) {
++		dev_err(dev, "Error allocating port structure\n");
++		return -ENOMEM;
++	}
++
++	s->regmap = regmaps[0];
++	s->devtype = devtype;
++	//s->if_cfg = if_cfg;
++	dev_set_drvdata(dev, s);
++
++	/* Check device to ensure we are talking to what we expect */
++
++	for (i = 0; i < devtype->nr; i++) {
++		unsigned int line;
++
++		line = find_first_zero_bit(adl1001_lines, ADL1001_UART_NRMAX);
++		if (line == ADL1001_UART_NRMAX) {
++			ret = -ERANGE;
++			goto out_uart;
++		}
++
++		/* Initialize port data */
++		s->p[i].port.line	= line;
++		s->p[i].port.dev	= dev;
++		s->p[i].port.irq	= irq;
++		s->p[i].port.type	= 124;
++		s->p[i].port.fifosize	= ADL1001_FIFO_SIZE;
++		s->p[i].port.flags	= UPF_FIXED_TYPE | UPF_LOW_LATENCY;
++		s->p[i].port.iotype	= UPIO_PORT;
++		s->p[i].port.iobase	= i;
++		/*
++		 * Use all ones as membase to make sure uart_configure_port() in
++		 * serial_core.c does not abort for SPI/I2C devices where the
++		 * membase address is not applicable.
++		 */
++		s->p[i].port.membase	= (void __iomem *)~0;
++		s->p[i].port.uartclk	= uartclk;
++		s->p[i].port.ops	= &adl1001_ops;
++		s->p[i].regmap		= regmaps[i];
++
++		INIT_WORK(&s->p[i].tx_work, adl1001_tx_proc);
++
++		/* Register port */
++		ret = uart_add_one_port(&adl1001_uart, &s->p[i].port);
++		if (ret) {
++			s->p[i].port.dev = NULL;
++			goto out_uart;
++		}
++		set_bit(line, adl1001_lines);
++
++		/* Go to suspend mode */
++		devtype->power(&s->p[i].port, 0);
++	}
++
++	/* Setup interrupt */
++	ret = devm_request_threaded_irq(dev, irq, NULL, adl1001_ist,
++					IRQF_ONESHOT | IRQF_SHARED, dev_name(dev), s);
++	if (!ret)
++	{
++		return 0;
++	}
++	dev_err(dev, "Unable to reguest IRQ %i\n", irq);
++
++out_uart:
++	for (i = 0; i < devtype->nr; i++) {
++		if (s->p[i].port.dev) {
++			uart_remove_one_port(&adl1001_uart, &s->p[i].port);
++			clear_bit(s->p[i].port.line, adl1001_lines);
++		}
++	}
++
++	clk_disable_unprepare(s->clk);
++
++	return ret;
++}
++
++static void adl1001_remove(struct device *dev)
++{
++	struct adl1001_port *s = dev_get_drvdata(dev);
++	int i;
++
++	for (i = 0; i < s->devtype->nr; i++) {
++		cancel_work_sync(&s->p[i].tx_work);
++		uart_remove_one_port(&adl1001_uart, &s->p[i].port);
++		clear_bit(s->p[i].port.line, adl1001_lines);
++		s->devtype->power(&s->p[i].port, 0);
++	}
++
++	clk_disable_unprepare(s->clk);
++}
++
++static const struct of_device_id __maybe_unused adl1001_dt_ids[] = {
++	{ .compatible = "adlink,adl1001",	.data = &adl1001_devtype, },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, adl1001_dt_ids);
++
++#ifdef CONFIG_I2C
++
++static struct regmap_config regcfg_i2c = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.cache_type = REGCACHE_RBTREE,
++	.writeable_reg = adl1001_reg_writeable,
++	.volatile_reg = adl1001_reg_volatile,
++	.precious_reg = adl1001_reg_precious,
++	.max_register = ADL1001_REG_1F,
++	.writeable_noinc_reg = adl1001_reg_noinc,
++	.readable_noinc_reg = adl1001_reg_noinc,
++	.max_raw_read = ADL1001_FIFO_SIZE,
++	.max_raw_write = ADL1001_FIFO_SIZE,
++};
++
++static int adl1001_i2c_probe(struct i2c_client *client)
++{
++	const struct adl1001_devtype *devtype =
++			device_get_match_data(&client->dev);
++	struct i2c_client *port_client;
++	struct regmap *regmaps[4];
++	unsigned int i;
++	u8 port_addr;
++
++	dev_info(&client->dev, "adl1001_i2c_probe client->addr:0x%x\n",client->addr);
++
++	regmaps[0] = devm_regmap_init_i2c(client, &regcfg_i2c);
++
++	return adl1001_probe(&client->dev, devtype,
++			     regmaps, client->irq);
++}
++
++static void adl1001_i2c_remove(struct i2c_client *client)
++{
++	adl1001_remove(&client->dev);
++}
++
++static struct i2c_driver adl1001_i2c_driver = {
++	.driver = {
++		.name		= ADL1001_NAME,
++		.of_match_table	= adl1001_dt_ids,
++		.pm		= &adl1001_pm_ops,
++	},
++	.probe		= adl1001_i2c_probe,
++	.remove		= adl1001_i2c_remove,
++};
++#endif
++
++static int __init adl1001_uart_init(void)
++{
++	int ret;
++
++	bitmap_zero(adl1001_lines, ADL1001_UART_NRMAX);
++
++	ret = uart_register_driver(&adl1001_uart);
++	if (ret)
++		return ret;
++
++#ifdef CONFIG_I2C
++	ret = i2c_add_driver(&adl1001_i2c_driver);
++	if (ret)
++		goto err_i2c_register;
++#endif
++
++	return 0;
++#ifdef CONFIG_I2C
++err_i2c_register:
++	uart_unregister_driver(&adl1001_uart);
++
++	return ret;
++#endif
++}
++module_init(adl1001_uart_init);
++
++static void __exit adl1001_uart_exit(void)
++{
++#ifdef CONFIG_I2C
++	i2c_del_driver(&adl1001_i2c_driver);
++#endif
++
++	uart_unregister_driver(&adl1001_uart);
++}
++module_exit(adl1001_uart_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Jimmy Yu <jimmy.yu@adlinktech.com>");
++MODULE_DESCRIPTION("ADL1001 serial driver");
++
+diff --git a/sound/soc/codecs/tlv320aic3x.c b/sound/soc/codecs/tlv320aic3x.c
+index eea8ca285f8e..d698c3ad1491 100644
+--- a/sound/soc/codecs/tlv320aic3x.c
++++ b/sound/soc/codecs/tlv320aic3x.c
+@@ -45,6 +45,7 @@
+ #include <sound/soc.h>
+ #include <sound/initval.h>
+ #include <sound/tlv.h>
++#include <linux/clk.h>
+ 
+ #include "tlv320aic3x.h"
+ 
+@@ -88,6 +89,7 @@ struct aic3x_priv {
+ 	enum aic3x_micbias_voltage micbias_vg;
+ 	/* Output Common-Mode Voltage */
+ 	u8 ocmv;
++	struct clk *mclk;
+ };
+ 
+ static const struct reg_default aic3x_reg[] = {
+@@ -1825,11 +1827,28 @@ int aic3x_probe(struct device *dev, struct regmap *regmap, kernel_ulong_t driver
+ 		return dev_err_probe(dev, ret, "Failed to request supplies\n");
+ 
+ 	aic3x_configure_ocmv(dev, aic3x);
++	
++	aic3x->mclk = devm_clk_get(dev, "mclk"); dev_info(dev, "adlink lv codec mclk patch\n");
++	if (IS_ERR(aic3x->mclk)) {
++        	aic3x->mclk = NULL;
++            	dev_err(dev, "mclk missing or invalid\n");
++    	}
++	else
++	{
++		ret = clk_prepare_enable(aic3x->mclk);
++		if (ret < 0) {
++			dev_err(dev, "Failed to enable mclk\n");
++		}
++	}
+ 
+ 	ret = devm_snd_soc_register_component(dev, &soc_component_dev_aic3x, &aic3x_dai, 1);
+ 	if (ret)
++	{
++		if(aic3x->mclk)
++			clk_disable_unprepare(aic3x->mclk);
+ 		return ret;
+-
++	
++	}
+ 	return 0;
+ }
+ EXPORT_SYMBOL(aic3x_probe);
+@@ -1837,7 +1856,8 @@ EXPORT_SYMBOL(aic3x_probe);
+ void aic3x_remove(struct device *dev)
+ {
+ 	struct aic3x_priv *aic3x = dev_get_drvdata(dev);
+-
++	if(aic3x->mclk)
++		clk_disable_unprepare(aic3x->mclk);
+ 	/* Leave the codec in reset state */
+ 	if (aic3x->gpio_reset && !aic3x->shared_reset)
+ 		gpiod_set_value(aic3x->gpio_reset, 1);
+-- 
+2.43.0
+

@@ -1,0 +1,186 @@
+From 66f349c97b54b58235e26dc250c3726c529955b9 Mon Sep 17 00:00:00 2001
+From: shiva-adlink <shivashankar.t@adlinktech.com>
+Date: Fri, 25 Sep 2026 15:26:09 +0530
+Subject: [PATCH] lec-imx95-added-SD8987
+
+Signed-off-by: shiva-adlink <shivashankar.t@adlinktech.com>
+---
+ android_wifi_mod_para.conf | 105 ++++++++++++++++++++++++++++++-------
+ 1 file changed, 86 insertions(+), 19 deletions(-)
+
+diff --git a/android_wifi_mod_para.conf b/android_wifi_mod_para.conf
+index f1ae362..25e3a23 100644
+--- a/android_wifi_mod_para.conf
++++ b/android_wifi_mod_para.conf
+@@ -27,6 +27,37 @@
+ # this configuration file, and set the corresponding value
+ # according to your real needs
+ 
++SDIW612 = {
++        cfg80211_wext=0xf
++        sta_name=wlan
++        uap_name=wlan
++        wfd_name=p2p
++        max_vir_bss=1
++        cal_data_cfg=none
++        ps_mode=2
++        auto_ds=2
++        fw_name=sduart_nw61x_v1.bin.se
++        fw_serial=0
++        cntry_txpwr=2
++        country_ie_ignore=1
++        beacon_hints=1
++        slew_rate=2
++        host_mlme=1
++}
++
++SD8997 = {
++	cfg80211_wext=0xf
++	sta_name=wlan
++	uap_name=wlan
++	wfd_name=p2p
++	max_vir_bss=1
++	cal_data_cfg=none
++	ps_mode=1
++	auto_ds=1
++	host_mlme=1
++	fw_name=sduart8997_combo_v4.bin
++}
++
+ #SD8997_1 = {
+ #       cfg80211_wext=0xf
+ #       wfd_name=wfd0
+@@ -61,75 +92,111 @@
+ #}
+ 
+ SD8987 = {
++	cfg80211_wext=0xf
+ 	sta_name=wlan
+ 	uap_name=wlan
+ 	wfd_name=p2p
+ 	max_vir_bss=1
+ 	cal_data_cfg=none
+-	fw_name=sduart8987_combo.bin
++	ps_mode=1
++	auto_ds=1
++	host_mlme=1
++	fw_name=sdiouart8987_combo_v0.bin
+ }
+ 
+-PCIE9098_0 = {
++USB8997 = {
++	cfg80211_wext=0xf
++	wfd_name=p2p
++	max_vir_bss=1
++	cal_data_cfg=nxp/WlanCalData_ext_8997_QFN_TB.conf
++	drv_mode=7
++}
++
++PCIE8997 = {
++	cfg80211_wext=0xf
+ 	sta_name=wlan
+ 	uap_name=wlan
+ 	wfd_name=p2p
+ 	max_vir_bss=1
+ 	cal_data_cfg=none
+-	fw_name=pcieuart9098_combo_v1.bin
++	ps_mode=1
++	auto_ds=1
++	host_mlme=1
++	fw_name=pcieuart8997_combo_v4.bin
+ }
+ 
+-PCIE9098_1 = {
++PCIE9098_0 = {
++	cfg80211_wext=0xf
+ 	sta_name=wlan
+ 	uap_name=wlan
+ 	wfd_name=p2p
+ 	max_vir_bss=1
+ 	cal_data_cfg=none
++	ps_mode=1
++	auto_ds=1
++	host_mlme=1
+ 	fw_name=pcieuart9098_combo_v1.bin
+ }
+ 
+-PCIEAW693_0 = {
+-	max_vir_bss=1
+-	cal_data_cfg=none
++PCIE9098_1 = {
++	cfg80211_wext=0xf
+ 	sta_name=wlan
+ 	uap_name=wlan
+ 	wfd_name=p2p
+-	fw_name=pcieuartaw693_combo_v1.bin.se
+-}
+-
+-PCIEAW693_1 = {
+ 	max_vir_bss=1
+ 	cal_data_cfg=none
+-	sta_name=wlan
+-	uap_name=wlan
+-	wfd_name=p2p
+-	fw_name=pcieuartaw693_combo_v1.bin.se
++	ps_mode=1
++	auto_ds=1
++	host_mlme=1
++	fw_name=pcieuart9098_combo_v1.bin
+ }
+ 
+ SD9098_0 = {
++	cfg80211_wext=0xf
+ 	sta_name=wlan
+ 	uap_name=wlan
+ 	wfd_name=p2p
+ 	max_vir_bss=1
+ 	cal_data_cfg=none
+-	fw_name=sduart9098_combo_v1.bin
++	ps_mode=1
++	auto_ds=1
++	host_mlme=1
++	fw_name=sdiouart9098_combo_v1.bin
+ }
+ 
+ SD9098_1 = {
++	cfg80211_wext=0xf
+ 	sta_name=wlan
+ 	uap_name=wlan
+ 	wfd_name=p2p
+ 	max_vir_bss=1
+ 	cal_data_cfg=none
+-	fw_name=sduart9098_combo_v1.bin
++	ps_mode=1
++	auto_ds=1
++	host_mlme=1
++	fw_name=sdiouart9098_combo_v1.bin
+ }
+ 
+-SDIW612 = {
++SDIW416 = {
++	cfg80211_wext=0xf
+ 	sta_name=wlan
+ 	uap_name=wlan
+ 	wfd_name=p2p
+ 	max_vir_bss=1
+ 	cal_data_cfg=none
+-	fw_name=sduart_nw61x_v1.bin.se
++	ps_mode=1
++	auto_ds=1
++	host_mlme=1
++	fw_name=sdiouartiw416_combo_v0.bin
++}
++
++SD8801 = {
++	cfg80211_wext=0xf
++	cal_data_cfg=none
++	ps_mode=1
++	auto_ds=1
++	host_mlme=1
++	fw_name=nxp/sd8801_uapsta.bin
+ }
+ 
+ #USB8997 = {
+-- 
+2.50.1
+

@@ -1,0 +1,38 @@
+From c70c784ece2bb694d0ddd9842db0e66b91d6dfaa Mon Sep 17 00:00:00 2001
+From: shiva-adlink <shivashankar.t@adlinktech.com>
+Date: Fri, 25 Sep 2026 15:24:29 +0530
+Subject: [PATCH] lec-imx95-addling-bt-config
+
+Signed-off-by: shiva-adlink <shivashankar.t@adlinktech.com>
+---
+ conf/nxp/lec_imx95/Android.txt    | 6 ++++++
+ conf/nxp/lec_imx95/bt_vendor.conf | 4 ++++
+ 2 files changed, 10 insertions(+)
+ create mode 100644 conf/nxp/lec_imx95/Android.txt
+ create mode 100644 conf/nxp/lec_imx95/bt_vendor.conf
+
+diff --git a/conf/nxp/lec_imx95/Android.txt b/conf/nxp/lec_imx95/Android.txt
+new file mode 100644
+index 0000000..e5929d5
+--- /dev/null
++++ b/conf/nxp/lec_imx95/Android.txt
+@@ -0,0 +1,6 @@
++prebuilt_etc {
++    name: "bt_vendor.conf",           // installs as this filename
++    sub_dir: "bluetooth",             // → /vendor/etc/bluetooth/
++    vendor: true,                     // → /vendor (the A15 TARGET_OUT_VENDOR)
++    src: "bt_uart.conf",              // your payload file
++}
+diff --git a/conf/nxp/lec_imx95/bt_vendor.conf b/conf/nxp/lec_imx95/bt_vendor.conf
+new file mode 100644
+index 0000000..bda869f
+--- /dev/null
++++ b/conf/nxp/lec_imx95/bt_vendor.conf
+@@ -0,0 +1,4 @@
++mchar_port = /dev/ttyLP4
++baudrate_fw_init = 115200
++baudrate_bt = 3000000
++enable_download_fw = 0
+-- 
+2.50.1
+

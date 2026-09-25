@@ -1,0 +1,1 @@
+clean_steps.mk boot.img dtbo.img  dtbo-imx95.img dtbo-imx95*  fastboot_imx_flashall.* imx95_mcu_demo.img u-boot-imx95-evk-uuu.imx imx-sdcard-partition.sh init_boot.img installed-files*.txt installed-files*.json kernel  module-info.json module-info.json.rsp partition-table*.bpt partition-table*.img super.img u-boot*.imx vbmeta*.img vendor*.img uuu_imx_android_flash.* tools 
