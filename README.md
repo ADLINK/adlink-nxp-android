@@ -14,6 +14,7 @@ You can follow the same steps to build your own customized BSP based on your int
 
 |  Android Version   |      Supported Products                                |
 | :--------- | :----------------------------------------------------------: |
+| Android 16 | [LEC-IMX95](https://github.com/ADLINK/imx8mp_android/tree/Android-16) |
 | Android 15 | [LEC-IMX8MP](https://github.com/ADLINK/imx8mp_android/tree/Android-15) [LEC-IMX95](https://github.com/ADLINK/imx8mp_android/tree/Android-15) |
 | Android 14 | [LEC-IMX8MP&SP2-IMX8MP ](https://github.com/ADLINK/imx8mp_android/tree/Android-14) |
 | Android 13 | [LEC-IMX8MP](https://github.com/ADLINK/imx8mp_android/tree/Android-13)  [SP2IMX8MP](https://github.com/ADLINK/imx8mp_android/tree/SP2-IMX8MP) |
@@ -24,6 +25,7 @@ You can follow the same steps to build your own customized BSP based on your int
 
 - Patches for LEC-IMX8MP will be found [here](https://github.com/ADLINK/imx8mp_android/tree/Android-14/patches/imx-android-14.0.0_2.2.0/android_build/lec-imx8mp).
 - Patches for SP2-IMX8MP will be found [here](https://github.com/ADLINK/imx8mp_android/tree/Android-14/patches/imx-android-14.0.0_2.2.0/android_build/sp2-imx8mp).
+- Patches for LEC-IMX95 will be found  [here](https://github.com/ADLINK/adlink-nxp-android/tree/Android-16/patches/imx-android-16.0.0_2.0.0/android_build/lec-imx95).
 - The patches that we created and have are based on the NXP Android SDK
 > [!Note]
 > Kernel version 5.15 onwards, Wi-Fi/BT interfaces are SDIO/UART.
